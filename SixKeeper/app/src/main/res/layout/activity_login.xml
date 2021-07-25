@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="18dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="18dp"
+            android:paddingBottom="36dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gLoginVertical10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gLoginVertical30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".30" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gLoginVertical70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".70" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gLoginVertical90"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".90" />
+
+            <ImageView
+                android:id="@+id/ivLoginLogo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/img_logo_and_name"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical70"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical30"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvLoginUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:text="@string/many_username"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/ivLoginLogo" />
+
+            <EditText
+                android:id="@+id/etLoginUsername"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/layout_edit_text"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvLoginUsername"
+                tools:ignore="Autofill, LabelFor" />
+
+            <TextView
+                android:id="@+id/tvLoginPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/many_password"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etLoginUsername" />
+
+            <EditText
+                android:id="@+id/etLoginPassword"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/layout_edit_text"
+                android:ems="10"
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvLoginPassword"
+                tools:ignore="Autofill, LabelFor" />
+
+            <ImageView
+                android:id="@+id/ivLoginTogglePass"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="9dp"
+                app:layout_constraintBottom_toBottomOf="@+id/etLoginPassword"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintTop_toTopOf="@+id/etLoginPassword"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvLoginForgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/login_forgot_pass"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintTop_toBottomOf="@+id/etLoginPassword" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbLoginLogin"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/layout_button_green_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_login"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvLoginForgotPass" />
+
+            <TextView
+                android:id="@+id/tvLoginImportData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/login_import_data"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/acbLoginLogin" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

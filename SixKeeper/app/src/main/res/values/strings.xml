@@ -1,0 +1,124 @@
+<resources>
+
+    <!-- App Name -->
+    <string name="app_name">6Keeper</string>
+
+    <!-- Accounts -->
+    <string name="accounts_categories">Categories</string>
+    <string name="accounts_favorites">Favorites</string>
+
+    <!-- Create Master PIN -->
+    <string name="create_master_pin_desc">
+        Master PIN is used for subsequent login and confirmation of actions. <b>Note: A digit
+        cannot be used for more than two (2) times.</b>
+    </string>
+
+    <!-- Create New Account -->
+    <string name="create_new_acc_p4_agree_to_terms">
+        I agree to <u>terms</u> and <u>conditions</u>.
+    </string>
+    <string name="create_new_acc_p4_agree_to_terms_mes">
+        Please read and agree to terms and conditions.
+    </string>
+    <string name="create_new_acc_p4_register">Register</string>
+
+    <!-- Login -->
+    <string name="login_forgot_pass"><u>Forgot Password?</u></string>
+    <string name="login_import_data"><u>Import Data</u></string>
+    <string name="login_enter_credentials">Please enter your credentials.</string>
+
+    <!-- Many -->
+    <string name="many_about_us">About Us</string>
+    <string name="many_accounts">Accounts</string>
+    <string name="many_alert_title">Warning!</string>
+    <string name="many_alert_message">
+        Do you want to go back? Data will be discarded (if there are any).
+    </string>
+    <string name="many_cancel">Cancel</string>
+    <string name="many_confirm_master_pin">Confirm Your Master PIN</string>
+    <string name="many_confirm_password">Confirm Password</string>
+    <string name="many_contact_us">Contact Us</string>
+    <string name="many_create_master_pin">Create Your Master PIN</string>
+    <string name="many_create_new_account">Create New Account</string>
+    <string name="many_birth_date">Birth Date</string>
+    <string name="many_dashboard">Dashboard</string>
+    <string name="many_delete">Delete</string>
+    <string name="many_eight">8</string>
+    <string name="many_email">Email</string>
+    <string name="many_email_hint"><i>ex. sample@domain.ext</i></string>
+    <string name="many_enter_code">Enter Code</string>
+    <string name="many_enter_code_mes">Please enter the code.</string>
+    <string name="many_enter_master_pin">Enter Your Master PIN</string>
+    <string name="many_fill_email_field">Please fill the Email field first.</string>
+    <string name="many_fill_missing_fields">Please fill the missing fields.</string>
+    <string name="many_fill_mobile_num_field">Please fill the Mobile Number field first.</string>
+    <string name="many_first_name">First Name</string>
+    <string name="many_five">5</string>
+    <string name="many_four">4</string>
+    <string name="many_help">Help</string>
+    <string name="many_last_name">Last Name</string>
+    <string name="many_letters_only_message">
+        *Can only contain letters, and special characters: period (.) and hyphen (-).
+    </string>
+    <string name="many_login">Login</string>
+    <string name="many_mobile_number">Mobile Number</string>
+    <string name="many_mobile_number_hint"><i>ex. 09123456789</i></string>
+    <string name="many_next">Next</string>
+    <string name="many_nine">9</string>
+    <string name="many_one">1</string>
+    <string name="many_password">Password</string>
+    <string name="many_password_generator">Password Generator</string>
+    <string name="many_recycle_bin">Recycle Bin</string>
+    <string name="many_required_mes">*Required</string>
+    <string name="many_send_code">Send Code</string>
+    <string name="many_settings">Settings</string>
+    <string name="many_setup_complete">Setup Complete!</string>
+    <string name="many_setup_face_recognition">Setup Face Recognition</string>
+    <string name="many_setup_fingerprint">Setup Fingerprint</string>
+    <string name="many_setup_master_pin">Setup Master PIN</string>
+    <string name="many_seven">7</string>
+    <string name="many_six">6</string>
+    <string name="many_terms_conditions">Terms and Conditions</string>
+    <string name="many_three">3</string>
+    <string name="many_two">2</string>
+    <string name="many_username">Username</string>
+    <string name="many_validate_confirm_pass">*Password does not match.</string>
+    <string name="many_validate_email">
+        *Should be a valid email address - username, at (@), domain, dot (.), and extension.
+    </string>
+    <string name="many_validate_mobile_num">*Should be a valid 11-digit mobile number.</string>
+    <string name="many_validate_password">
+        *Should be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
+        (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),
+        without space/s.
+    </string>
+    <string name="many_validate_username">
+        *Should be at least 6 characters. Can contain lower and upper case letters, numbers, and
+        special characters: dot (.), hyphen (-) and underscore (_), without space/s.
+    </string>
+    <string name="many_verify">Verify</string>
+    <string name="many_zero">0</string>
+
+    <!-- Password Generator -->
+    <string name="pass_generator_enter_special_char">
+        If you want to only include specific special characters, please enter separated by spaces,
+        otherwise, leave it blank.
+    </string>
+    <string name="pass_generator_generate">Generate</string>
+    <string name="pass_generator_generated_pass">Generated Password</string>
+    <string name="pass_generator_include">Include:</string>
+    <string name="pass_generator_length">Length</string>
+    <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
+    <string name="pass_generator_number">Numbers (0–9)</string>
+    <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
+    <string name="pass_generator_select_char">
+        Please select desired characters to generate password.
+    </string>
+    <string name="pass_generator_special_char">Special Characters</string>
+    <string name="pass_generator_fill_length">Please fill the Length field first.</string>
+    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>
+
+    <!-- Title Activity -->
+    <string name="title_activity_dashboard">DashboardActivity</string>
+
+</resources>

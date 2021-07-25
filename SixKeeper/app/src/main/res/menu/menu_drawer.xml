@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/dashboardFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_dashboard" />
+
+        <item
+            android:id="@+id/accountsFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_accounts" />
+
+        <item
+            android:id="@+id/passwordGeneratorFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_password_generator" />
+
+        <item
+            android:id="@+id/recycleBinFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_recycle_bin" />
+
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_settings" />
+
+        <item
+            android:id="@+id/contactUsFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_contact_us" />
+
+        <item
+            android:id="@+id/aboutUsFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_about_us" />
+
+        <item
+            android:id="@+id/helpFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_help" />
+
+        <item
+            android:id="@+id/termsConditionsFragment"
+            android:icon="@drawable/ic_visibility_off_gray"
+            android:title="@string/many_terms_conditions" />
+
+    </group>
+
+</menu>

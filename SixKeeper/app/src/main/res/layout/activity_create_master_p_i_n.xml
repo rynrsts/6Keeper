@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/asdas"
+    tools:context=".CreateMasterPINActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateMasterPINVertical10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateMasterPINVertical90"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <TextView
+            android:id="@+id/tvCreateMasterPINHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/many_create_master_pin"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINVertical10"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCreateMasterPINDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/create_master_pin_desc"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateMasterPINHeading" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clCreateMasterPINCircle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateMasterPINDesc">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical20"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".20" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".30" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".40" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical50"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical60"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".70" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINCircleVertical80"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".80" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical30"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical20"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical40"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical30"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical50"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical40"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical60"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical50"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical70"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical60"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateMasterPINCircle6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINCircleVertical80"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINCircleVertical70"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/clCreateMasterPINCircle">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINButtonVertical3333"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".3333" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateMasterPINButtonVertical6667"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".6667" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_one"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_two"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_three"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_four"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_five"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_six"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_seven"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_eight"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_nine"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButtonCancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_cancel"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton7" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButton0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_zero"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateMasterPINButtonDelete"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_delete"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gCreateMasterPINButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateMasterPINButton9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

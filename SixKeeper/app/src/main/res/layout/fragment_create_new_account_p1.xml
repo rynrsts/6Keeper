@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    android:scrollbarThumbVertical="@null"
+    tools:context=".CreateNewAccountP1Fragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="36dp"
+        android:paddingBottom="36dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP1Vertical10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP1Vertical90"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <TextView
+            android:id="@+id/tvCreateNewAccP1FirstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/many_first_name"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etCreateNewAccP1FirstName"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/layout_edit_text"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="30"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1FirstName"
+            tools:ignore="Autofill, LabelFor" />
+
+        <LinearLayout
+            android:id="@+id/llCreateNewAccP1FirstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1FirstName" />
+
+        <TextView
+            android:id="@+id/tvCreateNewAccP1LastName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/many_last_name"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1FirstName" />
+
+        <EditText
+            android:id="@+id/etCreateNewAccP1LastName"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/layout_edit_text"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="30"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1LastName"
+            tools:ignore="Autofill, LabelFor" />
+
+        <LinearLayout
+            android:id="@+id/llCreateNewAccP1LastName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1LastName" />
+
+        <TextView
+            android:id="@+id/tvCreateNewAccP1BirthDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/many_birth_date"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
+
+        <DatePicker
+            android:id="@+id/dpCreateNewAccP1BirthDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
+
+        <View
+            android:id="@+id/vCreateNewAccP1Division"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/dpCreateNewAccP1BirthDate" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acbCreateNewAccP1Next"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/layout_button_green_quadrilateral"
+            android:stateListAnimator="@null"
+            android:text="@string/many_next"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

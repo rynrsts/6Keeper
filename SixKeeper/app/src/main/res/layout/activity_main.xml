@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gMainVertical10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gMain1Vertical90"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbMainLogin"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/layout_button_green_quadrilateral"
+        android:stateListAnimator="@null"
+        android:text="@string/many_login"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/gMain1Vertical90"
+        app:layout_constraintStart_toStartOf="@+id/gMainVertical10"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbMainCreateNewAccount"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_button_green_quadrilateral"
+        android:stateListAnimator="@null"
+        android:text="@string/many_create_new_account"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/gMain1Vertical90"
+        app:layout_constraintStart_toStartOf="@+id/gMainVertical10"
+        app:layout_constraintTop_toBottomOf="@+id/acbMainLogin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
