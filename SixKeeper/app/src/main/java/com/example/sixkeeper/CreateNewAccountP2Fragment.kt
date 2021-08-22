@@ -23,6 +23,7 @@ class CreateNewAccountP2Fragment : CreateNewAccountP2ValidationClass() {
         )
     }
 
+    /*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,7 +56,7 @@ class CreateNewAccountP2Fragment : CreateNewAccountP2ValidationClass() {
 
     private fun setButtonOnClick() {
         val acbCreateNewAccP2EmailSendCode: Button =
-                getAppCompatActivity().findViewById(R.id.acbCreateNewAccP2EmailSendCode)
+                getAppCompatActivity().findViewById(R.id.acbCreateNewAccP1EmailSendCode)
         val acbCreateNewAccP2VerifyEmail: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP2VerifyEmail)
         val acbCreateNewAccP2MobileNumSendCode: Button =
@@ -141,13 +142,12 @@ class CreateNewAccountP2Fragment : CreateNewAccountP2ValidationClass() {
             }
         }
 
-        // TODO: Create New Account P2
         acbCreateNewAccP2Next.setOnClickListener {
-//            if (isNotEmpty()) {
-//                validateEmail()
-//                validateMobileNumber()
-//
-//                if (isValid()) {
+            if (isNotEmpty()) {
+                validateEmail()
+                validateMobileNumber()
+
+                if (isValid()) {
             val immKeyboard: InputMethodManager =
                     getAppCompatActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE
@@ -165,18 +165,19 @@ class CreateNewAccountP2Fragment : CreateNewAccountP2ValidationClass() {
             createNewAccountActivity.manageCreateNewAccFragments(
                     createNewAccountActivity.getCreateNewAccP3()
             )
-//                }
-//            } else {
-//                val toast: Toast = Toast.makeText(
-//                    getAppCompatActivity().applicationContext,
-//                    R.string.many_fill_missing_fields,
-//                    Toast.LENGTH_SHORT
-//                )
-//                toast.apply {
-//                    setGravity(Gravity.CENTER, 0, 0)
-//                    show()
-//                }
-//            }
+                }
+            } else {
+                val toast: Toast = Toast.makeText(
+                    getAppCompatActivity().applicationContext,
+                    R.string.many_fill_missing_fields,
+                    Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
     }
+    */
 }

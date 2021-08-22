@@ -54,17 +54,16 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 alert.setTitle(R.string.many_alert_title)
                 alert.show()
             }
-            getFragmentNum() == 2 -> {
-                manageCreateNewAccFragments(getCreateNewAccP1())
-            }
+
+            // TODO:
+//            getFragmentNum() == 2 -> {
+//                manageCreateNewAccFragments(getCreateNewAccP1())
+//            }
             getFragmentNum() == 3 -> {
-                manageCreateNewAccFragments(getCreateNewAccP2())
+                manageCreateNewAccFragments(getCreateNewAccP1())
             }
             getFragmentNum() == 4 -> {
                 manageCreateNewAccFragments(getCreateNewAccP3())
-            }
-            getFragmentNum() == 5 -> {
-                manageCreateNewAccFragments(getCreateNewAccP4())
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 open class CreateNewAccountP2ValidationClass : Fragment() {
+    /*
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var etCreateNewAccP2Email: EditText
     private lateinit var etCreateNewAccP2EmailEnterCode: EditText
@@ -169,4 +170,5 @@ open class CreateNewAccountP2ValidationClass : Fragment() {
     fun isValid(): Boolean {                                                                        // Validate EditTexts
         return validFields[0] && validFields[1]
     }
+    */
 }

@@ -41,12 +41,16 @@
     <string name="many_create_master_pin">Create Your Master PIN</string>
     <string name="many_create_new_account">Create New Account</string>
     <string name="many_birth_date">Birth Date</string>
+    <string name="many_birth_date_format">MM/DD/YYYY</string>
+    <string name="many_birth_date_format_message">
+        *Please use the format MM/DD/YYYY.
+    </string>
     <string name="many_dashboard">Dashboard</string>
     <string name="many_delete">Delete</string>
     <string name="many_eight">8</string>
     <string name="many_email">Email</string>
     <string name="many_email_hint"><i>ex. sample@domain.ext</i></string>
-    <string name="many_enter_code">Enter Code</string>
+<!--    <string name="many_enter_code">Enter Code</string>-->
     <string name="many_enter_code_mes">Please enter the code.</string>
     <string name="many_enter_master_pin">Enter Your Master PIN</string>
     <string name="many_fill_email_field">Please fill the Email field first.</string>
@@ -70,7 +74,7 @@
     <string name="many_password_generator">Password Generator</string>
     <string name="many_recycle_bin">Recycle Bin</string>
     <string name="many_required_mes">*Required</string>
-    <string name="many_send_code">Send Code</string>
+<!--    <string name="many_send_code">Send Code</string>-->
     <string name="many_settings">Settings</string>
     <string name="many_setup_complete">Setup Complete!</string>
     <string name="many_setup_face_recognition">Setup Face Recognition</string>
@@ -96,7 +100,7 @@
         *Should be at least 6 characters. Can contain lower and upper case letters, numbers, and
         special characters: dot (.), hyphen (-) and underscore (_), without space/s.
     </string>
-    <string name="many_verify">Verify</string>
+<!--    <string name="many_verify">Verify</string>-->
     <string name="many_zero">0</string>
 
     <!-- Password Generator -->

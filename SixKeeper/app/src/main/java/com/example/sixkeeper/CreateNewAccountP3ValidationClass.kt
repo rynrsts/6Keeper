@@ -164,6 +164,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
     fun validateConfirmPassword() {                                                                 // Validate confirm password
         val llCreateNewAccP3ConfirmPassword: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP3ConfirmPassword)
+        password = etCreateNewAccP3Password.text.toString()
 
         when (confirmPassword) {
             password -> {

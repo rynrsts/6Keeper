@@ -64,6 +64,10 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
             when {
                 isMasterPINSetup() && isTermsChecked() -> {
                     getAppCompatActivity().finish()
+                    getAppCompatActivity().overridePendingTransition(
+                            R.anim.anim_enter_left_to_right_2,
+                            R.anim.anim_exit_left_to_right_2
+                    )
                 }
                 isMasterPINSetup() && !isTermsChecked() -> {
                     val toast: Toast = Toast.makeText(

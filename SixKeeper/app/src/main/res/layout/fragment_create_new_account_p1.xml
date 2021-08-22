@@ -1,139 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="?android:attr/actionBarSize"
-    android:scrollbarThumbVertical="@null"
     tools:context=".CreateNewAccountP1Fragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="?android:attr/actionBarSize"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clCreateNewAccP1Container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP1Vertical10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP1Vertical90"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.90" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/many_first_name"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1FirstName"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1FirstName"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1FirstName"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1FirstName" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_last_name"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1FirstName" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1LastName"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1LastName"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1LastName"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1LastName" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_birth_date"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_birth_date_format"
+                android:inputType="text"
+                android:maxLength="10"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1BirthDate"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1BirthDate"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1BirthDate" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_email"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1BirthDate" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_email_hint"
+                android:inputType="textEmailAddress"
+                android:maxLength="60"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Email"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1Email"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1Email"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1Email" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_mobile_number"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1Email" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_mobile_number_hint"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1MobileNumber"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1MobileNumber"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1MobileNumber"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1MobileNumber" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="36dp"
-        android:paddingBottom="36dp">
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP1Vertical10"
+            android:id="@+id/gCreateNewAccP1BottomVertical10"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent=".10" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP1Vertical90"
+            android:id="@+id/gCreateNewAccP1BottomVertical90"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
 
-        <TextView
-            android:id="@+id/tvCreateNewAccP1FirstName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/many_first_name"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/etCreateNewAccP1FirstName"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/layout_edit_text"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:maxLength="30"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1FirstName"
-            tools:ignore="Autofill, LabelFor" />
-
-        <LinearLayout
-            android:id="@+id/llCreateNewAccP1FirstName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1FirstName" />
-
-        <TextView
-            android:id="@+id/tvCreateNewAccP1LastName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/many_last_name"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1FirstName" />
-
-        <EditText
-            android:id="@+id/etCreateNewAccP1LastName"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/layout_edit_text"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:maxLength="30"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1LastName"
-            tools:ignore="Autofill, LabelFor" />
-
-        <LinearLayout
-            android:id="@+id/llCreateNewAccP1LastName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1LastName" />
-
-        <TextView
-            android:id="@+id/tvCreateNewAccP1BirthDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/many_birth_date"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
-
-        <DatePicker
-            android:id="@+id/dpCreateNewAccP1BirthDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
-
         <View
-            android:id="@+id/vCreateNewAccP1Division"
+            android:id="@+id/vCreateNewAccP1Division1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/dpCreateNewAccP1BirthDate" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP1Next"
             android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="36dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="21dp"
             android:background="@drawable/layout_button_green_quadrilateral"
             android:stateListAnimator="@null"
             android:text="@string/many_next"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical10"
-            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division" />
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1BottomVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1BottomVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

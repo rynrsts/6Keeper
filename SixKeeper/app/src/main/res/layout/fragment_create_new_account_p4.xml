@@ -31,11 +31,12 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4MasterPIN"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:background="@drawable/layout_button_green_quadrilateral"
             android:stateListAnimator="@null"
             android:text="@string/many_setup_master_pin"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,6 +45,7 @@
             android:id="@+id/tvCreateNewAccP4MasterPINMes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="@string/many_required_mes"
             android:textColor="@color/red"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
@@ -53,7 +55,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4FaceRec"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:layout_marginTop="21dp"
             android:background="@drawable/layout_button_green_border"
             android:stateListAnimator="@null"
@@ -67,6 +69,7 @@
             android:id="@+id/llCreateNewAccP4FaceRec"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
@@ -75,7 +78,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4Fingerprint"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/layout_button_green_border"
             android:stateListAnimator="@null"
@@ -115,12 +118,13 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4Register"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:layout_marginTop="6dp"
             android:background="@drawable/layout_button_green_quadrilateral"
             android:stateListAnimator="@null"
             android:text="@string/create_new_acc_p4_register"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
             app:layout_constraintTop_toBottomOf="@+id/cbCreateNewAccP4AgreeToTerms" />

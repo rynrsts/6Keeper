@@ -2,7 +2,6 @@ package com.example.sixkeeper
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 
 class MainActivity : ChangeStatusBarToWhiteClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,10 +9,14 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         setContentView(R.layout.activity_main)
 
         changeStatusBarColor()
-        setButtonOnClick()
+        //setButtonOnClick()
+
+        val goToLoginActivity = Intent(this, LoginActivity::class.java)
+        startActivity(goToLoginActivity)
+        this.finish()
     }
 
-    private fun setButtonOnClick() {
+    /*private fun setButtonOnClick() {
         val acbMainLogin: Button = findViewById(R.id.acbMainLogin)
         val acbMainCreateNewAccount: Button = findViewById(R.id.acbMainCreateNewAccount)
 
@@ -57,5 +60,5 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
                 )
             }
         }
-    }
+    }*/
 }

@@ -27,6 +27,7 @@ class LoginActivity : LoginValidationClass() {
 
     private fun setButtonOnClick() {
         val acbLoginLogin: Button = findViewById(R.id.acbLoginLogin)
+        val acbLoginCreateNewAccount: Button = findViewById(R.id.acbLoginCreateNewAccount)
 
         // TODO:
         acbLoginLogin.setOnClickListener {
@@ -64,6 +65,25 @@ class LoginActivity : LoginValidationClass() {
 //                    show()
 //                }
 //            }
+        }
+
+        acbLoginCreateNewAccount.setOnClickListener {
+            val goToCreateNewAccountActivity = Intent(this, CreateNewAccountActivity::class.java)
+
+            startActivity(goToCreateNewAccountActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_right_to_left_2,
+                    R.anim.anim_exit_right_to_left_2
+            )
+
+            it.apply {
+                acbLoginCreateNewAccount.isClickable = false
+                postDelayed(
+                        {
+                            acbLoginCreateNewAccount.isClickable = true
+                        }, 1000
+                )
+            }
         }
     }
 
