@@ -1,10 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
     tools:context=".RecycleBinFragment">
 
+    <LinearLayout
+        android:id="@+id/llRecycleBinSelectAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <CheckBox
+            android:id="@+id/cbRecycleBinSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tvRecycleBinSelectAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/recycle_bin_select_all"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cbRecycleBinSelectAll"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vRecycleBinDivision1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/llRecycleBinSelectAll" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gRecycleBinBottomVertical10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gRecycleBinBottomVertical50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gRecycleBinBottomVertical90"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".90" />
+
+        <View
+            android:id="@+id/vRecycleBinBottomDivision"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRecycleBinDelete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toStartOf="@+id/gRecycleBinBottomVertical50"
+            app:layout_constraintStart_toStartOf="@+id/gRecycleBinBottomVertical10">
+
+            <ImageView
+                android:id="@+id/ivRecycleBinDelete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete_red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRecycleBinDelete"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvRecycleBinDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/many_delete"
+                android:textColor="@color/maroon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivRecycleBinDelete"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRecycleBinRestore"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toStartOf="@+id/gRecycleBinBottomVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gRecycleBinBottomVertical50">
+
+            <ImageView
+                android:id="@+id/ivRecycleBinRestore"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_restore_from_trash_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRecycleBinRestore"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvRecycleBinRestore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/recycle_bin_restore"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivRecycleBinRestore"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

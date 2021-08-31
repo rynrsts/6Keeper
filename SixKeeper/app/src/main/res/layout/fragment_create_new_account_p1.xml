@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
     tools:context=".CreateNewAccountP1Fragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingTop="?android:attr/actionBarSize"
         android:scrollbarThumbVertical="@null"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clCreateNewAccP1Container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="36dp"

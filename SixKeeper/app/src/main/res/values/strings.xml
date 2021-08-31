@@ -109,6 +109,7 @@
         If you want to only include specific special characters, please enter separated by spaces,
         otherwise, leave it blank.
     </string>
+    <string name="pass_generator_fill_length">Please fill the Length field first.</string>
     <string name="pass_generator_generate">Generate</string>
     <string name="pass_generator_generated_pass">Generated Password</string>
     <string name="pass_generator_include">Include:</string>
@@ -116,14 +117,22 @@
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
+    <string name="pass_generator_save_generated_pass">Save Generated Password</string>
     <string name="pass_generator_select_char">
         Please select desired characters to generate password.
     </string>
     <string name="pass_generator_special_char">Special Characters</string>
-    <string name="pass_generator_fill_length">Please fill the Length field first.</string>
+    <string name="pass_generator_view_saved_pass">View Saved Password</string>
     <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>
+
+    <!-- Recycle Bin -->
+    <string name="recycle_bin_restore">Restore</string>
+    <string name="recycle_bin_select_all">Select All</string>
 
     <!-- Title Activity -->
     <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <!-- Dummy -->
+    <string name="dummy_username">Username</string>
 
 </resources>

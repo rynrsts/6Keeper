@@ -2,19 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@drawable/layout_navigation_header"
+    android:background="@drawable/layout_button_blue_quadrilateral"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:paddingBottom="20dp"
+    android:paddingBottom="40dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="17sp"
-        android:textColor="@color/white" />
+    <View
+        android:id="@+id/vCreateNewAccP4Division"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/layout_account_circle" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCreateNewAccP1FirstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/dummy_username"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

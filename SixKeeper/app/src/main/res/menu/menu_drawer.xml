@@ -22,7 +22,7 @@
 
         <item
             android:id="@+id/recycleBinFragment"
-            android:icon="@drawable/ic_visibility_off_gray"
+            android:icon="@drawable/ic_delete_red"
             android:title="@string/many_recycle_bin" />
 
         <item
@@ -42,7 +42,7 @@
 
         <item
             android:id="@+id/termsConditionsFragment"
-            android:icon="@drawable/ic_visibility_off_gray"
+            android:icon="@drawable/ic_terms_and_conditions_black"
             android:title="@string/many_terms_conditions" />
 
         <item
