@@ -10,41 +10,49 @@
         android:name="com.example.sixkeeper.DashboardFragment"
         android:label="@string/many_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+
     <fragment
         android:id="@+id/accountsFragment"
         android:name="com.example.sixkeeper.AccountsFragment"
         android:label="@string/many_accounts"
         tools:layout="@layout/fragment_accounts" />
+
     <fragment
         android:id="@+id/passwordGeneratorFragment"
         android:name="com.example.sixkeeper.PasswordGeneratorFragment"
         android:label="@string/many_password_generator"
         tools:layout="@layout/fragment_password_generator" />
+
     <fragment
         android:id="@+id/recycleBinFragment"
         android:name="com.example.sixkeeper.RecycleBinFragment"
         android:label="@string/many_recycle_bin"
         tools:layout="@layout/fragment_recycle_bin" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.sixkeeper.SettingsFragment"
         android:label="@string/many_settings"
         tools:layout="@layout/fragment_settings" />
+
     <fragment
         android:id="@+id/contactUsFragment"
         android:name="com.example.sixkeeper.ContactUsFragment"
         android:label="@string/many_contact_us"
         tools:layout="@layout/fragment_contact_us" />
+
     <fragment
         android:id="@+id/aboutUsFragment"
         android:name="com.example.sixkeeper.AboutUsFragment"
         android:label="@string/many_about_us"
         tools:layout="@layout/fragment_about_us" />
+
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.example.sixkeeper.HelpFragment"
         android:label="@string/many_help"
         tools:layout="@layout/fragment_help" />
+
     <fragment
         android:id="@+id/termsConditionsFragment"
         android:name="com.example.sixkeeper.TermsConditionsFragment"

@@ -3,11 +3,22 @@ package com.example.sixkeeper
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 
 class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
+    private lateinit var firstName: String
+    private lateinit var lastName: String
+    private lateinit var birthDate: String
+    private lateinit var email: String
+    private var mobileNumber: Int = 0
+    private lateinit var username: String
+    private lateinit var password: String
+    private var masterPin: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_new_account)
@@ -65,6 +76,48 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
             getFragmentNum() == 4 -> {
                 manageCreateNewAccFragments(getCreateNewAccP3())
             }
+        }
+    }
+
+    // CreateNewAccountP1 Data
+    internal fun setCreateNewAccountP1Data(f: String, l: String, b: String, e: String, m: Int) {
+        firstName = f
+        lastName = l
+        birthDate = b
+        email = e
+        mobileNumber = m
+    }
+
+    // CreateNewAccountP3 Data
+    internal fun setCreateNewAccountP3Data(u: String, p: String) {
+        username = u
+        password = p
+    }
+
+    // CreateNewAccountP4 Data
+    internal fun setCreateNewAccountP4Data(mp: Int) {
+        masterPin = mp
+    }
+
+    // Save data to database
+    internal fun saveToDatabase() {
+        val userId: Int = (1000..9999).random()
+        val databaseHandler = DatabaseHandlerClass(this)
+
+        val userInfoStatus = databaseHandler.addUserInfo(
+                UserInfoModelClass(userId, firstName, lastName, birthDate, email, mobileNumber)
+        )
+        val userAccStatus = databaseHandler.addUserAcc(
+                UserAccModelClass(userId, username, password, masterPin)
+        )
+
+        if (userAccStatus > -1 && userInfoStatus > -1) {
+            val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    R.string.create_new_acc_success, Toast.LENGTH_LONG
+            )
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
         }
     }
 }

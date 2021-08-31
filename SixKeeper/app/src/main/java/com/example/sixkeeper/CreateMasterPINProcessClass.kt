@@ -148,7 +148,7 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
-    fun unShadeAllPin() {
+    private fun unShadeAllPin() {
         ivCreateMasterPINCircle1.setImageResource(R.drawable.layout_blue_border_circle)
         ivCreateMasterPINCircle2.setImageResource(R.drawable.layout_blue_border_circle)
         ivCreateMasterPINCircle3.setImageResource(R.drawable.layout_blue_border_circle)

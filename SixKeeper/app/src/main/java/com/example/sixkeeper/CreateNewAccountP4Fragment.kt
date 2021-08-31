@@ -63,6 +63,8 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         acbCreateNewAccP4Register.setOnClickListener {
             when {
                 isMasterPINSetup() && isTermsChecked() -> {
+                    getCreateNewAccountActivity().saveToDatabase()
+
                     getAppCompatActivity().finish()
                     getAppCompatActivity().overridePendingTransition(
                             R.anim.anim_enter_left_to_right_2,
@@ -88,18 +90,19 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
+        val masterPin: Int = data?.getIntExtra("masterPin", 0)!!
+
         when {
             requestCode == 16914 && resultCode == 16914 -> {
                 getTvCreateNewAccP4MasterPinMes().apply {
                     setText(R.string.many_setup_complete)
                     setTextColor(ContextCompat.getColor(context, R.color.blue))
                 }
+
+                getCreateNewAccountActivity().apply {
+                    setCreateNewAccountP4Data(masterPin)
+                }
             }
         }
-
-        // TODO:
-//        val masterPin: Int = data?.getIntExtra("masterPin", 0)!!
-//        val registerActivity: RegisterActivity = activity as RegisterActivity
-//        registerActivity.setRegisterPart3MasterPinData(masterPin)
     }
 }

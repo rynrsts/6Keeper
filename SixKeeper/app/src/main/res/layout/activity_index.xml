@@ -26,7 +26,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/graph_navigation" />
+            app:navGraph="@navigation/graph_navigation"
+            tools:ignore="FragmentTagUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

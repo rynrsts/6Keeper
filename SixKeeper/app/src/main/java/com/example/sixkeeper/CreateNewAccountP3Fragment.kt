@@ -135,23 +135,27 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
 //                validateConfirmPassword()
 //
 //                if (isValid()) {
-            val immKeyboard: InputMethodManager =
-                    getAppCompatActivity().getSystemService(
-                            Context.INPUT_METHOD_SERVICE
-                    ) as InputMethodManager
+                    val immKeyboard: InputMethodManager =
+                            getAppCompatActivity().getSystemService(
+                                    Context.INPUT_METHOD_SERVICE
+                            ) as InputMethodManager
 
-            if (immKeyboard.isActive) {
-                immKeyboard.hideSoftInputFromWindow(
-                        getAppCompatActivity().currentFocus?.windowToken,
-                        0
-                )
-            }
+                    if (immKeyboard.isActive) {
+                        immKeyboard.hideSoftInputFromWindow(
+                                getAppCompatActivity().currentFocus?.windowToken,
+                                0
+                        )
+                    }
 
-            val createNewAccountActivity: CreateNewAccountActivity =
-                    activity as CreateNewAccountActivity
-            createNewAccountActivity.manageCreateNewAccFragments(
-                    createNewAccountActivity.getCreateNewAccP4()
-            )
+                    val createNewAccountActivity: CreateNewAccountActivity =
+                            activity as CreateNewAccountActivity
+                    createNewAccountActivity.manageCreateNewAccFragments(
+                            createNewAccountActivity.getCreateNewAccP4()
+                    )
+                    createNewAccountActivity.apply {
+                        manageCreateNewAccFragments(createNewAccountActivity.getCreateNewAccP4())
+                        setCreateNewAccountP3Data(getUsername(), getPassword())
+                    }
 //                }
 //            } else {
 //                val toast: Toast = Toast.makeText(

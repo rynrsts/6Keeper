@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 
 open class CreateNewAccountP4ValidationClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var createNewAccountActivity: CreateNewAccountActivity
 
     private lateinit var tvCreateNewAccP4MasterPinMes: TextView
     private lateinit var cbCreateNewAccP4AgreeToTerms: CheckBox
 
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        createNewAccountActivity = activity as CreateNewAccountActivity
+
         tvCreateNewAccP4MasterPinMes =
                 getAppCompatActivity().findViewById(R.id.tvCreateNewAccP4MasterPINMes)
         cbCreateNewAccP4AgreeToTerms =
@@ -21,6 +24,10 @@ open class CreateNewAccountP4ValidationClass : Fragment() {
 
     fun getAppCompatActivity(): AppCompatActivity {
         return appCompatActivity
+    }
+
+    fun getCreateNewAccountActivity(): CreateNewAccountActivity {
+        return createNewAccountActivity
     }
 
     fun getTvCreateNewAccP4MasterPinMes(): TextView {

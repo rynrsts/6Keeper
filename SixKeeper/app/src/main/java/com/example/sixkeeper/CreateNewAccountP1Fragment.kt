@@ -101,6 +101,9 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                             getAppCompatActivity().getSystemService(
                                     Context.INPUT_METHOD_SERVICE
                             ) as InputMethodManager
+                    val mobileNumberInt = getEtCreateNewAccP1MobileNumber().text.toString().toInt()
+                    val createNewAccountActivity: CreateNewAccountActivity =
+                            activity as CreateNewAccountActivity
 
                     if (immKeyboard.isActive) {
                         immKeyboard.hideSoftInputFromWindow(
@@ -109,11 +112,16 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                         )
                     }
 
-                    val createNewAccountActivity: CreateNewAccountActivity =
-                            activity as CreateNewAccountActivity
-                    createNewAccountActivity.manageCreateNewAccFragments(
-                            createNewAccountActivity.getCreateNewAccP3()
-                    )
+                    createNewAccountActivity.apply {
+                        manageCreateNewAccFragments(createNewAccountActivity.getCreateNewAccP3())
+                        setCreateNewAccountP1Data(
+                                getFirstName(),
+                                getLastName(),
+                                getBirthDate(),
+                                getEmail(),
+                                mobileNumberInt
+                        )
+                    }
 //                }
 //            } else {
 //                val toast: Toast = Toast.makeText(

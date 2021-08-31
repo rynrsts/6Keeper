@@ -21,6 +21,7 @@
         Please read and agree to terms and conditions.
     </string>
     <string name="create_new_acc_p4_register">Register</string>
+    <string name="create_new_acc_success">Registered successfully!</string>
 
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
@@ -28,7 +29,7 @@
     <string name="login_enter_credentials">Please enter your credentials.</string>
 
     <!-- Many -->
-    <string name="many_about_us">About Us</string>
+    <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
     <string name="many_alert_title">Warning!</string>
     <string name="many_alert_message">
@@ -50,7 +51,7 @@
     <string name="many_eight">8</string>
     <string name="many_email">Email</string>
     <string name="many_email_hint"><i>ex. sample@domain.ext</i></string>
-<!--    <string name="many_enter_code">Enter Code</string>-->
+<!--    TODO: <string name="many_enter_code">Enter Code</string>-->
     <string name="many_enter_code_mes">Please enter the code.</string>
     <string name="many_enter_master_pin">Enter Your Master PIN</string>
     <string name="many_fill_email_field">Please fill the Email field first.</string>
@@ -59,7 +60,7 @@
     <string name="many_first_name">First Name</string>
     <string name="many_five">5</string>
     <string name="many_four">4</string>
-    <string name="many_help">Help</string>
+    <string name="many_help">FAQS</string>
     <string name="many_last_name">Last Name</string>
     <string name="many_letters_only_message">
         *Can only contain letters, and special characters: period (.) and hyphen (-).
@@ -74,7 +75,7 @@
     <string name="many_password_generator">Password Generator</string>
     <string name="many_recycle_bin">Recycle Bin</string>
     <string name="many_required_mes">*Required</string>
-<!--    <string name="many_send_code">Send Code</string>-->
+<!--    TODO: <string name="many_send_code">Send Code</string>-->
     <string name="many_settings">Settings</string>
     <string name="many_setup_complete">Setup Complete!</string>
     <string name="many_setup_face_recognition">Setup Face Recognition</string>
@@ -100,7 +101,7 @@
         *Should be at least 6 characters. Can contain lower and upper case letters, numbers, and
         special characters: dot (.), hyphen (-) and underscore (_), without space/s.
     </string>
-<!--    <string name="many_verify">Verify</string>-->
+<!--    TODO: <string name="many_verify">Verify</string>-->
     <string name="many_zero">0</string>
 
     <!-- Password Generator -->
