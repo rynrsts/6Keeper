@@ -10,14 +10,15 @@
     <LinearLayout
         android:id="@+id/llRecycleBinSelectAll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
         <CheckBox
             android:id="@+id/cbRecycleBinSelectAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_marginStart="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +26,7 @@
         <TextView
             android:id="@+id/tvRecycleBinSelectAll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/recycle_bin_select_all"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,25 +50,11 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gRecycleBinBottomVertical10"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".10" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gRecycleBinBottomVertical50"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent=".50" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gRecycleBinBottomVertical90"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".90" />
 
         <View
             android:id="@+id/vRecycleBinBottomDivision"
@@ -83,7 +70,7 @@
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintEnd_toStartOf="@+id/gRecycleBinBottomVertical50"
-            app:layout_constraintStart_toStartOf="@+id/gRecycleBinBottomVertical10">
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/ivRecycleBinDelete"
@@ -117,7 +104,7 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintEnd_toStartOf="@+id/gRecycleBinBottomVertical90"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/gRecycleBinBottomVertical50">
 
             <ImageView

@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
     tools:context=".AboutUsFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp">
 
-</FrameLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAboutUsVertical10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAboutUsVertical30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".30" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAboutUsVertical70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".70" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAboutUsVertical90"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".90" />
+
+            <ImageView
+                android:id="@+id/ivAboutUsLogo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/img_logo_and_name"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gAboutUsVertical70"
+                app:layout_constraintStart_toStartOf="@+id/gAboutUsVertical30"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvAboutUsVersion"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/about_us_version"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/gAboutUsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gAboutUsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/ivAboutUsLogo"
+                tools:ignore="RtlCompat" />
+
+            <TextView
+                android:id="@+id/tvAboutUsAbout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="36dp"
+                android:gravity="center_vertical"
+                android:text="@string/dummy_lorem_ipsum"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/gAboutUsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gAboutUsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvAboutUsVersion"
+                tools:ignore="RtlCompat" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

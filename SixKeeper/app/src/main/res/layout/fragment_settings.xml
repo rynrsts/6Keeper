@@ -1,10 +1,487 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
     tools:context=".SettingsFragment">
 
-    
+    <ScrollView
+        android:id="@+id/svPasswordGeneratorBody"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gSettingsVertical10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gSettingsVertical90"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".90" />
+
+            <TextView
+                android:id="@+id/tvSettingsGeneral"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_general"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsHideCategories"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingsGeneral">
+
+                <ImageView
+                    android:id="@+id/ivSettingsHideCategories"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_folder_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsHideCategories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_hide_categories"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsHideCategories"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsHideCategories"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsHideCatDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_hide_categories"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsHideCategories"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsHideCategories"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsHideCategories" />
+
+                <Switch
+                    android:id="@+id/sSettingsHideCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsDisableSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsHideCategories">
+
+                <ImageView
+                    android:id="@+id/ivSettingsDisableSearch"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_search_off_light_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_disable_search"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableSearch"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableSearch"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableSearchDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_disable_search"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableSearch"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableSearch"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsDisableSearch" />
+
+                <Switch
+                    android:id="@+id/sSettingsDisableSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsDisableNotifications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableSearch">
+
+                <ImageView
+                    android:id="@+id/ivSettingsDisableNotifications"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_notifications_active_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableNotifications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_disable_notifications"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableNotifications"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableNotifications"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableNotifDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_disable_notifications"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableNotifications"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableNotifications"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsDisableNotifications" />
+
+                <Switch
+                    android:id="@+id/sSettingsDisableNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsDisableThemes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableNotifications">
+
+                <ImageView
+                    android:id="@+id/ivSettingsDisableThemes"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_paint_palette_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableThemes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_themes"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableThemes"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableThemes"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsDisableThemesDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_themes"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsDisableThemes"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableThemes"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsDisableThemes" />
+
+                <Switch
+                    android:id="@+id/sSettingsDisableThemes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSettingsDivision1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="36dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableThemes" />
+
+            <TextView
+                android:id="@+id/tvSettingsSecurity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="33dp"
+                android:text="@string/settings_security"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision1" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingBlockAppScreenShots"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingsSecurity">
+
+                <ImageView
+                    android:id="@+id/ivSettingsBlockAppScreenShots"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_do_not_disturb_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsBlockAppScreenShots"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_block_app_ss"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsBlockAppScreenShots"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsBlockAppScreenShots"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsBlockAppSSDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_block_app_ss"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsBlockAppScreenShots"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsBlockAppScreenShots"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsBlockAppScreenShots" />
+
+                <Switch
+                    android:id="@+id/sSettingsBlockAppScreenShots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsBlockTextualCopy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingBlockAppScreenShots">
+
+                <ImageView
+                    android:id="@+id/ivSettingsBlockTextualCopy"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_content_paste_off_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsBlockTextualCopy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_block_textual_copy"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsBlockTextualCopy"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsBlockTextualCopy"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsBlockTextualCopyDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_block_textual_copy"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsBlockTextualCopy"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsBlockTextualCopy"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsBlockTextualCopy" />
+
+                <Switch
+                    android:id="@+id/sSettingsBlockTextualCopy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsAutoLock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsBlockTextualCopy">
+
+                <ImageView
+                    android:id="@+id/ivSettingsAutoLock"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_lock_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLock"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_auto_lock"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsAutoLock"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLock"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLockDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_auto_lock"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsAutoLock"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLock"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsAutoLock" />
+
+                <Switch
+                    android:id="@+id/sSettingsAutoLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsAutoLockDelay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLock">
+
+                <ImageView
+                    android:id="@+id/ivSettingsAutoLockDelay"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_access_time_light_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLockDelay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/settings_auto_lock_delay"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsAutoLockDelay"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLockDelay"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLockDelayDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/settings_auto_lock_delay"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/sSettingsAutoLockDelay"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLockDelay"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsAutoLockDelay" />
+
+                <Switch
+                    android:id="@+id/sSettingsAutoLockDelay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

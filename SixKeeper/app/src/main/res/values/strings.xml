@@ -3,6 +3,9 @@
     <!-- App Name -->
     <string name="app_name">6Keeper</string>
 
+    <!-- About Us -->
+    <string name="about_us_version">Version 1.0</string>
+
     <!-- Accounts -->
     <string name="accounts_categories">Categories</string>
     <string name="accounts_favorites">Favorites</string>
@@ -129,10 +132,25 @@
     <string name="recycle_bin_restore">Restore</string>
     <string name="recycle_bin_select_all">Select All</string>
 
+    <!-- Settings -->
+    <string name="settings_auto_lock">Auto Lock</string>
+    <string name="settings_auto_lock_delay">Auto Lock Delay</string>
+    <string name="settings_block_app_ss">Block App Screenshot</string>
+    <string name="settings_block_textual_copy">Block Textual Copy</string>
+    <string name="settings_disable_notifications">Disable Notifications</string>
+    <string name="settings_disable_search">Disable Search</string>
+    <string name="settings_general">General</string>
+    <string name="settings_hide_categories">Hide Categories</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_themes">Themes</string>
+
     <!-- Title Activity -->
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!-- Dummy -->
     <string name="dummy_username">Username</string>
-
+    <string name="dummy_lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.
+        Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
+        magna eros quis urna.</string>
 </resources>
