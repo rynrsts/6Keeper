@@ -1,15 +1,9 @@
 package com.example.sixkeeper
 
-import android.text.InputType
-import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 open class PasswordGeneratorProcessClass : Fragment() {
@@ -21,8 +15,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var cbPassGeneratorSpecialChar: CheckBox
     private lateinit var cbPassGeneratorNumber: CheckBox
     private lateinit var tvPassGeneratorGeneratedPass: TextView
-
-    private lateinit var llSpecialCharacter: LinearLayout
 
     private lateinit var passwordGeneratorLength: String
 
@@ -54,10 +46,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return tvPassGeneratorGeneratedPass
     }
 
-    fun getLlSpecialCharacter(): LinearLayout {
-        return llSpecialCharacter
-    }
-
     fun setPasswordGeneratorLength(s: String) {
         passwordGeneratorLength = s
     }
@@ -76,53 +64,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         cbPassGeneratorNumber = appCompatActivity.findViewById(R.id.cbPassGeneratorNumber)
         tvPassGeneratorGeneratedPass =
                 appCompatActivity.findViewById(R.id.tvPassGeneratorGeneratedPass)
-
-        llSpecialCharacter = LinearLayout(context)
-    }
-
-    fun createSpecialCharViews() {
-        val tvSpecialCharacter = TextView(context)
-        val etSpecialCharacter = EditText(context)
-
-        tvSpecialCharacter.apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            setText(R.string.pass_generator_enter_special_char)
-            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
-            textSize = 13F
-        }
-
-        etSpecialCharacter.apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    84
-            )
-            background = ContextCompat.getDrawable(context, R.drawable.layout_edit_text)
-            inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-        }
-
-        llSpecialCharacter.apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            background = ContextCompat.getDrawable(
-                    context,
-                    R.drawable.layout_constraint_white_quadrilateral
-            )
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
-            addView(tvSpecialCharacter)
-            addView(etSpecialCharacter)
-
-            val topToBottom: Animation = AnimationUtils.loadAnimation(
-                    context,
-                    R.anim.anim_enter_top_to_bottom_2
-            )
-            startAnimation(topToBottom)
-        }
     }
 
     fun generatePassword(length: Int): String {
@@ -142,7 +83,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
             characters += "0123456789"
         }
 
-        for (x in 0..length){
+        for (x in 1..length){
             val random = (characters.indices).random()
             stringBuilder.append(characters[random])
         }

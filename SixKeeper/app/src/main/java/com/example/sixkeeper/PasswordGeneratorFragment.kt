@@ -37,6 +37,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                             getAppCompatActivity().findViewById(R.id.etPassGeneratorLength)
 
                     val length: Int = etPassGeneratorLength.text.toString().toInt()
+
                     if (
                             getCbPassGeneratorLowercase().isChecked ||
                             getCbPassGeneratorUppercase().isChecked ||
@@ -83,24 +84,6 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     }
 
     private fun setOnCheckBoxChecked() {
-        getCbPassGeneratorSpecialChar().setOnClickListener {
-            val llPassGeneratorSpecialChar: LinearLayout =
-                    getAppCompatActivity().findViewById(R.id.llPassGeneratorSpecialChar)
 
-            if (getCbPassGeneratorSpecialChar().isChecked) {
-                createSpecialCharViews()
-
-                llPassGeneratorSpecialChar.apply {
-                    addView(getLlSpecialCharacter())
-                }
-            } else {
-                getLlSpecialCharacter().apply {
-                    removeAllViews()
-                }
-                llPassGeneratorSpecialChar.apply {
-                    removeAllViews()
-                }
-            }
-        }
     }
 }
