@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -102,16 +103,17 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     // Save data to database
     internal fun saveToDatabase() {
         val userId: Int = (1000..9999).random()
-        val databaseHandler = DatabaseHandlerClass(this)
+        val databaseHandler: DatabaseHandlerClass = DatabaseHandlerClass(this)
 
         val userInfoStatus = databaseHandler.addUserInfo(
                 UserInfoModelClass(userId, firstName, lastName, birthDate, email, mobileNumber)
         )
-        val userAccStatus = databaseHandler.addUserAcc(
-                UserAccModelClass(userId, username, password, masterPin)
-        )
+//        val userAccStatus = databaseHandler.addUserAcc(
+//                UserAccModelClass(userId, username, password, masterPin)
+//        )
 
-        if (userAccStatus > -1 && userInfoStatus > -1) {
+//        if (userInfoStatus > -1 && userAccStatus > -1) {
+        if (userInfoStatus > -1) {
             val toast: Toast = Toast.makeText(
                     applicationContext,
                     R.string.create_new_acc_success, Toast.LENGTH_LONG
