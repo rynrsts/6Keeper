@@ -9,21 +9,23 @@ class DatabaseHandlerClass(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "SixKeeperDatabase"
-        private val TABLE_USER_INFO = "UserInformationTable"
-        private val TABLE_USER_ACC = "UserAccountTable"
+        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "SixKeeperDatabase"
+        private const val TABLE_USER_INFO = "UserInformationTable"
+        private const val TABLE_USER_ACC = "UserAccountTable"
 
         //private const val KEY_ID = "id"
-        private val KEY_USER_ID = "user_id"
-        private val KEY_FIRST_NAME = "first_name"
-        private val KEY_LAST_NAME = "last_name"
-        private val KEY_BIRTH_DATE = "birth_date"
-        private val KEY_EMAIL = "email"
-        private val KEY_MOBILE_NUMBER = "mobile_number"
-        private val KEY_USERNAME = "username"
-        private val KEY_PASSWORD = "password"
-        private val KEY_MASTER_PIN = "master_pin"
+        private const val KEY_USER_ID = "user_id"
+
+        private const val KEY_FIRST_NAME = "first_name"
+        private const val KEY_LAST_NAME = "last_name"
+        private const val KEY_BIRTH_DATE = "birth_date"
+        private const val KEY_EMAIL = "email"
+        private const val KEY_MOBILE_NUMBER = "mobile_number"
+
+        private const val KEY_USERNAME = "username"
+        private const val KEY_PASSWORD = "password"
+        private const val KEY_MASTER_PIN = "master_pin"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -32,8 +34,8 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_USER_ID + " INTEGER PRIMARY KEY," +
                         KEY_FIRST_NAME + " TEXT," +
                         KEY_LAST_NAME + " TEXT," +
-                        KEY_BIRTH_DATE + " TEXT" +
-                        KEY_EMAIL + " TEXT" +
+                        KEY_BIRTH_DATE + " TEXT," +
+                        KEY_EMAIL + " TEXT," +
                         KEY_MOBILE_NUMBER + " INTEGER" +
                         ")"
                 )
@@ -41,7 +43,7 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_USER_ACC + "(" +
                         KEY_USER_ID + " INTEGER PRIMARY KEY," +
                         KEY_USERNAME + " TEXT," +
-                        KEY_PASSWORD + " TEXT" +
+                        KEY_PASSWORD + " TEXT," +
                         KEY_MASTER_PIN + " INTEGER" +
                         ")"
                 )
@@ -52,7 +54,7 @@ class DatabaseHandlerClass(context: Context) :
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
         onCreate(db)
     }
 
