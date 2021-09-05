@@ -17,6 +17,18 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         ivLoginTogglePass = findViewById(R.id.ivLoginTogglePass)
     }
 
+    fun setEtLoginUsername(s: String) {
+        etLoginUsername.setText(s)
+    }
+
+    fun getEtLoginUsername(): EditText {
+        return etLoginUsername
+    }
+
+    fun setEtLoginPassword(s: String) {
+        etLoginPassword.setText(s)
+    }
+
     fun getEtLoginPassword(): EditText {
         return etLoginPassword
     }
@@ -38,5 +50,38 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         password = etLoginPassword.text.toString()
 
         return username.isNotEmpty() && password.isNotEmpty()
+    }
+
+    fun validateUserCredential(): Boolean {
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var bool = false
+
+        for (u in userAccList) {
+            bool = etLoginUsername.text.toString() == u.username &&
+                    etLoginPassword.text.toString() == u.password
+        }
+
+        return bool
+    }
+
+    fun updateUserStatus() {
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = 0
+        var userUsername = ""
+        var userPassword = ""
+        var userMasterPIN = 0
+
+        for (u in userAccList) {
+            userId = u.userId
+            userUsername = u.username
+            userPassword = u.password
+            userMasterPIN = u.masterPin
+        }
+
+        databaseHandlerClass.updateUserAcc(
+                UserAccModelClass(userId, userUsername, userPassword, userMasterPIN, 1)
+        )
     }
 }

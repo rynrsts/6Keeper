@@ -1,9 +1,12 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
+import android.database.Cursor
+import android.database.sqlite.SQLiteException
 
 class DatabaseHandlerClass(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -26,6 +29,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_USERNAME = "username"
         private const val KEY_PASSWORD = "password"
         private const val KEY_MASTER_PIN = "master_pin"
+        private const val KEY_ACCOUNT_STATUS = "account_status"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -44,7 +48,8 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_USER_ID + " INTEGER PRIMARY KEY," +
                         KEY_USERNAME + " TEXT," +
                         KEY_PASSWORD + " TEXT," +
-                        KEY_MASTER_PIN + " INTEGER" +
+                        KEY_MASTER_PIN + " INTEGER," +
+                        KEY_ACCOUNT_STATUS + " INTEGER" +
                         ")"
                 )
 
@@ -88,11 +93,79 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_USERNAME, userAcc.username)
             put(KEY_PASSWORD, userAcc.password)
             put(KEY_MASTER_PIN, userAcc.masterPin)
+            put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
         }
 
         val success = db.insert(TABLE_USER_ACC, null, contentValues)
 
         db.close()
+        return success
+    }
+
+    @SuppressLint("Recycle")
+    fun validateUserAcc(): List<UserAccModelClass> {
+        val userAccList: ArrayList<UserAccModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+
+        try{
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var userId: Int
+        var userUsername: String
+        var userPassword: String
+        var userMasterPIN: Int
+        var userAccountStatus: Int
+
+        if (cursor.moveToFirst()) {
+            do {
+                userId = cursor.getInt(cursor.getColumnIndex("user_id"))
+                userUsername = cursor.getString(cursor.getColumnIndex("username"))
+                userPassword = cursor.getString(cursor.getColumnIndex("password"))
+                userMasterPIN = cursor.getInt(cursor.getColumnIndex("master_pin"))
+                userAccountStatus = cursor.getInt(cursor.getColumnIndex("account_status"))
+
+                val user = UserAccModelClass(
+                        userId = userId,
+                        username = userUsername,
+                        password = userPassword,
+                        masterPin = userMasterPIN,
+                        accountStatus = userAccountStatus
+                )
+                userAccList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        return userAccList
+    }
+
+    fun updateUserAcc(userAcc: UserAccModelClass): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_USER_ID, userAcc.userId)
+            put(KEY_USERNAME, userAcc.username)
+            put(KEY_PASSWORD, userAcc.password)
+            put(KEY_MASTER_PIN, userAcc.masterPin)
+            put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
+        }
+
+        // Updating Row
+        val success = db.update(
+                TABLE_USER_ACC,
+                contentValues,
+                "id=" + userAcc.userId,
+                null
+        )
+        // 2nd argument is String containing nullColumnHack
+
+        db.close() // Closing database connection
         return success
     }
 }

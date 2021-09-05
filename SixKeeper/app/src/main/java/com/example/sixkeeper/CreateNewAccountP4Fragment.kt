@@ -63,7 +63,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         acbCreateNewAccP4Register.setOnClickListener {
             when {
                 isMasterPINSetup() && isTermsChecked() -> {
-                    getCreateNewAccountActivity().saveToDatabase()
+                    getCreateNewAccountActivity().saveAccount()
 
                     getAppCompatActivity().finish()
                     getAppCompatActivity().overridePendingTransition(

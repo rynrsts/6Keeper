@@ -29,42 +29,59 @@ class LoginActivity : LoginValidationClass() {
         val acbLoginLogin: Button = findViewById(R.id.acbLoginLogin)
         val acbLoginCreateNewAccount: Button = findViewById(R.id.acbLoginCreateNewAccount)
 
-        // TODO:
         acbLoginLogin.setOnClickListener {
-//            if (isNotEmpty()) {
-//                closeKeyboard()
+            if (isNotEmpty()) {
+                if (validateUserCredential()) {
+                    updateUserStatus()
 
-                val goToMasterPINActivity = Intent(
-                        this,
-                        MasterPINActivity::class.java
-                )
+                    closeKeyboard()
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToMasterPINActivity, 16914)
-                overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
-
-                it.apply {
-                    getEtLoginPassword().isClickable = false
-                    postDelayed(
-                            {
-                                getEtLoginPassword().isClickable = true
-                            }, 1000
+                    val goToMasterPINActivity = Intent(
+                            this,
+                            MasterPINActivity::class.java
                     )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToMasterPINActivity, 16914)
+                    overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+
+                    it.apply {
+                        getEtLoginPassword().isClickable = false
+                        postDelayed(
+                                {
+                                    getEtLoginPassword().isClickable = true
+                                }, 1000
+                        )
+                    }
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            applicationContext,
+                            R.string.login_invalid_credentials,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+
+                    setEtLoginUsername("")
+                    setEtLoginPassword("")
+                    getEtLoginUsername().requestFocus()
                 }
-//            } else {
-//                val toast: Toast = Toast.makeText(
-//                    applicationContext,
-//                    R.string.login_enter_credentials,
-//                    Toast.LENGTH_SHORT
-//                )
-//                toast.apply {
-//                    setGravity(Gravity.CENTER, 0, 0)
-//                    show()
-//                }
-//            }
+            } else {
+                val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    R.string.login_enter_credentials,
+                    Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
 
         acbLoginCreateNewAccount.setOnClickListener {

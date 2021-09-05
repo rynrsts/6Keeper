@@ -65,7 +65,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 tempS = tempS + "" + temp.pop()
             val pinI: Int = tempS.toInt()
 
-            if (pinI == masterPin) {
+            if (validateUserMasterPIN(pinI)) {
                 setResult(16914, Intent().putExtra("masterPin", masterPin))
                 onBackPressed()
                 overridePendingTransition(
@@ -117,5 +117,17 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         ivMasterPINCircle4.setImageResource(R.drawable.layout_blue_border_circle)
         ivMasterPINCircle5.setImageResource(R.drawable.layout_blue_border_circle)
         ivMasterPINCircle6.setImageResource(R.drawable.layout_blue_border_circle)
+    }
+
+    private fun validateUserMasterPIN(pinI: Int): Boolean {
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var bool = false
+
+        for (u in userAccList) {
+            bool = pinI == u.masterPin
+        }
+
+        return bool
     }
 }

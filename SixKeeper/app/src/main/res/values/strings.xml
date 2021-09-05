@@ -29,6 +29,7 @@
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>
+    <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials.</string>
 
     <!-- Many -->

@@ -100,15 +100,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     // Save data to database
-    internal fun saveToDatabase() {
+    internal fun saveAccount() {
         val userId: Int = (1000..9999).random()
-        val databaseHandler = DatabaseHandlerClass(this)
+        val databaseHandlerClass = DatabaseHandlerClass(this)
 
-        val userInfoStatus = databaseHandler.addUserInfo(
+        val userInfoStatus = databaseHandlerClass.addUserInfo(
                 UserInfoModelClass(userId, firstName, lastName, birthDate, email, mobileNumber)
         )
-        val userAccStatus = databaseHandler.addUserAcc(
-                UserAccModelClass(userId, username, password, masterPin)
+        val userAccStatus = databaseHandlerClass.addUserAcc(
+                UserAccModelClass(userId, username, password, masterPin, 0)
         )
 
         if (userInfoStatus > -1 && userAccStatus > -1) {
