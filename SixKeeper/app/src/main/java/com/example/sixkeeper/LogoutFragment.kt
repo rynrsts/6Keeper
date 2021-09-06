@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 
 
 class LogoutFragment : Fragment() {
-    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var attActivity: Activity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +30,11 @@ class LogoutFragment : Fragment() {
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
-        databaseHandlerClass = DatabaseHandlerClass(activity)
+        attActivity = activity
     }
 
     private fun updateUserStatus() {
+        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
         val userUsername = ""
@@ -63,5 +64,6 @@ class LogoutFragment : Fragment() {
             R.anim.anim_enter_bottom_to_top_2,
             R.anim.anim_0
         )
+        this.activity?.finish()
     }
 }

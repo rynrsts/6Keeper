@@ -116,8 +116,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                     applicationContext,
                     R.string.create_new_acc_success, Toast.LENGTH_LONG
             )
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
         }
     }
 }

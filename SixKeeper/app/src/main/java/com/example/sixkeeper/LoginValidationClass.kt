@@ -70,19 +70,9 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     fun updateUserStatus() {
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        val userUsername = ""
-        val userPassword = ""
-        val userMasterPIN = 0
-        val userAccountStatus = 1
 
         databaseHandlerClass.updateUserStatus(
-                UserAccModelClass(
-                        userId,
-                        userUsername,
-                        userPassword,
-                        userMasterPIN,
-                        userAccountStatus
-                )
+                UserAccModelClass(userId, "", "", 0, 1)
         )
     }
 }

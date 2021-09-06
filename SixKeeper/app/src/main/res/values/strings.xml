@@ -121,6 +121,7 @@
     <string name="pass_generator_length">Length</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
+    <string name="pass_generator_pass_saved">Password Saved!</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
     <string name="pass_generator_save_generated_pass">Save Generated Password</string>
     <string name="pass_generator_select_char">

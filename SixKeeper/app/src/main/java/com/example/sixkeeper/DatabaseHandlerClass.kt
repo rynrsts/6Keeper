@@ -16,20 +16,26 @@ class DatabaseHandlerClass(context: Context) :
         private const val DATABASE_NAME = "SixKeeperDatabase"
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
+        private const val TABLE_SAVED_PASS = "SavedPasswordTable"
 
-        //private const val KEY_ID = "id"
         private const val KEY_USER_ID = "user_id"
 
+        // TABLE_USER_INFO
         private const val KEY_FIRST_NAME = "first_name"
         private const val KEY_LAST_NAME = "last_name"
         private const val KEY_BIRTH_DATE = "birth_date"
         private const val KEY_EMAIL = "email"
         private const val KEY_MOBILE_NUMBER = "mobile_number"
 
+        // TABLE_USER_ACC
         private const val KEY_USERNAME = "username"
         private const val KEY_PASSWORD = "password"
         private const val KEY_MASTER_PIN = "master_pin"
         private const val KEY_ACCOUNT_STATUS = "account_status"
+
+        // TABLE_SAVED_PASS
+        private const val KEY_PASS_ID = "pass_id"
+        private const val KEY_SAVED_PASS = "saved_password"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -52,14 +58,22 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_STATUS + " INTEGER" +
                         ")"
                 )
+        val createSavedPassTable = (
+                "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
+                        KEY_PASS_ID + " INTEGER PRIMARY KEY," +
+                        KEY_SAVED_PASS + " TEXT" +
+                        ")"
+                )
 
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
+        db?.execSQL(createSavedPassTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_SAVED_PASS")
         onCreate(db)
     }
 
@@ -102,6 +116,23 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    // Add Generated Password
+    fun addGeneratedPass(userSavedPass: UserSavedPassModelClass): Long {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_PASS_ID, userSavedPass.passId)
+            put(KEY_SAVED_PASS, userSavedPass.generatedPassword)
+        }
+
+        val success = db.insert(TABLE_SAVED_PASS, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    // Validate Username, Password, adn/or Master PIN
     @SuppressLint("Recycle")
     fun validateUserAcc(): List<UserAccModelClass> {
         val userAccList: ArrayList<UserAccModelClass> = ArrayList()
@@ -144,6 +175,7 @@ class DatabaseHandlerClass(context: Context) :
         return userAccList
     }
 
+    // Update User Status | 0 or 1
     fun updateUserStatus(userAcc: UserAccModelClass): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -152,16 +184,14 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
         }
 
-        // Updating Row
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
                 "user_id=" + userAcc.userId,
                 null
         )
-        // 2nd argument is String containing nullColumnHack
 
-        db.close() // Closing database connection
+        db.close()
         return success
     }
 }

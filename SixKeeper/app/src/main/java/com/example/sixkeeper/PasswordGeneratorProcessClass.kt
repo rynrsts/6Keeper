@@ -1,13 +1,17 @@
 package com.example.sixkeeper
 
+import android.app.Activity
+import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var attActivity: Activity
 
     private lateinit var etPassGeneratorLength: EditText
     private lateinit var cbPassGeneratorLowercase: CheckBox
@@ -89,5 +93,31 @@ open class PasswordGeneratorProcessClass : Fragment() {
         }
 
         return stringBuilder.toString()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        attActivity = activity
+    }
+
+    // Save data to database
+    fun saveGeneratedPass(generatedPass: String) {
+//        val userId: Int = (1000..9999).random()
+        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        val status = databaseHandlerClass.addGeneratedPass(
+                UserSavedPassModelClass(0, generatedPass)
+        )
+
+        if (status > -1) {
+            val toast: Toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.pass_generator_pass_saved, Toast.LENGTH_LONG
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
     }
 }

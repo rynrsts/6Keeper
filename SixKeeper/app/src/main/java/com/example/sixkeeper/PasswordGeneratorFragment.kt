@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 
 class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     override fun onCreateView(
@@ -21,12 +22,13 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
 
         setVariables()
         setButtonOnClick()
-        setOnCheckBoxChecked()
     }
 
     private fun setButtonOnClick() {
         val acbPassGeneratorGenerate: Button =
                 getAppCompatActivity().findViewById(R.id.acbPassGeneratorGenerate)
+        val clPassGeneratorSave: ConstraintLayout =
+                getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
         acbPassGeneratorGenerate.setOnClickListener {
             setPasswordGeneratorLength(getEtPassGeneratorLength().text.toString())
@@ -81,9 +83,9 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                 }
             }
         }
-    }
 
-    private fun setOnCheckBoxChecked() {
-
+        clPassGeneratorSave.setOnClickListener {
+            saveGeneratedPass(getTvPassGeneratorGeneratedPass().text.toString())
+        }
     }
 }
