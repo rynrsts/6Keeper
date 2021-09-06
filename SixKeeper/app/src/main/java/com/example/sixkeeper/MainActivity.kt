@@ -25,40 +25,16 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         if (status == 0) {
             val goToLoginActivity = Intent(this, LoginActivity::class.java)
             startActivity(goToLoginActivity)
-            this.finish()
         } else if (status == 1) {
             val goToMasterPINActivity = Intent(this, MasterPINActivity::class.java)
-
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToMasterPINActivity, 16914)
+            startActivity(goToMasterPINActivity)
             overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
+                R.anim.anim_enter_bottom_to_top_2,
+                R.anim.anim_0
             )
-
-//            this.finish()
         }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {
-                val goToIndexActivity = Intent(
-                        this,
-                        IndexActivity::class.java
-                )
-
-                startActivity(goToIndexActivity)
-                overridePendingTransition(
-                        R.anim.anim_enter_top_to_bottom_2,
-                        R.anim.anim_exit_top_to_bottom_2
-                )
-                finish()
-            }
-        }
+        this.finish()
     }
 
     /*private fun setButtonOnClick() {

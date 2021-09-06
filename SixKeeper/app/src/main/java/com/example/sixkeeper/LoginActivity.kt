@@ -40,22 +40,13 @@ class LoginActivity : LoginValidationClass() {
                             this,
                             MasterPINActivity::class.java
                     )
-
-                    @Suppress("DEPRECATION")
-                    startActivityForResult(goToMasterPINActivity, 16914)
+                    startActivity(goToMasterPINActivity)
                     overridePendingTransition(
                             R.anim.anim_enter_bottom_to_top_2,
                             R.anim.anim_0
                     )
 
-                    it.apply {
-                        getEtLoginPassword().isClickable = false
-                        postDelayed(
-                                {
-                                    getEtLoginPassword().isClickable = true
-                                }, 1000
-                        )
-                    }
+                    this.finish()
                 } else {
                     val toast: Toast = Toast.makeText(
                             applicationContext,
@@ -81,6 +72,15 @@ class LoginActivity : LoginValidationClass() {
                     setGravity(Gravity.CENTER, 0, 0)
                     show()
                 }
+            }
+
+            it.apply {
+                getEtLoginPassword().isClickable = false
+                postDelayed(
+                        {
+                            getEtLoginPassword().isClickable = true
+                        }, 1000
+                )
             }
         }
 
@@ -112,27 +112,6 @@ class LoginActivity : LoginValidationClass() {
         when {
             immKeyboard.isActive ->
                 immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {
-                val goToIndexActivity = Intent(
-                        this,
-                        IndexActivity::class.java
-                )
-
-                startActivity(goToIndexActivity)
-                overridePendingTransition(
-                        R.anim.anim_enter_top_to_bottom_2,
-                        R.anim.anim_exit_top_to_bottom_2
-                )
-                finish()
-            }
         }
     }
 

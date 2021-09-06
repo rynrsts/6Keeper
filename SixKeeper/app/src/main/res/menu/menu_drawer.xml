@@ -50,6 +50,11 @@
             android:icon="@drawable/ic_feedback_black"
             android:title="@string/many_contact_us" />
 
+        <item
+            android:id="@+id/logoutFragment"
+            android:icon="@drawable/ic_logout_black"
+            android:title="@string/many_logout" />
+
     </group>
 
 </menu>

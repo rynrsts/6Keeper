@@ -11,6 +11,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var username: String
     private lateinit var password: String
 
+    private var userId = 0
+
     fun setVariables() {
         etLoginUsername = findViewById(R.id.etLoginUsername)
         etLoginPassword = findViewById(R.id.etLoginPassword)
@@ -58,6 +60,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         var bool = false
 
         for (u in userAccList) {
+            userId = u.userId
             bool = etLoginUsername.text.toString() == u.username &&
                     etLoginPassword.text.toString() == u.password
         }
@@ -67,21 +70,19 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     fun updateUserStatus() {
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = 0
-        var userUsername = ""
-        var userPassword = ""
-        var userMasterPIN = 0
+        val userUsername = ""
+        val userPassword = ""
+        val userMasterPIN = 0
+        val userAccountStatus = 1
 
-        for (u in userAccList) {
-            userId = u.userId
-            userUsername = u.username
-            userPassword = u.password
-            userMasterPIN = u.masterPin
-        }
-
-        databaseHandlerClass.updateUserAcc(
-                UserAccModelClass(userId, userUsername, userPassword, userMasterPIN, 1)
+        databaseHandlerClass.updateUserStatus(
+                UserAccModelClass(
+                        userId,
+                        userUsername,
+                        userPassword,
+                        userMasterPIN,
+                        userAccountStatus
+                )
         )
     }
 }

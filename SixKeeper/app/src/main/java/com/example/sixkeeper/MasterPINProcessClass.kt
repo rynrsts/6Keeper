@@ -19,7 +19,6 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private val pinSize = 6
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
-    private val masterPin = 123456
 
     fun getPin(): Stack<Int> {
         return pin
@@ -66,12 +65,14 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
             val pinI: Int = tempS.toInt()
 
             if (validateUserMasterPIN(pinI)) {
-                setResult(16914, Intent().putExtra("masterPin", masterPin))
-                onBackPressed()
+                val goToIndexActivity = Intent(this, IndexActivity::class.java)
+                startActivity(goToIndexActivity)
                 overridePendingTransition(
-                    R.anim.anim_0,
+                    R.anim.anim_enter_top_to_bottom_2,
                     R.anim.anim_exit_top_to_bottom_2
                 )
+
+                this.finish()
             } else {
                 val vibrator: Vibrator =
                         getSystemService(Context.VIBRATOR_SERVICE) as Vibrator

@@ -1,12 +1,12 @@
 package com.example.sixkeeper
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
+import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHandlerClass(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -109,9 +109,9 @@ class DatabaseHandlerClass(context: Context) :
         val db = this.readableDatabase
         var cursor: Cursor? = null
 
-        try{
+        try {
             cursor = db.rawQuery(selectQuery, null)
-        }catch (e: SQLiteException) {
+        } catch (e: SQLiteException) {
             db.execSQL(selectQuery)
             return ArrayList()
         }
@@ -144,15 +144,11 @@ class DatabaseHandlerClass(context: Context) :
         return userAccList
     }
 
-    fun updateUserAcc(userAcc: UserAccModelClass): Int {
+    fun updateUserStatus(userAcc: UserAccModelClass): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
         contentValues.apply {
-            put(KEY_USER_ID, userAcc.userId)
-            put(KEY_USERNAME, userAcc.username)
-            put(KEY_PASSWORD, userAcc.password)
-            put(KEY_MASTER_PIN, userAcc.masterPin)
             put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
         }
 
@@ -160,7 +156,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "id=" + userAcc.userId,
+                "user_id=" + userAcc.userId,
                 null
         )
         // 2nd argument is String containing nullColumnHack
