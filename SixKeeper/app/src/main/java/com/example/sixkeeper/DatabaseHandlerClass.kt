@@ -14,6 +14,7 @@ class DatabaseHandlerClass(context: Context) :
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "SixKeeperDatabase"
+
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
         private const val TABLE_SAVED_PASS = "SavedPasswordTable"
@@ -77,6 +78,12 @@ class DatabaseHandlerClass(context: Context) :
         onCreate(db)
     }
 
+    /*
+     *******************************************************************************************
+     *******************************************************************************************    ADD
+     *******************************************************************************************
+     */
+
     // Add User Information
     fun addUserInfo(userInfo: UserInfoModelClass): Long {
         val db = this.writableDatabase
@@ -132,7 +139,13 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    // Validate Username, Password, adn/or Master PIN
+    /*
+     *******************************************************************************************
+     *******************************************************************************************    VIEW
+     *******************************************************************************************
+     */
+
+    // Validate Username, Password, and/or Master PIN
     @SuppressLint("Recycle")
     fun validateUserAcc(): List<UserAccModelClass> {
         val userAccList: ArrayList<UserAccModelClass> = ArrayList()
@@ -159,7 +172,8 @@ class DatabaseHandlerClass(context: Context) :
                 userUsername = cursor.getString(cursor.getColumnIndex("username"))
                 userPassword = cursor.getString(cursor.getColumnIndex("password"))
                 userMasterPIN = cursor.getInt(cursor.getColumnIndex("master_pin"))
-                userAccountStatus = cursor.getInt(cursor.getColumnIndex("account_status"))
+                userAccountStatus =
+                        cursor.getInt(cursor.getColumnIndex("account_status"))
 
                 val user = UserAccModelClass(
                         userId = userId,
@@ -174,6 +188,45 @@ class DatabaseHandlerClass(context: Context) :
 
         return userAccList
     }
+
+    // View saved password
+    fun viewSavedPass(): List<UserSavedPassModelClass> {
+        val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var passId: Int
+        var passPassword: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                passId = cursor.getInt(cursor.getColumnIndex("pass_id"))
+                passPassword = cursor.getString(cursor.getColumnIndex("saved_password"))
+
+                val user = UserSavedPassModelClass(
+                        passId = passId,
+                        generatedPassword = passPassword
+                )
+                userSavedPassList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        return userSavedPassList
+    }
+
+    /*
+     *******************************************************************************************
+     *******************************************************************************************    UPDATE
+     *******************************************************************************************
+     */
 
     // Update User Status | 0 or 1
     fun updateUserStatus(userAcc: UserAccModelClass): Int {
@@ -190,6 +243,24 @@ class DatabaseHandlerClass(context: Context) :
                 "user_id=" + userAcc.userId,
                 null
         )
+
+        db.close()
+        return success
+    }
+
+    /*
+     *******************************************************************************************
+     *******************************************************************************************    DELETE
+     *******************************************************************************************
+     */
+
+    // Delete all data in all tables
+    fun truncateAllTables(): Int {
+        val db = this.writableDatabase
+
+        val success = db.delete(TABLE_USER_ACC, "", null)
+        db.delete(TABLE_USER_INFO, "", null)
+        db.delete(TABLE_SAVED_PASS, "", null)
 
         db.close()
         return success

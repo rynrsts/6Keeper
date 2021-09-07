@@ -25,6 +25,12 @@
             android:icon="@drawable/ic_delete_red"
             android:title="@string/many_recycle_bin" />
 
+    </group>
+
+    <group
+        android:id="@+id/second"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/settingsFragment"
             android:icon="@drawable/ic_settings_black"
@@ -49,6 +55,12 @@
             android:id="@+id/contactUsFragment"
             android:icon="@drawable/ic_feedback_black"
             android:title="@string/many_contact_us" />
+
+    </group>
+
+    <group
+        android:id="@+id/third"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/logoutFragment"

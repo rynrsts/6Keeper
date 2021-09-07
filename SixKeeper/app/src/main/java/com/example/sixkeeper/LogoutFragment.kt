@@ -1,11 +1,13 @@
 package com.example.sixkeeper
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 
 
@@ -23,14 +25,31 @@ class LogoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateUserStatus()
-        goToLoginActivity()
+        showDialog()
     }
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         attActivity = activity
+    }
+
+    private fun showDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(attActivity)
+        builder.setMessage(R.string.many_continue_mes)
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            updateUserStatus()
+            goToLoginActivity()
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title)
+        alert.show()
     }
 
     private fun updateUserStatus() {

@@ -1,5 +1,7 @@
 package com.example.sixkeeper
 
+import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -8,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 
 class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
+    private lateinit var attActivity: Activity
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -28,6 +33,12 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
 
         setVariables()
         setButtonOnClick()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        attActivity = activity
     }
 
     private fun setButtonOnClick() {
@@ -63,13 +74,26 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         acbCreateNewAccP4Register.setOnClickListener {
             when {
                 isMasterPINSetup() && isTermsChecked() -> {
-                    getCreateNewAccountActivity().saveAccount()
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(attActivity)
+                    builder.setMessage(R.string.create_new_acc_message)
+                    builder.setCancelable(false)
 
-                    getAppCompatActivity().finish()
-                    getAppCompatActivity().overridePendingTransition(
-                            R.anim.anim_enter_left_to_right_2,
-                            R.anim.anim_exit_left_to_right_2
-                    )
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        getCreateNewAccountActivity().saveAccount()
+
+                        getAppCompatActivity().finish()
+                        getAppCompatActivity().overridePendingTransition(
+                                R.anim.anim_enter_left_to_right_2,
+                                R.anim.anim_exit_left_to_right_2
+                        )
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title)
+                    alert.show()
                 }
                 isMasterPINSetup() && !isTermsChecked() -> {
                     val toast: Toast = Toast.makeText(

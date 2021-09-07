@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.findNavController
 
 class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     override fun onCreateView(
@@ -27,6 +28,8 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     private fun setButtonOnClick() {
         val acbPassGeneratorGenerate: Button =
                 getAppCompatActivity().findViewById(R.id.acbPassGeneratorGenerate)
+        val clPassGeneratorView: ConstraintLayout =
+            getAppCompatActivity().findViewById(R.id.clPassGeneratorView)
         val clPassGeneratorSave: ConstraintLayout =
                 getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
@@ -84,8 +87,28 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
             }
         }
 
+        clPassGeneratorView.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
+            )
+        }
+
         clPassGeneratorSave.setOnClickListener {
-            saveGeneratedPass(getTvPassGeneratorGeneratedPass().text.toString())
+            val generatedPass = getTvPassGeneratorGeneratedPass().text.toString()
+
+            if (generatedPass != "") {
+                saveGeneratedPass(generatedPass)
+            } else {
+                val toast: Toast = Toast.makeText(
+                    getAppCompatActivity().applicationContext,
+                    R.string.pass_generator_generate_pass,
+                    Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
     }
 }

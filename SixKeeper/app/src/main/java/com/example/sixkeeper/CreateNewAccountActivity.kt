@@ -101,9 +101,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
 
     // Save data to database
     internal fun saveAccount() {
-        val userId: Int = (1000..9999).random()
+        val userId: Int = (1000000..9999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(this)
 
+        val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
                 UserInfoModelClass(userId, firstName, lastName, birthDate, email, mobileNumber)
         )
@@ -111,7 +112,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 UserAccModelClass(userId, username, password, masterPin, 0)
         )
 
-        if (userInfoStatus > -1 && userAccStatus > -1) {
+        if (tableStatus > -1 && userInfoStatus > -1 && userAccStatus > -1) {
             val toast: Toast = Toast.makeText(
                     applicationContext,
                     R.string.create_new_acc_success, Toast.LENGTH_LONG

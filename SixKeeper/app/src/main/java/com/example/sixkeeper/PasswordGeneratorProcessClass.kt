@@ -101,12 +101,13 @@ open class PasswordGeneratorProcessClass : Fragment() {
         attActivity = activity
     }
 
-    // Save data to database
+    // Save generated password to database
     fun saveGeneratedPass(generatedPass: String) {
-//        val userId: Int = (1000..9999).random()
+        val passId: Int = (100000..999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+
         val status = databaseHandlerClass.addGeneratedPass(
-                UserSavedPassModelClass(0, generatedPass)
+                UserSavedPassModelClass(passId, generatedPass)
         )
 
         if (status > -1) {
@@ -119,5 +120,22 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 show()
             }
         }
+    }
+
+    // View saved password
+    fun viewSavedPass() {
+        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        val userSavedPassList: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
+
+        val userArrayId = Array(userSavedPassList.size){"0"}
+        val userArrayPass = Array(userSavedPassList.size){"null"}
+
+        for ((index, u) in userSavedPassList.withIndex()) {
+            userArrayId[index] = u.passId.toString()
+            userArrayPass[index] = u.generatedPassword
+        }
+
+//        val myListAdapter = MyListAdapter(this,empArrayId,empArrayName,empArrayEmail)
+//        listView.adapter = myListAdapter
     }
 }

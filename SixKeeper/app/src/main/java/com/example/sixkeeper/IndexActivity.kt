@@ -32,10 +32,10 @@ class IndexActivity : AppCompatActivity() {
                 R.id.passwordGeneratorFragment,
                 R.id.recycleBinFragment,
                 R.id.settingsFragment,
-                R.id.contactUsFragment,
                 R.id.aboutUsFragment,
                 R.id.helpFragment,
-                R.id.termsConditionsFragment
+                R.id.termsConditionsFragment,
+                R.id.contactUsFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navigationController, appBarConfiguration)

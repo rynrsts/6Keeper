@@ -17,6 +17,9 @@
     </string>
 
     <!-- Create New Account -->
+    <string name="create_new_acc_message">
+        Saved data will be discarded (if there are any). Continue creating the account?
+    </string>
     <string name="create_new_acc_p4_agree_to_terms">
         I agree to <u>terms</u> and <u>conditions</u>.
     </string>
@@ -43,6 +46,7 @@
     <string name="many_confirm_master_pin">Confirm Your Master PIN</string>
     <string name="many_confirm_password">Confirm Password</string>
     <string name="many_contact_us">Contact Us</string>
+    <string name="many_continue_mes">Do you want to continue?</string>
     <string name="many_create_master_pin">Create Your Master PIN</string>
     <string name="many_create_new_account">Create New Account</string>
     <string name="many_birth_date">Birth Date</string>
@@ -117,12 +121,16 @@
     <string name="pass_generator_fill_length">Please fill the Length field first.</string>
     <string name="pass_generator_generate">Generate</string>
     <string name="pass_generator_generated_pass">Generated Password</string>
+    <string name="pass_generator_generate_pass">
+        Nothing to save. Please generate a password first.
+    </string>
     <string name="pass_generator_include">Include:</string>
     <string name="pass_generator_length">Length</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
     <string name="pass_generator_pass_saved">Password Saved!</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
+    <string name="pass_generator_saved_pass">Saved Password</string>
     <string name="pass_generator_save_generated_pass">Save Generated Password</string>
     <string name="pass_generator_select_char">
         Please select desired characters to generate password.
@@ -155,5 +163,7 @@
     <string name="dummy_lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.
         Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
-        magna eros quis urna.</string>
+        magna eros quis urna.
+    </string>
+
 </resources>

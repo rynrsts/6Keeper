@@ -21,7 +21,18 @@
         android:id="@+id/passwordGeneratorFragment"
         android:name="com.example.sixkeeper.PasswordGeneratorFragment"
         android:label="@string/many_password_generator"
-        tools:layout="@layout/fragment_password_generator" />
+        tools:layout="@layout/fragment_password_generator" >
+
+        <action
+            android:id="@+id/action_passwordGeneratorFragment_to_savedPasswordFragment"
+            app:destination="@id/savedPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/savedPasswordFragment"
+        android:name="com.example.sixkeeper.SavedPasswordFragment"
+        android:label="@string/pass_generator_saved_pass"
+        tools:layout="@layout/fragment_saved_password" />
 
     <fragment
         android:id="@+id/recycleBinFragment"
