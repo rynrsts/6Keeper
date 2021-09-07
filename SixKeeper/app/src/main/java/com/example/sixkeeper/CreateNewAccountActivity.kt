@@ -14,7 +14,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private lateinit var lastName: String
     private lateinit var birthDate: String
     private lateinit var email: String
-    private var mobileNumber: Int = 0
+    private var mobileNumber: Long = 0
     private lateinit var username: String
     private lateinit var password: String
     private var masterPin: Int = 0
@@ -80,7 +80,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     // CreateNewAccountP1 Data
-    internal fun setCreateNewAccountP1Data(f: String, l: String, b: String, e: String, m: Int) {
+    internal fun setCreateNewAccountP1Data(f: String, l: String, b: String, e: String, m: Long) {
         firstName = f
         lastName = l
         birthDate = b

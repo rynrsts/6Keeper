@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Toast
 
 class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
     private var passwordVisibility: Int = 0
@@ -129,12 +131,12 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
 
         // TODO: Create New Account P3
         acbCreateNewAccP3Next.setOnClickListener {
-//            if (isNotEmpty()) {
-//                validateUsername()
-//                validatePassword()
-//                validateConfirmPassword()
-//
-//                if (isValid()) {
+            if (isNotEmpty()) {
+                validateUsername()
+                validatePassword()
+                validateConfirmPassword()
+
+                if (isValid()) {
                     val immKeyboard: InputMethodManager =
                             getAppCompatActivity().getSystemService(
                                     Context.INPUT_METHOD_SERVICE
@@ -156,18 +158,18 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                         manageCreateNewAccFragments(createNewAccountActivity.getCreateNewAccP4())
                         setCreateNewAccountP3Data(getUsername(), getPassword())
                     }
-//                }
-//            } else {
-//                val toast: Toast = Toast.makeText(
-//                    getAppCompatActivity().applicationContext,
-//                    R.string.many_fill_missing_fields,
-//                    Toast.LENGTH_SHORT
-//                )
-//                toast.apply {
-//                    setGravity(Gravity.CENTER, 0, 0)
-//                    show()
-//                }
-//            }
+                }
+            } else {
+                val toast: Toast = Toast.makeText(
+                    getAppCompatActivity().applicationContext,
+                    R.string.many_fill_missing_fields,
+                    Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
     }
 

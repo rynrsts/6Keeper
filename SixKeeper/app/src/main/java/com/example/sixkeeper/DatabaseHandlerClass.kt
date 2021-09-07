@@ -47,7 +47,7 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_LAST_NAME + " TEXT," +
                         KEY_BIRTH_DATE + " TEXT," +
                         KEY_EMAIL + " TEXT," +
-                        KEY_MOBILE_NUMBER + " INTEGER" +
+                        KEY_MOBILE_NUMBER + " LONG" +
                         ")"
                 )
         val createUserAccTable = (
