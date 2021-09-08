@@ -121,21 +121,4 @@ open class PasswordGeneratorProcessClass : Fragment() {
             }
         }
     }
-
-    // View saved password
-    fun viewSavedPass() {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val userSavedPassList: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
-
-        val userArrayId = Array(userSavedPassList.size){"0"}
-        val userArrayPass = Array(userSavedPassList.size){"null"}
-
-        for ((index, u) in userSavedPassList.withIndex()) {
-            userArrayId[index] = u.passId.toString()
-            userArrayPass[index] = u.generatedPassword
-        }
-
-//        val myListAdapter = MyListAdapter(this,empArrayId,empArrayName,empArrayEmail)
-//        listView.adapter = myListAdapter
-    }
 }

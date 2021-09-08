@@ -159,6 +159,7 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!-- Dummy -->
+    <string name="dummy_dummy">Dummy</string>
     <string name="dummy_username">Username</string>
     <string name="dummy_lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.

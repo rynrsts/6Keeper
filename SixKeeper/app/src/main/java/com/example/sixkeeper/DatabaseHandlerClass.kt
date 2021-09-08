@@ -61,7 +61,7 @@ class DatabaseHandlerClass(context: Context) :
                 )
         val createSavedPassTable = (
                 "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
-                        KEY_PASS_ID + " INTEGER PRIMARY KEY," +
+                        KEY_PASS_ID + " INTEGER," +
                         KEY_SAVED_PASS + " TEXT" +
                         ")"
                 )

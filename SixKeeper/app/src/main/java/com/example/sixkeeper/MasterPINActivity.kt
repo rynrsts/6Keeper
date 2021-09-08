@@ -1,8 +1,11 @@
 package com.example.sixkeeper
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 
 class MasterPINActivity : MasterPINProcessClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +32,8 @@ class MasterPINActivity : MasterPINProcessClass() {
                 findViewById(R.id.acbMasterPINButtonDelete)
         val acbMasterPINButtonCancel: Button =
                 findViewById(R.id.acbMasterPINButtonCancel)
+
+        val tvMasterPINLogout: TextView = findViewById(R.id.tvMasterPINLogout)
 
         acbMasterPINButton1.setOnClickListener {
             pushNumber(1)
@@ -84,6 +89,24 @@ class MasterPINActivity : MasterPINProcessClass() {
                     R.anim.anim_0,
                     R.anim.anim_exit_top_to_bottom_2
             )
+        }
+
+        tvMasterPINLogout.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setMessage(R.string.many_continue_mes)
+            builder.setCancelable(false)
+
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                updateUserStatus()
+                goToLoginActivity()
+            }
+            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setTitle(R.string.many_alert_title)
+            alert.show()
         }
     }
 }

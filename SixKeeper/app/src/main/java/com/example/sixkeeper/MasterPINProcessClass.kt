@@ -131,4 +131,38 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
 
         return bool
     }
+
+    fun updateUserStatus() {
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = 0
+        val userUsername = ""
+        val userPassword = ""
+        val userMasterPIN = 0
+        val userAccountStatus = 0
+
+        for (u in userAccList) {
+            userId = u.userId
+        }
+
+        databaseHandlerClass.updateUserStatus(
+                UserAccModelClass(
+                        userId,
+                        userUsername,
+                        userPassword,
+                        userMasterPIN,
+                        userAccountStatus
+                )
+        )
+    }
+
+    fun goToLoginActivity() {
+        val goToLoginActivity = Intent(this, LoginActivity::class.java)
+        startActivity(goToLoginActivity)
+        overridePendingTransition(
+                R.anim.anim_enter_bottom_to_top_2,
+                R.anim.anim_0
+        )
+        this.finish()
+    }
 }

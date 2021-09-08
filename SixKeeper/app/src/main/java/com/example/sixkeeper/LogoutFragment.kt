@@ -45,6 +45,7 @@ class LogoutFragment : Fragment() {
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
             dialog.cancel()
+            activity?.onBackPressed()
         }
 
         val alert: AlertDialog = builder.create()

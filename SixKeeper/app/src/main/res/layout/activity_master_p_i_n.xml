@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MasterPINActivity">
 
+    <TextView
+        android:id="@+id/tvMasterPINLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        android:padding="6dp"
+        android:text="@string/many_logout"
+        android:textColor="@color/maroon"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
