@@ -16,6 +16,11 @@
             android:title="@string/many_accounts" />
 
         <item
+            android:id="@+id/favoritesFragment"
+            android:icon="@drawable/ic_star_black"
+            android:title="@string/many_favorites" />
+
+        <item
             android:id="@+id/passwordGeneratorFragment"
             android:icon="@drawable/ic_lock_password_gray"
             android:title="@string/many_password_generator" />

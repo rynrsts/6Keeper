@@ -11,7 +11,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <View
-        android:id="@+id/vCreateNewAccP4Division"
+        android:id="@+id/vNavigationHeaderPhoto"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
@@ -24,7 +24,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvCreateNewAccP1FirstName"
+            android:id="@+id/tvNavigationHeaderUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

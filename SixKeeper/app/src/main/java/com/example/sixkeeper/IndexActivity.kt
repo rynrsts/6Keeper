@@ -29,6 +29,7 @@ class IndexActivity : AppCompatActivity() {
             setOf(
                 R.id.dashboardFragment,
                 R.id.accountsFragment,
+                R.id.favoritesFragment,
                 R.id.passwordGeneratorFragment,
                 R.id.recycleBinFragment,
                 R.id.settingsFragment,

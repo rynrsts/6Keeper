@@ -7,8 +7,6 @@
     <string name="about_us_version">Version 1.0</string>
 
     <!-- Accounts -->
-    <string name="accounts_categories">Categories</string>
-    <string name="accounts_favorites">Favorites</string>
 
     <!-- Create Master PIN -->
     <string name="create_master_pin_desc">
@@ -62,6 +60,7 @@
     <!--    TODO: <string name="many_enter_code">Enter Code</string>-->
     <string name="many_enter_code_mes">Please enter the code.</string>
     <string name="many_enter_master_pin">Enter Your Master PIN</string>
+    <string name="many_favorites">Favorites</string>
     <string name="many_fill_email_field">Please fill the Email field first.</string>
     <string name="many_fill_missing_fields">Please fill the missing fields.</string>
     <string name="many_fill_mobile_num_field">Please fill the Mobile Number field first.</string>
