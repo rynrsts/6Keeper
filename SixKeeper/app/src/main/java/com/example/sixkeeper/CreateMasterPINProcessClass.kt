@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import java.util.*
+import kotlin.concurrent.schedule
 
 open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var ivCreateMasterPINCircle1: ImageView
@@ -17,10 +19,71 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var ivCreateMasterPINCircle5: ImageView
     private lateinit var ivCreateMasterPINCircle6: ImageView
 
+    private lateinit var acbCreateMasterPINButton1: Button
+    private lateinit var acbCreateMasterPINButton2: Button
+    private lateinit var acbCreateMasterPINButton3: Button
+    private lateinit var acbCreateMasterPINButton4: Button
+    private lateinit var acbCreateMasterPINButton5: Button
+    private lateinit var acbCreateMasterPINButton6: Button
+    private lateinit var acbCreateMasterPINButton7: Button
+    private lateinit var acbCreateMasterPINButton8: Button
+    private lateinit var acbCreateMasterPINButton9: Button
+    private lateinit var acbCreateMasterPINButton0: Button
+    private lateinit var acbCreateMasterPINButtonDelete: Button
+    private lateinit var acbCreateMasterPINButtonCancel: Button
+
     private val pinSize = 6
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
     private val savedPin: Stack<Int> = Stack()
+
+    fun getAcbCreateMasterPINButton1(): Button {
+        return acbCreateMasterPINButton1
+    }
+
+    fun getAcbCreateMasterPINButton2(): Button {
+        return acbCreateMasterPINButton2
+    }
+
+    fun getAcbCreateMasterPINButton3(): Button {
+        return acbCreateMasterPINButton3
+    }
+
+    fun getAcbCreateMasterPINButton4(): Button {
+        return acbCreateMasterPINButton4
+    }
+
+    fun getAcbCreateMasterPINButton5(): Button {
+        return acbCreateMasterPINButton5
+    }
+
+    fun getAcbCreateMasterPINButton6(): Button {
+        return acbCreateMasterPINButton6
+    }
+
+    fun getAcbCreateMasterPINButton7(): Button {
+        return acbCreateMasterPINButton7
+    }
+
+    fun getAcbCreateMasterPINButton8(): Button {
+        return acbCreateMasterPINButton8
+    }
+
+    fun getAcbCreateMasterPINButton9(): Button {
+        return acbCreateMasterPINButton9
+    }
+
+    fun getAcbCreateMasterPINButton0(): Button {
+        return acbCreateMasterPINButton0
+    }
+
+    fun getAcbCreateMasterPINButtonDelete(): Button {
+        return acbCreateMasterPINButtonDelete
+    }
+
+    fun getAcbCreateMasterPINButtonCancel(): Button {
+        return acbCreateMasterPINButtonCancel
+    }
 
     fun getPin(): Stack<Int> {
         return pin
@@ -33,6 +96,19 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         ivCreateMasterPINCircle4 = findViewById(R.id.ivCreateMasterPINCircle4)
         ivCreateMasterPINCircle5 = findViewById(R.id.ivCreateMasterPINCircle5)
         ivCreateMasterPINCircle6 = findViewById(R.id.ivCreateMasterPINCircle6)
+
+        acbCreateMasterPINButton1 = findViewById(R.id.acbCreateMasterPINButton1)
+        acbCreateMasterPINButton2 = findViewById(R.id.acbCreateMasterPINButton2)
+        acbCreateMasterPINButton3 = findViewById(R.id.acbCreateMasterPINButton3)
+        acbCreateMasterPINButton4 = findViewById(R.id.acbCreateMasterPINButton4)
+        acbCreateMasterPINButton5 = findViewById(R.id.acbCreateMasterPINButton5)
+        acbCreateMasterPINButton6 = findViewById(R.id.acbCreateMasterPINButton6)
+        acbCreateMasterPINButton7 = findViewById(R.id.acbCreateMasterPINButton7)
+        acbCreateMasterPINButton8 = findViewById(R.id.acbCreateMasterPINButton8)
+        acbCreateMasterPINButton9 = findViewById(R.id.acbCreateMasterPINButton9)
+        acbCreateMasterPINButton0 = findViewById(R.id.acbCreateMasterPINButton0)
+        acbCreateMasterPINButtonDelete = findViewById(R.id.acbCreateMasterPINButtonDelete)
+        acbCreateMasterPINButtonCancel = findViewById(R.id.acbCreateMasterPINButtonCancel)
     }
 
     fun pushNumber(i: Int) {
@@ -75,12 +151,54 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                         R.anim.anim_0,
                         R.anim.anim_exit_top_to_bottom_2
                 )
-
             } else {
-                for (i: Int in 1..pinSize)
-                    pin.pop()
+                acbCreateMasterPINButton1.isClickable = false
+                acbCreateMasterPINButton2.isClickable = false
+                acbCreateMasterPINButton3.isClickable = false
+                acbCreateMasterPINButton4.isClickable = false
+                acbCreateMasterPINButton5.isClickable = false
+                acbCreateMasterPINButton6.isClickable = false
+                acbCreateMasterPINButton7.isClickable = false
+                acbCreateMasterPINButton8.isClickable = false
+                acbCreateMasterPINButton9.isClickable = false
+                acbCreateMasterPINButton0.isClickable = false
+                acbCreateMasterPINButtonDelete.isClickable = false
+                acbCreateMasterPINButtonCancel.isClickable = false
 
-                unShadeAllPin()
+                Timer().schedule(200) {
+                    val vibrator: Vibrator =
+                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                    @Suppress("DEPRECATION")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
+                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
+                                VibrationEffect.createOneShot(
+                                        350,
+                                        VibrationEffect.DEFAULT_AMPLITUDE
+                                )
+                        )
+                    } else {
+                        vibrator.vibrate(350)
+                    }
+
+                    for (i: Int in 1..pinSize)
+                        pin.pop()
+
+                    acbCreateMasterPINButton1.isClickable = true
+                    acbCreateMasterPINButton2.isClickable = true
+                    acbCreateMasterPINButton3.isClickable = true
+                    acbCreateMasterPINButton4.isClickable = true
+                    acbCreateMasterPINButton5.isClickable = true
+                    acbCreateMasterPINButton6.isClickable = true
+                    acbCreateMasterPINButton7.isClickable = true
+                    acbCreateMasterPINButton8.isClickable = true
+                    acbCreateMasterPINButton9.isClickable = true
+                    acbCreateMasterPINButton0.isClickable = true
+                    acbCreateMasterPINButtonDelete.isClickable = true
+                    acbCreateMasterPINButtonCancel.isClickable = true
+
+                    unShadeAllPin()
+                }
             }
         } else if (pin.size == pinSize) {
             var valid = true
@@ -99,36 +217,64 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 }
             }
 
-            if (valid) {
-                for (i: Int in 1..pinSize)
-                    temp.push(pin.pop())
-                for (i: Int in 1..pinSize)
-                    savedPin.push(temp.pop())
+            acbCreateMasterPINButton1.isClickable = false
+            acbCreateMasterPINButton2.isClickable = false
+            acbCreateMasterPINButton3.isClickable = false
+            acbCreateMasterPINButton4.isClickable = false
+            acbCreateMasterPINButton5.isClickable = false
+            acbCreateMasterPINButton6.isClickable = false
+            acbCreateMasterPINButton7.isClickable = false
+            acbCreateMasterPINButton8.isClickable = false
+            acbCreateMasterPINButton9.isClickable = false
+            acbCreateMasterPINButton0.isClickable = false
+            acbCreateMasterPINButtonDelete.isClickable = false
+            acbCreateMasterPINButtonCancel.isClickable = false
 
-                val tvCreateMasterPINHeading: TextView =
-                        findViewById(R.id.tvCreateMasterPINHeading)
-                tvCreateMasterPINHeading.setText(R.string.many_confirm_master_pin)
-            } else {
-                val vibrator: Vibrator =
-                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            Timer().schedule(200) {
+                if (valid) {
+                    for (i: Int in 1..pinSize)
+                        temp.push(pin.pop())
+                    for (i: Int in 1..pinSize)
+                        savedPin.push(temp.pop())
 
-                @Suppress("DEPRECATION")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                               // If android version is Oreo and above
-                    vibrator.vibrate(                                                               // Vibrate for wrong confirmation
-                            VibrationEffect.createOneShot(
-                                    350,
-                                    VibrationEffect.DEFAULT_AMPLITUDE
-                            )
-                    )
+                    val tvCreateMasterPINHeading: TextView =
+                            findViewById(R.id.tvCreateMasterPINHeading)
+                    tvCreateMasterPINHeading.setText(R.string.many_confirm_master_pin)
                 } else {
-                    vibrator.vibrate(350)
+                    val vibrator: Vibrator =
+                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                    @Suppress("DEPRECATION")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
+                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
+                                VibrationEffect.createOneShot(
+                                        350,
+                                        VibrationEffect.DEFAULT_AMPLITUDE
+                                )
+                        )
+                    } else {
+                        vibrator.vibrate(350)
+                    }
+
+                    for (i: Int in 1..pinSize)
+                        pin.pop()
                 }
 
-                for (i: Int in 1..pinSize)
-                    pin.pop()
-            }
+                acbCreateMasterPINButton1.isClickable = true
+                acbCreateMasterPINButton2.isClickable = true
+                acbCreateMasterPINButton3.isClickable = true
+                acbCreateMasterPINButton4.isClickable = true
+                acbCreateMasterPINButton5.isClickable = true
+                acbCreateMasterPINButton6.isClickable = true
+                acbCreateMasterPINButton7.isClickable = true
+                acbCreateMasterPINButton8.isClickable = true
+                acbCreateMasterPINButton9.isClickable = true
+                acbCreateMasterPINButton0.isClickable = true
+                acbCreateMasterPINButtonDelete.isClickable = true
+                acbCreateMasterPINButtonCancel.isClickable = true
 
-            unShadeAllPin()
+                unShadeAllPin()
+            }
         }
     }
 

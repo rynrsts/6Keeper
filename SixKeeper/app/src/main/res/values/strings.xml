@@ -38,6 +38,8 @@
     <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials.</string>
 
+    <string name="login_incorrect_master_pin">Incorrect Master PIN!</string>
+
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
@@ -108,6 +110,9 @@
         *Must be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
         (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),
         without space/s.
+    </string>
+    <string name="many_validate_pass_equal">
+        *Password must not be the same with the username.
     </string>
     <string name="many_validate_username">
         *Must be at least 6 characters. Can contain lower and upper case letters, numbers, and

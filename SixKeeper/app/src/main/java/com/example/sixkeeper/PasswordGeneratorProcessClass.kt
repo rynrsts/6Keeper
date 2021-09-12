@@ -95,6 +95,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
             characters += number
         }
 
+
 //        do {
             for (x in 1..length) {
                 val random = (characters.indices).random()

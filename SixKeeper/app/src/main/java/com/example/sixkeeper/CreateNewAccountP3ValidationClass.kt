@@ -95,9 +95,10 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
         val llCreateNewAccP3Username: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP3Username)
 
+        llCreateNewAccP3Username.removeAllViews()
+
         when {
             isUsernameValid() -> {
-                llCreateNewAccP3Username.removeAllViews()
                 validFields[0] = true
             }
             else -> {
@@ -112,10 +113,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP3Username.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP3Username.addView(tvMessage)
                 validFields[0] = false
             }
         }
@@ -130,28 +128,31 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
     fun validatePassword() {                                                                        // Validate password
         val llCreateNewAccP3Password: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP3Password)
+        val tvMessage = TextView(context)
+
+        tvMessage.apply {
+            layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            setTextColor(ContextCompat.getColor(context, R.color.red))
+            textSize = 14F
+        }
+
+        llCreateNewAccP3Password.removeAllViews()
 
         when {
-            isPasswordValid() -> {
-                llCreateNewAccP3Password.removeAllViews()
+            isPasswordValid() && password != username -> {
                 validFields[1] = true
             }
-            else -> {
-                val tvMessage = TextView(context)
-                tvMessage.apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                    setText(R.string.many_validate_password)
-                    setTextColor(ContextCompat.getColor(context, R.color.red))
-                    textSize = 14F
-                }
-
-                llCreateNewAccP3Password.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+            !isPasswordValid() -> {
+                tvMessage.setText(R.string.many_validate_password)
+                llCreateNewAccP3Password.addView(tvMessage)
+                validFields[1] = false
+            }
+            password == username -> {
+                tvMessage.setText(R.string.many_validate_pass_equal)
+                llCreateNewAccP3Password.addView(tvMessage)
                 validFields[1] = false
             }
         }
@@ -168,9 +169,10 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                 appCompatActivity.findViewById(R.id.llCreateNewAccP3ConfirmPassword)
         password = etCreateNewAccP3Password.text.toString()
 
+        llCreateNewAccP3ConfirmPassword.removeAllViews()
+
         when (confirmPassword) {
             password -> {
-                llCreateNewAccP3ConfirmPassword.removeAllViews()
                 validFields[2] = true
             }
             else -> {
@@ -185,10 +187,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP3ConfirmPassword.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP3ConfirmPassword.addView(tvMessage)
                 validFields[2] = false
             }
         }

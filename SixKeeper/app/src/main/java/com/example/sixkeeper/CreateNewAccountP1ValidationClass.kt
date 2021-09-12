@@ -114,9 +114,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         val llCreateNewAccP1FirstName: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP1FirstName)
 
+        llCreateNewAccP1FirstName.removeAllViews()
+
         when {
             isNameValid(firstName) -> {
-                llCreateNewAccP1FirstName.removeAllViews()
                 validFields[0] = true
             }
             else -> {
@@ -131,10 +132,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP1FirstName.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP1FirstName.addView(tvMessage)
                 validFields[0] = false
             }
         }
@@ -144,9 +142,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         val llCreateNewAccP1LastName: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP1LastName)
 
+        llCreateNewAccP1LastName.removeAllViews()
+
         when {
             isNameValid(lastName) -> {
-                llCreateNewAccP1LastName.removeAllViews()
                 validFields[1] = true
             }
             else -> {
@@ -161,10 +160,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP1LastName.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP1LastName.addView(tvMessage)
                 validFields[1] = false
             }
         }
@@ -180,9 +176,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         val llCreateNewAccP1BirthDate: LinearLayout =
             appCompatActivity.findViewById(R.id.llCreateNewAccP1BirthDate)
 
+        llCreateNewAccP1BirthDate.removeAllViews()
+
         when {
             isBirthDateValid(birthDate) -> {
-                llCreateNewAccP1BirthDate.removeAllViews()
                 validFields[2] = true
             }
             else -> {
@@ -197,10 +194,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP1BirthDate.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP1BirthDate.addView(tvMessage)
                 validFields[2] = false
             }
         }
@@ -217,9 +211,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         val llCreateNewAccP1Email: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP1Email)
 
+        llCreateNewAccP1Email.removeAllViews()
+
         when {
             Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {                                    // Check if email is valid
-                llCreateNewAccP1Email.removeAllViews()
                 validFields[3] = true
             }
             else -> {
@@ -234,10 +229,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP1Email.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP1Email.addView(tvMessage)
                 validFields[3] = false
             }
         }
@@ -247,9 +239,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         val llCreateNewAccP1MobileNumber: LinearLayout =
                 appCompatActivity.findViewById(R.id.llCreateNewAccP1MobileNumber)
 
+        llCreateNewAccP1MobileNumber.removeAllViews()
+
         when (mobileNumber.length) {
             11 -> {
-                llCreateNewAccP1MobileNumber.removeAllViews()
                 validFields[4] = true
             }
             else -> {
@@ -264,10 +257,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     textSize = 14F
                 }
 
-                llCreateNewAccP1MobileNumber.apply {
-                    removeAllViews()
-                    addView(tvMessage)
-                }
+                llCreateNewAccP1MobileNumber.addView(tvMessage)
                 validFields[4] = false
             }
         }

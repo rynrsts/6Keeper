@@ -1,7 +1,6 @@
 package com.example.sixkeeper
 
 import android.os.Bundle
-import android.widget.Button
 
 class CreateMasterPINActivity : CreateMasterPINProcessClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,69 +13,63 @@ class CreateMasterPINActivity : CreateMasterPINProcessClass() {
     }
 
     private fun setButtonOnClick() {
-        val acbCreateMasterPINButton1: Button = findViewById(R.id.acbCreateMasterPINButton1)
-        val acbCreateMasterPINButton2: Button = findViewById(R.id.acbCreateMasterPINButton2)
-        val acbCreateMasterPINButton3: Button = findViewById(R.id.acbCreateMasterPINButton3)
-        val acbCreateMasterPINButton4: Button = findViewById(R.id.acbCreateMasterPINButton4)
-        val acbCreateMasterPINButton5: Button = findViewById(R.id.acbCreateMasterPINButton5)
-        val acbCreateMasterPINButton6: Button = findViewById(R.id.acbCreateMasterPINButton6)
-        val acbCreateMasterPINButton7: Button = findViewById(R.id.acbCreateMasterPINButton7)
-        val acbCreateMasterPINButton8: Button = findViewById(R.id.acbCreateMasterPINButton8)
-        val acbCreateMasterPINButton9: Button = findViewById(R.id.acbCreateMasterPINButton9)
-        val acbCreateMasterPINButton0: Button = findViewById(R.id.acbCreateMasterPINButton0)
-        val acbCreateMasterPINButtonDelete: Button =
-                findViewById(R.id.acbCreateMasterPINButtonDelete)
-        val acbCreateMasterPINButtonCancel: Button =
-                findViewById(R.id.acbCreateMasterPINButtonCancel)
-
-        acbCreateMasterPINButton1.setOnClickListener {
+        getAcbCreateMasterPINButton1().setOnClickListener {
             pushNumber(1)
         }
 
-        acbCreateMasterPINButton2.setOnClickListener {
+        getAcbCreateMasterPINButton2().setOnClickListener {
             pushNumber(2)
         }
 
-        acbCreateMasterPINButton3.setOnClickListener {
+        getAcbCreateMasterPINButton3().setOnClickListener {
             pushNumber(3)
         }
 
-        acbCreateMasterPINButton4.setOnClickListener {
+        getAcbCreateMasterPINButton4().setOnClickListener {
             pushNumber(4)
         }
 
-        acbCreateMasterPINButton5.setOnClickListener {
+        getAcbCreateMasterPINButton5().setOnClickListener {
             pushNumber(5)
         }
 
-        acbCreateMasterPINButton6.setOnClickListener {
+        getAcbCreateMasterPINButton6().setOnClickListener {
             pushNumber(6)
         }
 
-        acbCreateMasterPINButton7.setOnClickListener {
+        getAcbCreateMasterPINButton7().setOnClickListener {
             pushNumber(7)
         }
 
-        acbCreateMasterPINButton8.setOnClickListener {
+        getAcbCreateMasterPINButton8().setOnClickListener {
             pushNumber(8)
         }
 
-        acbCreateMasterPINButton9.setOnClickListener {
+        getAcbCreateMasterPINButton9().setOnClickListener {
             pushNumber(9)
         }
 
-        acbCreateMasterPINButton0.setOnClickListener {
+        getAcbCreateMasterPINButton0().setOnClickListener {
             pushNumber(0)
         }
 
-        acbCreateMasterPINButtonDelete.setOnClickListener {
+        getAcbCreateMasterPINButtonDelete().setOnClickListener {
             if (getPin().size > 0) {
                 unShadePin()
                 getPin().pop()
             }
         }
 
-        acbCreateMasterPINButtonCancel.setOnClickListener {
+        getAcbCreateMasterPINButtonCancel().setOnClickListener {
+            it.apply {
+                getAcbCreateMasterPINButtonCancel().isClickable = false                             // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            getAcbCreateMasterPINButtonCancel().isClickable = true
+                        }, 1000
+                )
+            }
+
             onBackPressed()
         }
     }

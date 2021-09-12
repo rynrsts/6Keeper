@@ -31,6 +31,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val ivActionBarBackArrow: ImageView = findViewById(R.id.ivActionBarBackArrow)
 
         ivActionBarBackArrow.setOnClickListener {
+            it.apply {
+                ivActionBarBackArrow.isClickable = false                                            // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            ivActionBarBackArrow.isClickable = true
+                        }, 1000
+                )
+            }
+
             onBackPressed()
         }
     }
