@@ -71,7 +71,7 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                 }
     }
 
-    private fun setEditTextOnChange() {
+    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
         getEtCreateNewAccP3Password().addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 setPassword(getEtCreateNewAccP3Password().text.toString())
@@ -129,7 +129,6 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
         val acbCreateNewAccP3Next: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP3Next)
 
-        // TODO: Create New Account P3
         acbCreateNewAccP3Next.setOnClickListener {
             if (isNotEmpty()) {
                 validateUsername()
@@ -143,7 +142,7 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                             ) as InputMethodManager
 
                     if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(
+                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
                                 getAppCompatActivity().currentFocus?.windowToken,
                                 0
                         )
@@ -161,9 +160,9 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                 }
             } else {
                 val toast: Toast = Toast.makeText(
-                    getAppCompatActivity().applicationContext,
-                    R.string.many_fill_missing_fields,
-                    Toast.LENGTH_SHORT
+                        getAppCompatActivity().applicationContext,
+                        R.string.many_fill_missing_fields,
+                        Toast.LENGTH_SHORT
                 )
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)
@@ -173,10 +172,10 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
         }
     }
 
-    private fun setImageViewOnClick() {
+    private fun setImageViewOnClick() {                                                             // Set action when image was clicked
         getIvCreateNewAccP3TogglePass().setOnClickListener {
             when (passwordVisibility) {
-                1 -> {
+                1 -> {                                                                              // Show password
                     getIvCreateNewAccP3TogglePass().apply {
                         setImageResource(R.drawable.ic_visibility_gray)
                     }
@@ -186,7 +185,7 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                     }
                     passwordVisibility = 2
                 }
-                2 -> {
+                2 -> {                                                                              // Hide password
                     getIvCreateNewAccP3TogglePass().apply {
                         setImageResource(R.drawable.ic_visibility_off_gray)
                     }
@@ -201,7 +200,7 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
 
         getIvCreateNewAccP3ToggleConfirmPass().setOnClickListener {
             when (confirmPasswordVisibility) {
-                1 -> {
+                1 -> {                                                                              // Show confirm password
                     getIvCreateNewAccP3ToggleConfirmPass().apply {
                         setImageResource(R.drawable.ic_visibility_gray)
                     }
@@ -211,7 +210,7 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                     }
                     confirmPasswordVisibility = 2
                 }
-                2 -> {
+                2 -> {                                                                              // Hide confirm password
                     getIvCreateNewAccP3ToggleConfirmPass().apply {
                         setImageResource(R.drawable.ic_visibility_off_gray)
                     }

@@ -36,9 +36,9 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
     }
 
     @Suppress("DEPRECATION")
-    override fun onAttach(activity: Activity) {
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
-        attActivity = activity
+        attActivity = activity                                                                      // Attach activity
     }
 
     private fun setButtonOnClick() {
@@ -62,7 +62,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
             )
 
             it.apply {
-                acbCreateNewAccP4MasterPIN.isClickable = false
+                acbCreateNewAccP4MasterPIN.isClickable = false                                      // Set button un-clickable for 1 second
                 postDelayed(
                         {
                             acbCreateNewAccP4MasterPIN.isClickable = true
@@ -110,7 +110,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {               // Get value from intent
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 

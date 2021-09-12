@@ -15,9 +15,9 @@ class LogoutFragment : Fragment() {
     private lateinit var attActivity: Activity
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_logout, container, false)
     }
@@ -29,14 +29,14 @@ class LogoutFragment : Fragment() {
     }
 
     @Suppress("DEPRECATION")
-    override fun onAttach(activity: Activity) {
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
-        attActivity = activity
+        attActivity = activity                                                                      // Attach activity
     }
 
-    private fun showDialog() {
+    private fun showDialog() {                                                                      // Show dialog for logout
         val builder: AlertDialog.Builder = AlertDialog.Builder(attActivity)
-        builder.setMessage(R.string.many_continue_mes)
+        builder.setMessage(R.string.many_logout_mes)
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
@@ -53,7 +53,7 @@ class LogoutFragment : Fragment() {
         alert.show()
     }
 
-    private fun updateUserStatus() {
+    private fun updateUserStatus() {                                                                // Update account status to 0
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
@@ -67,22 +67,22 @@ class LogoutFragment : Fragment() {
         }
 
         databaseHandlerClass.updateUserStatus(
-            UserAccModelClass(
-                userId,
-                userUsername,
-                userPassword,
-                userMasterPIN,
-                userAccountStatus
-            )
+                UserAccModelClass(
+                        userId,
+                        userUsername,
+                        userPassword,
+                        userMasterPIN,
+                        userAccountStatus
+                )
         )
     }
 
-    private fun goToLoginActivity() {
+    private fun goToLoginActivity() {                                                               // Go to login (Username and Password)
         val goToLoginActivity = Intent(activity, LoginActivity::class.java)
         startActivity(goToLoginActivity)
         activity?.overridePendingTransition(
-            R.anim.anim_enter_bottom_to_top_2,
-            R.anim.anim_0
+                R.anim.anim_enter_bottom_to_top_2,
+                R.anim.anim_0
         )
         this.activity?.finish()
     }

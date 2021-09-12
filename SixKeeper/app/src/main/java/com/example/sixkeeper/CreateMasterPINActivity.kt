@@ -1,6 +1,5 @@
 package com.example.sixkeeper
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 
@@ -79,11 +78,6 @@ class CreateMasterPINActivity : CreateMasterPINProcessClass() {
 
         acbCreateMasterPINButtonCancel.setOnClickListener {
             onBackPressed()
-            setResult(0, Intent().putExtra("finish", 0))
-            overridePendingTransition(
-                    R.anim.anim_0,
-                    R.anim.anim_exit_top_to_bottom_2
-            )
         }
     }
 }

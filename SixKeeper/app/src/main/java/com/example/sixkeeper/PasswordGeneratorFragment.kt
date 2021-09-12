@@ -29,7 +29,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         val acbPassGeneratorGenerate: Button =
                 getAppCompatActivity().findViewById(R.id.acbPassGeneratorGenerate)
         val clPassGeneratorView: ConstraintLayout =
-            getAppCompatActivity().findViewById(R.id.clPassGeneratorView)
+                getAppCompatActivity().findViewById(R.id.clPassGeneratorView)
         val clPassGeneratorSave: ConstraintLayout =
                 getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
@@ -38,24 +38,35 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
 
             if (getPassGeneratorLength().isNotEmpty()) {
                 if (getPassGeneratorLength() != "0") {
-                    val etPassGeneratorLength: EditText =
-                            getAppCompatActivity().findViewById(R.id.etPassGeneratorLength)
+                    if (getPassGeneratorLength() >= "4") {
+                        val etPassGeneratorLength: EditText =
+                                getAppCompatActivity().findViewById(R.id.etPassGeneratorLength)
 
-                    val length: Int = etPassGeneratorLength.text.toString().toInt()
+                        val length: Int = etPassGeneratorLength.text.toString().toInt()
 
-                    if (
-                            getCbPassGeneratorLowercase().isChecked ||
-                            getCbPassGeneratorUppercase().isChecked ||
-                            getCbPassGeneratorSpecialChar().isChecked ||
-                            getCbPassGeneratorNumber().isChecked
-                    ) {
-                        val generatedPass = generatePassword(length)
-                        getTvPassGeneratorGeneratedPass().text = generatedPass
-                    }
-                    else {
+                        if (
+                                getCbPassGeneratorLowercase().isChecked ||
+                                getCbPassGeneratorUppercase().isChecked ||
+                                getCbPassGeneratorSpecialChar().isChecked ||
+                                getCbPassGeneratorNumber().isChecked
+                        ) {
+                            val generatedPass = generatePassword(length)
+                            getTvPassGeneratorGeneratedPass().text = generatedPass
+                        } else {
+                            val toast: Toast = Toast.makeText(
+                                    getAppCompatActivity().applicationContext,
+                                    R.string.pass_generator_select_char,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
+                    } else {
                         val toast: Toast = Toast.makeText(
                                 getAppCompatActivity().applicationContext,
-                                R.string.pass_generator_select_char,
+                                R.string.pass_generator_less_than_four,
                                 Toast.LENGTH_SHORT
                         )
                         toast.apply {
@@ -88,8 +99,8 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         }
 
         clPassGeneratorView.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
+            findNavController().navigate(                                                           // Go to Saved Password
+                    R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
             )
         }
 
@@ -100,9 +111,9 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                 saveGeneratedPass(generatedPass)
             } else {
                 val toast: Toast = Toast.makeText(
-                    getAppCompatActivity().applicationContext,
-                    R.string.pass_generator_generate_pass,
-                    Toast.LENGTH_SHORT
+                        getAppCompatActivity().applicationContext,
+                        R.string.pass_generator_generate_pass,
+                        Toast.LENGTH_SHORT
                 )
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)

@@ -10,7 +10,7 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
 
         changeStatusBarColor()
         goTo()
-        //setButtonOnClick()
+//        setButtonOnClick()
     }
 
     private fun goTo() {
@@ -22,22 +22,23 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
             status = u.accountStatus
         }
 
-        if (status == 0) {
+        if (status == 0) {                                                                          // Go to login (Username and Password)
             val goToLoginActivity = Intent(this, LoginActivity::class.java)
             startActivity(goToLoginActivity)
-        } else if (status == 1) {
+        } else if (status == 1) {                                                                   // Go to login (Master PIN)
             val goToMasterPINActivity = Intent(this, MasterPINActivity::class.java)
             startActivity(goToMasterPINActivity)
             overridePendingTransition(
-                R.anim.anim_enter_bottom_to_top_2,
-                R.anim.anim_0
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
             )
         }
 
         this.finish()
     }
 
-    /*private fun setButtonOnClick() {
+    /*
+    private fun setButtonOnClick() {
         val acbMainLogin: Button = findViewById(R.id.acbMainLogin)
         val acbMainCreateNewAccount: Button = findViewById(R.id.acbMainCreateNewAccount)
 
@@ -81,5 +82,6 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
                 )
             }
         }
-    }*/
+    }
+    */
 }

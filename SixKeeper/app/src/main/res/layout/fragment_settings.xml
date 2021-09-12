@@ -242,14 +242,7 @@
                     app:layout_constraintStart_toEndOf="@+id/ivSettingsDisableThemes"
                     app:layout_constraintTop_toBottomOf="@+id/tvSettingsDisableThemes" />
 
-                <Switch
-                    android:id="@+id/sSettingsDisableThemes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

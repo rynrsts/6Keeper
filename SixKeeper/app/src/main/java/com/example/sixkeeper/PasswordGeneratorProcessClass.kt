@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import java.util.regex.Pattern
 
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -70,39 +71,48 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 appCompatActivity.findViewById(R.id.tvPassGeneratorGeneratedPass)
     }
 
-    fun generatePassword(length: Int): String {
+//    TODO: Generate Password: require all checked boxes
+    fun generatePassword(length: Int): String {                                                     // Generate password
+        val lowercase = "abcdefghijklmnopqrstuvwxyz"
+        val uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val specialChar = "!@#$%^&*()=+._-"
+        val number = "0123456789"
+//        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(^[a-zA-Z0-9._-]+\$)"
+//        val pattern = Pattern.compile(exp)
         val stringBuilder = StringBuilder(length)
         var characters = ""
 
         if (cbPassGeneratorLowercase.isChecked) {
-            characters += "abcdefghijklmnopqrstuvwxyz"
+            characters += lowercase
         }
         if (cbPassGeneratorUppercase.isChecked) {
-            characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            characters += uppercase
         }
         if (cbPassGeneratorSpecialChar.isChecked) {
-            characters += "!@#$%^&*()=+-_"
+            characters += specialChar
         }
         if (cbPassGeneratorNumber.isChecked) {
-            characters += "0123456789"
+            characters += number
         }
 
-        for (x in 1..length){
-            val random = (characters.indices).random()
-            stringBuilder.append(characters[random])
-        }
+//        do {
+            for (x in 1..length) {
+                val random = (characters.indices).random()
+                stringBuilder.append(characters[random])
+            }
+//        } while(!pattern.matcher(stringBuilder).matches())
 
         return stringBuilder.toString()
     }
 
     @Suppress("DEPRECATION")
-    override fun onAttach(activity: Activity) {
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
-        attActivity = activity
+        attActivity = activity                                                                      // Attach activity
     }
 
     // Save generated password to database
-    fun saveGeneratedPass(generatedPass: String) {
+    fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val passId: Int = (100000..999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
 

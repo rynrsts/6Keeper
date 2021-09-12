@@ -84,8 +84,7 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    // Add User Information
-    fun addUserInfo(userInfo: UserInfoModelClass): Long {
+    fun addUserInfo(userInfo: UserInfoModelClass): Long {                                           // Add User Information
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -104,8 +103,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    // Add User Account
-    fun addUserAcc(userAcc: UserAccModelClass): Long {
+    fun addUserAcc(userAcc: UserAccModelClass): Long {                                              // Add User Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -123,8 +121,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    // Add Generated Password
-    fun addGeneratedPass(userSavedPass: UserSavedPassModelClass): Long {
+    fun addGeneratedPass(userSavedPass: UserSavedPassModelClass): Long {                            // Add Generated Password
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -145,9 +142,8 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    // Validate Username, Password, and/or Master PIN
     @SuppressLint("Recycle")
-    fun validateUserAcc(): List<UserAccModelClass> {
+    fun validateUserAcc(): List<UserAccModelClass> {                                                // Validate Username, Password, and/or Master PIN
         val userAccList: ArrayList<UserAccModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
         val db = this.readableDatabase
@@ -189,8 +185,7 @@ class DatabaseHandlerClass(context: Context) :
         return userAccList
     }
 
-    // View saved password
-    fun viewSavedPass(): List<UserSavedPassModelClass> {
+    fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View saved password
         val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"
         val db = this.readableDatabase
@@ -228,8 +223,7 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    // Update User Status | 0 or 1
-    fun updateUserStatus(userAcc: UserAccModelClass): Int {
+    fun updateUserStatus(userAcc: UserAccModelClass): Int {                                         // Update User Status, 0 or 1
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -254,8 +248,7 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    // Delete all data in all tables
-    fun truncateAllTables(): Int {
+    fun truncateAllTables(): Int {                                                                  // Delete all data in all tables
         val db = this.writableDatabase
 
         val success = db.delete(TABLE_USER_ACC, "", null)

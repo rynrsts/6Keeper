@@ -54,6 +54,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         return etCreateNewAccP1LastName
     }
 
+    fun setEtCreateNewAccP1BirthDate(s: String) {
+        etCreateNewAccP1BirthDate.setText(s)
+    }
+
     fun getEtCreateNewAccP1BirthDate(): EditText {
         return etCreateNewAccP1BirthDate
     }
@@ -124,6 +128,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     )
                     setText(R.string.many_letters_only_message)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP1FirstName.apply {
@@ -153,6 +158,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     )
                     setText(R.string.many_letters_only_message)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP1LastName.apply {
@@ -164,7 +170,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         }
     }
 
-    private fun isNameValid(s: String): Boolean {                                                   // Only accept letters, (.), (-)
+    private fun isNameValid(s: String): Boolean {                                                   // Accept letters, (.) and (-) only
         val exp = "[a-zA-Z .-]+"
         val pattern: Pattern = Pattern.compile(exp)
         return pattern.matcher(s).matches()
@@ -188,6 +194,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     )
                     setText(R.string.many_birth_date_format_message)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP1BirthDate.apply {
@@ -199,7 +206,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         }
     }
 
-    private fun isBirthDateValid(s: String): Boolean {
+    private fun isBirthDateValid(s: String): Boolean {                                              // Accept MM//DD/YYYY format only
         //val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9])?[0-9][0-9]$"
         val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9][0-9][0-9])?$"
         val pattern: Pattern = Pattern.compile(exp)
@@ -211,8 +218,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                 appCompatActivity.findViewById(R.id.llCreateNewAccP1Email)
 
         when {
-            Patterns.EMAIL_ADDRESS.matcher(email)
-                    .matches() -> {                                    // Check if email is valid
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {                                    // Check if email is valid
                 llCreateNewAccP1Email.removeAllViews()
                 validFields[3] = true
             }
@@ -225,6 +231,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     )
                     setText(R.string.many_validate_email)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP1Email.apply {
@@ -254,6 +261,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
                     )
                     setText(R.string.many_validate_mobile_num)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP1MobileNumber.apply {
@@ -265,7 +273,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         }
     }
 
-    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts to not empty
+    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts are not empty
         firstName = etCreateNewAccP1FirstName.text.toString()
         lastName = etCreateNewAccP1LastName.text.toString()
         birthDate = etCreateNewAccP1BirthDate.text.toString()
@@ -280,6 +288,10 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
     }
 
     fun isValid(): Boolean {                                                                        // Validate EditTexts
-        return validFields[0] && validFields[1] && validFields[2] && validFields[3] && validFields[4]
+        return validFields[0] &&
+                validFields[1] &&
+                validFields[2] &&
+                validFields[3] &&
+                validFields[4]
     }
 }

@@ -68,11 +68,12 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                     tempS = tempS + "" + temp.pop()
                 val masterPin: Int = tempS.toInt()
 
+                // Return the created Master PIN
                 setResult(16914, Intent().putExtra("masterPin", masterPin))
-                onBackPressed()
+                finish()
                 overridePendingTransition(
-                    R.anim.anim_0,
-                    R.anim.anim_exit_top_to_bottom_2
+                        R.anim.anim_0,
+                        R.anim.anim_exit_top_to_bottom_2
                 )
 
             } else {
@@ -112,7 +113,7 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                         getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
                 @Suppress("DEPRECATION")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                               // If android version is Oreo and above
                     vibrator.vibrate(                                                               // Vibrate for wrong confirmation
                             VibrationEffect.createOneShot(
                                     350,
@@ -155,5 +156,14 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         ivCreateMasterPINCircle4.setImageResource(R.drawable.layout_blue_border_circle)
         ivCreateMasterPINCircle5.setImageResource(R.drawable.layout_blue_border_circle)
         ivCreateMasterPINCircle6.setImageResource(R.drawable.layout_blue_border_circle)
+    }
+
+    override fun onBackPressed() {                                                                  // Override back button function
+        setResult(0, Intent().putExtra("masterPin", 0))
+        super.onBackPressed()
+        overridePendingTransition(
+                R.anim.anim_0,
+                R.anim.anim_exit_top_to_bottom_2
+        )
     }
 }

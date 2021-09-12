@@ -35,8 +35,7 @@ open class CreateNewAccountP4ValidationClass : Fragment() {
     }
 
     fun isMasterPINSetup(): Boolean {
-        return tvCreateNewAccP4MasterPinMes.text.toString() ==
-                getString(R.string.many_setup_complete)
+        return tvCreateNewAccP4MasterPinMes.text.toString() == getString(R.string.many_setup_complete)
     }
 
     fun isTermsChecked(): Boolean {

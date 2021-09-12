@@ -47,14 +47,14 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return password
     }
 
-    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts to not empty
+    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts are not empty
         username = etLoginUsername.text.toString()
         password = etLoginPassword.text.toString()
 
         return username.isNotEmpty() && password.isNotEmpty()
     }
 
-    fun validateUserCredential(): Boolean {
+    fun validateUserCredential(): Boolean {                                                         // Validate username and password
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
@@ -68,7 +68,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return bool
     }
 
-    fun updateUserStatus() {
+    fun updateUserStatus() {                                                                        // Update account status to 1
         val databaseHandlerClass = DatabaseHandlerClass(this)
 
         databaseHandlerClass.updateUserStatus(

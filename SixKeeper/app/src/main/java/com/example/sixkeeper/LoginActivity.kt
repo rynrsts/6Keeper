@@ -1,6 +1,7 @@
 package com.example.sixkeeper
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -10,6 +11,7 @@ import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 class LoginActivity : LoginValidationClass() {
     private var passwordVisibility: Int = 0
@@ -58,15 +60,13 @@ class LoginActivity : LoginValidationClass() {
                         show()
                     }
 
-                    setEtLoginUsername("")
                     setEtLoginPassword("")
-                    getEtLoginUsername().requestFocus()
                 }
             } else {
                 val toast: Toast = Toast.makeText(
-                    applicationContext,
-                    R.string.login_enter_credentials,
-                    Toast.LENGTH_SHORT
+                        applicationContext,
+                        R.string.login_enter_credentials,
+                        Toast.LENGTH_SHORT
                 )
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)
@@ -75,7 +75,7 @@ class LoginActivity : LoginValidationClass() {
             }
 
             it.apply {
-                getEtLoginPassword().isClickable = false
+                getEtLoginPassword().isClickable = false                                            // Set button un-clickable for 1 second
                 postDelayed(
                         {
                             getEtLoginPassword().isClickable = true
@@ -85,7 +85,8 @@ class LoginActivity : LoginValidationClass() {
         }
 
         acbLoginCreateNewAccount.setOnClickListener {
-            val goToCreateNewAccountActivity = Intent(this, CreateNewAccountActivity::class.java)
+            val goToCreateNewAccountActivity =
+                    Intent(this, CreateNewAccountActivity::class.java)
 
             startActivity(goToCreateNewAccountActivity)
             overridePendingTransition(
@@ -94,7 +95,7 @@ class LoginActivity : LoginValidationClass() {
             )
 
             it.apply {
-                acbLoginCreateNewAccount.isClickable = false
+                acbLoginCreateNewAccount.isClickable = false                                        // Set button un-clickable for 1 second
                 postDelayed(
                         {
                             acbLoginCreateNewAccount.isClickable = true
@@ -111,11 +112,11 @@ class LoginActivity : LoginValidationClass() {
 
         when {
             immKeyboard.isActive ->
-                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)                   // Close keyboard
         }
     }
 
-    private fun setEditTextOnChange() {
+    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
         getEtLoginPassword().addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 setPassword(getEtLoginPassword().text.toString())
@@ -143,10 +144,10 @@ class LoginActivity : LoginValidationClass() {
         })
     }
 
-    private fun setImageViewOnClick() {
+    private fun setImageViewOnClick() {                                                             // Set action when image was clicked
         getIvLoginTogglePass().setOnClickListener {
             when (passwordVisibility) {
-                1 -> {
+                1 -> {                                                                              // Show password
                     getIvLoginTogglePass().apply {
                         setImageResource(R.drawable.ic_visibility_gray)
                     }
@@ -156,7 +157,7 @@ class LoginActivity : LoginValidationClass() {
                     }
                     passwordVisibility = 2
                 }
-                2 -> {
+                2 -> {                                                                              // Hide password
                     getIvLoginTogglePass().apply {
                         setImageResource(R.drawable.ic_visibility_off_gray)
                     }
@@ -170,11 +171,20 @@ class LoginActivity : LoginValidationClass() {
         }
     }
 
-    override fun onBackPressed() {                                                                  // Override back button
-        super.onBackPressed()
-        overridePendingTransition(
-                R.anim.anim_enter_left_to_right_2,
-                R.anim.anim_exit_left_to_right_2
-        )
+    override fun onBackPressed() {                                                                  // Override back button function
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setMessage(R.string.many_exit_mes)
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            super.onBackPressed()
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title)
+        alert.show()
     }
 }

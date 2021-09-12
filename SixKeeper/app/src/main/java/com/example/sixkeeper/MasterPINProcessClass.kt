@@ -1,11 +1,13 @@
 package com.example.sixkeeper
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import java.util.*
 
 open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
@@ -78,7 +80,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                         getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
                 @Suppress("DEPRECATION")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                               // If android version is Oreo and above
                     vibrator.vibrate(                                                               // Vibrate for wrong confirmation
                             VibrationEffect.createOneShot(
                                     350,
@@ -120,7 +122,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         ivMasterPINCircle6.setImageResource(R.drawable.layout_blue_border_circle)
     }
 
-    private fun validateUserMasterPIN(pinI: Int): Boolean {
+    private fun validateUserMasterPIN(pinI: Int): Boolean {                                         // Validate Master PIN
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
@@ -132,7 +134,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         return bool
     }
 
-    fun updateUserStatus() {
+    fun updateUserStatus() {                                                                        // Update account status to 0
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
@@ -156,7 +158,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         )
     }
 
-    fun goToLoginActivity() {
+    fun goToLoginActivity() {                                                                       // Go to login (Username and Password)
         val goToLoginActivity = Intent(this, LoginActivity::class.java)
         startActivity(goToLoginActivity)
         overridePendingTransition(
@@ -164,5 +166,22 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 R.anim.anim_0
         )
         this.finish()
+    }
+
+    override fun onBackPressed() {                                                                  // Override back button function
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setMessage(R.string.many_exit_mes)
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            super.onBackPressed()
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title)
+        alert.show()
     }
 }

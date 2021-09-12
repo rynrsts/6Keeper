@@ -16,7 +16,7 @@ class SavedPasswordListAdapter(
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
-        val rowView = inflater.inflate(
+        val rowView = inflater.inflate(                                                             // Inflate list adapter
                 R.layout.layout_saved_password_list_adapter,
                 null,
                 true

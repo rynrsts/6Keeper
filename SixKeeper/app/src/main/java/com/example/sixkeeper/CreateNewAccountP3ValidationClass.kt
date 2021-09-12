@@ -109,6 +109,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                     )
                     setText(R.string.many_validate_username)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP3Username.apply {
@@ -120,7 +121,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
         }
     }
 
-    private fun isUsernameValid(): Boolean {                                                        // Only accept letters, numbers, (.), (_), (-)
+    private fun isUsernameValid(): Boolean {                                                        // Accept letters, numbers, (.), (_) and (-) only
         val exp = "[a-zA-Z0-9._-]{6,}"
         val pattern: Pattern = Pattern.compile(exp)
         return pattern.matcher(username).matches()
@@ -144,6 +145,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                     )
                     setText(R.string.many_validate_password)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP3Password.apply {
@@ -155,7 +157,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
         }
     }
 
-    private fun isPasswordValid(): Boolean {                                                        // 1 lower, upper, number, and (.), (_), (-)
+    private fun isPasswordValid(): Boolean {                                                        // Accept 1 lowercase, uppercase, number, (.), (_) and (-) only
         val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(?=.{8,})(^[a-zA-Z0-9._-]+\$)"
         val pattern = Pattern.compile(exp)
         return pattern.matcher(password).matches()
@@ -180,6 +182,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
                     )
                     setText(R.string.many_validate_confirm_pass)
                     setTextColor(ContextCompat.getColor(context, R.color.red))
+                    textSize = 14F
                 }
 
                 llCreateNewAccP3ConfirmPassword.apply {
@@ -191,7 +194,7 @@ open class CreateNewAccountP3ValidationClass : Fragment() {
         }
     }
 
-    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts to not empty
+    fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts are not empty
         username = etCreateNewAccP3Username.text.toString()
         password = etCreateNewAccP3Password.text.toString()
         confirmPassword = etCreateNewAccP3ConfirmPassword.text.toString()

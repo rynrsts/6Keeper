@@ -48,6 +48,7 @@
             android:layout_marginTop="6dp"
             android:text="@string/many_required_mes"
             android:textColor="@color/red"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4MasterPIN" />
@@ -128,6 +129,17 @@
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
             app:layout_constraintTop_toBottomOf="@+id/cbCreateNewAccP4AgreeToTerms" />
+
+        <TextView
+            android:id="@+id/tvCreateNewAccP4Note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/create_new_acc_note"
+            android:layout_marginTop="21dp"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4Register" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

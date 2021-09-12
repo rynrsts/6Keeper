@@ -1,7 +1,6 @@
 package com.example.sixkeeper
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -84,16 +83,11 @@ class MasterPINActivity : MasterPINProcessClass() {
 
         acbMasterPINButtonCancel.setOnClickListener {
             onBackPressed()
-            setResult(0, Intent().putExtra("finish", 0))
-            overridePendingTransition(
-                    R.anim.anim_0,
-                    R.anim.anim_exit_top_to_bottom_2
-            )
         }
 
         tvMasterPINLogout.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setMessage(R.string.many_continue_mes)
+            builder.setMessage(R.string.many_logout_mes)
             builder.setCancelable(false)
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->

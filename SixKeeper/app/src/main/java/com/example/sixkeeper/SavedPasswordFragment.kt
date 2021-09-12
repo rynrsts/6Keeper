@@ -27,12 +27,12 @@ class SavedPasswordFragment : Fragment() {
     }
 
     @Suppress("DEPRECATION")
-    override fun onAttach(activity: Activity) {
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
-        attActivity = activity
+        attActivity = activity                                                                      // Attach activty
     }
 
-    private fun viewSavedPass() {
+    private fun viewSavedPass() {                                                                   // View saved password
         val databaseHandler = DatabaseHandlerClass(attActivity)
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandler.viewSavedPass()
 

@@ -15,11 +15,16 @@
     </string>
 
     <!-- Create New Account -->
-    <string name="create_new_acc_message">
-        Saved data will be discarded (if there are any). Continue creating the account?
+    <string name="create_new_acc_alert_message">
+        Returning to previous page will discard data.
+    </string>
+    <string name="create_new_acc_message">Continue creating the account?</string>
+    <string name="create_new_acc_note">
+        <b>Note:</b> Once you click register, existing account and data saved in the app will be
+        removed.
     </string>
     <string name="create_new_acc_p4_agree_to_terms">
-        I agree to <u>terms</u> and <u>conditions</u>.
+        I agree to <u>Terms and Conditions</u>.
     </string>
     <string name="create_new_acc_p4_agree_to_terms_mes">
         Please read and agree to terms and conditions.
@@ -37,14 +42,12 @@
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
     <string name="many_alert_title">Warning!</string>
-    <string name="many_alert_message">
-        Do you want to go back? Data will be discarded (if there are any).
-    </string>
     <string name="many_cancel">Cancel</string>
     <string name="many_confirm_master_pin">Confirm Your Master PIN</string>
     <string name="many_confirm_password">Confirm Password</string>
     <string name="many_contact_us">Contact Us</string>
     <string name="many_continue_mes">Do you want to continue?</string>
+    <string name="many_exit_mes">Do you want to exit the app?</string>
     <string name="many_create_master_pin">Create Your Master PIN</string>
     <string name="many_create_new_account">Create New Account</string>
     <string name="many_birth_date">Birth Date</string>
@@ -74,6 +77,7 @@
     </string>
     <string name="many_login">Login</string>
     <string name="many_logout">Logout</string>
+    <string name="many_logout_mes">Are you sure you want to log out?</string>
     <string name="many_mobile_number">Mobile Number</string>
     <string name="many_mobile_number_hint"><i>ex. 09123456789</i></string>
     <string name="many_next">Next</string>
@@ -97,16 +101,16 @@
     <string name="many_username">Username</string>
     <string name="many_validate_confirm_pass">*Password does not match.</string>
     <string name="many_validate_email">
-        *Should be a valid email address - username, at (@), domain, dot (.), and extension.
+        *Must be a valid email address - username, at (@), domain, dot (.), and extension.
     </string>
-    <string name="many_validate_mobile_num">*Should be a valid 11-digit mobile number.</string>
+    <string name="many_validate_mobile_num">*Must be a valid 11-digit mobile number.</string>
     <string name="many_validate_password">
-        *Should be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
+        *Must be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
         (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),
         without space/s.
     </string>
     <string name="many_validate_username">
-        *Should be at least 6 characters. Can contain lower and upper case letters, numbers, and
+        *Must be at least 6 characters. Can contain lower and upper case letters, numbers, and
         special characters: dot (.), hyphen (-) and underscore (_), without space/s.
     </string>
     <!--    TODO: <string name="many_verify">Verify</string>-->
@@ -124,7 +128,8 @@
         Nothing to save. Please generate a password first.
     </string>
     <string name="pass_generator_include">Include:</string>
-    <string name="pass_generator_length">Length</string>
+    <string name="pass_generator_length">Length (minimum of 4)</string>
+    <string name="pass_generator_less_than_four">Length must be minimum of 4.</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
     <string name="pass_generator_pass_saved">Password Saved!</string>

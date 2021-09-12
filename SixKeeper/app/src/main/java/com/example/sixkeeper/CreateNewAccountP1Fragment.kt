@@ -2,6 +2,8 @@ package com.example.sixkeeper
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,8 @@ import android.widget.Button
 import android.widget.Toast
 
 class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
+    private var typing: Boolean = false
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -28,6 +32,7 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
 
         setVariables()
         setEditTextFocusChange()
+//        setEditTextOnChange()
         setButtonOnClick()
     }
 
@@ -83,11 +88,36 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                 }
     }
 
+//    TODO: Add '/' automatically in the birth date
+//    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
+//        getEtCreateNewAccP1BirthDate().addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable) {
+//                setBirthDate(getEtCreateNewAccP1BirthDate().text.toString())
+//
+//                if (getBirthDate().isNotEmpty()) {
+//                    if (getBirthDate().length == 1) {
+//                        typing = true
+//                    }
+//
+//                    if (getBirthDate().length == 2 && typing) {
+//                        setEtCreateNewAccP1BirthDate(getBirthDate() + "/")
+//                        getEtCreateNewAccP1BirthDate().setSelection(
+//                                getEtCreateNewAccP1BirthDate().text.length
+//                        )
+//                        typing = false
+//                    }
+//                }
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+//        })
+//    }
+
     private fun setButtonOnClick() {
         val acbCreateNewAccP1Next: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP1Next)
 
-        // TODO: Create New Account P1
         acbCreateNewAccP1Next.setOnClickListener {
             if (isNotEmpty()) {
                 validateFirstName()
@@ -105,7 +135,7 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                             activity as CreateNewAccountActivity
 
                     if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(
+                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
                                 getAppCompatActivity().currentFocus?.windowToken,
                                 0
                         )
@@ -124,9 +154,9 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                 }
             } else {
                 val toast: Toast = Toast.makeText(
-                    getAppCompatActivity().applicationContext,
-                    R.string.many_fill_missing_fields,
-                    Toast.LENGTH_SHORT
+                        getAppCompatActivity().applicationContext,
+                        R.string.many_fill_missing_fields,
+                        Toast.LENGTH_SHORT
                 )
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)

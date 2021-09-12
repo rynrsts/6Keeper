@@ -24,10 +24,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         setContentView(R.layout.activity_create_new_account)
 
         manageCreateNewAccFragments(getCreateNewAccP1())
-        buttonOnClick()
+        setButtonOnClick()
     }
 
-    private fun buttonOnClick() {
+    private fun setButtonOnClick() {
         val ivActionBarBackArrow: ImageView = findViewById(R.id.ivActionBarBackArrow)
 
         ivActionBarBackArrow.setOnClickListener {
@@ -35,29 +35,29 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         }
     }
 
-    override fun onBackPressed() {                                                                  // Override back button
+    override fun onBackPressed() {                                                                  // Override back button function
         val immKeyboard: InputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         when {
             immKeyboard.isActive ->
-                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)                   // Close keyboard
         }
 
         when {
             getFragmentNum() == 1 -> {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-                builder.setMessage(R.string.many_alert_message)
+                builder.setMessage(R.string.create_new_acc_alert_message)
                 builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                builder.setPositiveButton("Continue") { _: DialogInterface, _: Int ->
                     super.onBackPressed()
                     overridePendingTransition(
                             R.anim.anim_enter_left_to_right_2,
                             R.anim.anim_exit_left_to_right_2
                     )
                 }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
                 }
 
@@ -66,7 +66,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 alert.show()
             }
 
-            // TODO:
+//            TODO: Second Fragment
 //            getFragmentNum() == 2 -> {
 //                manageCreateNewAccFragments(getCreateNewAccP1())
 //            }
@@ -79,8 +79,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         }
     }
 
-    // CreateNewAccountP1 Data
-    internal fun setCreateNewAccountP1Data(f: String, l: String, b: String, e: String, m: Long) {
+    internal fun setCreateNewAccountP1Data(f: String, l: String, b: String, e: String, m: Long) {   // CreateNewAccountP1 data
         firstName = f
         lastName = l
         birthDate = b
@@ -88,19 +87,16 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         mobileNumber = m
     }
 
-    // CreateNewAccountP3 Data
-    internal fun setCreateNewAccountP3Data(u: String, p: String) {
+    internal fun setCreateNewAccountP3Data(u: String, p: String) {                                  // CreateNewAccountP3 data
         username = u
         password = p
     }
 
-    // CreateNewAccountP4 Data
-    internal fun setCreateNewAccountP4Data(mp: Int) {
+    internal fun setCreateNewAccountP4Data(mp: Int) {                                               // CreateNewAccountP4 data
         masterPin = mp
     }
 
-    // Save data to database
-    internal fun saveAccount() {
+    internal fun saveAccount() {                                                                    // Save account data to database
         val userId: Int = (1000000..9999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(this)
 
