@@ -1,12 +1,14 @@
 package com.example.sixkeeper
 
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 
@@ -25,6 +27,7 @@ class LogoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        closeKeyboard()
         showDialog()
     }
 
@@ -32,6 +35,17 @@ class LogoutFragment : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    private fun closeKeyboard() {
+        val immKeyboard: InputMethodManager =
+                attActivity.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+        if (immKeyboard.isActive) {
+            immKeyboard.hideSoftInputFromWindow(attActivity.currentFocus?.windowToken, 0)           // Close keyboard
+        }
     }
 
     private fun showDialog() {                                                                      // Show dialog for logout

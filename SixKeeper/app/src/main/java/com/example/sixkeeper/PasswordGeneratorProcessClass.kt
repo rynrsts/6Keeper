@@ -1,14 +1,19 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.view.Gravity
+import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import java.util.regex.Pattern
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -71,44 +76,84 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 appCompatActivity.findViewById(R.id.tvPassGeneratorGeneratedPass)
     }
 
-//    TODO: Generate Password: require all checked boxes
+    fun closeKeyboard() {
+        val immKeyboard: InputMethodManager =
+                appCompatActivity.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+        if (immKeyboard.isActive) {
+            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
+                    appCompatActivity.currentFocus?.windowToken,
+                    0
+            )
+        }
+    }
+
     fun generatePassword(length: Int): String {                                                     // Generate password
         val lowercase = "abcdefghijklmnopqrstuvwxyz"
         val uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         val specialChar = "!@#$%^&*()=+._-"
         val number = "0123456789"
-//        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(^[a-zA-Z0-9._-]+\$)"
-//        val pattern = Pattern.compile(exp)
         val characters = ArrayList<String>()
+        val boolChar = booleanArrayOf(false, false, false, false)
         val stringBuilder = StringBuilder(length)
 
-        if (cbPassGeneratorLowercase.isChecked) {
-            characters.add(lowercase)
-        }
-        if (cbPassGeneratorUppercase.isChecked) {
-            characters.add(uppercase)
-        }
-        if (cbPassGeneratorSpecialChar.isChecked) {
-            characters.add(specialChar)
-        }
-        if (cbPassGeneratorNumber.isChecked) {
-            characters.add(number)
-        }
+        characters.add(lowercase)
+        characters.add(uppercase)
+        characters.add(specialChar)
+        characters.add(number)
 
         for (x in 1..length) {
-            val charRandom = (characters.indices).random()
-            val random = characters.random().elementAt(charRandom)
+            var charRandom: Int
+
+            when {
+                cbPassGeneratorLowercase.isChecked && !boolChar.elementAt(0) -> {
+                    charRandom = 0
+                    boolChar[0] = true
+                }
+                cbPassGeneratorUppercase.isChecked && !boolChar.elementAt(1) -> {
+                    charRandom = 1
+                    boolChar[1] = true
+                }
+                cbPassGeneratorSpecialChar.isChecked && !boolChar.elementAt(2) -> {
+                    charRandom = 2
+                    boolChar[2] = true
+                }
+                cbPassGeneratorNumber.isChecked && !boolChar.elementAt(3) -> {
+                    charRandom = 3
+                    boolChar[3] = true
+                }
+                else -> {
+                    do {
+                        charRandom = (characters.indices).random()
+                    } while(!boolChar[charRandom])
+                }
+            }
+
+            val randomTemp: String = characters.elementAt(charRandom)
+            val random = randomTemp.random()
             stringBuilder.append(random)
         }
 
-//        do {
-//            for (x in 1..length) {
-//                val random = (characters.indices).random()
-//                stringBuilder.append(characters[random])
-//            }
-//        } while(!pattern.matcher(stringBuilder.toString()).matches())
+        return shuffle(stringBuilder.toString())
+    }
 
-        return stringBuilder.toString()
+    private fun shuffle(input: String): String {
+        val characters: MutableList<Char> = ArrayList()
+
+        for (c in input.toCharArray()) {
+            characters.add(c)
+        }
+
+        val output: java.lang.StringBuilder = java.lang.StringBuilder(input.length)
+
+        while (characters.size != 0) {
+            val randPicker = (Math.random() * characters.size).toInt()
+            output.append(characters.removeAt(randPicker))
+        }
+
+        return output.toString()
     }
 
     @Suppress("DEPRECATION")
@@ -118,12 +163,17 @@ open class PasswordGeneratorProcessClass : Fragment() {
     }
 
     // Save generated password to database
+    @SuppressLint("SimpleDateFormat")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
-        val passId: Int = (100000..999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        val passId: Int = (10000..99999).random()
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
 
         val status = databaseHandlerClass.addGeneratedPass(
-                UserSavedPassModelClass(passId, generatedPass)
+                UserSavedPassModelClass(passId, generatedPass, date)
         )
 
         if (status > -1) {

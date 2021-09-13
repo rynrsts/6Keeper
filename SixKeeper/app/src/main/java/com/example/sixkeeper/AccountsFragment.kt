@@ -1,12 +1,17 @@
 package com.example.sixkeeper
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 class AccountsFragment : Fragment() {
+    private lateinit var appCompatActivity: AppCompatActivity
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -18,6 +23,21 @@ class AccountsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        appCompatActivity = activity as AppCompatActivity
+        closeKeyboard()
+    }
 
+    private fun closeKeyboard() {
+        val immKeyboard: InputMethodManager =
+                appCompatActivity.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+        if (immKeyboard.isActive) {
+            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
+                    appCompatActivity.currentFocus?.windowToken,
+                    0
+            )
+        }
     }
 }

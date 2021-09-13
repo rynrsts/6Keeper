@@ -110,8 +110,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
 
     @SuppressLint("SimpleDateFormat")
     internal fun saveAccount() {                                                                    // Save account data to database
-        val userId: Int = (1000000..9999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userId: Int = (1000000..9999999).random()
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")

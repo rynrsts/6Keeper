@@ -22,6 +22,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        closeKeyboard()
         setButtonOnClick()
     }
 
@@ -37,8 +38,8 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
             setPasswordGeneratorLength(getEtPassGeneratorLength().text.toString())
 
             if (getPassGeneratorLength().isNotEmpty()) {
-                if (getPassGeneratorLength() != "0") {
-                    if (getPassGeneratorLength() >= "4") {
+                if (Integer.parseInt(getPassGeneratorLength()) != 0) {
+                    if (Integer.parseInt(getPassGeneratorLength()) >= 4) {
                         val etPassGeneratorLength: EditText =
                                 getAppCompatActivity().findViewById(R.id.etPassGeneratorLength)
 
@@ -52,6 +53,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                         ) {
                             val generatedPass = generatePassword(length)
                             getTvPassGeneratorGeneratedPass().text = generatedPass
+                            closeKeyboard()
                         } else {
                             val toast: Toast = Toast.makeText(
                                     getAppCompatActivity().applicationContext,
@@ -99,6 +101,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         }
 
         clPassGeneratorView.setOnClickListener {
+            closeKeyboard()
             findNavController().navigate(                                                           // Go to Saved Password
                     R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
             )

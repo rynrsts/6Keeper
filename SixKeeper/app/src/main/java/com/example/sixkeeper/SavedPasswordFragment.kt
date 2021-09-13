@@ -38,16 +38,19 @@ class SavedPasswordFragment : Fragment() {
 
         val userSavedPassId = Array(userSavedPass.size) { "0" }
         val userSavedPassPassword = Array(userSavedPass.size) { "null" }
+        val userSavedPassCreationDate = Array(userSavedPass.size) { "null" }
 
         for ((index, u) in userSavedPass.withIndex()) {
             userSavedPassId[index] = u.passId.toString()
             userSavedPassPassword[index] = u.generatedPassword
+            userSavedPassCreationDate[index] = u.creationDate
         }
 
         val savedPasswordListAdapter = SavedPasswordListAdapter(
                 attActivity,
                 userSavedPassId,
-                userSavedPassPassword
+                userSavedPassPassword,
+                userSavedPassCreationDate
         )
         val lvSavedPasswordContainer: ListView =
                 (activity as AppCompatActivity).findViewById(R.id.lvSavedPasswordContainer)

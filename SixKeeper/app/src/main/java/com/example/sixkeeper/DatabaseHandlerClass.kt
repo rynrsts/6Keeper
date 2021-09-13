@@ -40,6 +40,7 @@ class DatabaseHandlerClass(context: Context) :
         // TABLE_SAVED_PASS
         private const val KEY_PASS_ID = "pass_id"
         private const val KEY_SAVED_PASS = "saved_password"
+        // KEY_CREATION_DATE = "creation_date"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -68,7 +69,8 @@ class DatabaseHandlerClass(context: Context) :
         val createSavedPassTable = (
                 "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
                         KEY_PASS_ID + " INTEGER," +
-                        KEY_SAVED_PASS + " TEXT" +
+                        KEY_SAVED_PASS + " TEXT," +
+                        KEY_CREATION_DATE + " TEXT" +
                         ")"
                 )
 
@@ -137,6 +139,7 @@ class DatabaseHandlerClass(context: Context) :
         contentValues.apply {
             put(KEY_PASS_ID, userSavedPass.passId)
             put(KEY_SAVED_PASS, userSavedPass.generatedPassword)
+            put(KEY_CREATION_DATE, userSavedPass.creationDate)
         }
 
         val success = db.insert(TABLE_SAVED_PASS, null, contentValues)
@@ -218,15 +221,18 @@ class DatabaseHandlerClass(context: Context) :
 
         var passId: Int
         var passPassword: String
+        var passCreationDate: String
 
         if (cursor.moveToFirst()) {
             do {
                 passId = cursor.getInt(cursor.getColumnIndex("pass_id"))
                 passPassword = cursor.getString(cursor.getColumnIndex("saved_password"))
+                passCreationDate = cursor.getString(cursor.getColumnIndex("creation_date"))
 
                 val user = UserSavedPassModelClass(
                         passId = passId,
-                        generatedPassword = passPassword
+                        generatedPassword = passPassword,
+                        creationDate = passCreationDate
                 )
                 userSavedPassList.add(user)
             } while (cursor.moveToNext())
