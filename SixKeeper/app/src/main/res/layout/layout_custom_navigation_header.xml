@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="176dp"
     android:background="@drawable/layout_button_blue_quadrilateral"
@@ -10,12 +11,13 @@
     android:paddingBottom="40dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <View
-        android:id="@+id/vNavigationHeaderPhoto"
+    <ImageView
+        android:id="@+id/ivNavigationHeaderPhoto"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
-        android:background="@drawable/layout_account_circle" />
+        android:background="@drawable/layout_account_circle"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="wrap_content"

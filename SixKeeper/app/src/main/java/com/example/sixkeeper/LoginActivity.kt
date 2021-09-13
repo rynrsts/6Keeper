@@ -61,6 +61,7 @@ class LoginActivity : LoginValidationClass() {
                     }
 
                     setEtLoginPassword("")
+                    getEtLoginPassword().requestFocus()
                 }
             } else {
                 val toast: Toast = Toast.makeText(

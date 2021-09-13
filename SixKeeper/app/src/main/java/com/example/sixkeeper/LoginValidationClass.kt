@@ -19,14 +19,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         ivLoginTogglePass = findViewById(R.id.ivLoginTogglePass)
     }
 
-    fun setEtLoginUsername(s: String) {
-        etLoginUsername.setText(s)
-    }
-
-    fun getEtLoginUsername(): EditText {
-        return etLoginUsername
-    }
-
     fun setEtLoginPassword(s: String) {
         etLoginPassword.setText(s)
     }
@@ -70,9 +62,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     fun updateUserStatus() {                                                                        // Update account status to 1
         val databaseHandlerClass = DatabaseHandlerClass(this)
-
-        databaseHandlerClass.updateUserStatus(
-                UserAccModelClass(userId, "", "", 0, 1)
-        )
+        databaseHandlerClass.updateUserStatus(userId, 1)
     }
 }

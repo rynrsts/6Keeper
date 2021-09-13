@@ -27,12 +27,15 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_BIRTH_DATE = "birth_date"
         private const val KEY_EMAIL = "email"
         private const val KEY_MOBILE_NUMBER = "mobile_number"
+        private const val KEY_LAST_UPDATE = "last_update"
 
         // TABLE_USER_ACC
         private const val KEY_USERNAME = "username"
         private const val KEY_PASSWORD = "password"
         private const val KEY_MASTER_PIN = "master_pin"
         private const val KEY_ACCOUNT_STATUS = "account_status"
+        private const val KEY_CREATION_DATE = "creation_date"
+        private const val KEY_LAST_LOGIN = "last_login"
 
         // TABLE_SAVED_PASS
         private const val KEY_PASS_ID = "pass_id"
@@ -42,21 +45,24 @@ class DatabaseHandlerClass(context: Context) :
     override fun onCreate(db: SQLiteDatabase?) {
         val createUserInfoTable = (
                 "CREATE TABLE " + TABLE_USER_INFO + "(" +
-                        KEY_USER_ID + " INTEGER PRIMARY KEY," +
+                        KEY_USER_ID + " INTEGER," +
                         KEY_FIRST_NAME + " TEXT," +
                         KEY_LAST_NAME + " TEXT," +
                         KEY_BIRTH_DATE + " TEXT," +
                         KEY_EMAIL + " TEXT," +
-                        KEY_MOBILE_NUMBER + " LONG" +
+                        KEY_MOBILE_NUMBER + " LONG," +
+                        KEY_LAST_UPDATE + " TEXT" +
                         ")"
                 )
         val createUserAccTable = (
                 "CREATE TABLE " + TABLE_USER_ACC + "(" +
-                        KEY_USER_ID + " INTEGER PRIMARY KEY," +
+                        KEY_USER_ID + " INTEGER," +
                         KEY_USERNAME + " TEXT," +
                         KEY_PASSWORD + " TEXT," +
                         KEY_MASTER_PIN + " INTEGER," +
-                        KEY_ACCOUNT_STATUS + " INTEGER" +
+                        KEY_ACCOUNT_STATUS + " INTEGER," +
+                        KEY_CREATION_DATE + " TEXT," +
+                        KEY_LAST_LOGIN + " TEXT" +
                         ")"
                 )
         val createSavedPassTable = (
@@ -95,6 +101,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_BIRTH_DATE, userInfo.birthDate)
             put(KEY_EMAIL, userInfo.email)
             put(KEY_MOBILE_NUMBER, userInfo.mobileNumber)
+            put(KEY_LAST_UPDATE, userInfo.lastUpdate)
         }
 
         val success = db.insert(TABLE_USER_INFO, null, contentValues)
@@ -113,6 +120,8 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_PASSWORD, userAcc.password)
             put(KEY_MASTER_PIN, userAcc.masterPin)
             put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
+            put(KEY_CREATION_DATE, userAcc.creationDate)
+            put(KEY_LAST_LOGIN, userAcc.lastLogin)
         }
 
         val success = db.insert(TABLE_USER_ACC, null, contentValues)
@@ -161,6 +170,8 @@ class DatabaseHandlerClass(context: Context) :
         var userPassword: String
         var userMasterPIN: Int
         var userAccountStatus: Int
+        var userCreationDate: String
+        var userLastLogin: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -170,18 +181,25 @@ class DatabaseHandlerClass(context: Context) :
                 userMasterPIN = cursor.getInt(cursor.getColumnIndex("master_pin"))
                 userAccountStatus =
                         cursor.getInt(cursor.getColumnIndex("account_status"))
+                userCreationDate =
+                        cursor.getString(cursor.getColumnIndex("creation_date"))
+                userLastLogin =
+                        cursor.getString(cursor.getColumnIndex("last_login"))
 
                 val user = UserAccModelClass(
                         userId = userId,
                         username = userUsername,
                         password = userPassword,
                         masterPin = userMasterPIN,
-                        accountStatus = userAccountStatus
+                        accountStatus = userAccountStatus,
+                        creationDate = userCreationDate,
+                        lastLogin = userLastLogin
                 )
                 userAccList.add(user)
             } while (cursor.moveToNext())
         }
 
+        db.close()
         return userAccList
     }
 
@@ -214,6 +232,7 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        db.close()
         return userSavedPassList
     }
 
@@ -223,18 +242,37 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    fun updateUserStatus(userAcc: UserAccModelClass): Int {                                         // Update User Status, 0 or 1
+    fun updateUserStatus(id: Int, accStatus: Int): Int {                                            // Update User Status, 0 or 1
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
         contentValues.apply {
-            put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
+            put(KEY_ACCOUNT_STATUS, accStatus)
         }
 
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "user_id=" + userAcc.userId,
+                "user_id=$id",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun updateUserStatus(id: Int, lastLogin: String): Int {                                            // Update User Status, 0 or 1
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_LAST_LOGIN, lastLogin)
+        }
+
+        val success = db.update(
+                TABLE_USER_ACC,
+                contentValues,
+                "user_id=$id",
                 null
         )
 

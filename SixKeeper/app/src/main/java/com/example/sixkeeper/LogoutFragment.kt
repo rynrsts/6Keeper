@@ -57,24 +57,13 @@ class LogoutFragment : Fragment() {
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
-        val userUsername = ""
-        val userPassword = ""
-        val userMasterPIN = 0
         val userAccountStatus = 0
 
         for (u in userAccList) {
             userId = u.userId
         }
 
-        databaseHandlerClass.updateUserStatus(
-                UserAccModelClass(
-                        userId,
-                        userUsername,
-                        userPassword,
-                        userMasterPIN,
-                        userAccountStatus
-                )
-        )
+        databaseHandlerClass.updateUserStatus(userId, userAccountStatus)
     }
 
     private fun goToLoginActivity() {                                                               // Go to login (Username and Password)

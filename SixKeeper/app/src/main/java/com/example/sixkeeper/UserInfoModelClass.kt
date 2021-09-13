@@ -6,5 +6,6 @@ class UserInfoModelClass(
         val lastName: String,
         val birthDate: String,
         val email: String,
-        val mobileNumber: Long
+        val mobileNumber: Long,
+        val lastUpdate: String
 )

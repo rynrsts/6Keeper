@@ -1,9 +1,9 @@
 package com.example.sixkeeper
 
-import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 
+
 class IndexActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -21,6 +22,7 @@ class IndexActivity : AppCompatActivity() {
         setContentView(R.layout.activity_index)
 
         populate()
+        setUsername()
     }
 
     private fun populate() {                                                                        // Populate menu and fragments
@@ -52,6 +54,26 @@ class IndexActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fIndexNavigationHost)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun setUsername() {
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var username = ""
+
+        for (u in userAccList) {
+            username = u.username
+        }
+
+        val navigationView: NavigationView = findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val tvNavigationHeaderUsername: TextView =
+                headerView.findViewById(R.id.tvNavigationHeaderUsername)
+//        val ivNavigationHeaderPhoto: ImageView =
+//                headerView.findViewById(R.id.ivNavigationHeaderPhoto)
+
+        tvNavigationHeaderUsername.text = username
+//        ivNavigationHeaderPhoto.setImageResource(R.drawable.ic_visibility_gray)
     }
 
 //    TODO: Show dialog box when in dashboard and back button was clicked

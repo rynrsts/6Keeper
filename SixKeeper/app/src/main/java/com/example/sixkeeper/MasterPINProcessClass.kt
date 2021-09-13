@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -255,24 +257,25 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
-        val userUsername = ""
-        val userPassword = ""
-        val userMasterPIN = 0
         val userAccountStatus = 0
 
         for (u in userAccList) {
             userId = u.userId
         }
 
-        databaseHandlerClass.updateUserStatus(
-                UserAccModelClass(
-                        userId,
-                        userUsername,
-                        userPassword,
-                        userMasterPIN,
-                        userAccountStatus
-                )
-        )
+        databaseHandlerClass.updateUserStatus(userId, userAccountStatus)
+
+        updateLastLogin(userId)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun updateLastLogin(userId: Int) {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
+        val databaseHandlerClass = DatabaseHandlerClass(this)
+        databaseHandlerClass.updateUserStatus(userId, date)
     }
 
     fun goToLoginActivity() {                                                                       // Go to login (Username and Password)

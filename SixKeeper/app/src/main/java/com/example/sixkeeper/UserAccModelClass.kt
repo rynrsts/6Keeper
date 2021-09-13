@@ -5,5 +5,7 @@ class UserAccModelClass(
         val username: String,
         val password: String,
         val masterPin: Int,
-        val accountStatus: Int
+        val accountStatus: Int,
+        val creationDate: String,
+        val lastLogin: String
 )

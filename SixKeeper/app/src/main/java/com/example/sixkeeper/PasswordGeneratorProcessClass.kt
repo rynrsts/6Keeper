@@ -79,29 +79,34 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val number = "0123456789"
 //        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(^[a-zA-Z0-9._-]+\$)"
 //        val pattern = Pattern.compile(exp)
+        val characters = ArrayList<String>()
         val stringBuilder = StringBuilder(length)
-        var characters = ""
 
         if (cbPassGeneratorLowercase.isChecked) {
-            characters += lowercase
+            characters.add(lowercase)
         }
         if (cbPassGeneratorUppercase.isChecked) {
-            characters += uppercase
+            characters.add(uppercase)
         }
         if (cbPassGeneratorSpecialChar.isChecked) {
-            characters += specialChar
+            characters.add(specialChar)
         }
         if (cbPassGeneratorNumber.isChecked) {
-            characters += number
+            characters.add(number)
         }
 
+        for (x in 1..length) {
+            val charRandom = (characters.indices).random()
+            val random = characters.random().elementAt(charRandom)
+            stringBuilder.append(random)
+        }
 
 //        do {
-            for (x in 1..length) {
-                val random = (characters.indices).random()
-                stringBuilder.append(characters[random])
-            }
-//        } while(!pattern.matcher(stringBuilder).matches())
+//            for (x in 1..length) {
+//                val random = (characters.indices).random()
+//                stringBuilder.append(characters[random])
+//            }
+//        } while(!pattern.matcher(stringBuilder.toString()).matches())
 
         return stringBuilder.toString()
     }

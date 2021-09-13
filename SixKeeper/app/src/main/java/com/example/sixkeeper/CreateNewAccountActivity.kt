@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private lateinit var firstName: String
@@ -105,16 +108,25 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         masterPin = mp
     }
 
+    @SuppressLint("SimpleDateFormat")
     internal fun saveAccount() {                                                                    // Save account data to database
         val userId: Int = (1000000..9999999).random()
         val databaseHandlerClass = DatabaseHandlerClass(this)
 
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
-                UserInfoModelClass(userId, firstName, lastName, birthDate, email, mobileNumber)
+                UserInfoModelClass(
+                        userId, firstName, lastName, birthDate, email, mobileNumber, ""
+                )
         )
         val userAccStatus = databaseHandlerClass.addUserAcc(
-                UserAccModelClass(userId, username, password, masterPin, 0)
+                UserAccModelClass(
+                        userId, username, password, masterPin, 0, date, ""
+                )
         )
 
         if (tableStatus > -1 && userInfoStatus > -1 && userAccStatus > -1) {
