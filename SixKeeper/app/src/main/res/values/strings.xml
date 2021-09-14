@@ -24,7 +24,7 @@
         removed.
     </string>
     <string name="create_new_acc_p4_agree_to_terms">
-        I agree to <u>Terms and Conditions</u>.
+        I agree to the <u>Terms and Conditions</u>.
     </string>
     <string name="create_new_acc_p4_agree_to_terms_mes">
         Please read and agree to terms and conditions.
@@ -137,6 +137,7 @@
     <string name="pass_generator_less_than_four">Length must be minimum of 4.</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
+    <string name="pass_generator_pass_already_saved">Password already saved.</string>
     <string name="pass_generator_pass_saved">Password Saved!</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
     <string name="pass_generator_saved_pass">Saved Password</string>

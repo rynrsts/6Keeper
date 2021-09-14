@@ -14,4 +14,10 @@
     <color name="darkBlue">#2861AC</color>
     <color name="maroon">#DB3F54</color>
 
+    <color name="orange">#F28123</color>
+    <color name="pinkRed">#EE4266</color>
+    <color name="blueMagenta">#6A4C93</color>
+    <color name="darkCyan">#08BDBD</color>
+    <color name="shadeGreen">#4DA167</color>
+
 </resources>

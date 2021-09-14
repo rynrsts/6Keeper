@@ -163,28 +163,47 @@ open class PasswordGeneratorProcessClass : Fragment() {
     }
 
     // Save generated password to database
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
         val passId: Int = (10000..99999).random()
+        var existing = false
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
-        val status = databaseHandlerClass.addGeneratedPass(
-                UserSavedPassModelClass(passId, generatedPass, date)
-        )
-
-        if (status > -1) {
-            val toast: Toast = Toast.makeText(
-                    appCompatActivity.applicationContext,
-                    R.string.pass_generator_pass_saved, Toast.LENGTH_LONG
-            )
-            toast.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
+        for (u in userSavedPass) {
+            if (generatedPass == u.generatedPassword) {
+                existing = true
+                break
             }
+        }
+
+        var toast: Toast? = null
+
+        if (!existing) {
+            val status = databaseHandlerClass.addGeneratedPass(
+                    UserSavedPassModelClass(passId, generatedPass, date)
+            )
+
+            if (status > -1) {
+                toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.pass_generator_pass_saved, Toast.LENGTH_LONG
+                )
+            }
+        } else {
+            toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.pass_generator_pass_already_saved, Toast.LENGTH_LONG
+            )
+        }
+
+        toast?.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 }
