@@ -17,30 +17,30 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="36dp"
-            android:paddingBottom="36dp">
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gCreateNewAccP3Vertical10"
+                android:id="@+id/gCreateNewAccP3Vertical09"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".10" />
+                app:layout_constraintGuide_percent=".09" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gCreateNewAccP3Vertical90"
+                android:id="@+id/gCreateNewAccP3Vertical91"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.90" />
+                app:layout_constraintGuide_percent="0.91" />
 
             <TextView
                 android:id="@+id/tvCreateNewAccP3Username"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/many_username"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -52,8 +52,8 @@
                 android:inputType="textPersonName"
                 android:maxLength="30"
                 android:paddingStart="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3Username"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
@@ -65,7 +65,7 @@
                 android:src="@drawable/ic_person_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Username"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Username"
                 tools:ignore="ContentDescription" />
 
@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3Username" />
 
             <TextView
@@ -85,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:text="@string/many_password"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP3Username" />
 
             <EditText
@@ -98,8 +98,8 @@
                 android:inputType="textPassword"
                 android:maxLength="30"
                 android:paddingStart="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3Password"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
@@ -111,7 +111,7 @@
                 android:src="@drawable/ic_lock_password_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Password"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Password"
                 tools:ignore="ContentDescription" />
 
@@ -124,7 +124,7 @@
                 android:padding="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Password"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Password"
                 tools:ignore="ContentDescription" />
 
@@ -134,8 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3Password" />
 
             <TextView
@@ -144,8 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:text="@string/many_confirm_password"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP3Password" />
 
             <EditText
@@ -157,8 +157,8 @@
                 android:inputType="textPassword"
                 android:maxLength="30"
                 android:paddingStart="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3ConfirmPassword"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
@@ -170,7 +170,7 @@
                 android:src="@drawable/ic_lock_password_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3ConfirmPassword"
                 tools:ignore="ContentDescription" />
 
@@ -183,7 +183,7 @@
                 android:padding="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3ConfirmPassword"
                 tools:ignore="ContentDescription" />
 
@@ -193,8 +193,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword" />
 
             <!--<View
@@ -214,8 +214,8 @@
                 android:stateListAnimator="@null"
                 android:text="@string/many_next"
                 android:textAllCaps="false"
-                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical90"
-                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP2Division" />
             -->
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -230,18 +230,18 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP3BottomVertical10"
+            android:id="@+id/gCreateNewAccP3BottomVertical09"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent=".10" />
+            app:layout_constraintGuide_percent=".09" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP3BottomVertical90"
+            android:id="@+id/gCreateNewAccP3BottomVertical91"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.90" />
+            app:layout_constraintGuide_percent="0.91" />
 
         <View
             android:id="@+id/vCreateNewAccP3Division1"
@@ -254,16 +254,16 @@
             android:id="@+id/acbCreateNewAccP3Next"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginTop="21dp"
-            android:layout_marginBottom="21dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/layout_button_green_quadrilateral"
             android:stateListAnimator="@null"
             android:text="@string/many_next"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3BottomVertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3BottomVertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3BottomVertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3BottomVertical09"
             app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP3Division1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

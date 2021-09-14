@@ -11,22 +11,22 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="36dp"
-        android:paddingBottom="36dp">
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP4Vertical10"
+            android:id="@+id/gCreateNewAccP4Vertical09"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent=".10" />
+            app:layout_constraintGuide_percent=".09" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP4Vertical90"
+            android:id="@+id/gCreateNewAccP4Vertical91"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.90" />
+            app:layout_constraintGuide_percent="0.91" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4MasterPIN"
@@ -37,8 +37,8 @@
             android:text="@string/many_setup_master_pin"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -49,8 +49,8 @@
             android:text="@string/many_required_mes"
             android:textColor="@color/red"
             android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4MasterPIN" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -62,8 +62,8 @@
             android:stateListAnimator="@null"
             android:text="@string/many_setup_face_recognition"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4MasterPINMes" />
 
         <LinearLayout
@@ -72,8 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4FaceRec" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -85,8 +85,8 @@
             android:stateListAnimator="@null"
             android:text="@string/many_setup_fingerprint"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP4FaceRec" />
 
         <LinearLayout
@@ -94,15 +94,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4Fingerprint" />
 
         <View
             android:id="@+id/vCreateNewAccP4Division"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="30dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP4Fingerprint" />
 
@@ -110,10 +110,10 @@
             android:id="@+id/cbCreateNewAccP4AgreeToTerms"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="12dp"
             android:text="@string/create_new_acc_p4_agree_to_terms"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -126,8 +126,8 @@
             android:text="@string/create_new_acc_p4_register"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/cbCreateNewAccP4AgreeToTerms" />
 
         <TextView
@@ -137,8 +137,8 @@
             android:text="@string/create_new_acc_note"
             android:layout_marginTop="21dp"
             android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical90"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical10"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4Register" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

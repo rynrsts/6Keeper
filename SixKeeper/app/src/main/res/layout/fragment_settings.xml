@@ -18,22 +18,22 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="36dp"
-            android:paddingBottom="36dp">
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gSettingsVertical10"
+                android:id="@+id/gSettingsVertical07"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".10" />
+                app:layout_constraintGuide_percent=".07" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gSettingsVertical90"
+                android:id="@+id/gSettingsVertical93"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".90" />
+                app:layout_constraintGuide_percent=".93" />
 
             <TextView
                 android:id="@+id/tvSettingsGeneral"
@@ -41,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_general"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,8 +50,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/tvSettingsGeneral">
 
                 <ImageView
@@ -59,8 +59,8 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_orange_circle"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_folder_light_black"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_folder_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -104,8 +104,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsHideCategories">
 
                 <ImageView
@@ -113,7 +113,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_pink_red_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_search_off_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -158,8 +158,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableSearch">
 
                 <ImageView
@@ -167,7 +167,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_blue_magenta_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_notifications_active_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -212,8 +212,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableNotifications">
 
                 <ImageView
@@ -221,8 +221,8 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_dark_cyan_circle"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_paint_palette_light_black"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_paint_palette_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -255,7 +255,7 @@
                 android:id="@+id/vSettingsDivision1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="27dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsDisableThemes" />
 
@@ -263,11 +263,11 @@
                 android:id="@+id/tvSettingsSecurity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="33dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/settings_security"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision1" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -275,8 +275,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/tvSettingsSecurity">
 
                 <ImageView
@@ -284,7 +284,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_shade_of_green_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_do_not_disturb_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -329,8 +329,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingBlockAppScreenShots">
 
                 <ImageView
@@ -338,7 +338,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_orange_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_content_paste_off_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -383,8 +383,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsBlockTextualCopy">
 
                 <ImageView
@@ -392,7 +392,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_pink_red_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_lock_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -437,8 +437,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLock">
 
                 <ImageView
@@ -446,7 +446,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_blue_magenta_circle"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_access_time_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

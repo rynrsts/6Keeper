@@ -12,7 +12,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 
-
 class IndexActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -55,7 +54,7 @@ class IndexActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun setUsername() {
+    private fun setUsername() {                                                                     // Show username in the navigation header
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var username = ""
@@ -68,8 +67,6 @@ class IndexActivity : AppCompatActivity() {
         val headerView = navigationView.getHeaderView(0)
         val tvNavigationHeaderUsername: TextView =
                 headerView.findViewById(R.id.tvNavigationHeaderUsername)
-//        val ivNavigationHeaderPhoto: ImageView =
-//                headerView.findViewById(R.id.ivNavigationHeaderPhoto)
 
         tvNavigationHeaderUsername.text = username
 //        ivNavigationHeaderPhoto.setImageResource(R.drawable.ic_visibility_gray)

@@ -100,6 +100,7 @@
     <string name="many_terms_conditions">Terms and Conditions</string>
     <string name="many_three">3</string>
     <string name="many_two">2</string>
+    <string name="many_user_account">User Account</string>
     <string name="many_username">Username</string>
     <string name="many_validate_confirm_pass">*Password does not match.</string>
     <string name="many_validate_email">

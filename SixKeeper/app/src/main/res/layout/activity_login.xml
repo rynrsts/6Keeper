@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="18dp"
+        android:paddingTop="12dp"
         android:scrollbarThumbVertical="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,15 +17,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="18dp"
-            android:paddingBottom="36dp">
+            android:paddingTop="12dp"
+            android:paddingBottom="30dp">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gLoginVertical10"
+                android:id="@+id/gLoginVertical09"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".10" />
+                app:layout_constraintGuide_percent=".09" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gLoginVertical30"
@@ -42,11 +42,11 @@
                 app:layout_constraintGuide_percent=".70" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gLoginVertical90"
+                android:id="@+id/gLoginVertical91"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".90" />
+                app:layout_constraintGuide_percent=".91" />
 
             <ImageView
                 android:id="@+id/ivLoginLogo"
@@ -63,9 +63,9 @@
                 android:id="@+id/tvLoginUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/many_username"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/ivLoginLogo" />
 
             <EditText
@@ -76,8 +76,8 @@
                 android:background="@drawable/layout_edit_text"
                 android:inputType="textPersonName"
                 android:paddingStart="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvLoginUsername"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
@@ -89,7 +89,7 @@
                 android:src="@drawable/ic_person_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/etLoginUsername"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toTopOf="@+id/etLoginUsername"
                 tools:ignore="ContentDescription" />
 
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:text="@string/many_password"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etLoginUsername" />
 
             <EditText
@@ -110,8 +110,8 @@
                 android:background="@drawable/layout_edit_text"
                 android:inputType="textPassword"
                 android:paddingStart="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvLoginPassword"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
@@ -123,7 +123,7 @@
                 android:src="@drawable/ic_lock_password_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/etLoginPassword"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toTopOf="@+id/etLoginPassword"
                 tools:ignore="ContentDescription" />
 
@@ -136,7 +136,7 @@
                 android:padding="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/etLoginPassword"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
                 app:layout_constraintTop_toTopOf="@+id/etLoginPassword"
                 tools:ignore="ContentDescription" />
 
@@ -149,7 +149,7 @@
                 android:focusable="true"
                 android:text="@string/login_forgot_pass"
                 android:textSize="13sp"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
                 app:layout_constraintTop_toBottomOf="@+id/etLoginPassword" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -162,8 +162,8 @@
                 android:text="@string/many_login"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvLoginForgotPass" />
 
             <TextView
@@ -175,8 +175,8 @@
                 android:focusable="true"
                 android:text="@string/login_import_data"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/acbLoginLogin" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -188,8 +188,8 @@
                 android:stateListAnimator="@null"
                 android:text="@string/many_create_new_account"
                 android:textAllCaps="false"
-                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical90"
-                app:layout_constraintStart_toStartOf="@+id/gLoginVertical10"
+                app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gLoginVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvLoginImportData" />
 
 

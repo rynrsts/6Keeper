@@ -69,7 +69,7 @@
 
         <item
             android:id="@+id/logoutFragment"
-            android:icon="@drawable/ic_logout_black"
+            android:icon="@drawable/ic_logout_red"
             android:title="@string/many_logout" />
 
     </group>

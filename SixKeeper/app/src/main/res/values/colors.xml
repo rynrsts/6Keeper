@@ -13,6 +13,7 @@
 
     <color name="darkBlue">#2861AC</color>
     <color name="maroon">#DB3F54</color>
+    <color name="bgLightGray">#F2F2F2</color>
 
     <color name="orange">#F28123</color>
     <color name="pinkRed">#EE4266</color>

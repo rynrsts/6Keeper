@@ -7,7 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
 
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -25,6 +30,7 @@ class DashboardFragment : Fragment() {
 
         appCompatActivity = activity as AppCompatActivity
         closeKeyboard()
+//        setOnClick()
     }
 
     private fun closeKeyboard() {
@@ -37,6 +43,22 @@ class DashboardFragment : Fragment() {
             immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
                     appCompatActivity.currentFocus?.windowToken,
                     0
+            )
+        }
+    }
+
+//    TODO: Error with navigationView
+    private fun setOnClick() {
+        val navigationView: NavigationView = appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val tvNavigationHeaderUsername: TextView = headerView.findViewById(R.id.tvNavigationHeaderUsername)
+        val ivNavigationHeaderPhoto: ImageView = headerView.findViewById(R.id.ivNavigationHeaderPhoto)
+
+        tvNavigationHeaderUsername.setOnClickListener {
+            val drawerLayout: DrawerLayout = appCompatActivity.findViewById(R.id.dlIndexDrawerLayout)
+            drawerLayout.closeDrawers();
+            findNavController().navigate(                                                           // Go to User Account
+                R.id.action_dashboardFragment_to_userAccountFragment
             )
         }
     }
