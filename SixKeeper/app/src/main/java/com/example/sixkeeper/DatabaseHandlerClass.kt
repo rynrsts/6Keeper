@@ -46,29 +46,29 @@ class DatabaseHandlerClass(context: Context) :
     override fun onCreate(db: SQLiteDatabase?) {
         val createUserInfoTable = (
                 "CREATE TABLE " + TABLE_USER_INFO + "(" +
-                        KEY_USER_ID + " INTEGER," +
+                        KEY_USER_ID + " TEXT," +
                         KEY_FIRST_NAME + " TEXT," +
                         KEY_LAST_NAME + " TEXT," +
                         KEY_BIRTH_DATE + " TEXT," +
                         KEY_EMAIL + " TEXT," +
-                        KEY_MOBILE_NUMBER + " LONG," +
+                        KEY_MOBILE_NUMBER + " TEXT," +
                         KEY_LAST_UPDATE + " TEXT" +
                         ")"
                 )
         val createUserAccTable = (
                 "CREATE TABLE " + TABLE_USER_ACC + "(" +
-                        KEY_USER_ID + " INTEGER," +
+                        KEY_USER_ID + " TEXT," +
                         KEY_USERNAME + " TEXT," +
                         KEY_PASSWORD + " TEXT," +
-                        KEY_MASTER_PIN + " INTEGER," +
-                        KEY_ACCOUNT_STATUS + " INTEGER," +
+                        KEY_MASTER_PIN + " TEXT," +
+                        KEY_ACCOUNT_STATUS + " TEXT," +
                         KEY_CREATION_DATE + " TEXT," +
                         KEY_LAST_LOGIN + " TEXT" +
                         ")"
                 )
         val createSavedPassTable = (
                 "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
-                        KEY_PASS_ID + " INTEGER," +
+                        KEY_PASS_ID + " TEXT," +
                         KEY_SAVED_PASS + " TEXT," +
                         KEY_CREATION_DATE + " TEXT" +
                         ")"
@@ -168,22 +168,22 @@ class DatabaseHandlerClass(context: Context) :
             return ArrayList()
         }
 
-        var userId: Int
+        var userId: String
         var userUsername: String
         var userPassword: String
-        var userMasterPIN: Int
-        var userAccountStatus: Int
+        var userMasterPIN: String
+        var userAccountStatus: String
         var userCreationDate: String
         var userLastLogin: String
 
         if (cursor.moveToFirst()) {
             do {
-                userId = cursor.getInt(cursor.getColumnIndex("user_id"))
+                userId = cursor.getString(cursor.getColumnIndex("user_id"))
                 userUsername = cursor.getString(cursor.getColumnIndex("username"))
                 userPassword = cursor.getString(cursor.getColumnIndex("password"))
-                userMasterPIN = cursor.getInt(cursor.getColumnIndex("master_pin"))
+                userMasterPIN = cursor.getString(cursor.getColumnIndex("master_pin"))
                 userAccountStatus =
-                        cursor.getInt(cursor.getColumnIndex("account_status"))
+                        cursor.getString(cursor.getColumnIndex("account_status"))
                 userCreationDate =
                         cursor.getString(cursor.getColumnIndex("creation_date"))
                 userLastLogin =
@@ -219,13 +219,13 @@ class DatabaseHandlerClass(context: Context) :
             return ArrayList()
         }
 
-        var passId: Int
+        var passId: String
         var passPassword: String
         var passCreationDate: String
 
         if (cursor.moveToFirst()) {
             do {
-                passId = cursor.getInt(cursor.getColumnIndex("pass_id"))
+                passId = cursor.getString(cursor.getColumnIndex("pass_id"))
                 passPassword = cursor.getString(cursor.getColumnIndex("saved_password"))
                 passCreationDate = cursor.getString(cursor.getColumnIndex("creation_date"))
 
@@ -248,7 +248,7 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    fun updateUserStatus(id: Int, accStatus: Int): Int {                                            // Update User Status, 0 or 1
+    fun updateUserStatus(id: String, accStatus: String): Int {                                      // Update User Status, 0 or 1
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -259,7 +259,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "user_id=$id",
+                "user_id='$id'",
                 null
         )
 
@@ -267,7 +267,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserStatus(id: Int, lastLogin: String): Int {                                            // Update User Status, 0 or 1
+    fun updateLastLogin(id: String, lastLogin: String): Int {                                          // Update last login
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -278,7 +278,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "user_id=$id",
+                "user_id='$id'",
                 null
         )
 

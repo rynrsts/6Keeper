@@ -1,7 +1,7 @@
 package com.example.sixkeeper
 
 class UserSavedPassModelClass(
-        val passId: Int,
+        val passId: String,
         val generatedPassword: String,
         val creationDate: String
 )

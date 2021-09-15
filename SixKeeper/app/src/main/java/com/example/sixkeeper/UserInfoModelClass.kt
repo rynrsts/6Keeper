@@ -1,11 +1,11 @@
 package com.example.sixkeeper
 
 class UserInfoModelClass(
-        val userId: Int,
+        val userId: String,
         val firstName: String,
         val lastName: String,
         val birthDate: String,
         val email: String,
-        val mobileNumber: Long,
+        val mobileNumber: String,
         val lastUpdate: String
 )

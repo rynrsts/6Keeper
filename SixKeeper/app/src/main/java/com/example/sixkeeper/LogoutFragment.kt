@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +64,7 @@ class LogoutFragment : Fragment() {
         }
 
         val alert: AlertDialog = builder.create()
-        alert.setTitle(R.string.many_alert_title)
+        alert.setTitle(R.string.many_alert_title_confirm)
         alert.show()
     }
 
@@ -71,13 +72,25 @@ class LogoutFragment : Fragment() {
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = 0
-        val userAccountStatus = 0
 
         for (u in userAccList) {
-            userId = u.userId
+            userId = Integer.parseInt(decodeData(u.userId))
         }
 
-        databaseHandlerClass.updateUserStatus(userId, userAccountStatus)
+        databaseHandlerClass.updateUserStatus(
+                encodeData(userId.toString()),
+                encodeData(0.toString())
+        )
+    }
+
+    private fun decodeData(data: String): String {                                                  // Decode data using Base64
+        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
+        return String(decrypt)
+    }
+
+    private fun encodeData(data: String): String {                                                  // Encode data using Base64
+        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
+        return String(encrypt)
     }
 
     private fun goToLoginActivity() {                                                               // Go to login (Username and Password)

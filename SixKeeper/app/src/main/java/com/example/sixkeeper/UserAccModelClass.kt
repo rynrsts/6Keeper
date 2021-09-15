@@ -1,11 +1,11 @@
 package com.example.sixkeeper
 
 class UserAccModelClass(
-        val userId: Int,
+        val userId: String,
         val username: String,
         val password: String,
-        val masterPin: Int,
-        val accountStatus: Int,
+        val masterPin: String,
+        val accountStatus: String,
         val creationDate: String,
         val lastLogin: String
 )

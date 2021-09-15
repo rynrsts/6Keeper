@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.util.Base64
 import android.widget.EditText
 import android.widget.ImageView
 
@@ -10,8 +11,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     private lateinit var username: String
     private lateinit var password: String
-
-    private var userId = 0
+    private lateinit var userId: String
 
     fun setVariables() {
         etLoginUsername = findViewById(R.id.etLoginUsername)
@@ -53,15 +53,29 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         for (u in userAccList) {
             userId = u.userId
-            bool = etLoginUsername.text.toString() == u.username &&
-                    etLoginPassword.text.toString() == u.password
+            bool = etLoginUsername.text.toString() == decodeData(u.username) &&
+                    etLoginPassword.text.toString() == decodeData(u.password)
         }
 
         return bool
     }
 
+    private fun decodeData(data: String): String {                                                  // Decode data using Base64
+        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
+        return String(decrypt)
+    }
+
     fun updateUserStatus() {                                                                        // Update account status to 1
+        val accountStatus = 1
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        databaseHandlerClass.updateUserStatus(userId, 1)
+        databaseHandlerClass.updateUserStatus(
+                userId,
+                encodeData(accountStatus.toString())
+        )
+    }
+
+    private fun encodeData(data: String): String {                                                  // Encode data using Base64
+        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
+        return String(encrypt)
     }
 }

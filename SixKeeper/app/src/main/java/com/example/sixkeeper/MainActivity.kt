@@ -2,6 +2,7 @@ package com.example.sixkeeper
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 
 class MainActivity : ChangeStatusBarToWhiteClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +20,7 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         var status = 0
 
         for (u in userAccList) {
-            status = u.accountStatus
+            status = Integer.parseInt(decodeData(u.accountStatus))
         }
 
         if (status == 0) {                                                                          // Go to login (Username and Password)
@@ -35,6 +36,11 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         }
 
         this.finish()
+    }
+
+    private fun decodeData(data: String): String {                                                  // Decode data using Base64
+        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
+        return String(decrypt)
     }
 
     /*

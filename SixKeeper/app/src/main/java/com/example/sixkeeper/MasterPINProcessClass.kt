@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Base64
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageView
@@ -40,6 +41,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private val pinSize = 6
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
+
+    private lateinit var userId: String
 
     fun getAcbMasterPINButton1(): Button {
         return acbMasterPINButton1
@@ -247,42 +250,50 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         var bool = false
 
         for (u in userAccList) {
-            bool = pinI == u.masterPin
+            userId = u.userId
+            bool = pinI == Integer.parseInt(decodeData(u.masterPin))
         }
 
         return bool
     }
 
+    private fun decodeData(data: String): String {                                                  // Decode data using Base64
+        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
+        return String(decrypt)
+    }
+
     fun updateUserStatus() {                                                                        // Update account status to 0
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = 0
-        val userAccountStatus = 0
 
-        for (u in userAccList) {
-            userId = u.userId
-        }
+        databaseHandlerClass.updateUserStatus(
+                userId,
+                encodeData(0.toString())
+        )
+    }
 
-        databaseHandlerClass.updateUserStatus(userId, userAccountStatus)
-
-        updateLastLogin(userId)
+    private fun encodeData(data: String): String {                                                  // Encode data using Base64
+        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
+        return String(encrypt)
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun updateLastLogin(userId: Int) {
+    fun updateLastLogin() {
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        databaseHandlerClass.updateUserStatus(userId, date)
+        databaseHandlerClass.updateLastLogin(
+                userId,
+                encodeData(date)
+        )
     }
 
     fun goToLoginActivity() {                                                                       // Go to login (Username and Password)
         val goToLoginActivity = Intent(this, LoginActivity::class.java)
         startActivity(goToLoginActivity)
         overridePendingTransition(
-                R.anim.anim_0,
+                R.anim.anim_enter_top_to_bottom_2,
                 R.anim.anim_exit_top_to_bottom_2
         )
         this.finish()
@@ -301,7 +312,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         }
 
         val alert: AlertDialog = builder.create()
-        alert.setTitle(R.string.many_alert_title)
+        alert.setTitle(R.string.many_alert_title_confirm)
         alert.show()
     }
 }

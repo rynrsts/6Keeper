@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Base64
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -120,12 +121,24 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
                 UserInfoModelClass(
-                        userId, firstName, lastName, birthDate, email, mobileNumber, ""
+                        encodeData(userId.toString()),
+                        encodeData(firstName),
+                        encodeData(lastName),
+                        encodeData(birthDate),
+                        encodeData(email),
+                        encodeData(mobileNumber.toString()),
+                        ""
                 )
         )
         val userAccStatus = databaseHandlerClass.addUserAcc(
                 UserAccModelClass(
-                        userId, username, password, masterPin, 0, date, ""
+                        encodeData(userId.toString()),
+                        encodeData(username),
+                        encodeData(password),
+                        encodeData(masterPin.toString()),
+                        encodeData(0.toString()),
+                        encodeData(date),
+                        ""
                 )
         )
 
@@ -139,5 +152,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 show()
             }
         }
+    }
+
+    private fun encodeData(data: String): String {                                                  // Encode data using Base64
+        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
+        return String(encrypt)
     }
 }

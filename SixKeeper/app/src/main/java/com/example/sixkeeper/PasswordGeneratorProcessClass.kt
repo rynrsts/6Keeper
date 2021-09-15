@@ -3,6 +3,7 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.util.Base64
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
@@ -186,7 +187,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val date: String = dateFormat.format(calendar.time)
 
         for (u in userSavedPass) {
-            if (generatedPass == u.generatedPassword) {
+            if (generatedPass == decodeData(u.generatedPassword)) {
                 existing = true
                 break
             }
@@ -196,7 +197,11 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
         if (!existing) {
             val status = databaseHandlerClass.addGeneratedPass(
-                    UserSavedPassModelClass(passId, generatedPass, date)
+                    UserSavedPassModelClass(
+                            encodeData(passId.toString()),
+                            encodeData(generatedPass),
+                            encodeData(date)
+                    )
             )
 
             if (status > -1) {
@@ -216,5 +221,15 @@ open class PasswordGeneratorProcessClass : Fragment() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
+    }
+
+    private fun decodeData(data: String): String {                                                  // Decode data using Base64
+        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
+        return String(decrypt)
+    }
+
+    private fun encodeData(data: String): String {                                                  // Encode data using Base64
+        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
+        return String(encrypt)
     }
 }

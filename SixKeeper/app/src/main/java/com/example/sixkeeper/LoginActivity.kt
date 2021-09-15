@@ -185,7 +185,7 @@ class LoginActivity : LoginValidationClass() {
         }
 
         val alert: AlertDialog = builder.create()
-        alert.setTitle(R.string.many_alert_title)
+        alert.setTitle(R.string.many_alert_title_confirm)
         alert.show()
     }
 }

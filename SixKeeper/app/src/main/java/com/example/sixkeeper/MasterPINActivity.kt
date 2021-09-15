@@ -94,6 +94,7 @@ class MasterPINActivity : MasterPINProcessClass() {
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 updateUserStatus()
+                updateLastLogin()
                 goToLoginActivity()
             }
             builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -101,7 +102,7 @@ class MasterPINActivity : MasterPINProcessClass() {
             }
 
             val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title)
+            alert.setTitle(R.string.many_alert_title_confirm)
             alert.show()
         }
     }
