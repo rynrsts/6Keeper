@@ -3,7 +3,6 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.util.Base64
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
@@ -21,6 +20,8 @@ import kotlin.collections.ArrayList
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     private lateinit var etPassGeneratorLength: EditText
     private lateinit var cbPassGeneratorLowercase: CheckBox
@@ -30,6 +31,12 @@ open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var tvPassGeneratorGeneratedPass: TextView
 
     private lateinit var passwordGeneratorLength: String
+
+    @Suppress("DEPRECATION")
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
+        super.onAttach(activity)
+        attActivity = activity                                                                      // Attach activity
+    }
 
     fun getAppCompatActivity(): AppCompatActivity {
         return appCompatActivity
@@ -69,6 +76,8 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
 
         etPassGeneratorLength = appCompatActivity.findViewById(R.id.etPassGeneratorLength)
         cbPassGeneratorLowercase = appCompatActivity.findViewById(R.id.cbPassGeneratorLowercase)
@@ -168,16 +177,9 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return output.toString()
     }
 
-    @Suppress("DEPRECATION")
-    override fun onAttach(activity: Activity) {                                                     // Override on attach
-        super.onAttach(activity)
-        attActivity = activity                                                                      // Attach activity
-    }
-
     // Save generated password to database
     @SuppressLint("SimpleDateFormat", "ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
         val passId: Int = (10000..99999).random()
         var existing = false
@@ -187,7 +189,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val date: String = dateFormat.format(calendar.time)
 
         for (u in userSavedPass) {
-            if (generatedPass == decodeData(u.generatedPassword)) {
+            if (generatedPass == encodingClass.decodeData(u.generatedPassword)) {
                 existing = true
                 break
             }
@@ -198,9 +200,9 @@ open class PasswordGeneratorProcessClass : Fragment() {
         if (!existing) {
             val status = databaseHandlerClass.addGeneratedPass(
                     UserSavedPassModelClass(
-                            encodeData(passId.toString()),
-                            encodeData(generatedPass),
-                            encodeData(date)
+                            encodingClass.encodeData(passId.toString()),
+                            encodingClass.encodeData(generatedPass),
+                            encodingClass.encodeData(date)
                     )
             )
 
@@ -221,15 +223,5 @@ open class PasswordGeneratorProcessClass : Fragment() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
-    }
-
-    private fun decodeData(data: String): String {                                                  // Decode data using Base64
-        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
-        return String(decrypt)
-    }
-
-    private fun encodeData(data: String): String {                                                  // Encode data using Base64
-        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
-        return String(encrypt)
     }
 }

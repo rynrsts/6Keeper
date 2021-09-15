@@ -2,7 +2,7 @@ package com.example.sixkeeper
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 
 class MasterPINActivity : MasterPINProcessClass() {
@@ -16,7 +16,7 @@ class MasterPINActivity : MasterPINProcessClass() {
     }
 
     private fun setButtonOnClick() {
-        val tvMasterPINLogout: TextView = findViewById(R.id.tvMasterPINLogout)
+        val llRecycleBinLogout: LinearLayout = findViewById(R.id.llRecycleBinLogout)
 
         getAcbMasterPINButton1().setOnClickListener {
             pushNumber(1)
@@ -78,12 +78,12 @@ class MasterPINActivity : MasterPINProcessClass() {
             onBackPressed()
         }
 
-        tvMasterPINLogout.setOnClickListener {
+        llRecycleBinLogout.setOnClickListener {
             it.apply {
-                tvMasterPINLogout.isClickable = false                                               // Set button un-clickable for 1 second
+                llRecycleBinLogout.isClickable = false                                               // Set button un-clickable for 1 second
                 postDelayed(
                         {
-                            tvMasterPINLogout.isClickable = true
+                            llRecycleBinLogout.isClickable = true
                         }, 1000
                 )
             }

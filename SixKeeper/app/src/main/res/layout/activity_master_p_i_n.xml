@@ -6,31 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".MasterPINActivity">
 
-    <ImageView
-        android:id="@+id/ivRecycleBinDelete"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <LinearLayout
+        android:id="@+id/llRecycleBinLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginStart="21dp"
         android:layout_marginTop="21dp"
-        android:src="@drawable/ic_logout_red"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMasterPINLogout"
-        app:layout_constraintDimensionRatio="1:1"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="UseCompoundDrawables">
 
-    <TextView
-        android:id="@+id/tvMasterPINLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="21dp"
-        android:gravity="center_vertical"
-        android:text="@string/many_logout"
-        android:textColor="@color/maroon"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/ivRecycleBinDelete"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/ivRecycleBinLogout"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_logout_red"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvMasterPINLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@string/many_logout"
+            android:textColor="@color/maroon"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

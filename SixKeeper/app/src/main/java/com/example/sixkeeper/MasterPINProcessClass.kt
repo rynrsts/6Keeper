@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Base64
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageView
@@ -18,6 +17,10 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
+    private lateinit var userAccList: List<UserAccModelClass>
+
     private lateinit var ivMasterPINCircle1: ImageView
     private lateinit var ivMasterPINCircle2: ImageView
     private lateinit var ivMasterPINCircle3: ImageView
@@ -42,7 +45,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
 
-    private lateinit var userId: String
+    private var userId: String = ""
 
     fun getAcbMasterPINButton1(): Button {
         return acbMasterPINButton1
@@ -97,6 +100,10 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun setVariables() {
+        databaseHandlerClass = DatabaseHandlerClass(this)
+        encodingClass = EncodingClass()
+        userAccList = databaseHandlerClass.validateUserAcc()
+
         ivMasterPINCircle1 = findViewById(R.id.ivMasterPINCircle1)
         ivMasterPINCircle2 = findViewById(R.id.ivMasterPINCircle2)
         ivMasterPINCircle3 = findViewById(R.id.ivMasterPINCircle3)
@@ -245,35 +252,25 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     private fun validateUserMasterPIN(pinI: Int): Boolean {                                         // Validate Master PIN
-        val databaseHandlerClass = DatabaseHandlerClass(this)
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 
         for (u in userAccList) {
+            bool = encodingClass.encodeData(pinI.toString()) == u.masterPin
             userId = u.userId
-            bool = pinI == Integer.parseInt(decodeData(u.masterPin))
         }
 
         return bool
     }
 
-    private fun decodeData(data: String): String {                                                  // Decode data using Base64
-        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
-        return String(decrypt)
-    }
-
     fun updateUserStatus() {                                                                        // Update account status to 0
-        val databaseHandlerClass = DatabaseHandlerClass(this)
+        for (u in userAccList) {
+            userId = u.userId
+        }
 
         databaseHandlerClass.updateUserStatus(
                 userId,
-                encodeData(0.toString())
+                encodingClass.encodeData(0.toString())
         )
-    }
-
-    private fun encodeData(data: String): String {                                                  // Encode data using Base64
-        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
-        return String(encrypt)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -282,10 +279,9 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
-        val databaseHandlerClass = DatabaseHandlerClass(this)
         databaseHandlerClass.updateLastLogin(
                 userId,
-                encodeData(date)
+                encodingClass.encodeData(date)
         )
     }
 

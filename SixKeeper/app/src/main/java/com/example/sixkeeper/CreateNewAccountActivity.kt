@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Base64
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -112,6 +111,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     @SuppressLint("SimpleDateFormat")
     internal fun saveAccount() {                                                                    // Save account data to database
         val databaseHandlerClass = DatabaseHandlerClass(this)
+        val encodingClass = EncodingClass()
         val userId: Int = (1000000..9999999).random()
 
         val calendar: Calendar = Calendar.getInstance()
@@ -121,23 +121,23 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
                 UserInfoModelClass(
-                        encodeData(userId.toString()),
-                        encodeData(firstName),
-                        encodeData(lastName),
-                        encodeData(birthDate),
-                        encodeData(email),
-                        encodeData(mobileNumber.toString()),
+                        encodingClass.encodeData(userId.toString()),
+                        encodingClass.encodeData(firstName),
+                        encodingClass.encodeData(lastName),
+                        encodingClass.encodeData(birthDate),
+                        encodingClass.encodeData(email),
+                        encodingClass.encodeData(mobileNumber.toString()),
                         ""
                 )
         )
         val userAccStatus = databaseHandlerClass.addUserAcc(
                 UserAccModelClass(
-                        encodeData(userId.toString()),
-                        encodeData(username),
-                        encodeData(password),
-                        encodeData(masterPin.toString()),
-                        encodeData(0.toString()),
-                        encodeData(date),
+                        encodingClass.encodeData(userId.toString()),
+                        encodingClass.encodeData(username),
+                        encodingClass.encodeData(password),
+                        encodingClass.encodeData(masterPin.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(date),
                         ""
                 )
         )
@@ -152,10 +152,5 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 show()
             }
         }
-    }
-
-    private fun encodeData(data: String): String {                                                  // Encode data using Base64
-        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
-        return String(encrypt)
     }
 }

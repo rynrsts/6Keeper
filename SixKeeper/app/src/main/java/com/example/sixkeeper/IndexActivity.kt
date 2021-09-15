@@ -1,7 +1,6 @@
 package com.example.sixkeeper
 
 import android.os.Bundle
-import android.util.Base64
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -57,11 +56,12 @@ class IndexActivity : AppCompatActivity() {
 
     private fun setUsername() {                                                                     // Show username in the navigation header
         val databaseHandlerClass = DatabaseHandlerClass(this)
+        val encodingClass = EncodingClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var username = ""
 
         for (u in userAccList) {
-            username = decodeData(u.username)
+            username = encodingClass.decodeData(u.username)
         }
 
         val navigationView: NavigationView = findViewById(R.id.nvIndexNavigationView)
@@ -71,11 +71,6 @@ class IndexActivity : AppCompatActivity() {
 
         tvNavigationHeaderUsername.text = username
 //        ivNavigationHeaderPhoto.setImageResource(R.drawable.ic_visibility_gray)
-    }
-
-    private fun decodeData(data: String): String {                                                  // Decode data using Base64
-        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
-        return String(decrypt)
     }
 
 //    TODO: Show dialog box when in dashboard and back button was clicked

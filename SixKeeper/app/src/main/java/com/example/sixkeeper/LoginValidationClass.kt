@@ -1,10 +1,12 @@
 package com.example.sixkeeper
 
-import android.util.Base64
 import android.widget.EditText
 import android.widget.ImageView
 
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
+
     private lateinit var etLoginUsername: EditText
     private lateinit var etLoginPassword: EditText
     private lateinit var ivLoginTogglePass: ImageView
@@ -14,6 +16,9 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var userId: String
 
     fun setVariables() {
+        databaseHandlerClass = DatabaseHandlerClass(this)
+        encodingClass = EncodingClass()
+
         etLoginUsername = findViewById(R.id.etLoginUsername)
         etLoginPassword = findViewById(R.id.etLoginPassword)
         ivLoginTogglePass = findViewById(R.id.ivLoginTogglePass)
@@ -47,35 +52,22 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun validateUserCredential(): Boolean {                                                         // Validate username and password
-        val databaseHandlerClass = DatabaseHandlerClass(this)
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 
         for (u in userAccList) {
             userId = u.userId
-            bool = etLoginUsername.text.toString() == decodeData(u.username) &&
-                    etLoginPassword.text.toString() == decodeData(u.password)
+            bool = encodingClass.encodeData(etLoginUsername.text.toString()) == u.username &&
+                    encodingClass.encodeData(etLoginPassword.text.toString()) == u.password
         }
 
         return bool
     }
 
-    private fun decodeData(data: String): String {                                                  // Decode data using Base64
-        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
-        return String(decrypt)
-    }
-
     fun updateUserStatus() {                                                                        // Update account status to 1
-        val accountStatus = 1
-        val databaseHandlerClass = DatabaseHandlerClass(this)
         databaseHandlerClass.updateUserStatus(
                 userId,
-                encodeData(accountStatus.toString())
+                encodingClass.encodeData(1.toString())
         )
-    }
-
-    private fun encodeData(data: String): String {                                                  // Encode data using Base64
-        val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
-        return String(encrypt)
     }
 }

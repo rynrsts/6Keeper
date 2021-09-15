@@ -2,7 +2,6 @@ package com.example.sixkeeper
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +34,7 @@ class SavedPasswordFragment : Fragment() {
 
     private fun viewSavedPass() {                                                                   // View saved password
         val databaseHandler = DatabaseHandlerClass(attActivity)
+        val encodingClass = EncodingClass()
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandler.viewSavedPass()
 
         val userSavedPassId = Array(userSavedPass.size) { "0" }
@@ -42,9 +42,9 @@ class SavedPasswordFragment : Fragment() {
         val userSavedPassCreationDate = Array(userSavedPass.size) { "null" }
 
         for ((index, u) in userSavedPass.withIndex()) {
-            userSavedPassId[index] = decodeData(u.passId)
-            userSavedPassPassword[index] = decodeData(u.generatedPassword)
-            userSavedPassCreationDate[index] = decodeData(u.creationDate)
+            userSavedPassId[index] = encodingClass.decodeData(u.passId)
+            userSavedPassPassword[index] = encodingClass.decodeData(u.generatedPassword)
+            userSavedPassCreationDate[index] = encodingClass.decodeData(u.creationDate)
         }
 
         val savedPasswordListAdapter = SavedPasswordListAdapter(
@@ -57,10 +57,5 @@ class SavedPasswordFragment : Fragment() {
                 (activity as AppCompatActivity).findViewById(R.id.lvSavedPasswordContainer)
 
         lvSavedPasswordContainer.adapter = savedPasswordListAdapter
-    }
-
-    private fun decodeData(data: String): String {                                                  // Decode data using Base64
-        val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
-        return String(decrypt)
     }
 }
