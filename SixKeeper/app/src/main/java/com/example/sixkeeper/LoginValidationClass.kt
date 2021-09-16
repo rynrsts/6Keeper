@@ -52,13 +52,17 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun validateUserCredential(): Boolean {                                                         // Validate username and password
+        val encryptionClass = EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 
+        val encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
+        val encodedPassword = encodingClass.encodeData(etLoginPassword.text.toString())
+        val encryptedPassword = encryptionClass.encrypt(encodedPassword)
+
         for (u in userAccList) {
             userId = u.userId
-            bool = encodingClass.encodeData(etLoginUsername.text.toString()) == u.username &&
-                    encodingClass.encodeData(etLoginPassword.text.toString()) == u.password
+            bool = encodedUsername == u.username && encryptedPassword.contentEquals(u.password)
         }
 
         return bool

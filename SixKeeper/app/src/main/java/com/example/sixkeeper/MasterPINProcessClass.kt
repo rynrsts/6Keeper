@@ -252,10 +252,14 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     private fun validateUserMasterPIN(pinI: Int): Boolean {                                         // Validate Master PIN
+        val encryptionClass = EncryptionClass()
         var bool = false
 
+        val encodedMasterPIN = encodingClass.encodeData(pinI.toString())
+        val encryptedMasterPIN = encryptionClass.encrypt(encodedMasterPIN)
+
         for (u in userAccList) {
-            bool = encodingClass.encodeData(pinI.toString()) == u.masterPin
+            bool = encryptedMasterPIN.contentEquals(u.masterPin)
             userId = u.userId
         }
 

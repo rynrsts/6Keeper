@@ -17,20 +17,22 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val encodingClass = EncodingClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var status = 0
+        var status = ""
 
         for (u in userAccList) {
-            if (encodingClass.encodeData(0.toString()) == u.accountStatus) {                                                                          // Go to login (Username and Password)
-                val goToLoginActivity = Intent(this, LoginActivity::class.java)
-                startActivity(goToLoginActivity)
-            } else if (encodingClass.encodeData(1.toString()) == u.accountStatus) {                                                                   // Go to login (Master PIN)
-                val goToMasterPINActivity = Intent(this, MasterPINActivity::class.java)
-                startActivity(goToMasterPINActivity)
-                overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
-            }
+            status = u.accountStatus
+        }
+
+        if (encodingClass.encodeData(1.toString()) == status) {                                     // Go to login (Master PIN)
+            val goToMasterPINActivity = Intent(this, MasterPINActivity::class.java)
+            startActivity(goToMasterPINActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
+            )
+        } else {                                                                                    // Go to login (Username and Password)
+            val goToLoginActivity = Intent(this, LoginActivity::class.java)
+            startActivity(goToLoginActivity)
         }
 
         this.finish()

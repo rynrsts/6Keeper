@@ -112,11 +112,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     internal fun saveAccount() {                                                                    // Save account data to database
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val encodingClass = EncodingClass()
+        val encryptionClass = EncryptionClass()
         val userId: Int = (1000000..9999999).random()
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
+
+        val encodedPassword = encodingClass.encodeData(password)
+        val encodedMasterPIN = encodingClass.encodeData(masterPin.toString())
 
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
@@ -134,8 +138,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 UserAccModelClass(
                         encodingClass.encodeData(userId.toString()),
                         encodingClass.encodeData(username),
-                        encodingClass.encodeData(password),
-                        encodingClass.encodeData(masterPin.toString()),
+                        encryptionClass.encrypt(encodedPassword),
+                        encryptionClass.encrypt(encodedMasterPIN),
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(date),
                         ""

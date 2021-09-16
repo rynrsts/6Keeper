@@ -59,8 +59,8 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_USER_ACC + "(" +
                         KEY_USER_ID + " TEXT," +
                         KEY_USERNAME + " TEXT," +
-                        KEY_PASSWORD + " TEXT," +
-                        KEY_MASTER_PIN + " TEXT," +
+                        KEY_PASSWORD + " BLOB," +
+                        KEY_MASTER_PIN + " BLOB," +
                         KEY_ACCOUNT_STATUS + " TEXT," +
                         KEY_CREATION_DATE + " TEXT," +
                         KEY_LAST_LOGIN + " TEXT" +
@@ -170,8 +170,8 @@ class DatabaseHandlerClass(context: Context) :
 
         var userId: String
         var userUsername: String
-        var userPassword: String
-        var userMasterPIN: String
+        var userPassword: ByteArray
+        var userMasterPIN: ByteArray
         var userAccountStatus: String
         var userCreationDate: String
         var userLastLogin: String
@@ -180,8 +180,8 @@ class DatabaseHandlerClass(context: Context) :
             do {
                 userId = cursor.getString(cursor.getColumnIndex("user_id"))
                 userUsername = cursor.getString(cursor.getColumnIndex("username"))
-                userPassword = cursor.getString(cursor.getColumnIndex("password"))
-                userMasterPIN = cursor.getString(cursor.getColumnIndex("master_pin"))
+                userPassword = cursor.getBlob(cursor.getColumnIndex("password"))
+                userMasterPIN = cursor.getBlob(cursor.getColumnIndex("master_pin"))
                 userAccountStatus =
                         cursor.getString(cursor.getColumnIndex("account_status"))
                 userCreationDate =
