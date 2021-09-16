@@ -114,6 +114,7 @@
     <string name="many_seven">7</string>
     <string name="many_six">6</string>
     <string name="many_terms_conditions">Terms and Conditions</string>
+    <string name="many_terms_conditions_bold"><b>Terms and Conditions</b></string>
     <string name="many_three">3</string>
     <string name="many_two">2</string>
     <string name="many_user_account">User Account</string>
@@ -179,6 +180,28 @@
     <string name="settings_hide_categories">Hide Categories</string>
     <string name="settings_security">Security</string>
     <string name="settings_themes">Themes</string>
+
+    <!-- Terms and Conditions Activity -->
+    <string name="terms_age_content">
+        You must be at least 18 years of age before you can use this application. By using this
+        application, you warrant that you are at least 18 years of age, and you may legally adhere
+        to this agreement. Team Sais assumes no responsibility for liabilities related to age
+        misrepresentation.
+    </string>
+    <string name="terms_conditions_content">
+        By using this application, you certify that you have read and reviewed this agreement and
+        that you agree to comply with its terms. If you do not want to be bound by the terms of this
+        agreement, you are advised not to use the application accordingly. 6Keeper only grants use
+        and access of this application and its services to those who have accepted its terms.
+    </string>
+    <string name="terms_privacy_content">
+        Before you continue using our application, we advise you to read our Privacy Policy
+        regarding our user data collection. It will help you better understand our practices.
+    </string>
+    <string name="terms_age_title"><b>Age Restriction</b></string>
+    <string name="terms_conditions_title"><b>Conditions of Use</b></string>
+    <string name="terms_last_update">Last updated: August 31, 2021</string>
+    <string name="terms_privacy_title"><b>Privacy Policy</b></string>
 
     <!-- Title Activity -->
     <string name="title_activity_dashboard">DashboardActivity</string>
