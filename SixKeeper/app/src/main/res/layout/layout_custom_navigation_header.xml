@@ -28,8 +28,9 @@
         <TextView
             android:id="@+id/tvNavigationHeaderUsername"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="@string/dummy_username"
             android:textColor="@color/white"
             android:textSize="17sp" />

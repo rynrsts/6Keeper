@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.navigation.NavigationView
 
 class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     override fun onCreateView(
@@ -28,14 +27,6 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
     }
 
     private fun setOnClick() {
-        val navigationView: NavigationView =
-                getAppCompatActivity().findViewById(R.id.nvIndexNavigationView)
-        val headerView = navigationView.getHeaderView(0)
-        val tvNavigationHeaderUsername: TextView =
-                headerView.findViewById(R.id.tvNavigationHeaderUsername)
-        val ivNavigationHeaderPhoto: ImageView =
-                headerView.findViewById(R.id.ivNavigationHeaderPhoto)
-
         val acbPassGeneratorGenerate: Button =
                 getAppCompatActivity().findViewById(R.id.acbPassGeneratorGenerate)
         val clPassGeneratorView: ConstraintLayout =
@@ -43,13 +34,6 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         val clPassGeneratorSave: ConstraintLayout =
                 getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
-        tvNavigationHeaderUsername.setOnClickListener {
-            goToUserAccount()
-        }
-
-        ivNavigationHeaderPhoto.setOnClickListener {
-            goToUserAccount()
-        }
 
         acbPassGeneratorGenerate.setOnClickListener {
             setPasswordGeneratorLength(getEtPassGeneratorLength().text.toString())

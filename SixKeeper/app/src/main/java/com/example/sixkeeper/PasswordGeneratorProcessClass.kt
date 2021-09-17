@@ -10,9 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -100,15 +98,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
                     0
             )
         }
-    }
-
-    fun goToUserAccount() {
-        val drawerLayout: DrawerLayout = appCompatActivity.findViewById(R.id.dlIndexDrawerLayout)
-        drawerLayout.closeDrawers()
-
-        findNavController().navigate(                                                               // Go to User Account
-            R.id.action_passwordGeneratorFragment_to_userAccountFragment
-        )
     }
 
     fun generatePassword(length: Int): String {                                                     // Generate password

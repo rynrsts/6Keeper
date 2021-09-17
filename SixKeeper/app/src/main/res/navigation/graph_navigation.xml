@@ -9,66 +9,54 @@
         android:id="@+id/userAccountFragment"
         android:name="com.example.sixkeeper.UserAccountFragment"
         android:label="@string/many_user_account"
-        tools:layout="@layout/fragment_user_account" />
+        tools:layout="@layout/fragment_user_account" >
+
+        <action
+            android:id="@+id/action_userAccountFragment_to_userAccountEditFragment"
+            app:destination="@id/userAccountEditFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1"  />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userAccountEditFragment"
+        android:name="com.example.sixkeeper.UserAccountEditFragment"
+        android:label="@string/many_user_account"
+        tools:layout="@layout/fragment_user_account_edit" />
+
+    <action
+        android:id="@+id/action_fragments_to_userAccountFragment"
+        app:destination="@id/userAccountFragment"
+        app:enterAnim="@anim/anim_enter_right_to_left_1"
+        app:exitAnim="@anim/anim_exit_right_to_left_1"
+        app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+        app:popExitAnim="@anim/anim_exit_left_to_right_1" />
 
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.sixkeeper.DashboardFragment"
         android:label="@string/many_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
-
-        <action
-            android:id="@+id/action_dashboardFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/accountsFragment"
         android:name="com.example.sixkeeper.AccountsFragment"
         android:label="@string/many_accounts"
-        tools:layout="@layout/fragment_accounts" >
-
-        <action
-            android:id="@+id/action_accountsFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_accounts" />
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.sixkeeper.FavoritesFragment"
         android:label="@string/many_favorites"
-        tools:layout="@layout/fragment_favorites" >
-
-        <action
-            android:id="@+id/action_favoritesFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_favorites" />
 
     <fragment
         android:id="@+id/passwordGeneratorFragment"
         android:name="com.example.sixkeeper.PasswordGeneratorFragment"
         android:label="@string/many_password_generator"
         tools:layout="@layout/fragment_password_generator">
-
-        <action
-            android:id="@+id/action_passwordGeneratorFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
 
         <action
             android:id="@+id/action_passwordGeneratorFragment_to_savedPasswordFragment"
@@ -89,91 +77,37 @@
         android:id="@+id/recycleBinFragment"
         android:name="com.example.sixkeeper.RecycleBinFragment"
         android:label="@string/many_recycle_bin"
-        tools:layout="@layout/fragment_recycle_bin" >
-
-        <action
-            android:id="@+id/action_recycleBinFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_recycle_bin" />
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.sixkeeper.SettingsFragment"
         android:label="@string/many_settings"
-        tools:layout="@layout/fragment_settings" >
-
-        <action
-            android:id="@+id/action_settingsFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/contactUsFragment"
         android:name="com.example.sixkeeper.ContactUsFragment"
         android:label="@string/many_contact_us"
-        tools:layout="@layout/fragment_contact_us" >
-
-        <action
-            android:id="@+id/action_contactUsFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_contact_us" />
 
     <fragment
         android:id="@+id/aboutUsFragment"
         android:name="com.example.sixkeeper.AboutUsFragment"
         android:label="@string/many_about_us"
-        tools:layout="@layout/fragment_about_us" >
-
-        <action
-            android:id="@+id/action_aboutUsFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_about_us" />
 
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.example.sixkeeper.HelpFragment"
         android:label="@string/many_help"
-        tools:layout="@layout/fragment_help" >
-
-        <action
-            android:id="@+id/action_helpFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_help" />
 
     <fragment
         android:id="@+id/termsConditionsFragment"
         android:name="com.example.sixkeeper.TermsConditionsFragment"
         android:label="@string/many_terms_conditions"
-        tools:layout="@layout/fragment_terms_conditions" >
-
-        <action
-            android:id="@+id/action_termsConditionsFragment_to_userAccountFragment"
-            app:destination="@id/userAccountFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
-    </fragment>
+        tools:layout="@layout/fragment_terms_conditions" />
 
     <fragment
         android:id="@+id/logoutFragment"

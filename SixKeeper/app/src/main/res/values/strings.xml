@@ -181,7 +181,7 @@
     <string name="settings_security">Security</string>
     <string name="settings_themes">Themes</string>
 
-    <!-- Terms and Conditions Activity -->
+    <!-- Terms and Conditions -->
     <string name="privacy_communication_content">
         We may use your personal information to contact you with marketing or promotional materials
         and other information that you might need to know.
@@ -285,8 +285,11 @@
     <string name="terms_privacy_title"><b>Privacy Policy</b></string>
     <string name="terms_user_title"><b>User Accounts</b></string>
 
-    <!-- Title Activity -->
+    <!-- Title -->
     <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <!-- User Account -->
+    <string name="user_master_pin">Master PIN</string>
 
     <!-- Dummy -->
     <string name="dummy_dummy">Dummy</string>
