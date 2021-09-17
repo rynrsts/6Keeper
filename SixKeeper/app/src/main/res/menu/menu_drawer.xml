@@ -53,7 +53,7 @@
 
         <item
             android:id="@+id/termsConditionsFragment"
-            android:icon="@drawable/ic_terms_and_conditions_black"
+            android:icon="@drawable/ic_terms_and_conditions_light_black"
             android:title="@string/many_terms_conditions" />
 
         <item

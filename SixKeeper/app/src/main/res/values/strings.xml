@@ -182,9 +182,49 @@
     <string name="settings_themes">Themes</string>
 
     <!-- Terms and Conditions Activity -->
+    <string name="privacy_communication_content">
+        We may use your personal information to contact you with marketing or promotional materials
+        and other information that you might need to know.
+    </string>
+    <string name="privacy_changes_content_1">
+        This Privacy Policy is effective as of August 31, 2021 and will remain in effect except
+        with respect to any changes in its provisions in the future, which will be in effect
+        immediately after being posted on the application.
+    </string>
+    <string name="privacy_changes_content_2">
+        We reserve the right to update or change our Privacy Policy at any time and you should check
+        this Privacy Policy periodically. Your continued use of the service and application after we
+        post any modifications to the Privacy Policy on this page will constitute your
+        acknowledgment of the modifications and your consent to abide and be bound by the modified
+        Privacy Policy.
+    </string>
+    <string name="privacy_changes_content_3">
+        If we make any material changes to this Privacy Policy, we will notify you either through
+        the email address you have provided us, or by placing a prominent notice on our application.
+    </string>
+    <string name="privacy_content_1">
+        This document informs you of our policies regarding the collection, use and disclosure of
+        Personal Information we receive from users of the application.
+    </string>
+    <string name="privacy_content_2">
+        We use your Personal Information only for providing and improving the application. By using
+        the application, you agree to the collection and use of information in accordance with this
+        policy.
+    </string>
+    <string name="privacy_information_content">
+        While using our application, we may ask you to provide us with certain personally
+        identifiable information that can be used to contact or identify you. Personally
+        identifiable information may include but is not limited to your name and other personal
+        details.
+    </string>
+    <string name="privacy_security_content">
+        The security of your personal information is important to us but remember that no method of
+        transmission over the Internet, or method of electronic storage, is 100% secure. While we
+        strive to use acceptable means to protect your personal information.
+    </string>
     <string name="terms_age_content">
-        You must be at least 18 years of age before you can use this application. By using this
-        application, you warrant that you are at least 18 years of age, and you may legally adhere
+        You must be at least 15 years of age before you can use this application. By using this
+        application, you warrant that you are at least 15 years of age, and you may legally adhere
         to this agreement. Team Sais assumes no responsibility for liabilities related to age
         misrepresentation.
     </string>
@@ -194,14 +234,56 @@
         agreement, you are advised not to use the application accordingly. 6Keeper only grants use
         and access of this application and its services to those who have accepted its terms.
     </string>
+    <string name="terms_indemnification_content">
+        You agree to compensate Team Sais and its affiliates and hold Team Sais harmless against
+        legal claims and demands that may arise from your use or misuse of our services. We reserve
+        the right to select our own legal counsel.
+    </string>
+    <string name="terms_law_content">
+        By using this application, you agree that the laws of the Philippines, without regard to
+        principles of conflict laws, will govern these terms and conditions, or any dispute of any
+        sort that might come between Team Sais and you, or its partners and associates.
+    </string>
+    <string name="terms_liability_content_1">
+        Team Sais is not liable for any damages that may occur to you as a result of your misuse of
+        our application.
+    </string>
+    <string name="terms_liability_content_2">
+        Team Sais reserves the right to edit, modify, and change this agreement at any time. We
+        shall let our users know of these changes to any medium that they provided to contact them.
+        This agreement is an understanding between Team Sais and the user, and this takes place and
+        replaces all prior agreements regarding the use of this application.
+    </string>
     <string name="terms_privacy_content">
         Before you continue using our application, we advise you to read our Privacy Policy
         regarding our user data collection. It will help you better understand our practices.
     </string>
+    <string name="terms_user_content_1">
+        As a user of this application, you may be asked to register with us and provide private
+        information. You are responsible for ensuring the accuracy of this information, and you are
+        responsible for maintaining the safety and security of your identifying information. You are
+        also responsible for all activities that occur under your account or password.
+    </string>
+    <string name="terms_user_content_2">
+        If you think there are any possible issues regarding the security of your account on the
+        application, inform us immediately so we may address them accordingly.
+    </string>
+    <string name="terms_user_content_3">
+        We reserve all rights to terminate accounts, edit or remove content and cancel any services
+        at our sole discretion.
+    </string>
+    <string name="privacy_changes_title"><b>Changes To This Privacy Policy</b></string>
+    <string name="privacy_communication_title"><b>Communications</b></string>
+    <string name="privacy_information_title"><b>Information Collection and Use</b></string>
+    <string name="privacy_security_title"><b>Security</b></string>
     <string name="terms_age_title"><b>Age Restriction</b></string>
     <string name="terms_conditions_title"><b>Conditions of Use</b></string>
+    <string name="terms_indemnification_title"><b>Indemnification</b></string>
     <string name="terms_last_update">Last updated: August 31, 2021</string>
+    <string name="terms_law_title"><b>Applicable Law</b></string>
+    <string name="terms_liability_title"><b>Limitation on Liability</b></string>
     <string name="terms_privacy_title"><b>Privacy Policy</b></string>
+    <string name="terms_user_title"><b>User Accounts</b></string>
 
     <!-- Title Activity -->
     <string name="title_activity_dashboard">DashboardActivity</string>
