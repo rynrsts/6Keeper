@@ -80,8 +80,6 @@ class IndexActivity : AppCompatActivity() {
 
         tvNavigationHeaderUsername.text = username
 //        ivNavigationHeaderPhoto.setImageResource(R.drawable.ic_visibility_gray)
-
-
     }
 
     private fun setOnClick() {

@@ -5,27 +5,6 @@
     android:id="@+id/graph_navigation"
     app:startDestination="@id/dashboardFragment">
 
-    <fragment
-        android:id="@+id/userAccountFragment"
-        android:name="com.example.sixkeeper.UserAccountFragment"
-        android:label="@string/many_user_account"
-        tools:layout="@layout/fragment_user_account" >
-
-        <action
-            android:id="@+id/action_userAccountFragment_to_userAccountEditFragment"
-            app:destination="@id/userAccountEditFragment"
-            app:enterAnim="@anim/anim_enter_right_to_left_1"
-            app:exitAnim="@anim/anim_exit_right_to_left_1"
-            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
-            app:popExitAnim="@anim/anim_exit_left_to_right_1"  />
-    </fragment>
-
-    <fragment
-        android:id="@+id/userAccountEditFragment"
-        android:name="com.example.sixkeeper.UserAccountEditFragment"
-        android:label="@string/many_user_account"
-        tools:layout="@layout/fragment_user_account_edit" />
-
     <action
         android:id="@+id/action_fragments_to_userAccountFragment"
         app:destination="@id/userAccountFragment"
@@ -33,6 +12,33 @@
         app:exitAnim="@anim/anim_exit_right_to_left_1"
         app:popEnterAnim="@anim/anim_enter_left_to_right_1"
         app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.example.sixkeeper.UserAccountFragment"
+        android:label="@string/many_user_account"
+        tools:layout="@layout/fragment_user_account">
+
+        <action
+            android:id="@+id/action_userAccountFragment_to_userAccountEditFragment"
+            app:destination="@id/userAccountEditFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userAccountEditFragment"
+        android:name="com.example.sixkeeper.UserAccountEditFragment"
+        android:label="@string/many_user_account"
+        tools:layout="@layout/fragment_user_account_edit">
+
+        <argument
+            android:name="userAccountEditId"
+            android:defaultValue="2"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/dashboardFragment"

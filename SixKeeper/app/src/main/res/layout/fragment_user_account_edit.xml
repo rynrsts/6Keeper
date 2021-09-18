@@ -20,6 +20,12 @@
             android:paddingTop="30dp"
             android:paddingBottom="30dp">
 
+            <ViewStub
+                android:id="@+id/vsUserAccountEditContainer"
+                android:inflatedId="@+id/message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
