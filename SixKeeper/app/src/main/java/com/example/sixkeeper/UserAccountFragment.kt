@@ -50,14 +50,35 @@ class UserAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clUserAccountFirstName)
         val clUserAccountLastName: ConstraintLayout =
             appCompatActivity.findViewById(R.id.clUserAccountLastName)
+        val clUserAccountBirthDate: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
+        val clUserAccountEmail: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEmail)
+        val clUserAccountMobileNum: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
 
         clUserAccountFirstName.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(2)
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("first name")
             findNavController().navigate(action)
         }
 
         clUserAccountLastName.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(3)
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("last name")
+            findNavController().navigate(action)
+        }
+
+        clUserAccountBirthDate.setOnClickListener {
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("birth date")
+            findNavController().navigate(action)
+        }
+
+        clUserAccountEmail.setOnClickListener {
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("email")
+            findNavController().navigate(action)
+        }
+
+        clUserAccountMobileNum.setOnClickListener {
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("mobile number")
             findNavController().navigate(action)
         }
     }
