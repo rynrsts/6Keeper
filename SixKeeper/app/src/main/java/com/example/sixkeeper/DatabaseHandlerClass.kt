@@ -159,7 +159,7 @@ class DatabaseHandlerClass(context: Context) :
         val userAccList: ArrayList<UserAccModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
         val db = this.readableDatabase
-        var cursor: Cursor? = null
+        val cursor: Cursor?
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -207,11 +207,11 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewUserInfo(): List<UserInfoModelClass> {                                            // View user information
+    fun viewUserInfo(): List<UserInfoModelClass> {                                                  // View user information
         val userInfoList: ArrayList<UserInfoModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
         val db = this.readableDatabase
-        var cursor: Cursor? = null
+        val cursor: Cursor?
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -256,11 +256,36 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
+    fun viewUsername(): String {
+        val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return String.toString()
+        }
+
+        var userUsername = ""
+
+        if (cursor.moveToFirst()) {
+            do {
+                userUsername = cursor.getString(cursor.getColumnIndex("username"))
+            } while (cursor.moveToNext())
+        }
+
+        db.close()
+        return userUsername
+    }
+
+    @SuppressLint("Recycle")
     fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View saved password
         val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"
         val db = this.readableDatabase
-        var cursor: Cursor? = null
+        val cursor: Cursor?
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -317,7 +342,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateLastLogin(id: String, lastLogin: String): Int {                                          // Update last login
+    fun updateLastLogin(id: String, lastLogin: String): Int {                                       // Update last login
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -331,6 +356,40 @@ class DatabaseHandlerClass(context: Context) :
                 "user_id='$id'",
                 null
         )
+
+        db.close()
+        return success
+    }
+
+    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update last login
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(field, updatedData)
+            put(KEY_LAST_UPDATE, lastUpdate)
+        }
+
+        val success = db.update(TABLE_USER_INFO, contentValues, null, null)
+
+        db.close()
+        return success
+    }
+
+    fun updateUsername(updatedData: String, lastUpdate: String): Int {                              // Update last login
+        val db = this.writableDatabase
+        val contentValues1 = ContentValues()
+        val contentValues2 = ContentValues()
+
+        contentValues1.apply {
+            put(KEY_USERNAME, updatedData)
+        }
+        contentValues2.apply {
+            put(KEY_LAST_UPDATE, lastUpdate)
+        }
+
+        val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
+        db.update(TABLE_USER_INFO, contentValues2, null, null)
 
         db.close()
         return success

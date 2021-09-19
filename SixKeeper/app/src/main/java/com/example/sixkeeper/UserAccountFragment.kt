@@ -56,6 +56,8 @@ class UserAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clUserAccountEmail)
         val clUserAccountMobileNum: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
+        val clUserAccountUsername: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountUsername)
 
         clUserAccountFirstName.setOnClickListener {
             val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("first name")
@@ -79,6 +81,11 @@ class UserAccountFragment : Fragment() {
 
         clUserAccountMobileNum.setOnClickListener {
             val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("mobile number")
+            findNavController().navigate(action)
+        }
+
+        clUserAccountUsername.setOnClickListener {
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("username")
             findNavController().navigate(action)
         }
     }

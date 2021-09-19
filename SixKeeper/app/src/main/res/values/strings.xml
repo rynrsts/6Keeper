@@ -31,7 +31,7 @@
 
     <!-- Create New Account -->
     <string name="create_new_acc_alert_message">
-        Returning to previous page will discard data.
+        Returning to previous page will discard data. Continue?
     </string>
     <string name="create_new_acc_message">Continue creating the account?</string>
     <string name="create_new_acc_note">
@@ -140,6 +140,9 @@
     </string>
     <!--    TODO: <string name="many_verify">Verify</string>-->
     <string name="many_zero">0</string>
+
+    <!-- Master PIN -->
+    <string name="master_pin_forgot">Forgot Master PIN?</string>
 
     <!-- Password Generator -->
     <string name="pass_generator_enter_special_char">
@@ -291,7 +294,13 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!-- User Account -->
+    <string name="user_delete_account">Delete Account</string>
+    <string name="user_face_recognition">Face Recognition</string>
+    <string name="user_fingerprint">Fingerprint</string>
     <string name="user_master_pin">Master PIN</string>
+
+    <!-- User Account -->
+    <string name="user_edit_alert_message">Canceling will discard changes. Continue?</string>
 
     <!-- Dummy -->
     <string name="dummy_dummy">Dummy</string>

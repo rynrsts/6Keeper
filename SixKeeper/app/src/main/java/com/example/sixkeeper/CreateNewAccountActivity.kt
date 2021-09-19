@@ -62,14 +62,14 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 builder.setMessage(R.string.create_new_acc_alert_message)
                 builder.setCancelable(false)
 
-                builder.setPositiveButton("Continue") { _: DialogInterface, _: Int ->
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     super.onBackPressed()
                     overridePendingTransition(
                             R.anim.anim_enter_left_to_right_2,
                             R.anim.anim_exit_left_to_right_2
                     )
                 }
-                builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
                 }
 
