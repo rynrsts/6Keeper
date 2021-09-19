@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class UserAccountEditFragment : UserAccountEditProcessClass() {
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -46,17 +45,34 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
                 "mobile number" ->
                     setMobileNumber()
             }
+
+            setInfoContent()
         }
     }
 
     private fun setOnClick() {
         val clUserEditButton: ConstraintLayout =
-                getAppCompatActivity().findViewById(R.id.clUserEditButton)
+                getAppCompatActivity().findViewById(R.id.clUserEditEdit)
 
         clUserEditButton.setOnClickListener {
-            when (getViewId()) {
-                "first name" ->
-                    doFirstName()
+            if (
+                    getViewId() == "first name" ||
+                    getViewId() == "last name" ||
+                    getViewId() == "birth date" ||
+                    getViewId() == "email" ||
+                    getViewId() == "mobile number"
+            ) {
+                if (getViewId() == "first name" || getViewId() == "last name") {
+                    enterEditModeName()
+                }  else if (getViewId() == "birth date") {
+                    enterEditModeBirthDate()
+                } else if (getViewId() == "email") {
+                    enterEditModeEmail()
+                } else if (getViewId() == "mobile number") {
+                    enterEditModeMobileNum()
+                }
+
+                enterEditMode()
             }
         }
     }

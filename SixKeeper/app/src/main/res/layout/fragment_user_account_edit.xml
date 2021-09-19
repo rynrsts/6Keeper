@@ -8,7 +8,6 @@
     tools:context=".UserAccountEditFragment">
 
     <ScrollView
-        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -16,18 +15,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clUserAccountEditContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="30dp"
-            android:paddingBottom="30dp">
-
-            <ViewStub
-                android:id="@+id/vsUserAccountEditContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inflatedId="@+id/vsUserAccountEditContainerInflate" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:paddingBottom="30dp" />
 
     </ScrollView>
 
@@ -35,14 +27,6 @@
         android:id="@+id/clUserAccountEditButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ViewStub
-            android:id="@+id/vsUserAccountEditButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inflatedId="@+id/vsUserAccountEditButtonInflate" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

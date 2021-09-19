@@ -20,5 +20,8 @@
     <color name="blueMagenta">#6A4C93</color>
     <color name="darkCyan">#08BDBD</color>
     <color name="shadeGreen">#4DA167</color>
+    <color name="mediumLightRed">#F64740</color>
+    <color name="mediumDarkCyanBlue">#155EA2</color>
+    <color name="yellowShade">#CBA415</color>
 
 </resources>

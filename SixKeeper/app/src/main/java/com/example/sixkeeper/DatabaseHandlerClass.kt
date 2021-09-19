@@ -206,6 +206,56 @@ class DatabaseHandlerClass(context: Context) :
         return userAccList
     }
 
+    @SuppressLint("Recycle")
+    fun viewUserInfo(): List<UserInfoModelClass> {                                            // View user information
+        val userInfoList: ArrayList<UserInfoModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var userId: String
+        var userFirstName: String
+        var userLastName: String
+        var userBirthDate: String
+        var userEmail: String
+        var userMobileNumber: String
+        var userLastUpdate: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                userId = cursor.getString(cursor.getColumnIndex("user_id"))
+                userFirstName = cursor.getString(cursor.getColumnIndex("first_name"))
+                userLastName = cursor.getString(cursor.getColumnIndex("last_name"))
+                userBirthDate = cursor.getString(cursor.getColumnIndex("birth_date"))
+                userEmail = cursor.getString(cursor.getColumnIndex("email"))
+                userMobileNumber = cursor.getString(cursor.getColumnIndex("mobile_number"))
+                userLastUpdate = cursor.getString(cursor.getColumnIndex("last_update"))
+
+                val user = UserInfoModelClass(
+                        userId = userId,
+                        firstName = userFirstName,
+                        lastName = userLastName,
+                        birthDate = userBirthDate,
+                        email = userEmail,
+                        mobileNumber = userMobileNumber,
+                        lastUpdate = userLastUpdate
+                )
+                userInfoList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        db.close()
+        return userInfoList
+    }
+
+    @SuppressLint("Recycle")
     fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View saved password
         val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"

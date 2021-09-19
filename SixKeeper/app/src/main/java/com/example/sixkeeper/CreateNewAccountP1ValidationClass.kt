@@ -54,10 +54,6 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         return etCreateNewAccP1LastName
     }
 
-    fun setEtCreateNewAccP1BirthDate(s: String) {
-        etCreateNewAccP1BirthDate.setText(s)
-    }
-
     fun getEtCreateNewAccP1BirthDate(): EditText {
         return etCreateNewAccP1BirthDate
     }
