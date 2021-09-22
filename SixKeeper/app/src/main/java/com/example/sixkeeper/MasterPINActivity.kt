@@ -16,7 +16,7 @@ class MasterPINActivity : MasterPINProcessClass() {
     }
 
     private fun setButtonOnClick() {
-        val llRecycleBinLogout: LinearLayout = findViewById(R.id.llRecycleBinLogout)
+        val llMasterPinLogout: LinearLayout = findViewById(R.id.llMasterPinLogout)
 
         getAcbMasterPINButton1().setOnClickListener {
             pushNumber(1)
@@ -78,12 +78,12 @@ class MasterPINActivity : MasterPINProcessClass() {
             onBackPressed()
         }
 
-        llRecycleBinLogout.setOnClickListener {
+        llMasterPinLogout.setOnClickListener {
             it.apply {
-                llRecycleBinLogout.isClickable = false                                               // Set button un-clickable for 1 second
+                llMasterPinLogout.isClickable = false                                               // Set button un-clickable for 1 second
                 postDelayed(
                         {
-                            llRecycleBinLogout.isClickable = true
+                            llMasterPinLogout.isClickable = true
                         }, 1000
                 )
             }

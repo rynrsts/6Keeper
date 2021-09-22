@@ -5,23 +5,16 @@
 
     <!-- About Us -->
     <string name="about_us_version">Version 1.0</string>
-    <string name="about_us_about_1">
+    <string name="about_us_about">
         SixKeeper is a password manager application that will help users save and manage their
         accounts and passwords in various platforms. It provides fast access to saved passwords to
         not put mental stress in trying to remember all complicated passwords that the user needs.
         It provides automated features to simplify cyber security for users. It is also capable of
         assessing and suggesting passwords to mitigate risks and increase security.
     </string>
-    <string name="about_us_about_2">
-        Team SAIS, the developers of SixKeeper, were formed in 2021, the group is made up of four
-        (4) members that are committed to work and achieve their goals among the areas that they are
-        tasked to accomplish within a certain period. Team SAIS offers useful applications that aims
-        to deliver security solutions integrated with the evolving technology. The team upholds
-        proper work ethics and are driven to provide consistent and trusted services among its users
-        and connections.
-    </string>
 
-    <!-- Accounts -->
+    <!-- Confirm Action -->
+    <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
 
     <!-- Create Master PIN -->
     <string name="create_master_pin_desc">
@@ -53,14 +46,13 @@
     <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials.</string>
 
-    <string name="login_incorrect_master_pin">Incorrect Master PIN!</string>
-
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
     <string name="many_alert_title">Warning!</string>
     <string name="many_alert_title_confirm">Confirm Action</string>
     <string name="many_cancel">Cancel</string>
+    <string name="many_changes_saved">Changes saved!</string>
     <string name="many_confirm_master_pin">Confirm Your Master PIN</string>
     <string name="many_confirm_password">Confirm Password</string>
     <string name="many_contact_us">Contact Us</string>
@@ -90,6 +82,7 @@
     <string name="many_five">5</string>
     <string name="many_four">4</string>
     <string name="many_help">FAQS</string>
+    <string name="many_incorrect_master_pin">Incorrect Master PIN!</string>
     <string name="many_last_name">Last Name</string>
     <string name="many_letters_only_message">
         *Can only contain letters, and special characters: period (.) and hyphen (-).
@@ -294,13 +287,17 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!-- User Account -->
-    <string name="user_delete_account">Delete Account</string>
+    <string name="user_deactivate_account">Deactivate Account</string>
     <string name="user_face_recognition">Face Recognition</string>
     <string name="user_fingerprint">Fingerprint</string>
     <string name="user_master_pin">Master PIN</string>
 
     <!-- User Account -->
-    <string name="user_edit_alert_message">Canceling will discard changes. Continue?</string>
+    <string name="user_edit_cancel_alert_mes">Canceling will discard changes. Continue?</string>
+    <string name="user_edit_confirm_pass">Confirm Password</string>
+    <string name="user_edit_current_pass">Current Password</string>
+    <string name="user_edit_new_pass">New Password</string>
+    <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
 
     <!-- Dummy -->
     <string name="dummy_dummy">Dummy</string>
@@ -310,5 +307,14 @@
         Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
         magna eros quis urna.
     </string>
+    <string name="title_activity_confirm_action">ConfirmActionActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>

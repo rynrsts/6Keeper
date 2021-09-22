@@ -168,7 +168,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
             } else {
                 val toast: Toast = Toast.makeText(
                         applicationContext,
-                        R.string.login_incorrect_master_pin,
+                        R.string.many_incorrect_master_pin,
                         Toast.LENGTH_SHORT
                 )
 

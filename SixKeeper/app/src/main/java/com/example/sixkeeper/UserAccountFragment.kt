@@ -1,6 +1,7 @@
 package com.example.sixkeeper
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 
 class UserAccountFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
+
+    private var field = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,46 +50,78 @@ class UserAccountFragment : Fragment() {
 
     private fun setOnClick() {
         val clUserAccountFirstName: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountFirstName)
+            appCompatActivity.findViewById(R.id.clUserAccountFirstName)
         val clUserAccountLastName: ConstraintLayout =
             appCompatActivity.findViewById(R.id.clUserAccountLastName)
         val clUserAccountBirthDate: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
+            appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
         val clUserAccountEmail: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountEmail)
+            appCompatActivity.findViewById(R.id.clUserAccountEmail)
         val clUserAccountMobileNum: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
+            appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
         val clUserAccountUsername: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountUsername)
+            appCompatActivity.findViewById(R.id.clUserAccountUsername)
 
         clUserAccountFirstName.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("first name")
-            findNavController().navigate(action)
+            field = "first name"
+            openConfirmActionActivity()
         }
 
         clUserAccountLastName.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("last name")
-            findNavController().navigate(action)
+            field = "last name"
+            openConfirmActionActivity()
         }
 
         clUserAccountBirthDate.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("birth date")
-            findNavController().navigate(action)
+            field = "birth date"
+            openConfirmActionActivity()
         }
 
         clUserAccountEmail.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("email")
-            findNavController().navigate(action)
+            field = "email"
+            openConfirmActionActivity()
         }
 
         clUserAccountMobileNum.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("mobile number")
-            findNavController().navigate(action)
+            field = "mobile number"
+            openConfirmActionActivity()
         }
 
         clUserAccountUsername.setOnClickListener {
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment("username")
-            findNavController().navigate(action)
+            field = "username"
+            openConfirmActionActivity()
+        }
+    }
+
+    private fun openConfirmActionActivity() {
+        val goToConfirmActivity = Intent(
+                appCompatActivity,
+                ConfirmActionActivity::class.java
+        )
+
+        @Suppress("DEPRECATION")
+        startActivityForResult(goToConfirmActivity, 16914)
+        appCompatActivity.overridePendingTransition(
+                R.anim.anim_enter_bottom_to_top_2,
+                R.anim.anim_0
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    postDelayed(
+                        {
+                            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(field)
+                            findNavController().navigate(action)
+                        }, 250
+                    )
+                }
+            }
         }
     }
 }

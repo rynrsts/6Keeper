@@ -4,14 +4,17 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Patterns
+import android.view.Gravity
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +40,9 @@ open class UserAccountEditProcessClass : Fragment() {
     private lateinit var etUserEditTextBox: EditText
     private lateinit var ivUserEditIcon: ImageView
     private lateinit var tvUserEditNote: TextView
+
+    private var previousData: String = ""
+    private var editMode: Boolean = false
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -186,6 +192,8 @@ open class UserAccountEditProcessClass : Fragment() {
                 getAppCompatActivity().findViewById(R.id.clUserEditEdit)
 
         clUserEditEdit.setOnClickListener {
+            previousData = etUserEditTextBox.text.toString()
+
             if (
                     getViewId() == "first name" ||
                     getViewId() == "last name" ||
@@ -249,6 +257,7 @@ open class UserAccountEditProcessClass : Fragment() {
             addView(layoutButton)
         }
 
+        editMode = true
         setEditModeOnClick()
     }
 
@@ -260,10 +269,11 @@ open class UserAccountEditProcessClass : Fragment() {
 
         clUserEditCancel.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-            builder.setMessage(R.string.user_edit_alert_message)
+            builder.setMessage(R.string.user_edit_cancel_alert_mes)
             builder.setCancelable(false)
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                etUserEditTextBox.setText(previousData)
                 goBackToViewMode()
             }
             builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -276,36 +286,109 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         clUserEditSave.setOnClickListener {
-            val text = etUserEditTextBox.text.toString()
+            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+            builder.setMessage(R.string.user_edit_save_alert_mes)
+            builder.setCancelable(false)
 
-            if (getViewId() == "first name" && isNameValid(text)) {
-                updateInfo("first_name")
-                setInfoContent()
-                goBackToViewMode()
-            } else if (getViewId() == "last name" && isNameValid(text)) {
-                updateInfo("last_name")
-                setInfoContent()
-                goBackToViewMode()
-            } else if (getViewId() == "birth date" && isBirthDateValid(text)) {
-                updateInfo("birth_date")
-                setInfoContent()
-                goBackToViewMode()
-            } else if (getViewId() == "email" && Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-                updateInfo("email")
-                setInfoContent()
-                goBackToViewMode()
-            } else if (getViewId() == "mobile number" && text.length == 11) {
-                updateInfo("mobile_number")
-                setInfoContent()
-                goBackToViewMode()
-            } else if (getViewId() == "username" && isUsernameValid(text)) {
-                updateUsername()
-                setInfoContent()
-                goBackToViewMode()
-                setUsernameInMenu()
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            }
+            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setTitle(R.string.many_alert_title_confirm)
+            alert.show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                val text = etUserEditTextBox.text.toString()
+
+                if (getViewId() == "first name" && isNameValid(text)) {
+                    updateInfo("first_name")
+                    setInfoContent()
+                    goBackToViewMode()
+                } else if (getViewId() == "last name" && isNameValid(text)) {
+                    updateInfo("last_name")
+                    setInfoContent()
+                    goBackToViewMode()
+                } else if (getViewId() == "birth date" && isBirthDateValid(text)) {
+                    updateInfo("birth_date")
+                    setInfoContent()
+                    goBackToViewMode()
+                } else if (getViewId() == "email" && isEmailValid(text)) {
+                    updateInfo("email")
+                    setInfoContent()
+                    goBackToViewMode()
+                } else if (getViewId() == "mobile number" && text.length == 11) {
+                    updateInfo("mobile_number")
+                    setInfoContent()
+                    goBackToViewMode()
+                } else if (getViewId() == "username" && isUsernameValid(text)) {
+                    updateUsername()
+                    setInfoContent()
+                    goBackToViewMode()
+                    setUsernameInMenu()
+                }
+
+                val toast: Toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.many_changes_saved,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
             }
         }
     }
+
+//    TODO: Back press on edit mode
+//    override fun onCreate(savedInstanceState: Bundle?) {                                            // To override onBackPressed in fragment
+//        super.onCreate(savedInstanceState)
+//        activity?.onBackPressedDispatcher?.addCallback(
+//                this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                if (editMode) {
+//                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+//                    builder.setMessage(R.string.user_edit_cancel_alert_mes)
+//                    builder.setCancelable(false)
+//
+//                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+//                        etUserEditTextBox.setText(previousData)
+//                        goBackToViewMode()
+//                    }
+//                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+//                        dialog.cancel()
+//                    }
+//
+//                    val alert: AlertDialog = builder.create()
+//                    alert.setTitle(R.string.many_alert_title)
+//                    alert.show()
+//                } else {
+//                    cons
+//                }
+//            }
+//        })
+//    }
 
     private fun isNameValid(s: String): Boolean {                                                   // Accept letters, (.) and (-) only
         val exp = "[a-zA-Z .-]+"
@@ -320,7 +403,11 @@ open class UserAccountEditProcessClass : Fragment() {
         return pattern.matcher(s).matches()
     }
 
-    private fun isUsernameValid(s: String): Boolean {                                                        // Accept letters, numbers, (.), (_) and (-) only
+    private fun isEmailValid(s: String): Boolean {                                                  // Accept valid email
+        return Patterns.EMAIL_ADDRESS.matcher(s).matches()
+    }
+
+    private fun isUsernameValid(s: String): Boolean {                                               // Accept letters, numbers, (.), (_) and (-) only
         val exp = "[a-zA-Z0-9._-]{6,}"
         val pattern: Pattern = Pattern.compile(exp)
         return pattern.matcher(s).matches()
@@ -377,6 +464,7 @@ open class UserAccountEditProcessClass : Fragment() {
                 )
         }
 
+        editMode = false
         setEditOnClick()
     }
 
