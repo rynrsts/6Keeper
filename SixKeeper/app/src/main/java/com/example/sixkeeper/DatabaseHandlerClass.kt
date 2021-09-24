@@ -361,7 +361,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update last login
+    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update user information
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -376,13 +376,13 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUsername(updatedData: String, lastUpdate: String): Int {                              // Update last login
+    fun updateUserAcc(field: String, updatedData: String, lastUpdate: String): Int {                // Update user account
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
         val contentValues2 = ContentValues()
 
         contentValues1.apply {
-            put(KEY_USERNAME, updatedData)
+            put(field, updatedData)
         }
         contentValues2.apply {
             put(KEY_LAST_UPDATE, lastUpdate)

@@ -31,6 +31,10 @@
         Note: Once you click register, existing account and data saved in the app will be
         removed.
     </string>
+    <string name="create_new_acc_p1_note">
+        Note: Please make sure that the First Name, Last Name and Birth Date fields are correct.
+        These cannot be changed once registered.
+    </string>
     <string name="create_new_acc_p4_agree_to_terms">
         I agree to the <u>Terms and Conditions</u>.
     </string>
@@ -290,13 +294,15 @@
     <string name="user_deactivate_account">Deactivate Account</string>
     <string name="user_face_recognition">Face Recognition</string>
     <string name="user_fingerprint">Fingerprint</string>
-    <string name="user_master_pin">Master PIN</string>
+    <string name="user_change_master_pin">Change Master PIN</string>
+    <string name="user_change_password">Change Password</string>
 
     <!-- User Account -->
     <string name="user_edit_cancel_alert_mes">Canceling will discard changes. Continue?</string>
     <string name="user_edit_confirm_pass">Confirm Password</string>
     <string name="user_edit_current_pass">Current Password</string>
     <string name="user_edit_new_pass">New Password</string>
+    <string name="user_edit_pass_mes">Wrong Current Password!</string>
     <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
 
     <!-- Dummy -->

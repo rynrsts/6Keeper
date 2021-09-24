@@ -61,6 +61,8 @@ class UserAccountFragment : Fragment() {
             appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
         val clUserAccountUsername: ConstraintLayout =
             appCompatActivity.findViewById(R.id.clUserAccountUsername)
+        val clUserAccountPassword: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountPassword)
 
         clUserAccountFirstName.setOnClickListener {
             field = "first name"
@@ -90,6 +92,12 @@ class UserAccountFragment : Fragment() {
         clUserAccountUsername.setOnClickListener {
             field = "username"
             openConfirmActionActivity()
+        }
+
+        clUserAccountPassword.setOnClickListener {
+            field = "password"
+            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
     }
 

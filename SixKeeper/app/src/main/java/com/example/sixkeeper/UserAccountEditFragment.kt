@@ -23,32 +23,36 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
     }
 
     private fun setSpecifiedView() {
-        if (
-                getViewId() == "first name" ||
-                getViewId() == "last name" ||
-                getViewId() == "birth date" ||
-                getViewId() == "email" ||
-                getViewId() == "mobile number" ||
-                getViewId() == "username"
-        ) {
+        if (isFirstNameToUsername()) {
             setView1()
 
             when (getViewId()) {
-                "first name" ->
+                "first name" -> {
                     setFirstName()
-                "last name" ->
+                }
+                "last name" -> {
                     setLastName()
-                "birth date" ->
+                }
+                "birth date" -> {
                     setBirthDate()
-                "email" ->
+                }
+                "email" -> {
+                    setViewButton()
                     setEmail()
-                "mobile number" ->
+                }
+                "mobile number" -> {
+                    setViewButton()
                     setMobileNumber()
-                "username" ->
+                }
+                "username" -> {
+                    setViewButton()
                     setUsername()
+                }
             }
 
             setInfoContent()
+        } else if (getViewId() == "password") {
+            setView2()
         }
     }
 }

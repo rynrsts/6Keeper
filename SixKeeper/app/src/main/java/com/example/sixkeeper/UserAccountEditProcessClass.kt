@@ -11,10 +11,7 @@ import android.util.Patterns
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +38,12 @@ open class UserAccountEditProcessClass : Fragment() {
     private lateinit var ivUserEditIcon: ImageView
     private lateinit var tvUserEditNote: TextView
 
+    private lateinit var etUserEditCurrentPass: EditText
+    private lateinit var etUserEditNewPass: EditText
+    private lateinit var tvUserEditNewPassNote: TextView
+    private lateinit var etUserEditConfirmPass: EditText
+    private lateinit var tvUserEditConfirmPassNote: TextView
+
     private var previousData: String = ""
     private var editMode: Boolean = false
 
@@ -66,29 +69,35 @@ open class UserAccountEditProcessClass : Fragment() {
         return appCompatActivity
     }
 
-    @SuppressLint("ResourceType")
-    fun setView1() {
+    fun isFirstNameToUsername(): Boolean {
+        return viewId == "first name" || viewId == "last name" || viewId == "birth date" ||
+                viewId == "email" || viewId == "mobile number" || viewId == "username"
+    }
+
+    private fun isEmailToUsername(): Boolean {
+        return viewId == "email" || viewId == "mobile number" || viewId == "username"
+    }
+
+    fun setView1() {                                                                                // View for First Name to Username
         val clUserAccountEditContainer: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
         val layoutContainer = layoutInflater.inflate(
-                R.layout.layout_user_edit_1,
-                view as ViewGroup?,
-                false
+                R.layout.layout_user_edit_1, view as ViewGroup?,  false
         )
         clUserAccountEditContainer.addView(layoutContainer)
-
-        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
-        val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_1,
-                view as ViewGroup?,
-                false
-        )
-        clUserAccountEditButton.addView(layoutButton)
 
         tvUserEditLabel = appCompatActivity.findViewById(R.id.tvUserEditLabel)
         etUserEditTextBox = appCompatActivity.findViewById(R.id.etUserEditTextBox)
         ivUserEditIcon = appCompatActivity.findViewById(R.id.ivUserEditIcon)
         tvUserEditNote = appCompatActivity.findViewById(R.id.tvUserEditNote)
+    }
+
+    fun setViewButton() {                                                                           // View for button in the bottom
+        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
+        val layoutButton = layoutInflater.inflate(
+                R.layout.layout_user_edit_button_1, view as ViewGroup?, false
+        )
+        clUserAccountEditButton.addView(layoutButton)
     }
 
     fun setFirstName() {                                                                            // View for First Name
@@ -145,6 +154,27 @@ open class UserAccountEditProcessClass : Fragment() {
         ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
     }
 
+    fun setView2() {                                                                                // View for Password
+        val clUserAccountEditContainer: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_user_edit_2, view as ViewGroup?, false
+        )
+        clUserAccountEditContainer.addView(layoutContainer)
+
+        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
+        val layoutButton = layoutInflater.inflate(
+                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
+        )
+        clUserAccountEditButton.addView(layoutButton)
+
+        etUserEditCurrentPass = appCompatActivity.findViewById(R.id.etUserEditCurrentPass)
+        etUserEditNewPass = appCompatActivity.findViewById(R.id.etUserEditNewPass)
+        tvUserEditNewPassNote = appCompatActivity.findViewById(R.id.tvUserEditNewPassNote)
+        etUserEditConfirmPass = appCompatActivity.findViewById(R.id.etUserEditConfirmPass)
+        tvUserEditConfirmPassNote = appCompatActivity.findViewById(R.id.tvUserEditConfirmPassNote)
+    }
+
     fun setInfoContent() {                                                                          // Set user information data
         etUserEditTextBox.setText(viewUserInformation())
     }
@@ -188,55 +218,31 @@ open class UserAccountEditProcessClass : Fragment() {
     }
 
     fun setEditOnClick() {
-        val clUserEditEdit: ConstraintLayout =
-                getAppCompatActivity().findViewById(R.id.clUserEditEdit)
+        if (isEmailToUsername()) {
+            val clUserEditEdit: ConstraintLayout =
+                    getAppCompatActivity().findViewById(R.id.clUserEditEdit)
 
-        clUserEditEdit.setOnClickListener {
-            previousData = etUserEditTextBox.text.toString()
+            clUserEditEdit.setOnClickListener {
+                previousData = etUserEditTextBox.text.toString()
 
-            if (
-                    getViewId() == "first name" ||
-                    getViewId() == "last name" ||
-                    getViewId() == "birth date" ||
-                    getViewId() == "email" ||
-                    getViewId() == "mobile number" ||
-                    getViewId() == "username"
-            ) {
-                if (getViewId() == "first name" || getViewId() == "last name") {
-                    enterEditModeName()
-                } else if (getViewId() == "birth date") {
-                    enterEditModeBirthDate()
-                } else if (getViewId() == "email") {
-                    enterEditModeEmail()
-                } else if (getViewId() == "mobile number") {
-                    enterEditModeMobileNum()
-                } else if (getViewId() == "username") {
-                    enterEditModeUsername()
+                when (viewId) {
+                    "email" -> {
+                        tvUserEditNote.setText(R.string.many_validate_email)
+                        enterEditMode()
+                    }
+                    "mobile number" -> {
+                        tvUserEditNote.setText(R.string.many_validate_mobile_num)
+                        enterEditMode()
+                    }
+                    "username" -> {
+                        tvUserEditNote.setText(R.string.many_validate_username)
+                        enterEditMode()
+                    }
                 }
-
-                enterEditMode()
             }
+        } else if (viewId == "password") {
+            setEditModeOnClick()
         }
-    }
-
-    private fun enterEditModeName() {
-        tvUserEditNote.setText(R.string.many_letters_only_message)
-    }
-
-    private fun enterEditModeBirthDate() {
-        tvUserEditNote.setText(R.string.many_birth_date_format_message)
-    }
-
-    private fun enterEditModeEmail() {
-        tvUserEditNote.setText(R.string.many_validate_email)
-    }
-
-    private fun enterEditModeMobileNum() {
-        tvUserEditNote.setText(R.string.many_validate_mobile_num)
-    }
-
-    private fun enterEditModeUsername() {
-        tvUserEditNote.setText(R.string.many_validate_username)
     }
 
     private fun enterEditMode() {                                                                   // Enter edit mode
@@ -248,9 +254,7 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_2,
-                view as ViewGroup?,
-                false
+                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
         )
         clUserAccountEditButton.apply {
             removeAllViews()
@@ -273,8 +277,12 @@ open class UserAccountEditProcessClass : Fragment() {
             builder.setCancelable(false)
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                etUserEditTextBox.setText(previousData)
-                goBackToViewMode()
+                if (isEmailToUsername()) {
+                    etUserEditTextBox.setText(previousData)
+                    goBackToViewMode()
+                } else if (viewId == "password") {
+                    appCompatActivity.onBackPressed()
+                }
             }
             builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
                 dialog.cancel()
@@ -286,77 +294,113 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         clUserEditSave.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-            builder.setMessage(R.string.user_edit_save_alert_mes)
-            builder.setCancelable(false)
+            if (isEmailToUsername()) {
+                val text = etUserEditTextBox.text.toString()
 
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
+                if (
+                        (viewId == "email" && isEmailValid(text)) ||
+                        (viewId == "mobile number" && text.length == 11) ||
+                        (viewId == "username" && isUsernameValid(text))
+                ) {
+                    showSaveAlertDialog()
+                }
+            } else if (viewId == "password") {
+                val currentPass = etUserEditCurrentPass.text.toString()
+                val newPass = etUserEditNewPass.text.toString()
+                val confirmPass = etUserEditConfirmPass.text.toString()
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
+                if (
+                        isPasswordValid(newPass) && confirmPass == newPass &&
+                        validateUserAccPass(currentPass)
+                ) {
+                    showSaveAlertDialog()
+                } else {
+                    if (confirmPass == newPass) {
+                        tvUserEditConfirmPassNote.text = ""
+                    } else if (confirmPass != newPass) {
+                        tvUserEditConfirmPassNote.setText(R.string.many_validate_confirm_pass)
+                    }
+
+                    if (
+                            isPasswordValid(newPass) && confirmPass == newPass &&
+                            !validateUserAccPass(currentPass)
+                    ) {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.user_edit_pass_mes,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
+                }
             }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
-
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title_confirm)
-            alert.show()
         }
+    }
+
+    private fun showSaveAlertDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+        builder.setMessage(R.string.user_edit_save_alert_mes)
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            val goToConfirmActivity = Intent(
+                    appCompatActivity, ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            appCompatActivity.overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
+            )
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title_confirm)
+        alert.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                val text = etUserEditTextBox.text.toString()
-
-                if (getViewId() == "first name" && isNameValid(text)) {
-                    updateInfo("first_name")
-                    setInfoContent()
-                    goBackToViewMode()
-                } else if (getViewId() == "last name" && isNameValid(text)) {
-                    updateInfo("last_name")
-                    setInfoContent()
-                    goBackToViewMode()
-                } else if (getViewId() == "birth date" && isBirthDateValid(text)) {
-                    updateInfo("birth_date")
-                    setInfoContent()
-                    goBackToViewMode()
-                } else if (getViewId() == "email" && isEmailValid(text)) {
+        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
+            when (viewId) {
+                "email" -> {
                     updateInfo("email")
                     setInfoContent()
                     goBackToViewMode()
-                } else if (getViewId() == "mobile number" && text.length == 11) {
+                }
+                "mobile number" -> {
                     updateInfo("mobile_number")
                     setInfoContent()
                     goBackToViewMode()
-                } else if (getViewId() == "username" && isUsernameValid(text)) {
-                    updateUsername()
+                }
+                "username" -> {
+                    updateAcc("username")
                     setInfoContent()
                     goBackToViewMode()
                     setUsernameInMenu()
                 }
-
-                val toast: Toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_changes_saved,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+                "password" -> {
+                    updateAcc("password")
+                    appCompatActivity.onBackPressed()
                 }
+            }
+
+            val toast: Toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.many_changes_saved,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
             }
         }
     }
@@ -390,19 +434,6 @@ open class UserAccountEditProcessClass : Fragment() {
 //        })
 //    }
 
-    private fun isNameValid(s: String): Boolean {                                                   // Accept letters, (.) and (-) only
-        val exp = "[a-zA-Z .-]+"
-        val pattern: Pattern = Pattern.compile(exp)
-        return pattern.matcher(s).matches()
-    }
-
-    private fun isBirthDateValid(s: String): Boolean {                                              // Accept MM//DD/YYYY format only
-        //val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9])?[0-9][0-9]$"
-        val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9][0-9][0-9])?$"
-        val pattern: Pattern = Pattern.compile(exp)
-        return pattern.matcher(s).matches()
-    }
-
     private fun isEmailValid(s: String): Boolean {                                                  // Accept valid email
         return Patterns.EMAIL_ADDRESS.matcher(s).matches()
     }
@@ -413,26 +444,44 @@ open class UserAccountEditProcessClass : Fragment() {
         return pattern.matcher(s).matches()
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun updateInfo(field: String) {                                                         // Update desired information
-        val input = etUserEditTextBox.text.toString()
+    private fun validateUserAccPass(pass: String): Boolean {
+        val encryptionClass = EncryptionClass()
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var bool = false
 
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
+        val encodedPassword = encodingClass.encodeData(pass)
+        val encryptedPassword = encryptionClass.encrypt(encodedPassword)
 
-        databaseHandlerClass.updateUserInfo(field, encodingClass.encodeData(input), date)
+        for (u in userAccList) {
+            bool = encryptedPassword.contentEquals(u.password)
+        }
+
+        return bool
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun updateUsername() {
-        val input = etUserEditTextBox.text.toString()
+    private fun isPasswordValid(s: String): Boolean {                                               // Accept 1 lowercase, uppercase, number, (.), (_) and (-) only
+        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(?=.{8,})(^[a-zA-Z0-9._-]+\$)"
+        val pattern = Pattern.compile(exp)
+        return pattern.matcher(s).matches()
+    }
 
+    private fun updateInfo(field: String) {                                                         // Update desired information
+        val input = etUserEditTextBox.text.toString()
+        databaseHandlerClass.updateUserInfo(
+                field, encodingClass.encodeData(input), getCurrentDate()
+        )
+    }
+
+    private fun updateAcc(field: String) {                                                          // Update Username or Password
+        val input = etUserEditTextBox.text.toString()
+        databaseHandlerClass.updateUserAcc(field, encodingClass.encodeData(input), getCurrentDate())
+    }
+    
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
-
-        databaseHandlerClass.updateUsername(encodingClass.encodeData(input), date)
+        return dateFormat.format(calendar.time)
     }
 
     private fun goBackToViewMode() {                                                                // Go back to view mode
@@ -444,9 +493,7 @@ open class UserAccountEditProcessClass : Fragment() {
         tvUserEditNote.text = null
 
         val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_1,
-                view as ViewGroup?,
-                false
+                R.layout.layout_user_edit_button_1, view as ViewGroup?, false
         )
         clUserAccountEditButton.apply {
             removeAllViews()
