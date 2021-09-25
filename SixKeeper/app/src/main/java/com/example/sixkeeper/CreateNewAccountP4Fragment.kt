@@ -54,7 +54,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
             )
 
             @Suppress("DEPRECATION")
-            startActivityForResult(goToCreateMasterPINActivity, 16914)
+            startActivityForResult(goToCreateMasterPINActivity, 14523)
 
             getAppCompatActivity().overridePendingTransition(
                     R.anim.anim_enter_bottom_to_top_2,
@@ -117,7 +117,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         val masterPin: Int = data?.getIntExtra("masterPin", 0)!!
 
         when {
-            requestCode == 16914 && resultCode == 16914 -> {
+            requestCode == 14523 && resultCode == 14523 -> {
                 getTvCreateNewAccP4MasterPinMes().apply {
                     setText(R.string.many_setup_complete)
                     setTextColor(ContextCompat.getColor(context, R.color.blue))

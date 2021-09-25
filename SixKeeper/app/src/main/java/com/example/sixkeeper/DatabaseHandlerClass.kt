@@ -376,7 +376,26 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserAcc(field: String, updatedData: String, lastUpdate: String): Int {                // Update user account
+    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                          // Update user account
+        val db = this.writableDatabase
+        val contentValues1 = ContentValues()
+        val contentValues2 = ContentValues()
+
+        contentValues1.apply {
+            put(KEY_USERNAME, updatedData)
+        }
+        contentValues2.apply {
+            put(KEY_LAST_UPDATE, lastUpdate)
+        }
+
+        val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
+        db.update(TABLE_USER_INFO, contentValues2, null, null)
+
+        db.close()
+        return success
+    }
+
+    fun updateUserAcc(field: String, updatedData: ByteArray, lastUpdate: String): Int {             // Update user account
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
         val contentValues2 = ContentValues()

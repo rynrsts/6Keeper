@@ -63,6 +63,8 @@ class UserAccountFragment : Fragment() {
             appCompatActivity.findViewById(R.id.clUserAccountUsername)
         val clUserAccountPassword: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountPassword)
+        val clUserAccountMasterPIN: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountMasterPIN)
 
         clUserAccountFirstName.setOnClickListener {
             field = "first name"
@@ -96,7 +98,15 @@ class UserAccountFragment : Fragment() {
 
         clUserAccountPassword.setOnClickListener {
             field = "password"
-            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(field)
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
+        }
+
+        clUserAccountMasterPIN.setOnClickListener {
+            field = "master pin"
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
             findNavController().navigate(action)
         }
     }
@@ -124,7 +134,8 @@ class UserAccountFragment : Fragment() {
                 view?.apply {
                     postDelayed(
                         {
-                            val action = UserAccountFragmentDirections.actionUserAccountFragmentToUserAccountEditFragment(field)
+                            val action = UserAccountFragmentDirections
+                                    .actionUserAccountFragmentToUserAccountEditFragment(field)
                             findNavController().navigate(action)
                         }, 250
                     )

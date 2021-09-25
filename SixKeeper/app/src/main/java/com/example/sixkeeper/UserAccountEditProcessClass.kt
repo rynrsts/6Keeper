@@ -44,8 +44,14 @@ open class UserAccountEditProcessClass : Fragment() {
     private lateinit var etUserEditConfirmPass: EditText
     private lateinit var tvUserEditConfirmPassNote: TextView
 
+    private lateinit var ivUserEditCurrentTogglePass: ImageView
+    private lateinit var ivUserEditNewTogglePass: ImageView
+    private lateinit var ivUserEditConfirmTogglePass: ImageView
+
     private var previousData: String = ""
     private var editMode: Boolean = false
+
+    private var masterPin: Int = 0
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -154,27 +160,6 @@ open class UserAccountEditProcessClass : Fragment() {
         ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
     }
 
-    fun setView2() {                                                                                // View for Password
-        val clUserAccountEditContainer: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
-        val layoutContainer = layoutInflater.inflate(
-                R.layout.layout_user_edit_2, view as ViewGroup?, false
-        )
-        clUserAccountEditContainer.addView(layoutContainer)
-
-        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
-        val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
-        )
-        clUserAccountEditButton.addView(layoutButton)
-
-        etUserEditCurrentPass = appCompatActivity.findViewById(R.id.etUserEditCurrentPass)
-        etUserEditNewPass = appCompatActivity.findViewById(R.id.etUserEditNewPass)
-        tvUserEditNewPassNote = appCompatActivity.findViewById(R.id.tvUserEditNewPassNote)
-        etUserEditConfirmPass = appCompatActivity.findViewById(R.id.etUserEditConfirmPass)
-        tvUserEditConfirmPassNote = appCompatActivity.findViewById(R.id.tvUserEditConfirmPassNote)
-    }
-
     fun setInfoContent() {                                                                          // Set user information data
         etUserEditTextBox.setText(viewUserInformation())
     }
@@ -217,31 +202,122 @@ open class UserAccountEditProcessClass : Fragment() {
         return returnValue
     }
 
+    fun setView2() {                                                                                // View for Password
+        val clUserAccountEditContainer: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_user_edit_2, view as ViewGroup?, false
+        )
+        clUserAccountEditContainer.addView(layoutContainer)
+
+        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
+        val layoutButton = layoutInflater.inflate(
+                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
+        )
+        clUserAccountEditButton.addView(layoutButton)
+
+        etUserEditCurrentPass = appCompatActivity.findViewById(R.id.etUserEditCurrentPass)
+        etUserEditNewPass = appCompatActivity.findViewById(R.id.etUserEditNewPass)
+        tvUserEditNewPassNote = appCompatActivity.findViewById(R.id.tvUserEditNewPassNote)
+        etUserEditConfirmPass = appCompatActivity.findViewById(R.id.etUserEditConfirmPass)
+        tvUserEditConfirmPassNote = appCompatActivity.findViewById(R.id.tvUserEditConfirmPassNote)
+
+        ivUserEditCurrentTogglePass =
+                appCompatActivity.findViewById(R.id.ivUserEditCurrentTogglePass)
+        ivUserEditNewTogglePass = appCompatActivity.findViewById(R.id.ivUserEditNewTogglePass)
+        ivUserEditConfirmTogglePass =
+                appCompatActivity.findViewById(R.id.ivUserEditConfirmTogglePass)
+    }
+
+    fun getEtUserEditCurrentPass(): EditText {
+        return etUserEditCurrentPass
+    }
+
+    fun getEtUserEditNewPass(): EditText {
+        return etUserEditNewPass
+    }
+
+    fun getEtUserEditConfirmPass(): EditText {
+        return etUserEditConfirmPass
+    }
+
+    fun getIvUserEditCurrentTogglePass(): ImageView {
+        return ivUserEditCurrentTogglePass
+    }
+
+    fun getIvUserEditNewTogglePass(): ImageView {
+        return ivUserEditNewTogglePass
+    }
+
+    fun getIvUserEditConfirmTogglePass(): ImageView {
+        return ivUserEditConfirmTogglePass
+    }
+
+    fun setView3() {                                                                                // View for Master PIN
+        val clUserAccountEditContainer: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_user_edit_3, view as ViewGroup?, false
+        )
+        clUserAccountEditContainer.addView(layoutContainer)
+    }
+
     fun setEditOnClick() {
-        if (isEmailToUsername()) {
-            val clUserEditEdit: ConstraintLayout =
-                    getAppCompatActivity().findViewById(R.id.clUserEditEdit)
+        when {
+            isEmailToUsername() -> {
+                val clUserEditEdit: ConstraintLayout =
+                        getAppCompatActivity().findViewById(R.id.clUserEditEdit)
 
-            clUserEditEdit.setOnClickListener {
-                previousData = etUserEditTextBox.text.toString()
+                clUserEditEdit.setOnClickListener {
+                    previousData = etUserEditTextBox.text.toString()
 
-                when (viewId) {
-                    "email" -> {
-                        tvUserEditNote.setText(R.string.many_validate_email)
-                        enterEditMode()
-                    }
-                    "mobile number" -> {
-                        tvUserEditNote.setText(R.string.many_validate_mobile_num)
-                        enterEditMode()
-                    }
-                    "username" -> {
-                        tvUserEditNote.setText(R.string.many_validate_username)
-                        enterEditMode()
+                    when (viewId) {
+                        "email" -> {
+                            tvUserEditNote.setText(R.string.many_validate_email)
+                            enterEditMode()
+                        }
+                        "mobile number" -> {
+                            tvUserEditNote.setText(R.string.many_validate_mobile_num)
+                            enterEditMode()
+                        }
+                        "username" -> {
+                            tvUserEditNote.setText(R.string.many_validate_username)
+                            enterEditMode()
+                        }
                     }
                 }
             }
-        } else if (viewId == "password") {
-            setEditModeOnClick()
+            viewId == "password" -> {
+                setEditModeOnClick()
+            }
+            viewId == "master pin" -> {
+                val acbUserEditMasterPIN: Button =
+                        appCompatActivity.findViewById(R.id.acbUserEditMasterPIN)
+
+                acbUserEditMasterPIN.setOnClickListener {
+                    val goToCreateMasterPINActivity = Intent(
+                            appCompatActivity,
+                            CreateMasterPINActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToCreateMasterPINActivity, 14523)
+
+                    getAppCompatActivity().overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+
+                    it.apply {
+                        acbUserEditMasterPIN.isClickable = false                                    // Set button un-clickable for 1 second
+                        postDelayed(
+                                {
+                                    acbUserEditMasterPIN.isClickable = true
+                                }, 1000
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -369,6 +445,13 @@ open class UserAccountEditProcessClass : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == 14523 && resultCode == 14523) {
+            if (viewId == "master pin") {
+                masterPin = data?.getIntExtra("masterPin", 0)!!
+                showSaveAlertDialog()
+            }
+        }
+
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             when (viewId) {
                 "email" -> {
@@ -382,14 +465,30 @@ open class UserAccountEditProcessClass : Fragment() {
                     goBackToViewMode()
                 }
                 "username" -> {
-                    updateAcc("username")
+                    updateAccUsername()
                     setInfoContent()
                     goBackToViewMode()
                     setUsernameInMenu()
                 }
                 "password" -> {
-                    updateAcc("password")
-                    appCompatActivity.onBackPressed()
+                    updateAccPassword()
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    appCompatActivity.onBackPressed()
+                                }, 250
+                        )
+                    }
+                }
+                "master pin" -> {
+                    updateAccMasterPIN()
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    appCompatActivity.onBackPressed()
+                                }, 250
+                        )
+                    }
                 }
             }
 
@@ -472,9 +571,33 @@ open class UserAccountEditProcessClass : Fragment() {
         )
     }
 
-    private fun updateAcc(field: String) {                                                          // Update Username or Password
+    private fun updateAccUsername() {                                                               // Update Username
         val input = etUserEditTextBox.text.toString()
-        databaseHandlerClass.updateUserAcc(field, encodingClass.encodeData(input), getCurrentDate())
+
+        if (viewId == "username") {
+            databaseHandlerClass.updateUserUsername(
+                    encodingClass.encodeData(input), getCurrentDate()
+            )
+        }
+    }
+
+    private fun updateAccPassword() {                                                               // Update Password
+        val encryptionClass = EncryptionClass()
+        val input = etUserEditNewPass.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
+
+        databaseHandlerClass.updateUserAcc(
+                "password", encryptionClass.encrypt(encodedInput), getCurrentDate()
+        )
+    }
+
+    private fun updateAccMasterPIN() {                                                              // Update Master PIN
+        val encryptionClass = EncryptionClass()
+        val encodedInput = encodingClass.encodeData(masterPin.toString())
+
+        databaseHandlerClass.updateUserAcc(
+                "master_pin", encryptionClass.encrypt(encodedInput), getCurrentDate()
+        )
     }
     
     @SuppressLint("SimpleDateFormat")

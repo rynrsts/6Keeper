@@ -54,6 +54,19 @@
         app:layout_constraintTop_toTopOf="@+id/etUserEditCurrentPass"
         tools:ignore="ContentDescription" />
 
+    <ImageView
+        android:id="@+id/ivUserEditCurrentTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditCurrentPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditCurrentPass"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/tvUserEditNewPass"
         android:layout_width="0dp"
@@ -87,6 +100,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/etUserEditNewPass"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditNewPass"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivUserEditNewTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditNewPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
         app:layout_constraintTop_toTopOf="@+id/etUserEditNewPass"
         tools:ignore="ContentDescription" />
 
@@ -134,6 +160,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/etUserEditConfirmPass"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditConfirmPass"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivUserEditConfirmTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditConfirmPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
         app:layout_constraintTop_toTopOf="@+id/etUserEditConfirmPass"
         tools:ignore="ContentDescription" />
 

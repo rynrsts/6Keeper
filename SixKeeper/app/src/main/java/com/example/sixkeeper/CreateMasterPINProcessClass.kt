@@ -145,7 +145,7 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 val masterPin: Int = tempS.toInt()
 
                 // Return the created Master PIN
-                setResult(16914, Intent().putExtra("masterPin", masterPin))
+                setResult(14523, Intent().putExtra("masterPin", masterPin))
                 finish()
                 overridePendingTransition(
                         R.anim.anim_0,

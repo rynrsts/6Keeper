@@ -304,6 +304,18 @@
     <string name="user_edit_new_pass">New Password</string>
     <string name="user_edit_pass_mes">Wrong Current Password!</string>
     <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
+    <string name="user_edit_master_pin_note">
+        Changing the Master PIN will require you to:
+    </string>
+    <string name="user_edit_master_pin_note_1">
+        (1) Enter the desired new Master PIN,
+    </string>
+    <string name="user_edit_master_pin_note_2">
+        (2) Confirm the Master PIN by reentering it again, and
+    </string>
+    <string name="user_edit_master_pin_note_3">
+        (3) Confirm the action of changing the Master PIN by entering the current or old Master PIN.
+    </string>
 
     <!-- Dummy -->
     <string name="dummy_dummy">Dummy</string>
