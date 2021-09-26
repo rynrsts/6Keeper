@@ -13,6 +13,10 @@
         assessing and suggesting passwords to mitigate risks and increase security.
     </string>
 
+    <!-- Accounts -->
+    <string name="accounts_category_name">Category Name</string>
+    <string name="accounts_new_category">New Category</string>
+
     <!-- Confirm Action -->
     <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
 
