@@ -18,6 +18,9 @@ class DatabaseHandlerClass(context: Context) :
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
         private const val TABLE_SAVED_PASS = "SavedPasswordTable"
+        private const val TABLE_CATEGORIES = "CategoriesTable"
+        private const val TABLE_PLATFORMS = "PlatformsTable"
+        private const val TABLE_ACCOUNTS = "AccountsTable"
 
         private const val KEY_USER_ID = "user_id"
 
@@ -41,6 +44,28 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_PASS_ID = "pass_id"
         private const val KEY_SAVED_PASS = "saved_password"
         // KEY_CREATION_DATE = "creation_date"
+
+        // TABLE_CATEGORIES
+        private const val KEY_CATEGORY_ID = "category_id"
+        private const val KEY_CATEGORY_NAME = "category_name"
+
+        // TABLE_PLATFORMS
+        private const val KEY_PLATFORM_ID = "platform_id"
+        private const val KEY_PLATFORM_NAME = "platform_name"
+//        private const val KEY_CATEGORY_ID = "category_id"
+
+        // TABLE_ACCOUNTS
+        private const val KEY_ACCOUNT_ID = "account_id"
+        private const val KEY_ACCOUNT_NAME = "account_name"
+        private const val KEY_ACCOUNT_USERNAME = "account_username"
+        private const val KEY_ACCOUNT_EMAIL = "account_email"
+        private const val KEY_ACCOUNT_MOBILE_NUMBER = "account_mobile_number"
+        private const val KEY_ACCOUNT_PASSWORD = "account_password"
+        private const val KEY_ACCOUNT_APPLICATION = "account_application"
+        private const val KEY_ACCOUNT_WEBSITE = "account_website"
+        private const val KEY_ACCOUNT_DESCRIPTION = "account_description"
+        private const val KEY_ACCOUNT_FAVORITES = "account_favorites"
+//        private const val KEY_PLATFORM_ID = "platform_id"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -74,21 +99,60 @@ class DatabaseHandlerClass(context: Context) :
                         ")"
                 )
 
+        val createCategoriesTable = (
+                "CREATE TABLE " + TABLE_CATEGORIES + "(" +
+                        KEY_CATEGORY_ID + " TEXT," +
+                        KEY_CATEGORY_NAME + " TEXT" +
+                        ")"
+                )
+
+        val createPlatformsTable = (
+                "CREATE TABLE " + TABLE_PLATFORMS + "(" +
+                        KEY_PLATFORM_ID + " TEXT," +
+                        KEY_PLATFORM_NAME + " TEXT," +
+                        KEY_CATEGORY_ID + " TEXT" +
+                        ")"
+                )
+
+        val createAccountsTable = (
+                "CREATE TABLE " + TABLE_ACCOUNTS + "(" +
+                        KEY_ACCOUNT_ID + " TEXT," +
+                        KEY_ACCOUNT_NAME + " TEXT," +
+                        KEY_ACCOUNT_USERNAME + " TEXT," +
+                        KEY_ACCOUNT_EMAIL + " TEXT," +
+                        KEY_ACCOUNT_MOBILE_NUMBER + " TEXT," +
+                        KEY_ACCOUNT_PASSWORD + " TEXT," +
+                        KEY_ACCOUNT_APPLICATION + " TEXT," +
+                        KEY_ACCOUNT_WEBSITE + " TEXT," +
+                        KEY_ACCOUNT_DESCRIPTION + " TEXT," +
+                        KEY_ACCOUNT_FAVORITES + " TEXT," +
+                        KEY_PLATFORM_ID + " TEXT" +
+                        ")"
+                )
+
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
         db?.execSQL(createSavedPassTable)
+        db?.execSQL(createCategoriesTable)
+        db?.execSQL(createPlatformsTable)
+        db?.execSQL(createAccountsTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_SAVED_PASS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNTS")
         onCreate(db)
     }
 
     /*
      *******************************************************************************************
+     *******************************************************************************************
      *******************************************************************************************    ADD
+     *******************************************************************************************
      *******************************************************************************************
      */
 
@@ -148,9 +212,26 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun addCategory(userCategory: UserCategoryModelClass): Long {                         // Add Generated Password
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_CATEGORY_ID, userCategory.categoryId)
+            put(KEY_CATEGORY_NAME, userCategory.categoryName)
+        }
+
+        val success = db.insert(TABLE_CATEGORIES, null, contentValues)
+
+        db.close()
+        return success
+    }
+
     /*
      *******************************************************************************************
+     *******************************************************************************************
      *******************************************************************************************    VIEW
+     *******************************************************************************************
      *******************************************************************************************
      */
 
@@ -256,7 +337,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewUsername(): String {
+    fun viewUsername(): String {                                                                    // View Username
         val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
         val db = this.readableDatabase
         val cursor: Cursor?
@@ -317,9 +398,45 @@ class DatabaseHandlerClass(context: Context) :
         return userSavedPassList
     }
 
+    @SuppressLint("Recycle")
+    fun viewCategory(): List<UserCategoryModelClass> {                                              // View saved password
+        val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var categoryId: String
+        var categoryName: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                categoryId = cursor.getString(cursor.getColumnIndex("category_id"))
+                categoryName = cursor.getString(cursor.getColumnIndex("category_name"))
+
+                val user = UserCategoryModelClass(
+                        categoryId = categoryId,
+                        categoryName = categoryName
+                )
+                userCategoryList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        db.close()
+        return userCategoryList
+    }
+
     /*
      *******************************************************************************************
+     *******************************************************************************************
      *******************************************************************************************    UPDATE
+     *******************************************************************************************
      *******************************************************************************************
      */
 
@@ -416,7 +533,9 @@ class DatabaseHandlerClass(context: Context) :
 
     /*
      *******************************************************************************************
+     *******************************************************************************************
      *******************************************************************************************    DELETE
+     *******************************************************************************************
      *******************************************************************************************
      */
 
@@ -426,6 +545,9 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.delete(TABLE_USER_ACC, "", null)
         db.delete(TABLE_USER_INFO, "", null)
         db.delete(TABLE_SAVED_PASS, "", null)
+        db.delete(TABLE_CATEGORIES, "", null)
+        db.delete(TABLE_PLATFORMS, "", null)
+        db.delete(TABLE_ACCOUNTS, "", null)
 
         db.close()
         return success

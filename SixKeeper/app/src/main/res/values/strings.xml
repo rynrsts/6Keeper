@@ -16,6 +16,8 @@
     <!-- Accounts -->
     <string name="accounts_category_name">Category Name</string>
     <string name="accounts_new_category">New Category</string>
+    <string name="accounts_new_category_mes">New category added!</string>
+    <string name="accounts_new_category_alert_mes">Nothing to add</string>
 
     <!-- Confirm Action -->
     <string name="confirm_confirm_action">Confirm Action with Master PIN</string>

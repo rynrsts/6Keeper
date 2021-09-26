@@ -29,7 +29,7 @@ class SavedPasswordFragment : Fragment() {
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
-        attActivity = activity                                                                      // Attach activty
+        attActivity = activity                                                                      // Attach activity
     }
 
     private fun viewSavedPass() {                                                                   // View saved password

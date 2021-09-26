@@ -198,13 +198,15 @@ open class PasswordGeneratorProcessClass : Fragment() {
             if (status > -1) {
                 toast = Toast.makeText(
                         appCompatActivity.applicationContext,
-                        R.string.pass_generator_pass_saved, Toast.LENGTH_LONG
+                        R.string.pass_generator_pass_saved,
+                        Toast.LENGTH_LONG
                 )
             }
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
-                    R.string.pass_generator_pass_already_saved, Toast.LENGTH_LONG
+                    R.string.pass_generator_pass_already_saved,
+                    Toast.LENGTH_LONG
             )
         }
 
