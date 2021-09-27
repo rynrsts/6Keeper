@@ -283,6 +283,7 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
         db.close()
         return userAccList
     }
@@ -332,6 +333,7 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
         db.close()
         return userInfoList
     }
@@ -357,6 +359,7 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
         db.close()
         return userUsername
     }
@@ -394,12 +397,13 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
         db.close()
         return userSavedPassList
     }
 
     @SuppressLint("Recycle")
-    fun viewCategory(): List<UserCategoryModelClass> {                                              // View saved password
+    fun viewCategory(): List<UserCategoryModelClass> {                                              // View category
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
         val db = this.readableDatabase
@@ -428,9 +432,66 @@ class DatabaseHandlerClass(context: Context) :
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
         db.close()
         return userCategoryList
     }
+
+    fun viewNumberOfPlatforms(categoryId: String): Int {
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        val num = cursor.count
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+//    @SuppressLint("Recycle")
+//    fun viewPlatform(): List<UserPlatformModelClass> {                                              // View platform
+//        val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
+//        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS"
+//        val db = this.readableDatabase
+//        val cursor: Cursor?
+//
+//        try {
+//            cursor = db.rawQuery(selectQuery, null)
+//        } catch (e: SQLiteException) {
+//            db.execSQL(selectQuery)
+//            return ArrayList()
+//        }
+//
+//        var platformId: String
+//        var platformName: String
+//        var categoryId: String
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                platformId = cursor.getString(cursor.getColumnIndex("platform_id"))
+//                platformName = cursor.getString(cursor.getColumnIndex("platform_name"))
+//                categoryId = cursor.getString(cursor.getColumnIndex("category_id"))
+//
+//                val user = UserPlatformModelClass(
+//                        platformId = platformId,
+//                        platformName = platformName,
+//                        categoryId = categoryId
+//                )
+//                userPlatformList.add(user)
+//            } while (cursor.moveToNext())
+//        }
+//
+//        db.close()
+//        return userPlatformList
+//    }
 
     /*
      *******************************************************************************************

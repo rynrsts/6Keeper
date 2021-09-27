@@ -33,9 +33,9 @@ class SavedPasswordFragment : Fragment() {
     }
 
     private fun viewSavedPass() {                                                                   // View saved password
-        val databaseHandler = DatabaseHandlerClass(attActivity)
+        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val encodingClass = EncodingClass()
-        val userSavedPass: List<UserSavedPassModelClass> = databaseHandler.viewSavedPass()
+        val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
 
         val userSavedPassId = Array(userSavedPass.size) { "0" }
         val userSavedPassPassword = Array(userSavedPass.size) { "null" }

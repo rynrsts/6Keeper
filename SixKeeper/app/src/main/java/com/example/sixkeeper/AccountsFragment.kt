@@ -10,10 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -22,6 +19,8 @@ import androidx.fragment.app.Fragment
 class AccountsFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -34,8 +33,9 @@ class AccountsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appCompatActivity = activity as AppCompatActivity
+        setVariables()
         closeKeyboard()
+        populateCategories()
         setOnClick()
     }
 
@@ -43,6 +43,12 @@ class AccountsFragment : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    private fun setVariables() {
+        appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
     }
 
     private fun closeKeyboard() {
@@ -57,6 +63,27 @@ class AccountsFragment : Fragment() {
                     0
             )
         }
+    }
+
+    private fun populateCategories() {
+        val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
+        val userCategoryName = Array(userCategory.size) { "0" }
+        val userNumberOfPlatforms = Array(userCategory.size) { "0" }
+
+        for ((index, u) in userCategory.withIndex()) {
+            userCategoryName[index] = encodingClass.decodeData(u.categoryName)
+            userNumberOfPlatforms[index] =
+                    (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId) - 1).toString()
+        }
+
+        val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
+                attActivity,
+                userCategoryName,
+                userNumberOfPlatforms
+        )
+        val lvAccountsContainer: ListView = appCompatActivity.findViewById(R.id.lvAccountsContainer)
+
+        lvAccountsContainer.adapter = categoriesPlatformsListAdapter
     }
 
     @SuppressLint("InflateParams")
@@ -82,10 +109,10 @@ class AccountsFragment : Fragment() {
             ivAccountsAddNew.setImageResource(R.drawable.ic_format_list_bulleted_light_black)
 
             builder.setPositiveButton("Add") { _: DialogInterface, _: Int ->
-                val addNewCategory = etAccountsAddNew.text.toString()
+                val newCategory = etAccountsAddNew.text.toString()
 
-                if (addNewCategory.isNotEmpty()) {
-                    addNewCategory(addNewCategory)
+                if (newCategory.isNotEmpty()) {
+                    addNewCategory(newCategory)
                     closeKeyboard()
                 } else {
                     val toast: Toast = Toast.makeText(
@@ -114,15 +141,17 @@ class AccountsFragment : Fragment() {
         }
     }
 
-    private fun addNewCategory(categoryName: String) {                                                  // Add new category
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+    private fun addNewCategory(categoryName: String) {                                              // Add new category
         val encodingClass = EncodingClass()
         val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
+        var categoryId = 0
 
-        val categoryId: Int = if (userCategory.isNullOrEmpty()) {
-            10000
+        if (userCategory.isNullOrEmpty()) {
+            categoryId = 10000
         } else {
-            Integer.parseInt(userCategory.last().toString()) + 1
+            for (u in userCategory) {
+                categoryId = Integer.parseInt(encodingClass.decodeData(u.categoryId)) + 1
+            }
         }
 
         val status = databaseHandlerClass.addCategory(
@@ -142,6 +171,8 @@ class AccountsFragment : Fragment() {
                 setGravity(Gravity.CENTER, 0, 0)
                 show()
             }
+
+            populateCategories()
         }
     }
 }

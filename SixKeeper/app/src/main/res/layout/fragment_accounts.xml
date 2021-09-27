@@ -7,18 +7,26 @@
     android:paddingTop="?attr/actionBarSize"
     tools:context=".AccountsFragment">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAccountsSearchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:scrollbarThumbVertical="@null"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clAccountsSearchBox">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ListView
+            android:id="@+id/lvAccountsContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
-    </ScrollView>
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/ivAccountsAddCategories"
