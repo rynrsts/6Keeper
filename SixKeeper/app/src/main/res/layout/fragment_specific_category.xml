@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?attr/actionBarSize"
-    tools:context=".AccountsFragment">
+    tools:context=".SpecificCategoryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clAccountsSearchBox"
+        android:id="@+id/clSpecificCatSearchBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="30dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/etAccountsSearchBox"
+            android:id="@+id/etSpecificCatSearchBox"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:background="@drawable/layout_edit_text_search"
@@ -31,40 +31,40 @@
             tools:ignore="Autofill" />
 
         <ImageView
-            android:id="@+id/ivAccountsSearchButton"
+            android:id="@+id/ivSpecificCatSearchButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:background="@drawable/layout_button_search"
             android:src="@drawable/ic_search_white"
-            app:layout_constraintBottom_toBottomOf="@+id/etAccountsSearchBox"
+            app:layout_constraintBottom_toBottomOf="@+id/etSpecificCatSearchBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/etAccountsSearchBox"
+            app:layout_constraintTop_toTopOf="@+id/etSpecificCatSearchBox"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vAccountsSearch"
+        android:id="@+id/vSpecificCatSearch"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/clAccountsSearchBox" />
+        app:layout_constraintTop_toBottomOf="@+id/clSpecificCatSearchBox" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vAccountsSearch">
+        app:layout_constraintTop_toBottomOf="@+id/vSpecificCatSearch">
 
         <ListView
-            android:id="@+id/lvAccountsContainer"
+            android:id="@+id/lvSpecificCatContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/ivAccountsAddCategories"
+        android:id="@+id/ivSpecificCatAddPlatforms"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginEnd="18dp"

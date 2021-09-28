@@ -171,26 +171,28 @@ open class PasswordGeneratorProcessClass : Fragment() {
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
         val passId: Int = (10000..99999).random()
+        var encodedGeneratedPass = ""
         var existing = false
+        var toast: Toast? = null
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
         for (u in userSavedPass) {
-            if (generatedPass == encodingClass.decodeData(u.generatedPassword)) {
+            encodedGeneratedPass = encodingClass.encodeData(generatedPass)
+
+            if (encodedGeneratedPass == u.generatedPassword) {
                 existing = true
                 break
             }
         }
 
-        var toast: Toast? = null
-
         if (!existing) {
             val status = databaseHandlerClass.addGeneratedPass(
                     UserSavedPassModelClass(
                             encodingClass.encodeData(passId.toString()),
-                            encodingClass.encodeData(generatedPass),
+                            encodedGeneratedPass,
                             encodingClass.encodeData(date)
                     )
             )

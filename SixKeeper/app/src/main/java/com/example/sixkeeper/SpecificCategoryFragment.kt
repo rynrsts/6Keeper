@@ -3,41 +3,34 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
-import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
 
-
-class AccountsFragment : AccountsProcessClass() {
+class SpecificCategoryFragment : SpecificCategoryProcessClass() {
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_accounts, container, false)
+        return inflater.inflate(R.layout.fragment_specific_category, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
-        closeKeyboard()
-        populateCategories()
+        populatePlatforms()
         setOnClick()
     }
 
     @SuppressLint("InflateParams")
     private fun setOnClick() {
-        val ivAccountsAddCategories: ImageView =
-                getAppCompatActivity().findViewById(R.id.ivAccountsAddCategories)
+        val ivSpecificCatAddPlatforms: ImageView =
+                getAppCompatActivity().findViewById(R.id.ivSpecificCatAddPlatforms)
 
-        ivAccountsAddCategories.setOnClickListener {
+        ivSpecificCatAddPlatforms.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
             val inflater = this.layoutInflater
             val dialogView = inflater.inflate(R.layout.layout_accounts_add_new, null)
@@ -51,14 +44,14 @@ class AccountsFragment : AccountsProcessClass() {
             val etAccountsAddNew: EditText = dialogView.findViewById(R.id.etAccountsAddNew)
             val ivAccountsAddNew: ImageView = dialogView.findViewById(R.id.ivAccountsAddNew)
 
-            tvAccountsAddNew.setText(R.string.accounts_category_name)
+            tvAccountsAddNew.setText(R.string.specific_category_platform_name)
             ivAccountsAddNew.setImageResource(R.drawable.ic_format_list_bulleted_light_black)
 
             builder.setPositiveButton("Add") { _: DialogInterface, _: Int ->
-                val newCategory = etAccountsAddNew.text.toString()
+                val newPlatform = etAccountsAddNew.text.toString()
 
-                if (newCategory.isNotEmpty()) {
-                    addNewCategory(newCategory)
+                if (newPlatform.isNotEmpty()) {
+                    addNewPlatform(newPlatform)
                 } else {
                     val toast: Toast = Toast.makeText(
                             getAppCompatActivity().applicationContext,
@@ -95,22 +88,23 @@ class AccountsFragment : AccountsProcessClass() {
             alert.apply {
                 window?.setBackgroundDrawable(
                         ContextCompat.getDrawable(
-                                getAppCompatActivity(), R.drawable.layout_alert_dialog
+                                getAppCompatActivity(),
+                                R.drawable.layout_alert_dialog
                         )
                 )
-                setTitle(R.string.accounts_new_category)
+                setTitle(R.string.specific_category_new_platform)
                 show()
             }
         }
 
-        getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedCategoryId = getLvAccountsContainer().getItemAtPosition(i).toString()
-
-            val action = AccountsFragmentDirections
-                    .actionAccountsFragmentToSpecificCategoryFragment(selectedCategoryId)
-            findNavController().navigate(action)
-
-            closeKeyboard()
-        })
+//        getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
+//            val selectedCategoryId = getLvAccountsContainer().getItemAtPosition(i).toString()
+//
+//            val action = AccountsFragmentDirections
+//                    .actionAccountsFragmentToSpecificCategoryFragment(selectedCategoryId)
+//            findNavController().navigate(action)
+//
+//            closeKeyboard()
+//        })
     }
 }

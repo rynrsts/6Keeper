@@ -49,7 +49,27 @@
         android:id="@+id/accountsFragment"
         android:name="com.example.sixkeeper.AccountsFragment"
         android:label="@string/many_accounts"
-        tools:layout="@layout/fragment_accounts" />
+        tools:layout="@layout/fragment_accounts" >
+
+        <action
+            android:id="@+id/action_accountsFragment_to_specificCategoryFragment"
+            app:destination="@id/specificCategoryFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/specificCategoryFragment"
+        android:name="com.example.sixkeeper.SpecificCategoryFragment"
+        android:label="@string/many_specific_category"
+        tools:layout="@layout/fragment_specific_category">
+
+        <argument
+            android:name="specificCategoryId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"

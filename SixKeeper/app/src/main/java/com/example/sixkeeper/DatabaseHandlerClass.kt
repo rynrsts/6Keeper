@@ -212,7 +212,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun addCategory(userCategory: UserCategoryModelClass): Long {                         // Add Generated Password
+    fun addCategory(userCategory: UserCategoryModelClass): Long {                                   // Add Category
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -222,6 +222,22 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_CATEGORIES, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addPlatform(userPlatform: UserPlatformModelClass): Long {                                   // Add Platform
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_PLATFORM_ID, userPlatform.platformId)
+            put(KEY_PLATFORM_NAME, userPlatform.platformName)
+            put(KEY_CATEGORY_ID, userPlatform.categoryId)
+        }
+
+        val success = db.insert(TABLE_PLATFORMS, null, contentValues)
 
         db.close()
         return success
@@ -259,16 +275,16 @@ class DatabaseHandlerClass(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                userId = cursor.getString(cursor.getColumnIndex("user_id"))
-                userUsername = cursor.getString(cursor.getColumnIndex("username"))
-                userPassword = cursor.getBlob(cursor.getColumnIndex("password"))
-                userMasterPIN = cursor.getBlob(cursor.getColumnIndex("master_pin"))
+                userId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
+                userUsername = cursor.getString(cursor.getColumnIndex(KEY_USERNAME))
+                userPassword = cursor.getBlob(cursor.getColumnIndex(KEY_PASSWORD))
+                userMasterPIN = cursor.getBlob(cursor.getColumnIndex(KEY_MASTER_PIN))
                 userAccountStatus =
-                        cursor.getString(cursor.getColumnIndex("account_status"))
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_STATUS))
                 userCreationDate =
-                        cursor.getString(cursor.getColumnIndex("creation_date"))
+                        cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
                 userLastLogin =
-                        cursor.getString(cursor.getColumnIndex("last_login"))
+                        cursor.getString(cursor.getColumnIndex(KEY_LAST_LOGIN))
 
                 val user = UserAccModelClass(
                         userId = userId,
@@ -312,13 +328,13 @@ class DatabaseHandlerClass(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                userId = cursor.getString(cursor.getColumnIndex("user_id"))
-                userFirstName = cursor.getString(cursor.getColumnIndex("first_name"))
-                userLastName = cursor.getString(cursor.getColumnIndex("last_name"))
-                userBirthDate = cursor.getString(cursor.getColumnIndex("birth_date"))
-                userEmail = cursor.getString(cursor.getColumnIndex("email"))
-                userMobileNumber = cursor.getString(cursor.getColumnIndex("mobile_number"))
-                userLastUpdate = cursor.getString(cursor.getColumnIndex("last_update"))
+                userId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
+                userFirstName = cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME))
+                userLastName = cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME))
+                userBirthDate = cursor.getString(cursor.getColumnIndex(KEY_BIRTH_DATE))
+                userEmail = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
+                userMobileNumber = cursor.getString(cursor.getColumnIndex(KEY_MOBILE_NUMBER))
+                userLastUpdate = cursor.getString(cursor.getColumnIndex(KEY_LAST_UPDATE))
 
                 val user = UserInfoModelClass(
                         userId = userId,
@@ -355,7 +371,7 @@ class DatabaseHandlerClass(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                userUsername = cursor.getString(cursor.getColumnIndex("username"))
+                userUsername = cursor.getString(cursor.getColumnIndex(KEY_USERNAME))
             } while (cursor.moveToNext())
         }
 
@@ -384,9 +400,9 @@ class DatabaseHandlerClass(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                passId = cursor.getString(cursor.getColumnIndex("pass_id"))
-                passPassword = cursor.getString(cursor.getColumnIndex("saved_password"))
-                passCreationDate = cursor.getString(cursor.getColumnIndex("creation_date"))
+                passId = cursor.getString(cursor.getColumnIndex(KEY_PASS_ID))
+                passPassword = cursor.getString(cursor.getColumnIndex(KEY_SAVED_PASS))
+                passCreationDate = cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
 
                 val user = UserSavedPassModelClass(
                         passId = passId,
@@ -421,8 +437,8 @@ class DatabaseHandlerClass(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                categoryId = cursor.getString(cursor.getColumnIndex("category_id"))
-                categoryName = cursor.getString(cursor.getColumnIndex("category_name"))
+                categoryId = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_ID))
+                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
 
                 val user = UserCategoryModelClass(
                         categoryId = categoryId,
@@ -449,49 +465,71 @@ class DatabaseHandlerClass(context: Context) :
             return 0
         }
 
-        val num = cursor.count
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
 
         cursor.close()
         db.close()
         return num
     }
 
-//    @SuppressLint("Recycle")
-//    fun viewPlatform(): List<UserPlatformModelClass> {                                              // View platform
-//        val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
-//        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS"
-//        val db = this.readableDatabase
-//        val cursor: Cursor?
-//
-//        try {
-//            cursor = db.rawQuery(selectQuery, null)
-//        } catch (e: SQLiteException) {
-//            db.execSQL(selectQuery)
-//            return ArrayList()
-//        }
-//
-//        var platformId: String
-//        var platformName: String
-//        var categoryId: String
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                platformId = cursor.getString(cursor.getColumnIndex("platform_id"))
-//                platformName = cursor.getString(cursor.getColumnIndex("platform_name"))
-//                categoryId = cursor.getString(cursor.getColumnIndex("category_id"))
-//
-//                val user = UserPlatformModelClass(
-//                        platformId = platformId,
-//                        platformName = platformName,
-//                        categoryId = categoryId
-//                )
-//                userPlatformList.add(user)
-//            } while (cursor.moveToNext())
-//        }
-//
-//        db.close()
-//        return userPlatformList
-//    }
+    @SuppressLint("Recycle")
+    fun viewPlatform(id: String): List<UserPlatformModelClass> {                                              // View platform
+        val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var platformId: String
+        var platformName: String
+        var categoryId: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
+                platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
+                categoryId = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_ID))
+
+                val user = UserPlatformModelClass(
+                        platformId = platformId,
+                        platformName = platformName,
+                        categoryId = categoryId
+                )
+                userPlatformList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userPlatformList
+    }
+
+    fun viewNumberOfAccounts(platformId: String): Int {
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$platformId'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
 
     /*
      *******************************************************************************************
@@ -512,7 +550,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "user_id='$id'",
+                "$KEY_USER_ID='$id'",
                 null
         )
 
@@ -531,7 +569,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_USER_ACC,
                 contentValues,
-                "user_id='$id'",
+                "$KEY_USER_ID='$id'",
                 null
         )
 

@@ -9,9 +9,10 @@ import android.widget.TextView
 
 class CategoriesPlatformsListAdapter(
         private val context: Activity,
-        private val categoryName: Array<String>,
-        private val numberOfPlatforms: Array<String>
-) : ArrayAdapter<String>(context, R.layout.layout_categories_platforms_list_adapter, categoryName) {
+        id: Array<String>,
+        private val name: Array<String>,
+        private val number: Array<String>
+) : ArrayAdapter<String>(context, R.layout.layout_categories_platforms_list_adapter, id) {
 
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
@@ -27,8 +28,8 @@ class CategoriesPlatformsListAdapter(
         val tvCategoriesPlatformsNumber =
                 rowView.findViewById(R.id.tvCategoriesPlatformsNumber) as TextView
 
-        tvCategoriesPlatformsName.text = categoryName[position]
-        tvCategoriesPlatformsNumber.text = "Platforms: ${numberOfPlatforms[position]}"
+        tvCategoriesPlatformsName.text = name[position]
+        tvCategoriesPlatformsNumber.text = "Platforms: ${number[position]}"
 
         return rowView
     }

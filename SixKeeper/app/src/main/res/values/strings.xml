@@ -17,7 +17,9 @@
     <string name="accounts_category_name">Category Name</string>
     <string name="accounts_new_category">New Category</string>
     <string name="accounts_new_category_mes">New category added!</string>
-    <string name="accounts_new_category_alert_mes">Nothing to add</string>
+    <string name="accounts_new_category_alert_existing">
+        Category is already existing
+    </string>
 
     <!-- Confirm Action -->
     <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
@@ -104,6 +106,7 @@
     <string name="many_mobile_number_hint"><i>ex. 09123456789</i></string>
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
+    <string name="many_nothing_to_add">Nothing to add</string>
     <string name="many_one">1</string>
     <string name="many_password">Password</string>
     <string name="many_password_generator">Password Generator</string>
@@ -111,6 +114,7 @@
     <string name="many_required_mes">*Required</string>
     <!--    TODO: <string name="many_send_code">Send Code</string>-->
     <string name="many_save">Save</string>
+    <string name="many_search">Search</string>
     <string name="many_settings">Settings</string>
     <string name="many_setup_complete">Setup Complete!</string>
     <string name="many_setup_face_recognition">Setup Face Recognition</string>
@@ -118,6 +122,7 @@
     <string name="many_setup_master_pin">Setup Master PIN</string>
     <string name="many_seven">7</string>
     <string name="many_six">6</string>
+    <string name="many_specific_category">Specific Category</string>
     <string name="many_terms_conditions">Terms and Conditions</string>
     <string name="many_terms_conditions_bold"><b>Terms and Conditions</b></string>
     <string name="many_three">3</string>
@@ -188,6 +193,13 @@
     <string name="settings_hide_categories">Hide Categories</string>
     <string name="settings_security">Security</string>
     <string name="settings_themes">Themes</string>
+
+    <!-- Specific Category -->
+    <string name="specific_category_platform_name">Platform Name</string>
+    <string name="specific_category_new_platform">New Platform</string>
+    <string name="specific_category_new_platform_alert_existing">
+        Platform is already existing
+    </string>
 
     <!-- Terms and Conditions -->
     <string name="privacy_communication_content">
@@ -332,13 +344,5 @@
         magna eros quis urna.
     </string>
     <string name="title_activity_confirm_action">ConfirmActionActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>

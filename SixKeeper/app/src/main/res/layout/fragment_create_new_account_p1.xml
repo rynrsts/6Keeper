@@ -39,6 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/create_new_acc_p1_note"
+                android:textColor="@color/red"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
@@ -48,8 +49,8 @@
                 android:id="@+id/tvCreateNewAccP1FirstName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/many_first_name"
                 android:layout_marginTop="30dp"
+                android:text="@string/many_first_name"
                 app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Note" />
