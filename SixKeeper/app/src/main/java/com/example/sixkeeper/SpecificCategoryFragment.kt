@@ -21,14 +21,23 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
-        populatePlatforms()
+        populatePlatforms("")
         setOnClick()
     }
 
     @SuppressLint("InflateParams")
     private fun setOnClick() {
+        val ivSpecificCatSearchButton: ImageView =
+                getAppCompatActivity().findViewById(R.id.ivSpecificCatSearchButton)
         val ivSpecificCatAddPlatforms: ImageView =
                 getAppCompatActivity().findViewById(R.id.ivSpecificCatAddPlatforms)
+
+        ivSpecificCatSearchButton.setOnClickListener {
+            val search = getEtSpecificCatSearchBox().text.toString()
+
+            populatePlatforms(search)
+            closeKeyboard()
+        }
 
         ivSpecificCatAddPlatforms.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
@@ -45,7 +54,7 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             val ivAccountsAddNew: ImageView = dialogView.findViewById(R.id.ivAccountsAddNew)
 
             tvAccountsAddNew.setText(R.string.specific_category_platform_name)
-            ivAccountsAddNew.setImageResource(R.drawable.ic_format_list_bulleted_light_black)
+            ivAccountsAddNew.setImageResource(R.drawable.ic_globe_light_black)
 
             builder.setPositiveButton("Add") { _: DialogInterface, _: Int ->
                 val newPlatform = etAccountsAddNew.text.toString()

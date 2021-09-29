@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ open class SpecificCategoryProcessClass : Fragment() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
 
+    private lateinit var etSpecificCatSearchBox: EditText
     private lateinit var lvSpecificCatContainer: ListView
 
     @Suppress("DEPRECATION")
@@ -31,26 +33,49 @@ open class SpecificCategoryProcessClass : Fragment() {
         return appCompatActivity
     }
 
+    fun getEtSpecificCatSearchBox(): EditText {
+        return etSpecificCatSearchBox
+    }
+
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
 
+        etSpecificCatSearchBox = getAppCompatActivity().findViewById(R.id.etSpecificCatSearchBox)
         lvSpecificCatContainer = appCompatActivity.findViewById(R.id.lvSpecificCatContainer)
     }
 
-    fun populatePlatforms() {
+    @SuppressLint("DefaultLocale")
+    fun populatePlatforms(platformName: String) {
         val userPlatform: List<UserPlatformModelClass> =
                 databaseHandlerClass.viewPlatform(encodingClass.encodeData(args.specificCategoryId))
-        val userPlatformId = Array(userPlatform.size) { "0" }
-        val userPlatformName = Array(userPlatform.size) { "0" }
-        val userNumberOfAccounts = Array(userPlatform.size) { "0" }
+        var size = 0
 
-        for ((index, u) in userPlatform.withIndex()) {
-            userPlatformId[index] = encodingClass.decodeData(u.platformId)
-            userPlatformName[index] = encodingClass.decodeData(u.platformName)
-            userNumberOfAccounts[index] =
-                    (databaseHandlerClass.viewNumberOfAccounts(u.categoryId)).toString()
+        for (u in userPlatform) {
+            val uPlatformName = encodingClass.decodeData(u.platformName)
+
+            if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
+                size++
+            }
+        }
+
+        val userPlatformId = Array(size) { "0" }
+        val userPlatformName = Array(size) { "0" }
+        val userNumberOfAccounts = Array(size) { "0" }
+        var index = 0
+
+        for (u in userPlatform) {
+            val uPlatformName = encodingClass.decodeData(u.platformName)
+
+            if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
+                userPlatformId[index] = encodingClass.decodeData(u.platformId)
+                userPlatformName[index] = encodingClass.decodeData(u.platformName)
+                userNumberOfAccounts[index] =
+                        (databaseHandlerClass.viewNumberOfAccounts(u.categoryId)).toString()
+
+                index++
+            }
         }
 
         val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
@@ -65,7 +90,6 @@ open class SpecificCategoryProcessClass : Fragment() {
 
     @SuppressLint("ShowToast")
     fun addNewPlatform(platformName: String) {                                                      // Add new platform
-        val encodingClass = EncodingClass()
         val userPlatform: List<UserPlatformModelClass> =
                 databaseHandlerClass.viewPlatform(encodingClass.encodeData(args.specificCategoryId))
         var platformId = 0
@@ -106,7 +130,7 @@ open class SpecificCategoryProcessClass : Fragment() {
                         Toast.LENGTH_LONG
                 )
 
-                populatePlatforms()
+                populatePlatforms("")
             }
         } else {
             toast = Toast.makeText(

@@ -57,6 +57,11 @@
             android:title="@string/many_terms_conditions" />
 
         <item
+            android:id="@+id/privacyPolicyFragment"
+            android:icon="@drawable/ic_terms_and_conditions_light_black"
+            android:title="@string/many_privacy_policy" />
+
+        <item
             android:id="@+id/contactUsFragment"
             android:icon="@drawable/ic_feedback_black"
             android:title="@string/many_contact_us" />

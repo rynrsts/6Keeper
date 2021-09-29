@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Patterns
@@ -12,6 +13,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -526,8 +528,6 @@ open class UserAccountEditProcessClass : Fragment() {
 //                    val alert: AlertDialog = builder.create()
 //                    alert.setTitle(R.string.many_alert_title)
 //                    alert.show()
-//                } else {
-//                    cons
 //                }
 //            }
 //        })

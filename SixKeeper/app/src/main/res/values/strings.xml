@@ -107,9 +107,12 @@
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
     <string name="many_nothing_to_add">Nothing to add</string>
+    <string name="many_nothing_to_search">Nothing to search</string>
     <string name="many_one">1</string>
     <string name="many_password">Password</string>
     <string name="many_password_generator">Password Generator</string>
+    <string name="many_privacy_policy">Privacy Policy</string>
+    <string name="many_privacy_policy_bold"><b>Privacy Policy</b></string>
     <string name="many_recycle_bin">Recycle Bin</string>
     <string name="many_required_mes">*Required</string>
     <!--    TODO: <string name="many_send_code">Send Code</string>-->
@@ -178,30 +181,8 @@
     <string name="pass_generator_view_saved_pass">View Saved Password</string>
     <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>
 
-    <!-- Recycle Bin -->
-    <string name="recycle_bin_restore">Restore</string>
-    <string name="recycle_bin_select_all">Select All</string>
+    <!-- Privacy Policy -->
 
-    <!-- Settings -->
-    <string name="settings_auto_lock">Auto Lock</string>
-    <string name="settings_auto_lock_delay">Auto Lock Delay</string>
-    <string name="settings_block_app_ss">Block App Screenshot</string>
-    <string name="settings_block_textual_copy">Block Textual Copy</string>
-    <string name="settings_disable_notifications">Disable Notifications</string>
-    <string name="settings_disable_search">Disable Search</string>
-    <string name="settings_general">General</string>
-    <string name="settings_hide_categories">Hide Categories</string>
-    <string name="settings_security">Security</string>
-    <string name="settings_themes">Themes</string>
-
-    <!-- Specific Category -->
-    <string name="specific_category_platform_name">Platform Name</string>
-    <string name="specific_category_new_platform">New Platform</string>
-    <string name="specific_category_new_platform_alert_existing">
-        Platform is already existing
-    </string>
-
-    <!-- Terms and Conditions -->
     <string name="privacy_communication_content">
         We may use your personal information to contact you with marketing or promotional materials
         and other information that you might need to know.
@@ -242,6 +223,36 @@
         transmission over the Internet, or method of electronic storage, is 100% secure. While we
         strive to use acceptable means to protect your personal information.
     </string>
+    <string name="privacy_changes_title"><b>Changes To This Privacy Policy</b></string>
+    <string name="privacy_communication_title"><b>Communications</b></string>
+    <string name="privacy_information_title"><b>Information Collection and Use</b></string>
+    <string name="privacy_last_update">Last updated: August 31, 2021</string>
+    <string name="privacy_security_title"><b>Security</b></string>
+
+    <!-- Recycle Bin -->
+    <string name="recycle_bin_restore">Restore</string>
+    <string name="recycle_bin_select_all">Select All</string>
+
+    <!-- Settings -->
+    <string name="settings_auto_lock">Auto Lock</string>
+    <string name="settings_auto_lock_delay">Auto Lock Delay</string>
+    <string name="settings_block_app_ss">Block App Screenshot</string>
+    <string name="settings_block_textual_copy">Block Textual Copy</string>
+    <string name="settings_disable_notifications">Disable Notifications</string>
+    <string name="settings_disable_search">Disable Search</string>
+    <string name="settings_general">General</string>
+    <string name="settings_hide_categories">Hide Categories</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_themes">Themes</string>
+
+    <!-- Specific Category -->
+    <string name="specific_category_platform_name">Platform Name</string>
+    <string name="specific_category_new_platform">New Platform</string>
+    <string name="specific_category_new_platform_alert_existing">
+        Platform is already existing
+    </string>
+
+    <!-- Terms and Conditions -->
     <string name="terms_age_content">
         You must be at least 15 years of age before you can use this application. By using this
         application, you warrant that you are at least 15 years of age, and you may legally adhere
@@ -292,10 +303,6 @@
         We reserve all rights to terminate accounts, edit or remove content and cancel any services
         at our sole discretion.
     </string>
-    <string name="privacy_changes_title"><b>Changes To This Privacy Policy</b></string>
-    <string name="privacy_communication_title"><b>Communications</b></string>
-    <string name="privacy_information_title"><b>Information Collection and Use</b></string>
-    <string name="privacy_security_title"><b>Security</b></string>
     <string name="terms_age_title"><b>Age Restriction</b></string>
     <string name="terms_conditions_title"><b>Conditions of Use</b></string>
     <string name="terms_indemnification_title"><b>Indemnification</b></string>
@@ -344,5 +351,7 @@
         magna eros quis urna.
     </string>
     <string name="title_activity_confirm_action">ConfirmActionActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -103,8 +104,17 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
 
         clPassGeneratorView.setOnClickListener {
             closeKeyboard()
-            findNavController().navigate(                                                           // Go to Saved Password
-                    R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
+
+            val goToConfirmActivity = Intent(
+                    getAppCompatActivity(),
+                    ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            getAppCompatActivity().overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
             )
         }
 
@@ -122,6 +132,25 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)
                     show()
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    postDelayed(
+                            {
+                                findNavController().navigate(                                       // Go to Saved Password
+                                        R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
+                                )
+                            }, 250
+                    )
                 }
             }
         }

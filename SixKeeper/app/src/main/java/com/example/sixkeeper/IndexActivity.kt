@@ -51,6 +51,7 @@ class IndexActivity : AppCompatActivity() {
                         R.id.aboutUsFragment,
                         R.id.helpFragment,
                         R.id.termsConditionsFragment,
+                        R.id.privacyPolicyFragment,
                         R.id.contactUsFragment
                 ), drawerLayout
         )

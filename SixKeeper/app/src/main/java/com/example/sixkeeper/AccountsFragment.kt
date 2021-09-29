@@ -28,14 +28,23 @@ class AccountsFragment : AccountsProcessClass() {
 
         setVariables()
         closeKeyboard()
-        populateCategories()
+        populateCategories("")
         setOnClick()
     }
 
     @SuppressLint("InflateParams")
     private fun setOnClick() {
+        val ivAccountsSearchButton: ImageView =
+                getAppCompatActivity().findViewById(R.id.ivAccountsSearchButton)
         val ivAccountsAddCategories: ImageView =
                 getAppCompatActivity().findViewById(R.id.ivAccountsAddCategories)
+
+        ivAccountsSearchButton.setOnClickListener {
+            val search = getEtAccountsSearchBox().text.toString()
+
+            populateCategories(search)
+            closeKeyboard()
+        }
 
         ivAccountsAddCategories.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
@@ -110,6 +119,7 @@ class AccountsFragment : AccountsProcessClass() {
                     .actionAccountsFragmentToSpecificCategoryFragment(selectedCategoryId)
             findNavController().navigate(action)
 
+            getEtAccountsSearchBox().setText("")
             closeKeyboard()
         })
     }

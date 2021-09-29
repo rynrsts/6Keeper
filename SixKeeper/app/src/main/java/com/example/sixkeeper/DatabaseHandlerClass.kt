@@ -419,7 +419,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewCategory(): List<UserCategoryModelClass> {                                              // View category
+    fun viewCategory(): List<UserCategoryModelClass> {                                              // View categories
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
         val db = this.readableDatabase
@@ -453,7 +453,7 @@ class DatabaseHandlerClass(context: Context) :
         return userCategoryList
     }
 
-    fun viewNumberOfPlatforms(categoryId: String): Int {
+    fun viewNumberOfPlatforms(categoryId: String): Int {                                            // View number of platforms in a category
         val selectQuery = "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
         val db = this.readableDatabase
         val cursor: Cursor?
@@ -474,7 +474,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewPlatform(id: String): List<UserPlatformModelClass> {                                              // View platform
+    fun viewPlatform(id: String): List<UserPlatformModelClass> {                      // View platforms
         val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
         val db = this.readableDatabase
@@ -511,7 +511,7 @@ class DatabaseHandlerClass(context: Context) :
         return userPlatformList
     }
 
-    fun viewNumberOfAccounts(platformId: String): Int {
+    fun viewNumberOfAccounts(platformId: String): Int {                                             // View number of accounts in a platform
         val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$platformId'"
         val db = this.readableDatabase
         val cursor: Cursor?
