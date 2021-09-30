@@ -174,6 +174,17 @@
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate"
                 tools:ignore="ContentDescription" />
 
+<!--            <TextView-->
+<!--                android:id="@+id/tvCreateNewAccP1BirthDateSlash"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_marginStart="39dp"-->
+<!--                android:text="@string/many_birth_date_slash"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1BirthDate"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/ivCreateNewAccP1BirthDate"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate" />-->
+
             <LinearLayout
                 android:id="@+id/llCreateNewAccP1BirthDate"
                 android:layout_width="0dp"
@@ -249,8 +260,8 @@
                 android:background="@drawable/layout_edit_text"
                 android:hint="@string/many_mobile_number_hint"
                 android:inputType="number"
-                android:maxLength="11"
-                android:paddingStart="48dp"
+                android:maxLength="10"
+                android:paddingStart="84dp"
                 app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1MobileNumber"
@@ -267,6 +278,16 @@
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1MobileNumber"
                 tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1MobileNumberPrefix"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/many_mobile_number_prefix"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1MobileNumber"
+                app:layout_constraintStart_toEndOf="@+id/ivCreateNewAccP1MobileNumber"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1MobileNumber" />
 
             <LinearLayout
                 android:id="@+id/llCreateNewAccP1MobileNumber"

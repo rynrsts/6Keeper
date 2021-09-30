@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 
 class AboutUsFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -25,6 +28,7 @@ class AboutUsFragment : Fragment() {
 
         appCompatActivity = activity as AppCompatActivity
         closeKeyboard()
+        setOnClick()
     }
 
     private fun closeKeyboard() {
@@ -37,6 +41,26 @@ class AboutUsFragment : Fragment() {
             immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
                     appCompatActivity.currentFocus?.windowToken,
                     0
+            )
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    private fun setOnClick() {
+        val tvAboutUsTermsAndConditions: TextView =
+                appCompatActivity.findViewById(R.id.tvAboutUsTermsAndConditions)
+        val tvAboutUsPrivacyPolicy: TextView =
+                appCompatActivity.findViewById(R.id.tvAboutUsPrivacyPolicy)
+
+        tvAboutUsTermsAndConditions.setOnClickListener {
+            findNavController().navigate(                                                           // Go to Terms and Conditions
+                    R.id.action_aboutUsFragment_to_termsConditionsFragment
+            )
+        }
+
+        tvAboutUsPrivacyPolicy.setOnClickListener {
+            findNavController().navigate(                                                           // Go to Privacy Policy
+                    R.id.action_aboutUsFragment_to_privacyPolicyFragment
             )
         }
     }

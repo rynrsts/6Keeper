@@ -238,7 +238,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
         llCreateNewAccP1MobileNumber.removeAllViews()
 
         when (mobileNumber.length) {
-            11 -> {
+            10 -> {
                 validFields[4] = true
             }
             else -> {

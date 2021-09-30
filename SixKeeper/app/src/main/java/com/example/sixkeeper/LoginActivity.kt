@@ -9,8 +9,7 @@ import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 
 class LoginActivity : LoginValidationClass() {

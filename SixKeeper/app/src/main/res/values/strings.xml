@@ -44,7 +44,7 @@
         These cannot be changed once registered.
     </string>
     <string name="create_new_acc_p4_agree_to_terms">
-        I agree to the <u>Terms and Conditions</u>.
+        I agree to the Terms and Conditions, and Privacy Policy.
     </string>
     <string name="create_new_acc_p4_agree_to_terms_mes">
         Please read and agree to terms and conditions.
@@ -77,6 +77,7 @@
     <string name="many_birth_date_format_message">
         *Please use the format MM/DD/YYYY.
     </string>
+    <string name="many_birth_date_slash">/</string>
     <string name="many_dashboard">Dashboard</string>
     <string name="many_delete">Delete</string>
     <string name="many_edit">Edit</string>
@@ -103,7 +104,8 @@
     <string name="many_logout">Logout</string>
     <string name="many_logout_mes">Are you sure you want to log out?</string>
     <string name="many_mobile_number">Mobile Number</string>
-    <string name="many_mobile_number_hint"><i>ex. 09123456789</i></string>
+    <string name="many_mobile_number_hint">9123456789</string>
+    <string name="many_mobile_number_prefix">+63</string>
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
     <string name="many_nothing_to_add">Nothing to add</string>
@@ -113,6 +115,7 @@
     <string name="many_password_generator">Password Generator</string>
     <string name="many_privacy_policy">Privacy Policy</string>
     <string name="many_privacy_policy_bold"><b>Privacy Policy</b></string>
+    <string name="many_privacy_policy_underlined"><u>Privacy Policy</u></string>
     <string name="many_recycle_bin">Recycle Bin</string>
     <string name="many_required_mes">*Required</string>
     <!--    TODO: <string name="many_send_code">Send Code</string>-->
@@ -128,6 +131,7 @@
     <string name="many_specific_category">Specific Category</string>
     <string name="many_terms_conditions">Terms and Conditions</string>
     <string name="many_terms_conditions_bold"><b>Terms and Conditions</b></string>
+    <string name="many_terms_conditions_underlined"><u>Terms and Conditions</u></string>
     <string name="many_three">3</string>
     <string name="many_two">2</string>
     <string name="many_user_account">User Account</string>
@@ -136,7 +140,7 @@
     <string name="many_validate_email">
         *Must be a valid email address - username, at (@), domain, dot (.), and extension.
     </string>
-    <string name="many_validate_mobile_num">*Must be a valid 11-digit mobile number.</string>
+    <string name="many_validate_mobile_num">*Must be a valid mobile number.</string>
     <string name="many_validate_password">
         *Must be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
         (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),

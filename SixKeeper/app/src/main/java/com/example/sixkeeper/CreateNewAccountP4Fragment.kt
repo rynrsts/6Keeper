@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -41,11 +43,64 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         attActivity = activity                                                                      // Attach activity
     }
 
+    @SuppressLint("InflateParams")
     private fun setButtonOnClick() {
         val acbCreateNewAccP4MasterPIN: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP4MasterPIN)
+        val tvCreateNewAccP4Terms: TextView =
+                getAppCompatActivity().findViewById(R.id.tvCreateNewAccP4Terms)
+        val tvCreateNewAccP4Privacy: TextView =
+                getAppCompatActivity().findViewById(R.id.tvCreateNewAccP4Privacy)
         val acbCreateNewAccP4Register: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP4Register)
+
+        tvCreateNewAccP4Terms.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+            val inflater = this.layoutInflater
+            val dialogView = inflater.inflate(R.layout.fragment_terms_conditions, null)
+
+            builder.apply {
+                setView(dialogView)
+                setCancelable(false)
+            }
+            builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.apply {
+                window?.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                                context, R.drawable.layout_alert_dialog
+                        )
+                )
+                show()
+            }
+        }
+
+        tvCreateNewAccP4Privacy.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+            val inflater = this.layoutInflater
+            val dialogView = inflater.inflate(R.layout.fragment_privacy_policy, null)
+
+            builder.apply {
+                setView(dialogView)
+                setCancelable(false)
+            }
+            builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.apply {
+                window?.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                                context, R.drawable.layout_alert_dialog
+                        )
+                )
+                show()
+            }
+        }
 
         acbCreateNewAccP4MasterPIN.setOnClickListener {
             val goToCreateMasterPINActivity = Intent(

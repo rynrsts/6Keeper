@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Patterns
@@ -13,7 +12,6 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -89,9 +87,16 @@ open class UserAccountEditProcessClass : Fragment() {
     fun setView1() {                                                                                // View for First Name to Username
         val clUserAccountEditContainer: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
-        val layoutContainer = layoutInflater.inflate(
-                R.layout.layout_user_edit_1, view as ViewGroup?,  false
-        )
+
+        val layoutContainer = if (viewId == "mobile number") {
+            layoutInflater.inflate(
+                    R.layout.layout_user_edit_4, view as ViewGroup?,  false
+            )
+        } else {
+            layoutInflater.inflate(
+                    R.layout.layout_user_edit_1, view as ViewGroup?,  false
+            )
+        }
         clUserAccountEditContainer.addView(layoutContainer)
 
         tvUserEditLabel = appCompatActivity.findViewById(R.id.tvUserEditLabel)
