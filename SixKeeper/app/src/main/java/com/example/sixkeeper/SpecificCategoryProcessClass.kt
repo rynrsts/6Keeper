@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 
@@ -37,6 +38,10 @@ open class SpecificCategoryProcessClass : Fragment() {
         return etSpecificCatSearchBox
     }
 
+    fun getLvSpecificCatContainer(): ListView {
+        return lvSpecificCatContainer
+    }
+
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
@@ -44,6 +49,11 @@ open class SpecificCategoryProcessClass : Fragment() {
 
         etSpecificCatSearchBox = getAppCompatActivity().findViewById(R.id.etSpecificCatSearchBox)
         lvSpecificCatContainer = appCompatActivity.findViewById(R.id.lvSpecificCatContainer)
+    }
+
+    fun setActionBarTitle() {
+        val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
+        tAppBarToolbar.title = args.specificCategoryName
     }
 
     @SuppressLint("DefaultLocale")
@@ -69,8 +79,8 @@ open class SpecificCategoryProcessClass : Fragment() {
             val uPlatformName = encodingClass.decodeData(u.platformName)
 
             if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
-                userPlatformId[index] = encodingClass.decodeData(u.platformId)
-                userPlatformName[index] = encodingClass.decodeData(u.platformName)
+                userPlatformId[index] = encodingClass.decodeData(u.platformId) + uPlatformName
+                userPlatformName[index] = uPlatformName
                 userNumberOfAccounts[index] =
                         (databaseHandlerClass.viewNumberOfAccounts(u.categoryId)).toString()
 

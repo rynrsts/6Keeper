@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 
-
 class AccountsFragment : AccountsProcessClass() {
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -113,10 +112,15 @@ class AccountsFragment : AccountsProcessClass() {
         }
 
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedCategoryId = getLvAccountsContainer().getItemAtPosition(i).toString()
+            val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
+            val selectedCategoryId = selectedCategory.substring(0, 5)
+            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
 
             val action = AccountsFragmentDirections
-                    .actionAccountsFragmentToSpecificCategoryFragment(selectedCategoryId)
+                    .actionAccountsFragmentToSpecificCategoryFragment(
+                            selectedCategoryId,
+                            selectedCategoryName
+                    )
             findNavController().navigate(action)
 
             getEtAccountsSearchBox().setText("")

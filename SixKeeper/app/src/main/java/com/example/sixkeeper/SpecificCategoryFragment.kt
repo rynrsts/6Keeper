@@ -3,10 +3,18 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.*
-import android.widget.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 
 class SpecificCategoryFragment : SpecificCategoryProcessClass() {
     override fun onCreateView(
@@ -21,6 +29,7 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        setActionBarTitle()
         populatePlatforms("")
         setOnClick()
     }
@@ -106,14 +115,20 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             }
         }
 
-//        getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-//            val selectedCategoryId = getLvAccountsContainer().getItemAtPosition(i).toString()
-//
-//            val action = AccountsFragmentDirections
-//                    .actionAccountsFragmentToSpecificCategoryFragment(selectedCategoryId)
-//            findNavController().navigate(action)
-//
-//            closeKeyboard()
-//        })
+        getLvSpecificCatContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
+            val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
+            val selectedPlatformId = selectedPlatform.substring(0, 5)
+            val selectedPlatformName = selectedPlatform.substring(5, selectedPlatform.length)
+
+            val action = SpecificCategoryFragmentDirections
+                    .actionSpecificCategoryFragmentToSpecificPlatformFragment(
+                            selectedPlatformId,
+                            selectedPlatformName
+                    )
+            findNavController().navigate(action)
+
+            getEtSpecificCatSearchBox().setText("")
+            closeKeyboard()
+        })
     }
 }

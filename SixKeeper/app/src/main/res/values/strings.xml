@@ -14,6 +14,7 @@
     </string>
 
     <!-- Accounts -->
+    <string name="accounts_categories">Categories</string>
     <string name="accounts_category_name">Category Name</string>
     <string name="accounts_new_category">New Category</string>
     <string name="accounts_new_category_mes">New category added!</string>
@@ -128,7 +129,9 @@
     <string name="many_setup_master_pin">Setup Master PIN</string>
     <string name="many_seven">7</string>
     <string name="many_six">6</string>
+    <string name="many_specific_account">Specific Account</string>
     <string name="many_specific_category">Specific Category</string>
+    <string name="many_specific_platform">Specific Platform</string>
     <string name="many_terms_conditions">Terms and Conditions</string>
     <string name="many_terms_conditions_bold"><b>Terms and Conditions</b></string>
     <string name="many_terms_conditions_underlined"><u>Terms and Conditions</u></string>
@@ -250,6 +253,7 @@
     <string name="settings_themes">Themes</string>
 
     <!-- Specific Category -->
+    <string name="specific_category_platforms">Platforms</string>
     <string name="specific_category_platform_name">Platform Name</string>
     <string name="specific_category_new_platform">New Platform</string>
     <string name="specific_category_new_platform_alert_existing">
@@ -354,8 +358,5 @@
         Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
         magna eros quis urna.
     </string>
-    <string name="title_activity_confirm_action">ConfirmActionActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

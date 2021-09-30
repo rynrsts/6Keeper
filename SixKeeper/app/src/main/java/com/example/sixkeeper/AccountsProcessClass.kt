@@ -74,7 +74,7 @@ open class AccountsProcessClass : Fragment() {
             }
         }
 
-        val userCategoryId = Array(size) { "0" }
+        val userCategoryIdName = Array(size) { "0" }
         val userCategoryName = Array(size) { "0" }
         val userNumberOfPlatforms = Array(size) { "0" }
         var index = 0
@@ -83,7 +83,7 @@ open class AccountsProcessClass : Fragment() {
             val uCategoryName = encodingClass.decodeData(u.categoryName)
 
             if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
-                userCategoryId[index] = encodingClass.decodeData(u.categoryId)
+                userCategoryIdName[index] = encodingClass.decodeData(u.categoryId) + uCategoryName
                 userCategoryName[index] = uCategoryName
                 userNumberOfPlatforms[index] =
                         (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
@@ -94,7 +94,7 @@ open class AccountsProcessClass : Fragment() {
 
         val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
                 attActivity,
-                userCategoryId,
+                userCategoryIdName,
                 userCategoryName,
                 userNumberOfPlatforms
         )

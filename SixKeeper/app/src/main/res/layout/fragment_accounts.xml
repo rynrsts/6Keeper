@@ -28,6 +28,7 @@
             android:hint="@string/many_search"
             android:inputType="textPersonName"
             android:maxLength="15"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -53,12 +54,31 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/clAccountsSearchBox" />
 
+    <TextView
+        android:id="@+id/tvAccountsCategories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/accounts_categories"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/vAccountsSearch" />
+
+    <View
+        android:id="@+id/vAccountsCategories"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/tvAccountsCategories" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vAccountsSearch">
+        app:layout_constraintTop_toBottomOf="@+id/vAccountsCategories">
 
         <ListView
             android:id="@+id/lvAccountsContainer"

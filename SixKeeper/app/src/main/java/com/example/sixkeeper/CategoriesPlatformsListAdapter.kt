@@ -9,10 +9,14 @@ import android.widget.TextView
 
 class CategoriesPlatformsListAdapter(
         private val context: Activity,
-        id: Array<String>,
+        idName: Array<String>,
         private val name: Array<String>,
         private val number: Array<String>
-) : ArrayAdapter<String>(context, R.layout.layout_categories_platforms_list_adapter, id) {
+) : ArrayAdapter<String>(
+        context,
+        R.layout.layout_categories_platforms_list_adapter,
+        idName
+) {
 
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
