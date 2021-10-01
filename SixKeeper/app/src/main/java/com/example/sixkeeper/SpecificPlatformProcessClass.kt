@@ -10,6 +10,10 @@ open class SpecificPlatformProcessClass: Fragment() {
 
     private lateinit var appCompatActivity: AppCompatActivity
 
+    fun getAppCompatActivity(): AppCompatActivity {
+        return appCompatActivity
+    }
+
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
     }

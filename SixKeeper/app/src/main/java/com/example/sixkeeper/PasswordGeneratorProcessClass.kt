@@ -170,7 +170,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
     @SuppressLint("SimpleDateFormat", "ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
-        val passId: Int = (10000..99999).random()
+        var passId = 10001
         var encodedGeneratedPass = ""
         var existing = false
         var toast: Toast? = null
@@ -185,6 +185,10 @@ open class PasswordGeneratorProcessClass : Fragment() {
             if (encodedGeneratedPass == u.generatedPassword) {
                 existing = true
                 break
+            }
+
+            if (!userSavedPass.isNullOrEmpty()) {
+                passId = Integer.parseInt(encodingClass.decodeData(u.passId)) + 1
             }
         }
 

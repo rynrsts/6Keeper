@@ -13,6 +13,15 @@
         assessing and suggesting passwords to mitigate risks and increase security.
     </string>
 
+    <!-- Add Account -->
+    <string name="add_account_add">Add</string>
+    <string name="add_account_credential_1">Credential Field</string>
+    <string name="add_account_desc">Description</string>
+    <string name="add_account_favorites">Appear in Favorites</string>
+    <string name="add_account_title">Add New Account</string>
+    <string name="add_account_name">Name</string>
+    <string name="add_account_website">Website URL</string>
+
     <!-- Accounts -->
     <string name="accounts_categories">Categories</string>
     <string name="accounts_category_name">Category Name</string>

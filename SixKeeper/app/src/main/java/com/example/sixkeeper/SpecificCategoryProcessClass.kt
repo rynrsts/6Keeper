@@ -56,6 +56,20 @@ open class SpecificCategoryProcessClass : Fragment() {
         tAppBarToolbar.title = args.specificCategoryName
     }
 
+    fun closeKeyboard() {
+        val immKeyboard: InputMethodManager =
+                appCompatActivity.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+        if (immKeyboard.isActive) {
+            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
+                    appCompatActivity.currentFocus?.windowToken,
+                    0
+            )
+        }
+    }
+
     @SuppressLint("DefaultLocale")
     fun populatePlatforms(platformName: String) {
         val userPlatform: List<UserPlatformModelClass> =
@@ -102,13 +116,11 @@ open class SpecificCategoryProcessClass : Fragment() {
     fun addNewPlatform(platformName: String) {                                                      // Add new platform
         val userPlatform: List<UserPlatformModelClass> =
                 databaseHandlerClass.viewPlatform(encodingClass.encodeData(args.specificCategoryId))
-        var platformId = 0
+        var platformId = 10001
         var existing = false
         var toast: Toast? = null
 
-        if (userPlatform.isNullOrEmpty()) {
-            platformId = 10001
-        } else {
+        if (!userPlatform.isNullOrEmpty()) {
             for (u in userPlatform) {
                 if (
                         platformName.equals(
@@ -153,20 +165,6 @@ open class SpecificCategoryProcessClass : Fragment() {
         toast?.apply {
             setGravity(Gravity.CENTER, 0, 0)
             show()
-        }
-    }
-
-    fun closeKeyboard() {
-        val immKeyboard: InputMethodManager =
-                appCompatActivity.getSystemService(
-                        Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
-
-        if (immKeyboard.isActive) {
-            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
-                    appCompatActivity.currentFocus?.windowToken,
-                    0
-            )
         }
     }
 }

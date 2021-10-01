@@ -111,11 +111,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:buttonTint="@drawable/style_checked_blue"
+            android:paddingStart="9dp"
             android:text="@string/create_new_acc_p4_agree_to_terms"
             android:textColor="@color/lightBlack"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division1" />
+            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division1"
+            tools:ignore="RtlSymmetry" />
 
         <TextView
             android:id="@+id/tvCreateNewAccP4Terms"

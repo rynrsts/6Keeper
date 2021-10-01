@@ -30,6 +30,7 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
 
         setVariables()
         setActionBarTitle()
+        closeKeyboard()
         populatePlatforms("")
         setOnClick()
     }
@@ -128,7 +129,6 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             findNavController().navigate(action)
 
             getEtSpecificCatSearchBox().setText("")
-            closeKeyboard()
         })
     }
 }

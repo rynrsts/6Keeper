@@ -124,7 +124,6 @@ class AccountsFragment : AccountsProcessClass() {
             findNavController().navigate(action)
 
             getEtAccountsSearchBox().setText("")
-            closeKeyboard()
         })
     }
 }

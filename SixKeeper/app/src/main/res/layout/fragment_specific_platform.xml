@@ -88,7 +88,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/ivSpecificPlatAddPlatforms"
+        android:id="@+id/ivSpecificPlatAddAccounts"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginEnd="18dp"

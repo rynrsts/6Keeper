@@ -96,7 +96,21 @@
         <argument
             android:name="specificPlatformName"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_specificPlatformFragment_to_addAccountFragment"
+            app:destination="@id/addAccountFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addAccountFragment"
+        android:name="com.example.sixkeeper.AddAccountFragment"
+        android:label="@string/add_account_title"
+        tools:layout="@layout/fragment_add_account" />
 
     <fragment
         android:id="@+id/specificAccountFragment"

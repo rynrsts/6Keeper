@@ -105,13 +105,11 @@ open class AccountsProcessClass : Fragment() {
     @SuppressLint("ShowToast")
     fun addNewCategory(categoryName: String) {                                                      // Add new category
         val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
-        var categoryId = 0
+        var categoryId = 10001
         var existing = false
         var toast: Toast? = null
 
-        if (userCategory.isNullOrEmpty()) {
-            categoryId = 10001
-        } else {
+        if (!userCategory.isNullOrEmpty()) {
             for (u in userCategory) {
                 if (
                         categoryName.equals(

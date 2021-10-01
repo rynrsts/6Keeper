@@ -38,8 +38,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/layout_custom_navigation_header"
-        app:itemIconTint="@drawable/style_menu_drawer_item"
-        app:itemTextColor="@drawable/style_menu_drawer_item"
+        app:itemIconTint="@drawable/style_checked_blue"
+        app:itemTextColor="@drawable/style_checked_blue"
         app:menu="@menu/menu_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
