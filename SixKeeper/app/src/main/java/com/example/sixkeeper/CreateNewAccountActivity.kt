@@ -140,8 +140,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 UserAccModelClass(
                         encodingClass.encodeData(userId.toString()),
                         encodingClass.encodeData(username),
-                        encryptionClass.encrypt(encodedPassword),
-                        encryptionClass.encrypt(encodedMasterPIN),
+                        encryptionClass.hashData(encodedPassword),
+                        encryptionClass.hashData(encodedMasterPIN),
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(date),
                         ""

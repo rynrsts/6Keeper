@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/etCreateNewAccP1FirstName"
+                android:id="@+id/etAddAccountName"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="12dp"
@@ -66,7 +66,7 @@
                 android:text="@string/add_account_credential_1"
                 app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
                 app:layout_constraintStart_toStartOf="@+id/gAddAccountVertical09"
-                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1FirstName" />
+                app:layout_constraintTop_toBottomOf="@+id/etAddAccountName" />
 
             <RelativeLayout
                 android:id="@+id/rlAddAccountCredential1"

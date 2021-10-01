@@ -245,7 +245,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         var bool = false
 
         val encodedConfirmAction = encodingClass.encodeData(pinI.toString())
-        val encryptedConfirmAction = encryptionClass.encrypt(encodedConfirmAction)
+        val encryptedConfirmAction = encryptionClass.hashData(encodedConfirmAction)
 
         for (u in userAccList) {
             bool = encryptedConfirmAction.contentEquals(u.masterPin)

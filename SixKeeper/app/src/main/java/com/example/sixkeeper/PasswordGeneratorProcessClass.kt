@@ -170,8 +170,8 @@ open class PasswordGeneratorProcessClass : Fragment() {
     @SuppressLint("SimpleDateFormat", "ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
-        var passId = 10001
-        var encodedGeneratedPass = ""
+        var passId = 100001
+        val encodedGeneratedPass = encodingClass.encodeData(generatedPass)
         var existing = false
         var toast: Toast? = null
 
@@ -180,8 +180,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val date: String = dateFormat.format(calendar.time)
 
         for (u in userSavedPass) {
-            encodedGeneratedPass = encodingClass.encodeData(generatedPass)
-
             if (encodedGeneratedPass == u.generatedPassword) {
                 existing = true
                 break

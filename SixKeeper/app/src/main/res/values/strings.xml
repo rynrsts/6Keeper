@@ -16,7 +16,7 @@
     <!-- Add Account -->
     <string name="add_account_add">Add</string>
     <string name="add_account_credential_1">Credential Field</string>
-    <string name="add_account_desc">Description</string>
+    <string name="add_account_desc">Description (Optional)</string>
     <string name="add_account_favorites">Appear in Favorites</string>
     <string name="add_account_title">Add New Account</string>
     <string name="add_account_name">Name</string>

@@ -57,14 +57,12 @@ class DatabaseHandlerClass(context: Context) :
         // TABLE_ACCOUNTS
         private const val KEY_ACCOUNT_ID = "account_id"
         private const val KEY_ACCOUNT_NAME = "account_name"
-        private const val KEY_ACCOUNT_USERNAME = "account_username"
-        private const val KEY_ACCOUNT_EMAIL = "account_email"
-        private const val KEY_ACCOUNT_MOBILE_NUMBER = "account_mobile_number"
+        private const val KEY_ACCOUNT_CREDENTIAL_FIELD = "account_credential_field"                 // Email, Mobile Number, Username, or Other
+        private const val KEY_ACCOUNT_CREDENTIAL = "account_credential"
         private const val KEY_ACCOUNT_PASSWORD = "account_password"
-        private const val KEY_ACCOUNT_APPLICATION = "account_application"
-        private const val KEY_ACCOUNT_WEBSITE = "account_website"
+        private const val KEY_ACCOUNT_WEBSITE_URL = "account_website_url"
         private const val KEY_ACCOUNT_DESCRIPTION = "account_description"
-        private const val KEY_ACCOUNT_FAVORITES = "account_favorites"
+        private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
 //        private const val KEY_PLATFORM_ID = "platform_id"
     }
 
@@ -118,14 +116,12 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_ACCOUNTS + "(" +
                         KEY_ACCOUNT_ID + " TEXT," +
                         KEY_ACCOUNT_NAME + " TEXT," +
-                        KEY_ACCOUNT_USERNAME + " TEXT," +
-                        KEY_ACCOUNT_EMAIL + " TEXT," +
-                        KEY_ACCOUNT_MOBILE_NUMBER + " TEXT," +
+                        KEY_ACCOUNT_CREDENTIAL_FIELD + " TEXT," +
+                        KEY_ACCOUNT_CREDENTIAL + " TEXT," +
                         KEY_ACCOUNT_PASSWORD + " TEXT," +
-                        KEY_ACCOUNT_APPLICATION + " TEXT," +
-                        KEY_ACCOUNT_WEBSITE + " TEXT," +
+                        KEY_ACCOUNT_WEBSITE_URL + " TEXT," +
                         KEY_ACCOUNT_DESCRIPTION + " TEXT," +
-                        KEY_ACCOUNT_FAVORITES + " TEXT," +
+                        KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_PLATFORM_ID + " TEXT" +
                         ")"
                 )
@@ -592,7 +588,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                          // Update user account
+    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                       // Update user account
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
         val contentValues2 = ContentValues()

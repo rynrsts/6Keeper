@@ -58,11 +58,12 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         val encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
         val encodedPassword = encodingClass.encodeData(etLoginPassword.text.toString())
-        val encryptedPassword = encryptionClass.encrypt(encodedPassword)
+        val encryptedPassword = encryptionClass.hashData(encodedPassword)
 
         for (u in userAccList) {
             userId = u.userId
-            bool = encodedUsername == u.username && encryptedPassword.contentEquals(u.password)
+            bool = encodedUsername == u.username &&
+                    encryptedPassword.contentEquals(u.password)
         }
 
         return bool

@@ -30,6 +30,7 @@ open class UserAccountEditProcessClass : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var clUserAccountEditButton: ConstraintLayout
 
@@ -65,6 +66,7 @@ open class UserAccountEditProcessClass : Fragment() {
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
     }
 
     fun getViewId(): String {
@@ -549,12 +551,11 @@ open class UserAccountEditProcessClass : Fragment() {
     }
 
     private fun validateUserAccPass(pass: String): Boolean {
-        val encryptionClass = EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 
         val encodedPassword = encodingClass.encodeData(pass)
-        val encryptedPassword = encryptionClass.encrypt(encodedPassword)
+        val encryptedPassword = encryptionClass.hashData(encodedPassword)
 
         for (u in userAccList) {
             bool = encryptedPassword.contentEquals(u.password)
@@ -587,21 +588,19 @@ open class UserAccountEditProcessClass : Fragment() {
     }
 
     private fun updateAccPassword() {                                                               // Update Password
-        val encryptionClass = EncryptionClass()
         val input = etUserEditNewPass.text.toString()
         val encodedInput = encodingClass.encodeData(input)
 
         databaseHandlerClass.updateUserAcc(
-                "password", encryptionClass.encrypt(encodedInput), getCurrentDate()
+                "password", encryptionClass.hashData(encodedInput), getCurrentDate()
         )
     }
 
     private fun updateAccMasterPIN() {                                                              // Update Master PIN
-        val encryptionClass = EncryptionClass()
         val encodedInput = encodingClass.encodeData(masterPin.toString())
 
         databaseHandlerClass.updateUserAcc(
-                "master_pin", encryptionClass.encrypt(encodedInput), getCurrentDate()
+                "master_pin", encryptionClass.hashData(encodedInput), getCurrentDate()
         )
     }
     

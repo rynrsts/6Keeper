@@ -256,7 +256,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         var bool = false
 
         val encodedMasterPIN = encodingClass.encodeData(pinI.toString())
-        val encryptedMasterPIN = encryptionClass.encrypt(encodedMasterPIN)
+        val encryptedMasterPIN = encryptionClass.hashData(encodedMasterPIN)
 
         for (u in userAccList) {
             bool = encryptedMasterPIN.contentEquals(u.masterPin)
