@@ -110,7 +110,12 @@
         android:id="@+id/addAccountFragment"
         android:name="com.example.sixkeeper.AddAccountFragment"
         android:label="@string/add_account_title"
-        tools:layout="@layout/fragment_add_account" />
+        tools:layout="@layout/fragment_add_account">
+
+        <argument
+            android:name="specificPlatformId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/specificAccountFragment"

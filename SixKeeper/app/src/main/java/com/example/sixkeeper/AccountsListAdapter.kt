@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-class CategoriesPlatformsListAdapter(
+class AccountsListAdapter(
         private val context: Activity,
         idName: ArrayList<String>,
-        private val name: ArrayList<String>,
-        private val number: ArrayList<String>
+        private val name: ArrayList<String>
 ) : ArrayAdapter<String>(
         context,
-        R.layout.layout_categories_platforms_list_adapter,
+        R.layout.layout_accounts_list_adapter,
         idName
 ) {
 
@@ -22,18 +21,13 @@ class CategoriesPlatformsListAdapter(
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
         val rowView = inflater.inflate(                                                             // Inflate list adapter
-                R.layout.layout_categories_platforms_list_adapter,
+                R.layout.layout_accounts_list_adapter,
                 null,
                 true
         )
 
-        val tvCategoriesPlatformsName =
-                rowView.findViewById(R.id.tvCategoriesPlatformsName) as TextView
-        val tvCategoriesPlatformsNumber =
-                rowView.findViewById(R.id.tvCategoriesPlatformsNumber) as TextView
-
-        tvCategoriesPlatformsName.text = name[position]
-        tvCategoriesPlatformsNumber.text = "Platforms: ${number[position]}"
+        val tvAccountsName = rowView.findViewById(R.id.tvAccountsName) as TextView
+        tvAccountsName.text = name[position]
 
         return rowView
     }

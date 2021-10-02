@@ -239,6 +239,28 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun addAccount(userAccount: UserAccountModelClass): Long {                                      // Add Account
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_ACCOUNT_ID, userAccount.accountId)
+            put(KEY_ACCOUNT_NAME, userAccount.accountName)
+            put(KEY_ACCOUNT_CREDENTIAL_FIELD, userAccount.accountCredentialField)
+            put(KEY_ACCOUNT_CREDENTIAL, userAccount.accountCredential)
+            put(KEY_ACCOUNT_PASSWORD, userAccount.accountPassword)
+            put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
+            put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
+            put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+            put(KEY_PLATFORM_ID, userAccount.platformId)
+        }
+
+        val success = db.insert(TABLE_ACCOUNTS, null, contentValues)
+
+        db.close()
+        return success
+    }
+
     /*
      *******************************************************************************************
      *******************************************************************************************
@@ -450,9 +472,14 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun viewNumberOfPlatforms(categoryId: String): Int {                                            // View number of platforms in a category
-        val selectQuery = "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
         val db = this.readableDatabase
         val cursor: Cursor?
+
+        val selectQuery = if (categoryId.isNotEmpty()) {
+            "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
+        } else {
+            "SELECT COUNT(*) FROM $TABLE_PLATFORMS"
+        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -508,9 +535,14 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun viewNumberOfAccounts(platformId: String): Int {                                             // View number of accounts in a platform
-        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$platformId'"
         val db = this.readableDatabase
         val cursor: Cursor?
+
+        val selectQuery = if (platformId.isNotEmpty()) {
+            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$platformId'"
+        } else {
+            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS"
+        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -525,6 +557,62 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return num
+    }
+
+    @SuppressLint("Recycle")
+    fun viewAccount(id: String): List<UserAccountModelClass> {                                      // View accounts
+        val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$id'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var accountId: String
+        var accountName: String
+        var accountCredentialField: String
+        var accountCredential: String
+        var accountPassword: String
+        var accountWebsiteURL: String
+        var accountDescription: String
+        var accountIsFavorites: String
+        var platformId: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                accountId = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_ID))
+                accountName = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_NAME))
+                accountCredentialField = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL_FIELD))
+                accountCredential = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL))
+                accountPassword = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_PASSWORD))
+                accountWebsiteURL = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_WEBSITE_URL))
+                accountDescription = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
+                accountIsFavorites = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
+                platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
+
+                val user = UserAccountModelClass(
+                        accountId = accountId,
+                        accountName = accountName,
+                        accountCredentialField = accountCredentialField,
+                        accountCredential = accountCredential,
+                        accountPassword = accountPassword,
+                        accountWebsiteURL = accountWebsiteURL,
+                        accountDescription = accountDescription,
+                        accountIsFavorites = accountIsFavorites,
+                        platformId = platformId
+                )
+                userAccountList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userAccountList
     }
 
     /*

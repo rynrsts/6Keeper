@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 open class AccountsProcessClass : Fragment() {
-    private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
+    private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
 
@@ -64,31 +64,19 @@ open class AccountsProcessClass : Fragment() {
     @SuppressLint("DefaultLocale")
     fun populateCategories(categoryName: String) {
         val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
-        var size = 0
+        val userCategoryIdName = ArrayList<String>(0)
+        val userCategoryName = ArrayList<String>(0)
+        val userNumberOfPlatforms = ArrayList<String>(0)
 
         for (u in userCategory) {
             val uCategoryName = encodingClass.decodeData(u.categoryName)
 
             if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
-                size++
-            }
-        }
-
-        val userCategoryIdName = Array(size) { "0" }
-        val userCategoryName = Array(size) { "0" }
-        val userNumberOfPlatforms = Array(size) { "0" }
-        var index = 0
-
-        for (u in userCategory) {
-            val uCategoryName = encodingClass.decodeData(u.categoryName)
-
-            if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
-                userCategoryIdName[index] = encodingClass.decodeData(u.categoryId) + uCategoryName
-                userCategoryName[index] = uCategoryName
-                userNumberOfPlatforms[index] =
+                userCategoryIdName.add(encodingClass.decodeData(u.categoryId) + uCategoryName)
+                userCategoryName.add(uCategoryName)
+                userNumberOfPlatforms.add(
                         (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
-
-                index++
+                )
             }
         }
 

@@ -62,8 +62,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         for (u in userAccList) {
             userId = u.userId
-            bool = encodedUsername == u.username &&
-                    encryptedPassword.contentEquals(u.password)
+            bool = encodedUsername == u.username && encryptedPassword.contentEquals(u.password)
         }
 
         return bool
