@@ -323,7 +323,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewUserInfo(): List<UserInfoModelClass> {                                                  // View user information
+    fun viewUserInfo(): List<UserInfoModelClass> {                                                  // View User Information
         val userInfoList: ArrayList<UserInfoModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
         val db = this.readableDatabase
@@ -399,7 +399,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View saved password
+    fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View Saved Password
         val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"
         val db = this.readableDatabase
@@ -437,11 +437,15 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewCategory(): List<UserCategoryModelClass> {                                              // View categories
+    fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                     // View categories
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
+        var selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
         val db = this.readableDatabase
         val cursor: Cursor?
+
+        if (field == "category") {
+            selectQuery = "SELECT * FROM $TABLE_CATEGORIES WHERE $KEY_CATEGORY_ID = '$id'"
+        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -497,11 +501,17 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewPlatform(id: String): List<UserPlatformModelClass> {                      // View platforms
+    fun viewPlatform(field: String, id: String): List<UserPlatformModelClass> {                     // View platforms
         val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
+        var selectQuery = ""
         val db = this.readableDatabase
         val cursor: Cursor?
+
+        if (field == "category") {
+            selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
+        } else if (field == "platform") {
+            selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_PLATFORM_ID = '$id'"
+        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -560,7 +570,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewAccount(id: String): List<UserAccountModelClass> {                                      // View accounts
+    fun viewAccount(id: String): List<UserAccountModelClass> {                                      // View Specific Account
         val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
         val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$id'"
         val db = this.readableDatabase
@@ -661,7 +671,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update user information
+    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update User Information
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
@@ -676,7 +686,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                       // Update user account
+    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                          // Update Username
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
         val contentValues2 = ContentValues()
@@ -695,7 +705,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateUserAcc(field: String, updatedData: ByteArray, lastUpdate: String): Int {             // Update user account
+    fun updateUserAcc(field: String, updatedData: ByteArray, lastUpdate: String): Int {             // Update User Account
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
         val contentValues2 = ContentValues()
@@ -709,6 +719,32 @@ class DatabaseHandlerClass(context: Context) :
 
         val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
         db.update(TABLE_USER_INFO, contentValues2, null, null)
+
+        db.close()
+        return success
+    }
+
+    fun updateAccount(userAccount: UserAccountModelClass): Int {                                    // Update Specific Account
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        val accountId = userAccount.accountId
+
+        contentValues.apply {
+            put(KEY_ACCOUNT_NAME, userAccount.accountName)
+            put(KEY_ACCOUNT_CREDENTIAL_FIELD, userAccount.accountCredentialField)
+            put(KEY_ACCOUNT_CREDENTIAL, userAccount.accountCredential)
+            put(KEY_ACCOUNT_PASSWORD, userAccount.accountPassword)
+            put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
+            put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
+            put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+        }
+
+        val success = db.update(
+                TABLE_ACCOUNTS,
+                contentValues,
+                "$KEY_ACCOUNT_ID='$accountId'",
+                null
+        )
 
         db.close()
         return success

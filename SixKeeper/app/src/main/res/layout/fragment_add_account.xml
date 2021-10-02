@@ -221,7 +221,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clAddAccountAdd"
+            android:id="@+id/clAddAccountButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginTop="15dp"
@@ -235,19 +235,18 @@
             app:layout_constraintTop_toBottomOf="@+id/vAddAccountDivision1">
 
             <ImageView
-                android:id="@+id/ivAddAccountAdd"
+                android:id="@+id/ivAddAccountButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_add_white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvAddAccountAdd"
+                app:layout_constraintEnd_toStartOf="@+id/tvAddAccountButton"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/tvAddAccountAdd"
+                android:id="@+id/tvAddAccountButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -255,7 +254,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivAddAccountAdd"
+                app:layout_constraintStart_toEndOf="@+id/ivAddAccountButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

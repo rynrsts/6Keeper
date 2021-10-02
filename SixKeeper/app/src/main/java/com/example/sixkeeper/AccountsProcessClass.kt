@@ -63,7 +63,8 @@ open class AccountsProcessClass : Fragment() {
 
     @SuppressLint("DefaultLocale")
     fun populateCategories(categoryName: String) {
-        val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
+        val userCategory: List<UserCategoryModelClass> =
+                databaseHandlerClass.viewCategory("", "")
         val userCategoryIdName = ArrayList<String>(0)
         val userCategoryName = ArrayList<String>(0)
         val userNumberOfPlatforms = ArrayList<String>(0)
@@ -92,7 +93,8 @@ open class AccountsProcessClass : Fragment() {
 
     @SuppressLint("ShowToast")
     fun addNewCategory(categoryName: String) {                                                      // Add new category
-        val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory()
+        val userCategory: List<UserCategoryModelClass> =
+                databaseHandlerClass.viewCategory("", "")
         var categoryId = 10001
         var existing = false
         var toast: Toast? = null

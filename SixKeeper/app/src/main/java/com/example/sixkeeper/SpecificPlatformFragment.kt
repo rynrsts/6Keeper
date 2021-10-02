@@ -3,11 +3,13 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
@@ -23,7 +25,11 @@ class SpecificPlatformFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
 
+    private lateinit var etSpecificPlatSearchBox: EditText
     private lateinit var lvSpecificPlatContainer: ListView
+
+    private lateinit var selectedAccountId: String
+    private lateinit var selectedAccountName: String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -52,6 +58,7 @@ class SpecificPlatformFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
 
+        etSpecificPlatSearchBox = appCompatActivity.findViewById(R.id.etSpecificPlatSearchBox)
         lvSpecificPlatContainer = appCompatActivity.findViewById(R.id.lvSpecificPlatContainer)
     }
 
@@ -108,8 +115,6 @@ class SpecificPlatformFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.ivSpecificPlatAddAccounts)
 
         ivSpecificPlatSearchButton.setOnClickListener {
-            val etSpecificPlatSearchBox: EditText =
-                    appCompatActivity.findViewById(R.id.etSpecificPlatSearchBox)
             val search = etSpecificPlatSearchBox.text.toString()
 
             populateAccounts(search)
@@ -119,9 +124,54 @@ class SpecificPlatformFragment : Fragment() {
         ivSpecificPlatAddAccounts.setOnClickListener {
             val action = SpecificPlatformFragmentDirections
                     .actionSpecificPlatformFragmentToAddAccountFragment(
-                            args.specificPlatformId
+                            args.specificPlatformId,
+                            "add",
+                            ""
                     )
             findNavController().navigate(action)
+        }
+
+        lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
+            val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
+            selectedAccountId = selectedAccount.substring(0, 6)
+            selectedAccountName = selectedAccount.substring(6, selectedAccount.length)
+
+            val goToConfirmActivity = Intent(
+                    appCompatActivity,
+                    ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            appCompatActivity.overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
+            )
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    postDelayed(
+                            {
+                                val action = SpecificPlatformFragmentDirections
+                                        .actionSpecificPlatformFragmentToSpecificAccountFragment(
+                                                selectedAccountId,
+                                                selectedAccountName,
+                                                args.specificPlatformId
+                                        )
+                                findNavController().navigate(action)
+
+                                etSpecificPlatSearchBox.setText("")
+                            }, 250
+                    )
+                }
+            }
         }
     }
 }

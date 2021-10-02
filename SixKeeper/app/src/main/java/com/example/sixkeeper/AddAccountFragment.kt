@@ -3,6 +3,8 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,7 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -20,6 +24,8 @@ class AddAccountFragment : Fragment() {
 
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     private lateinit var etAddAccountName: EditText
     private lateinit var sAddAccountCredential1: Spinner
@@ -29,6 +35,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var etAddAccountDescription: EditText
     private lateinit var cbAddAccountFavorites: CheckBox
 
+    private var accountName: String = ""
     private lateinit var name: String
     private lateinit var credentialField: String
     private lateinit var credential: String
@@ -36,6 +43,8 @@ class AddAccountFragment : Fragment() {
     private lateinit var websiteURL: String
     private lateinit var description: String
     private var isFavorites: Int = 0
+
+    private val items = arrayOf("-- Select Item --", "Email", "Mobile Number", "Username", "Other")
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -51,6 +60,7 @@ class AddAccountFragment : Fragment() {
         setVariables()
         setSpinner()
         closeKeyboard()
+        setButton()
         setOnClick()
     }
 
@@ -62,6 +72,8 @@ class AddAccountFragment : Fragment() {
 
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
 
         etAddAccountName = appCompatActivity.findViewById(R.id.etAddAccountName)
         sAddAccountCredential1 = appCompatActivity.findViewById(R.id.sAddAccountCredential1)
@@ -75,7 +87,6 @@ class AddAccountFragment : Fragment() {
     private fun setSpinner() {
         val sAddAccountCredential1: Spinner =
                 appCompatActivity.findViewById(R.id.sAddAccountCredential1)
-        val items = arrayOf("-- Select Item --", "Email", "Mobile Number", "Username", "Other")
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
                 appCompatActivity,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -99,10 +110,28 @@ class AddAccountFragment : Fragment() {
         }
     }
 
-    private fun setOnClick() {
-        val clAddAccountAdd: ConstraintLayout = appCompatActivity.findViewById(R.id.clAddAccountAdd)
+    private fun setButton() {
+        val ivAddAccountButton: ImageView = appCompatActivity.findViewById(R.id.ivAddAccountButton)
+        val tvAddAccountButton: TextView = appCompatActivity.findViewById(R.id.tvAddAccountButton)
 
-        clAddAccountAdd.setOnClickListener {
+        if (args.addOrEdit == "add") {
+            ivAddAccountButton.setImageResource(R.drawable.ic_add_white)
+            tvAddAccountButton.setText(R.string.add_account_add)
+        } else if (args.addOrEdit == "edit") {
+            val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
+            tAppBarToolbar.title = "Edit Account"
+
+            populateAccountData()
+
+            ivAddAccountButton.setImageResource(R.drawable.ic_save_white)
+            tvAddAccountButton.setText(R.string.many_save)
+        }
+    }
+
+    private fun setOnClick() {
+        val clAddAccountButton: ConstraintLayout = appCompatActivity.findViewById(R.id.clAddAccountButton)
+
+        clAddAccountButton.setOnClickListener {
             if (isNotEmpty()) {
                 credentialField = sAddAccountCredential1.selectedItem.toString()
                 description = etAddAccountDescription.text.toString()
@@ -111,9 +140,7 @@ class AddAccountFragment : Fragment() {
                     isFavorites = 1
                 }
 
-                if (addNewAccount()) {
-                    appCompatActivity.onBackPressed()
-                }
+                addOrEditAccount()
             } else {
                 val toast: Toast = Toast.makeText(
                         appCompatActivity.applicationContext,
@@ -143,24 +170,19 @@ class AddAccountFragment : Fragment() {
     }
 
     @SuppressLint("ShowToast")
-    private fun addNewAccount(): Boolean {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
+    private fun addOrEditAccount() {
         val encodedArgs = encodingClass.encodeData(args.specificPlatformId)
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(encodedArgs)
         var accountId = 100001
         var existing = false
         var toast: Toast? = null
-        var isAdded = false
 
         accountId += databaseHandlerClass.viewNumberOfAccounts("")
 
         for (u in userAccount) {
             if (
-                    name.equals(
-                            encodingClass.decodeData(u.accountName),
-                            ignoreCase = true
-                    )
+                    name.equals(encodingClass.decodeData(u.accountName), ignoreCase = true) &&
+                    !name.equals(accountName, ignoreCase = true)
             ) {
                 existing = true
                 break
@@ -168,29 +190,56 @@ class AddAccountFragment : Fragment() {
         }
 
         if (!existing) {
-            val status = databaseHandlerClass.addAccount(
-                    UserAccountModelClass(
-                            encodingClass.encodeData(accountId.toString()),
-                            encodingClass.encodeData(name),
-                            encodingClass.encodeData(credentialField),
-                            encodingClass.encodeData(credential),
-                            encodingClass.encodeData(password),
-                            encodingClass.encodeData(websiteURL),
-                            encodingClass.encodeData(description),
-                            encodingClass.encodeData(isFavorites.toString()),
-                            encodedArgs
-                    )
-            )
-
-            if (status > -1) {
-                toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        "Account '$name' added!",
-                        Toast.LENGTH_LONG
+            if (args.addOrEdit == "add") {
+                val status = databaseHandlerClass.addAccount(
+                        UserAccountModelClass(
+                                encodingClass.encodeData(accountId.toString()),
+                                encodingClass.encodeData(name),
+                                encodingClass.encodeData(credentialField),
+                                encodingClass.encodeData(credential),
+                                encodingClass.encodeData(password),
+                                encodingClass.encodeData(websiteURL),
+                                encodingClass.encodeData(description),
+                                encodingClass.encodeData(isFavorites.toString()),
+                                encodedArgs
+                        )
                 )
-            }
 
-            isAdded = true
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Account '$name' added!",
+                            Toast.LENGTH_LONG
+                    )
+                }
+
+                appCompatActivity.onBackPressed()
+            } else if (args.addOrEdit == "edit") {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setMessage(R.string.user_edit_save_alert_mes)
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            }
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
@@ -203,7 +252,74 @@ class AddAccountFragment : Fragment() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
+    }
 
-        return isAdded
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 16914 && resultCode == 16914) {                                        // If Master PIN is correct
+            view?.apply {
+                if (args.addOrEdit == "edit") {
+                    val status = databaseHandlerClass.updateAccount(
+                            UserAccountModelClass(
+                                    encodingClass.encodeData(args.specificAccountId),
+                                    encodingClass.encodeData(name),
+                                    encodingClass.encodeData(credentialField),
+                                    encodingClass.encodeData(credential),
+                                    encodingClass.encodeData(password),
+                                    encodingClass.encodeData(websiteURL),
+                                    encodingClass.encodeData(description),
+                                    encodingClass.encodeData(isFavorites.toString()),
+                                    ""
+                            )
+                    )
+
+                    if (status > -1) {
+                        val toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                "Account '$name' updated!",
+                                Toast.LENGTH_LONG
+                        )
+                        toast?.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
+                }
+
+                postDelayed(
+                        {
+                            appCompatActivity.onBackPressed()
+                        }, 250
+                )
+            }
+        }
+    }
+
+    private fun populateAccountData() {
+        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        val encodingClass = EncodingClass()
+        val userAccount: List<UserAccountModelClass> =
+                databaseHandlerClass.viewAccount(encodingClass.encodeData(args.specificPlatformId))
+
+        for (u in userAccount) {
+            if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
+                accountName = encodingClass.decodeData(u.accountName)
+                etAddAccountName.setText(accountName)
+                etAddAccountCredential1.setText(encodingClass.decodeData(u.accountCredential))
+                etAddAccountPassword.setText(encodingClass.decodeData(u.accountPassword))
+                etAddAccountWebsite.setText(encodingClass.decodeData(u.accountWebsiteURL))
+                etAddAccountDescription.setText(encodingClass.decodeData(u.accountDescription))
+
+                sAddAccountCredential1.setSelection(
+                        items.indexOf(encodingClass.decodeData(u.accountCredentialField))
+                )
+
+                if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
+                    cbAddAccountFavorites.isChecked = true
+                }
+            }
+        }
     }
 }

@@ -104,6 +104,14 @@
             app:exitAnim="@anim/anim_exit_right_to_left_1"
             app:popEnterAnim="@anim/anim_enter_left_to_right_1"
             app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+
+        <action
+            android:id="@+id/action_specificPlatformFragment_to_specificAccountFragment"
+            app:destination="@id/specificAccountFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
     </fragment>
 
     <fragment
@@ -115,13 +123,42 @@
         <argument
             android:name="specificPlatformId"
             app:argType="string" />
+
+        <argument
+            android:name="addOrEdit"
+            app:argType="string" />
+
+        <argument
+            android:name="specificAccountId"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/specificAccountFragment"
         android:name="com.example.sixkeeper.SpecificAccountFragment"
         android:label="@string/many_specific_account"
-        tools:layout="@layout/fragment_specific_account" />
+        tools:layout="@layout/fragment_specific_account">
+
+        <argument
+            android:name="specificAccountId"
+            app:argType="string" />
+
+        <argument
+            android:name="specificAccountName"
+            app:argType="string" />
+
+        <argument
+            android:name="specificPlatformId"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_specificAccountFragment_to_addAccountFragment"
+            app:destination="@id/addAccountFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"

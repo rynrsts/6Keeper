@@ -72,8 +72,10 @@ open class SpecificCategoryProcessClass : Fragment() {
 
     @SuppressLint("DefaultLocale")
     fun populatePlatforms(platformName: String) {
-        val userPlatform: List<UserPlatformModelClass> =
-                databaseHandlerClass.viewPlatform(encodingClass.encodeData(args.specificCategoryId))
+        val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
+                "category",
+                encodingClass.encodeData(args.specificCategoryId)
+        )
         val userPlatformId = ArrayList<String>(0)
         val userPlatformName = ArrayList<String>(0)
         val userNumberOfAccounts = ArrayList<String>(0)
@@ -103,8 +105,10 @@ open class SpecificCategoryProcessClass : Fragment() {
     @SuppressLint("ShowToast")
     fun addNewPlatform(platformName: String) {                                                      // Add new platform
         val encodedArgs = encodingClass.encodeData(args.specificCategoryId)
-        val userPlatform: List<UserPlatformModelClass> =
-                databaseHandlerClass.viewPlatform(encodedArgs)
+        val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
+                "category",
+                encodedArgs
+        )
         var platformId = 10001
         var existing = false
         var toast: Toast? = null
