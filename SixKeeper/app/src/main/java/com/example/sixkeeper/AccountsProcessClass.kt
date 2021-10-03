@@ -62,7 +62,7 @@ open class AccountsProcessClass : Fragment() {
     }
 
     @SuppressLint("DefaultLocale")
-    fun populateCategories(categoryName: String) {
+    fun populateCategories(categoryName: String) {                                                  // Populate list view with categories
         val userCategory: List<UserCategoryModelClass> =
                 databaseHandlerClass.viewCategory("", "")
         val userCategoryIdName = ArrayList<String>(0)
@@ -92,7 +92,12 @@ open class AccountsProcessClass : Fragment() {
     }
 
     @SuppressLint("ShowToast")
-    fun addNewCategory(categoryName: String) {                                                      // Add new category
+    fun addOrUpdateCategory(
+            addOrUpdate: String,
+            categoryName: String,
+            selectedCategoryId: String,
+            selectedCategoryName: String
+    ) {
         val userCategory: List<UserCategoryModelClass> =
                 databaseHandlerClass.viewCategory("", "")
         var categoryId = 10001
@@ -105,7 +110,8 @@ open class AccountsProcessClass : Fragment() {
                         categoryName.equals(
                                 encodingClass.decodeData(u.categoryName),
                                 ignoreCase = true
-                        )
+                        ) &&
+                        !categoryName.equals(selectedCategoryName, ignoreCase = true)
                 ) {
                     existing = true
                     break
@@ -116,27 +122,44 @@ open class AccountsProcessClass : Fragment() {
         }
 
         if (!existing) {
-            val status = databaseHandlerClass.addCategory(
-                    UserCategoryModelClass(
-                            encodingClass.encodeData(categoryId.toString()),
-                            encodingClass.encodeData(categoryName)
-                    )
-            )
-
-            if (status > -1) {
-                toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        "Category '$categoryName' added!",
-                        Toast.LENGTH_LONG
+            if (addOrUpdate == "add") {
+                val status = databaseHandlerClass.addCategory(                                      // Add Category
+                        UserCategoryModelClass(
+                                encodingClass.encodeData(categoryId.toString()),
+                                encodingClass.encodeData(categoryName)
+                        )
                 )
 
-                populateCategories("")
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Category '$categoryName' added!",
+                            Toast.LENGTH_SHORT
+                    )
+                }
+            } else if (addOrUpdate == "update") {
+                val status = databaseHandlerClass.updateCategory(                                   // Update Category
+                        UserCategoryModelClass(
+                                encodingClass.encodeData(selectedCategoryId),
+                                encodingClass.encodeData(categoryName)
+                        )
+                )
+
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Category updated to '$categoryName'",
+                            Toast.LENGTH_SHORT
+                    )
+                }
             }
+
+            populateCategories("")
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
                     R.string.accounts_new_category_alert_existing,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
             )
         }
 
@@ -144,5 +167,6 @@ open class AccountsProcessClass : Fragment() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
+        closeKeyboard()
     }
 }

@@ -24,6 +24,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var encodedSpecificPlatformId: String
 
     private lateinit var etAddAccountName: EditText
     private lateinit var sAddAccountCredential1: Spinner
@@ -73,6 +74,7 @@ class AddAccountFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        encodedSpecificPlatformId = encodingClass.encodeData(args.specificPlatformId)
 
         etAddAccountName = appCompatActivity.findViewById(R.id.etAddAccountName)
         sAddAccountCredential1 = appCompatActivity.findViewById(R.id.sAddAccountCredential1)
@@ -127,8 +129,49 @@ class AddAccountFragment : Fragment() {
         }
     }
 
+    private fun populateAccountData() {                                                             // Set Account data to fields
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "platformId",
+                encodedSpecificPlatformId
+        )
+
+        for (u in userAccount) {
+            if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
+                accountName = encodingClass.decodeData(u.accountName)
+                etAddAccountName.apply {
+                    setText(accountName)
+                    setSelection(etAddAccountName.text.length)
+                }
+                sAddAccountCredential1.setSelection(
+                        items.indexOf(encodingClass.decodeData(u.accountCredentialField))
+                )
+                etAddAccountCredential1.apply {
+                    setText(encodingClass.decodeData(u.accountCredential))
+                    setSelection(etAddAccountCredential1.text.length)
+                }
+                etAddAccountPassword.apply {
+                    setText(encodingClass.decodeData(u.accountPassword))
+                    setSelection(etAddAccountPassword.text.length)
+                }
+                etAddAccountWebsite.apply {
+                    setText(encodingClass.decodeData(u.accountWebsiteURL))
+                    setSelection(etAddAccountWebsite.text.length)
+                }
+                etAddAccountDescription.apply {
+                    setText(encodingClass.decodeData(u.accountDescription))
+                    setSelection(etAddAccountDescription.text.length)
+                }
+
+                if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
+                    cbAddAccountFavorites.isChecked = true
+                }
+            }
+        }
+    }
+
     private fun setOnClick() {
-        val clAddAccountButton: ConstraintLayout = appCompatActivity.findViewById(R.id.clAddAccountButton)
+        val clAddAccountButton: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clAddAccountButton)
 
         clAddAccountButton.setOnClickListener {
             if (isNotEmpty()) {
@@ -187,8 +230,10 @@ class AddAccountFragment : Fragment() {
 
     @SuppressLint("ShowToast")
     private fun addOrEditAccount() {
-        val encodedArgs = encodingClass.encodeData(args.specificPlatformId)
-        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(encodedArgs)
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "platformId",
+                encodedSpecificPlatformId
+        )
         var accountId = 100001
         var existing = false
         var toast: Toast? = null
@@ -206,7 +251,7 @@ class AddAccountFragment : Fragment() {
         }
 
         if (!existing) {
-            if (args.addOrEdit == "add") {
+            if (args.addOrEdit == "add") {                                                          // Add Account
                 val status = databaseHandlerClass.addAccount(
                         UserAccountModelClass(
                                 encodingClass.encodeData(accountId.toString()),
@@ -217,7 +262,7 @@ class AddAccountFragment : Fragment() {
                                 encodingClass.encodeData(websiteURL),
                                 encodingClass.encodeData(description),
                                 encodingClass.encodeData(isFavorites.toString()),
-                                encodedArgs
+                                encodedSpecificPlatformId
                         )
                 )
 
@@ -225,12 +270,12 @@ class AddAccountFragment : Fragment() {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
                             "Account '$name' added!",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                     )
                 }
 
                 appCompatActivity.onBackPressed()
-            } else if (args.addOrEdit == "edit") {
+            } else if (args.addOrEdit == "edit") {                                                  // Update Account
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                 builder.setMessage(R.string.user_edit_save_alert_mes)
                 builder.setCancelable(false)
@@ -260,7 +305,7 @@ class AddAccountFragment : Fragment() {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
                     R.string.add_account_alert_existing,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
             )
         }
 
@@ -274,7 +319,7 @@ class AddAccountFragment : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 16914 && resultCode == 16914) {                                        // If Master PIN is correct
+        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
                 if (args.addOrEdit == "edit") {
                     val status = databaseHandlerClass.updateAccount(
@@ -295,7 +340,7 @@ class AddAccountFragment : Fragment() {
                         val toast = Toast.makeText(
                                 appCompatActivity.applicationContext,
                                 "Account '$name' updated!",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                         )
                         toast?.apply {
                             setGravity(Gravity.CENTER, 0, 0)
@@ -309,32 +354,6 @@ class AddAccountFragment : Fragment() {
                             appCompatActivity.onBackPressed()
                         }, 250
                 )
-            }
-        }
-    }
-
-    private fun populateAccountData() {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
-        val userAccount: List<UserAccountModelClass> =
-                databaseHandlerClass.viewAccount(encodingClass.encodeData(args.specificPlatformId))
-
-        for (u in userAccount) {
-            if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
-                accountName = encodingClass.decodeData(u.accountName)
-                etAddAccountName.setText(accountName)
-                etAddAccountCredential1.setText(encodingClass.decodeData(u.accountCredential))
-                etAddAccountPassword.setText(encodingClass.decodeData(u.accountPassword))
-                etAddAccountWebsite.setText(encodingClass.decodeData(u.accountWebsiteURL))
-                etAddAccountDescription.setText(encodingClass.decodeData(u.accountDescription))
-
-                sAddAccountCredential1.setSelection(
-                        items.indexOf(encodingClass.decodeData(u.accountCredentialField))
-                )
-
-                if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
-                    cbAddAccountFavorites.isChecked = true
-                }
             }
         }
     }

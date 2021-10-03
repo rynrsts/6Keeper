@@ -73,8 +73,10 @@ class SpecificAccountFragment : Fragment() {
     private fun populateAccountData() {
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val encodingClass = EncodingClass()
-        val userAccount: List<UserAccountModelClass> =
-                databaseHandlerClass.viewAccount(encodingClass.encodeData(args.specificPlatformId))
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "platformId",
+                encodingClass.encodeData(args.specificPlatformId)
+        )
         var platformName = ""
         var categoryId = ""
         var categoryName = ""

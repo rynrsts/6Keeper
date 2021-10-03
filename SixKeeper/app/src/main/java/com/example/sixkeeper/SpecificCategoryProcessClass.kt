@@ -71,7 +71,7 @@ open class SpecificCategoryProcessClass : Fragment() {
     }
 
     @SuppressLint("DefaultLocale")
-    fun populatePlatforms(platformName: String) {
+    fun populatePlatforms(platformName: String) {                                                   // Populate list view with platforms
         val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                 "category",
                 encodingClass.encodeData(args.specificCategoryId)
@@ -103,7 +103,12 @@ open class SpecificCategoryProcessClass : Fragment() {
     }
 
     @SuppressLint("ShowToast")
-    fun addNewPlatform(platformName: String) {                                                      // Add new platform
+    fun addOrUpdatePlatform(
+            addOrUpdate: String,
+            platformName: String,
+            selectedPlatformId: String,
+            selectedPlatformName: String
+    ) {
         val encodedArgs = encodingClass.encodeData(args.specificCategoryId)
         val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                 "category",
@@ -120,7 +125,8 @@ open class SpecificCategoryProcessClass : Fragment() {
                     platformName.equals(
                             encodingClass.decodeData(u.platformName),
                             ignoreCase = true
-                    )
+                    ) &&
+                    !platformName.equals(selectedPlatformName, ignoreCase = true)
             ) {
                 existing = true
                 break
@@ -128,28 +134,46 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
 
         if (!existing) {
-            val status = databaseHandlerClass.addPlatform(
-                    UserPlatformModelClass(
-                            encodingClass.encodeData(platformId.toString()),
-                            encodingClass.encodeData(platformName),
-                            encodedArgs
-                    )
-            )
-
-            if (status > -1) {
-                toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        "Platform '$platformName' added!",
-                        Toast.LENGTH_LONG
+            if (addOrUpdate == "add") {
+                val status = databaseHandlerClass.addPlatform(                                      // Add Platform
+                        UserPlatformModelClass(
+                                encodingClass.encodeData(platformId.toString()),
+                                encodingClass.encodeData(platformName),
+                                encodedArgs
+                        )
                 )
 
-                populatePlatforms("")
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Platform '$platformName' added!",
+                            Toast.LENGTH_SHORT
+                    )
+                }
+            } else if (addOrUpdate == "update") {
+                val status = databaseHandlerClass.updatePlatform(                                   // Update Platform
+                        UserPlatformModelClass(
+                                encodingClass.encodeData(selectedPlatformId),
+                                encodingClass.encodeData(platformName),
+                                ""
+                        )
+                )
+
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Platform updated to '$platformName'",
+                            Toast.LENGTH_SHORT
+                    )
+                }
             }
+
+            populatePlatforms("")
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
                     R.string.specific_category_new_platform_alert_existing,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
             )
         }
 
@@ -157,5 +181,6 @@ open class SpecificCategoryProcessClass : Fragment() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
+        closeKeyboard()
     }
 }

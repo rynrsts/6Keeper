@@ -570,11 +570,17 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewAccount(id: String): List<UserAccountModelClass> {                                      // View Specific Account
+    fun viewAccount(conditionField: String, idOrIsFavorites: String): List<UserAccountModelClass> { // View Specific Account
         val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$id'"
+        var selectQuery = ""
         val db = this.readableDatabase
         val cursor: Cursor?
+
+        if (conditionField == "platformId") {
+            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$idOrIsFavorites'"
+        } else if (conditionField == "accountIsFavorites") {
+            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_IS_FAVORITES = '$idOrIsFavorites'"
+        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -719,6 +725,46 @@ class DatabaseHandlerClass(context: Context) :
 
         val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
         db.update(TABLE_USER_INFO, contentValues2, null, null)
+
+        db.close()
+        return success
+    }
+
+    fun updateCategory(userCategory: UserCategoryModelClass): Int {                                 // Update Specific Category
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        val categoryId = userCategory.categoryId
+
+        contentValues.apply {
+            put(KEY_CATEGORY_NAME, userCategory.categoryName)
+        }
+
+        val success = db.update(
+                TABLE_CATEGORIES,
+                contentValues,
+                "$KEY_CATEGORY_ID='$categoryId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun updatePlatform(userPlatform: UserPlatformModelClass): Int {                                 // Update Specific Platform
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        val platformId = userPlatform.platformId
+
+        contentValues.apply {
+            put(KEY_PLATFORM_NAME, userPlatform.platformName)
+        }
+
+        val success = db.update(
+                TABLE_PLATFORMS,
+                contentValues,
+                "$KEY_PLATFORM_ID='$platformId'",
+                null
+        )
 
         db.close()
         return success

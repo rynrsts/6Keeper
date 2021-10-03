@@ -123,7 +123,7 @@
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
     <string name="many_nothing_to_add">Nothing to add</string>
-    <string name="many_nothing_to_save">Nothing to save</string>
+    <string name="many_nothing_to_update">Nothing to update</string>
     <string name="many_nothing_to_search">Nothing to search</string>
     <string name="many_one">1</string>
     <string name="many_password">Password</string>
@@ -270,6 +270,8 @@
     <string name="specific_account_desc">Description</string>
 
     <!-- Specific Category -->
+    <string name="specific_category_edit_platform">Edit Platform</string>
+    <string name="specific_category_delete_platform">Delete Platform</string>
     <string name="specific_category_platforms">Platforms</string>
     <string name="specific_category_platform_name">Platform Name</string>
     <string name="specific_category_new_platform">New Platform</string>

@@ -151,7 +151,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         if (tableStatus > -1 && userInfoStatus > -1 && userAccStatus > -1) {
             val toast: Toast = Toast.makeText(
                     applicationContext,
-                    R.string.create_new_acc_success, Toast.LENGTH_LONG
+                    R.string.create_new_acc_success, Toast.LENGTH_SHORT
             )
             toast.apply {
                 setGravity(Gravity.CENTER, 0, 0)

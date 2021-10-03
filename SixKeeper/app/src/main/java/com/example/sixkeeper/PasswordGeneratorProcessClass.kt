@@ -203,14 +203,14 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 toast = Toast.makeText(
                         appCompatActivity.applicationContext,
                         R.string.pass_generator_pass_saved,
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                 )
             }
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,
                     R.string.pass_generator_pass_already_saved,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
             )
         }
 

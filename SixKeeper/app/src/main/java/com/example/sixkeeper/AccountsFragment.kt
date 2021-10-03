@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 
-
 class AccountsFragment : AccountsProcessClass() {
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -45,7 +44,7 @@ class AccountsFragment : AccountsProcessClass() {
         }
 
         ivAccountsAddCategories.setOnClickListener {
-            showAddEditCategory("add", "")
+            showAddUpdateCategory("add", "", "")
         }
 
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
@@ -65,7 +64,7 @@ class AccountsFragment : AccountsProcessClass() {
     }
 
     @SuppressLint("InflateParams")
-    private fun setOnLongClick() {
+    private fun setOnLongClick() {                                                                  // Set item long click
         getLvAccountsContainer().onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(pos).toString()
             val selectedCategoryId = selectedCategory.substring(0, 5)
@@ -103,7 +102,11 @@ class AccountsFragment : AccountsProcessClass() {
 
             llCategoryPlatformEdit.setOnClickListener {
                 alert.cancel()
-                showAddEditCategory("save", selectedCategoryName)
+                showAddUpdateCategory(
+                        "update",
+                        selectedCategoryName,
+                        selectedCategoryId
+                )
             }
 
             llCategoryPlatformDelete.setOnClickListener {
@@ -115,7 +118,11 @@ class AccountsFragment : AccountsProcessClass() {
     }
 
     @SuppressLint("InflateParams")
-    private fun showAddEditCategory(addOrSave: String, selectedCategoryName: String) {
+    private fun showAddUpdateCategory(
+            addOrUpdate: String,
+            selectedCategoryName: String,
+            selectedCategoryId: String
+    ) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
         val inflater = this.layoutInflater
         val dialogView = inflater.inflate(R.layout.layout_accounts_add_new, null)
@@ -136,21 +143,31 @@ class AccountsFragment : AccountsProcessClass() {
         var dialogTitle = ""
         var toastMes = ""
 
-        if (addOrSave == "add") {
+        if (addOrUpdate == "add") {
             buttonName = "Add"
             dialogTitle = resources.getString(R.string.accounts_new_category)
             toastMes = resources.getString(R.string.many_nothing_to_add)
-        } else if (addOrSave == "save") {
-            buttonName = "Save"
+        } else if (addOrUpdate == "update") {
+            buttonName = "Update"
             dialogTitle = resources.getString(R.string.accounts_edit_category) + ": " + selectedCategoryName
-            toastMes = resources.getString(R.string.many_nothing_to_save)
+            toastMes = resources.getString(R.string.many_nothing_to_update)
+
+            etAccountsAddNew.apply {
+                setText(selectedCategoryName)
+                setSelection(etAccountsAddNew.text.length)
+            }
         }
 
         builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
-            val newCategory = etAccountsAddNew.text.toString()
+            val categoryName = etAccountsAddNew.text.toString()
 
-            if (newCategory.isNotEmpty()) {
-                addNewCategory(newCategory)
+            if (categoryName.isNotEmpty()) {
+                addOrUpdateCategory(
+                        addOrUpdate,
+                        categoryName,
+                        selectedCategoryId,
+                        selectedCategoryName
+                )
             } else {
                 val toast: Toast = Toast.makeText(
                         getAppCompatActivity().applicationContext,
