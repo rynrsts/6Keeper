@@ -25,7 +25,9 @@
 
     <!-- Accounts -->
     <string name="accounts_categories">Categories</string>
-    <string name="accounts_category_name">Category Name</string>
+    <string name="accounts_category_name">Category Name</string>>
+    <string name="accounts_edit_category">Edit Category</string>
+    <string name="accounts_delete_category">Delete Category</string>
     <string name="accounts_new_category">New Category</string>
     <string name="accounts_new_category_mes">New category added!</string>
     <string name="accounts_new_category_alert_existing">
@@ -72,6 +74,7 @@
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
+    <string name="many_action">Action</string>
     <string name="many_alert_title">Warning!</string>
     <string name="many_alert_title_confirm">Confirm Action</string>
     <string name="many_cancel">Cancel</string>
@@ -120,6 +123,7 @@
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
     <string name="many_nothing_to_add">Nothing to add</string>
+    <string name="many_nothing_to_save">Nothing to save</string>
     <string name="many_nothing_to_search">Nothing to search</string>
     <string name="many_one">1</string>
     <string name="many_password">Password</string>

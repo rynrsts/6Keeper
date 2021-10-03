@@ -6,10 +6,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.method.ScrollingMovementMethod
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -62,6 +60,7 @@ class AddAccountFragment : Fragment() {
         closeKeyboard()
         setButton()
         setOnClick()
+        setOnTouchListener()
     }
 
     @Suppress("DEPRECATION")
@@ -167,6 +166,23 @@ class AddAccountFragment : Fragment() {
                 credential.isNotEmpty() &&
                 password.isNotEmpty() &&
                 websiteURL.isNotEmpty()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setOnTouchListener() {
+        etAddAccountDescription.movementMethod = ScrollingMovementMethod.getInstance()
+
+        etAddAccountDescription.setOnTouchListener { view, motionEvent ->                           // Make Description field scrollable
+            view.parent.requestDisallowInterceptTouchEvent(true)
+
+            if (
+                    motionEvent.action and MotionEvent.ACTION_UP != 0 &&
+                    motionEvent.actionMasked and MotionEvent.ACTION_UP != 0
+            ) {
+                view.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
     }
 
     @SuppressLint("ShowToast")

@@ -43,7 +43,7 @@ open class AccountsProcessClass : Fragment() {
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
 
-        etAccountsSearchBox = getAppCompatActivity().findViewById(R.id.etAccountsSearchBox)
+        etAccountsSearchBox = appCompatActivity.findViewById(R.id.etAccountsSearchBox)
         lvAccountsContainer = appCompatActivity.findViewById(R.id.lvAccountsContainer)
     }
 

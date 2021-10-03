@@ -10,8 +10,8 @@
     <TextView
         android:id="@+id/tvAccountsAddNew"
         android:layout_width="match_parent"
-        android:layout_marginTop="?dialogPreferredPadding"
         android:layout_height="wrap_content"
+        android:layout_marginTop="?dialogPreferredPadding"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
