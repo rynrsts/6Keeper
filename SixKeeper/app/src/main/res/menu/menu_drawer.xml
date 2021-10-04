@@ -12,7 +12,7 @@
 
         <item
             android:id="@+id/accountsFragment"
-            android:icon="@drawable/ic_account_circle_black"
+            android:icon="@drawable/ic_account_circle_light_gray"
             android:title="@string/many_accounts" />
 
         <item
@@ -58,7 +58,7 @@
 
         <item
             android:id="@+id/privacyPolicyFragment"
-            android:icon="@drawable/ic_terms_and_conditions_light_black"
+            android:icon="@drawable/ic_privacy_tip_light_black"
             android:title="@string/many_privacy_policy" />
 
         <item

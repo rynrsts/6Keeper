@@ -15,16 +15,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/ivAccountsIcon"
+            android:layout_width="30dp"
+            android:layout_height="48dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="9dp"
+            android:src="@drawable/ic_account_circle_light_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
         <TextView
             android:id="@+id/tvAccountsName"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="18dp"
             android:gravity="center_vertical"
             android:text="@string/dummy_dummy"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivAccounts"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAccountsIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView

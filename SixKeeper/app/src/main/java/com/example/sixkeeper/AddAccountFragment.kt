@@ -10,12 +10,16 @@ import android.text.method.ScrollingMovementMethod
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+
 
 class AddAccountFragment : Fragment() {
     private val args: AddAccountFragmentArgs by navArgs()
@@ -68,6 +72,44 @@ class AddAccountFragment : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {                                                    // Override back press
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setCancelable(false)
+
+                if (args.addOrEdit == "add") {
+                    builder.setMessage(R.string.create_new_acc_alert_message)
+                } else if (args.addOrEdit == "edit") {
+                    builder.setMessage(R.string.many_alert_discard_change)
+                }
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    val controller = Navigation.findNavController(view!!)
+                    controller.popBackStack(R.id.addAccountFragment, true)
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title)
+                alert.show()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            findNavController().navigateUp()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setVariables() {

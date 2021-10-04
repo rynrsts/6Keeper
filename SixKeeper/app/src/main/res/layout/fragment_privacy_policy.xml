@@ -52,7 +52,7 @@
                 android:id="@+id/ivPrivacyHeadIcon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/ic_terms_and_conditions_light_black"
+                android:src="@drawable/ic_privacy_tip_light_black"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toStartOf="@+id/gPrivacyVertical64"
                 app:layout_constraintStart_toStartOf="@+id/gPrivacyVertical36"

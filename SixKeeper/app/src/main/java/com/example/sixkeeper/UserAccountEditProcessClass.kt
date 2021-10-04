@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Patterns
@@ -12,10 +13,12 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
@@ -540,32 +543,35 @@ open class UserAccountEditProcessClass : Fragment() {
         }
     }
 
-//    TODO: Back press on edit mode
-//    override fun onCreate(savedInstanceState: Bundle?) {                                            // To override onBackPressed in fragment
-//        super.onCreate(savedInstanceState)
-//        activity?.onBackPressedDispatcher?.addCallback(
-//                this, object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                if (editMode) {
-//                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-//                    builder.setMessage(R.string.user_edit_cancel_alert_mes)
-//                    builder.setCancelable(false)
-//
-//                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-//                        etUserEditTextBox.setText(previousData)
-//                        goBackToViewMode()
-//                    }
-//                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-//                        dialog.cancel()
-//                    }
-//
-//                    val alert: AlertDialog = builder.create()
-//                    alert.setTitle(R.string.many_alert_title)
-//                    alert.show()
-//                }
-//            }
-//        })
-//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {                                                    // Override back press
+                if (editMode) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                    builder.setMessage(R.string.user_edit_cancel_alert_mes)
+                    builder.setCancelable(false)
+
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        etUserEditTextBox.setText(previousData)
+                        goBackToViewMode()
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title)
+                    alert.show()
+                } else {
+                    val controller = Navigation.findNavController(view!!)
+                    controller.popBackStack(R.id.userAccountEditFragment, true)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     private fun isEmailValid(s: String): Boolean {                                                  // Accept valid email
         return Patterns.EMAIL_ADDRESS.matcher(s).matches()

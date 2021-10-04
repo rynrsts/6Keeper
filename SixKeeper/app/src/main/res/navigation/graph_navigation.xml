@@ -97,6 +97,10 @@
             android:name="specificPlatformName"
             app:argType="string" />
 
+        <argument
+            android:name="specificCategoryName"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_specificPlatformFragment_to_addAccountFragment"
             app:destination="@id/addAccountFragment"

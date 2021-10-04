@@ -27,21 +27,23 @@
             android:background="@drawable/layout_edit_text_search"
             android:hint="@string/many_search"
             android:inputType="textPersonName"
-            android:maxLength="15"
+            android:maxLength="20"
+            android:paddingStart="48dp"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill, RtlSymmetry" />
 
         <ImageView
             android:id="@+id/ivSpecificPlatSearchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@drawable/layout_button_search"
-            android:src="@drawable/ic_search_white"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_search_gray"
             app:layout_constraintBottom_toBottomOf="@+id/etSpecificPlatSearchBox"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/etSpecificPlatSearchBox"
             app:layout_constraintTop_toTopOf="@+id/etSpecificPlatSearchBox"
             tools:ignore="ContentDescription" />
 
@@ -55,30 +57,30 @@
         app:layout_constraintTop_toBottomOf="@+id/clSpecificPlatSearchBox" />
 
     <TextView
-        android:id="@+id/tvSpecificPlatAccounts"
+        android:id="@+id/tvSpecificPlatHierarchy"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="@string/many_accounts"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/vSpecificPlatSearch" />
 
     <View
-        android:id="@+id/vSpecificPlatAccounts"
+        android:id="@+id/vSpecificPlatHierarchy"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/tvSpecificPlatAccounts" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSpecificPlatHierarchy" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSpecificPlatAccounts">
+        app:layout_constraintTop_toBottomOf="@+id/vSpecificPlatHierarchy">
 
         <ListView
             android:id="@+id/lvSpecificPlatContainer"

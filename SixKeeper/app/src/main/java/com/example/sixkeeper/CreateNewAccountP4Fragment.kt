@@ -177,6 +177,17 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                         )
                     }
                 }
+                !isMasterPINSetup() -> {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.create_new_acc_p4_master_pin_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
                 isMasterPINSetup() && !isTermsChecked() -> {
                     val toast: Toast = Toast.makeText(
                             getAppCompatActivity().applicationContext,

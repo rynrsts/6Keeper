@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -44,9 +47,11 @@ class SpecificPlatformFragment : Fragment() {
 
         setVariables()
         setActionBarTitle()
+        setHierarchy()
         closeKeyboard()
         populateAccounts("")
         setOnClick()
+        setEditTextOnChange()
     }
 
     @Suppress("DEPRECATION")
@@ -64,7 +69,14 @@ class SpecificPlatformFragment : Fragment() {
 
     private fun setActionBarTitle() {
         val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
-        tAppBarToolbar.title = args.specificPlatformName
+        tAppBarToolbar.title = getString(R.string.many_accounts)
+    }
+
+    private fun setHierarchy(){
+        val tvSpecificPlatHierarchy: TextView =
+                appCompatActivity.findViewById(R.id.tvSpecificPlatHierarchy)
+        val titleText = args.specificCategoryName + " > " + args.specificPlatformName
+        tvSpecificPlatHierarchy.text = titleText
     }
 
     private fun closeKeyboard() {
@@ -111,17 +123,8 @@ class SpecificPlatformFragment : Fragment() {
     }
 
     private fun setOnClick() {
-        val ivSpecificPlatSearchButton: ImageView =
-                appCompatActivity.findViewById(R.id.ivSpecificPlatSearchButton)
         val ivSpecificPlatAddAccounts: ImageView =
                 appCompatActivity.findViewById(R.id.ivSpecificPlatAddAccounts)
-
-        ivSpecificPlatSearchButton.setOnClickListener {
-            val search = etSpecificPlatSearchBox.text.toString()
-
-            populateAccounts(search)
-            closeKeyboard()
-        }
 
         ivSpecificPlatAddAccounts.setOnClickListener {
             val action = SpecificPlatformFragmentDirections
@@ -176,5 +179,17 @@ class SpecificPlatformFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Search real-time
+        etSpecificPlatSearchBox.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                val search = etSpecificPlatSearchBox.text.toString()
+                populateAccounts(search)
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
     }
 }

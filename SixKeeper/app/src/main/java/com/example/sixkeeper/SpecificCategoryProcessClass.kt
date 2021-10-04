@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -28,6 +29,10 @@ open class SpecificCategoryProcessClass : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    fun getArgsSpecificCategoryName(): String  {
+        return args.specificCategoryName
     }
 
     fun getAppCompatActivity(): AppCompatActivity {
@@ -53,7 +58,13 @@ open class SpecificCategoryProcessClass : Fragment() {
 
     fun setActionBarTitle() {
         val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
-        tAppBarToolbar.title = args.specificCategoryName
+        tAppBarToolbar.title = getString(R.string.specific_category_platforms)
+    }
+
+    fun setHierarchy(){
+        val tvSpecificCatHierarchy: TextView =
+                appCompatActivity.findViewById(R.id.tvSpecificCatHierarchy)
+        tvSpecificCatHierarchy.text = args.specificCategoryName
     }
 
     fun closeKeyboard() {
@@ -94,6 +105,7 @@ open class SpecificCategoryProcessClass : Fragment() {
 
         val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
                 attActivity,
+                "Accounts:",
                 userPlatformId,
                 userPlatformName,
                 userNumberOfAccounts

@@ -3,6 +3,8 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -28,25 +30,18 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
 
         setVariables()
         setActionBarTitle()
+        setHierarchy()
         closeKeyboard()
         populatePlatforms("")
         setOnClick()
         setOnLongClick()
+        setEditTextOnChange()
     }
 
     @SuppressLint("InflateParams")
     private fun setOnClick() {
-        val ivSpecificCatSearchButton: ImageView =
-                getAppCompatActivity().findViewById(R.id.ivSpecificCatSearchButton)
         val ivSpecificCatAddPlatforms: ImageView =
                 getAppCompatActivity().findViewById(R.id.ivSpecificCatAddPlatforms)
-
-        ivSpecificCatSearchButton.setOnClickListener {
-            val search = getEtSpecificCatSearchBox().text.toString()
-
-            populatePlatforms(search)
-            closeKeyboard()
-        }
 
         ivSpecificCatAddPlatforms.setOnClickListener {
             showAddUpdatePlatform("add", "", "")
@@ -70,7 +65,8 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             val action = SpecificCategoryFragmentDirections
                     .actionSpecificCategoryFragmentToSpecificPlatformFragment(
                             selectedPlatformId,
-                            selectedPlatformName
+                            selectedPlatformName,
+                            getArgsSpecificCategoryName()
                     )
             findNavController().navigate(action)
 
@@ -226,5 +222,17 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             setTitle(dialogTitle)
             show()
         }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Search real-time
+        getEtSpecificCatSearchBox().addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                val search = getEtSpecificCatSearchBox().text.toString()
+                populatePlatforms(search)
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
     }
 }

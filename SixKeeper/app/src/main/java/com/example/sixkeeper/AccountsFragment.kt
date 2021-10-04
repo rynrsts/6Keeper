@@ -3,6 +3,8 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
@@ -24,24 +26,17 @@ class AccountsFragment : AccountsProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        setActionBarTitle()
         closeKeyboard()
         populateCategories("")
         setOnClick()
         setOnLongClick()
+        setEditTextOnChange()
     }
 
     private fun setOnClick() {
-        val ivAccountsSearchButton: ImageView =
-                getAppCompatActivity().findViewById(R.id.ivAccountsSearchButton)
         val ivAccountsAddCategories: ImageView =
                 getAppCompatActivity().findViewById(R.id.ivAccountsAddCategories)
-
-        ivAccountsSearchButton.setOnClickListener {
-            val search = getEtAccountsSearchBox().text.toString()
-
-            populateCategories(search)
-            closeKeyboard()
-        }
 
         ivAccountsAddCategories.setOnClickListener {
             showAddUpdateCategory("add", "", "")
@@ -220,5 +215,17 @@ class AccountsFragment : AccountsProcessClass() {
             setTitle(dialogTitle)
             show()
         }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Search real-time
+        getEtAccountsSearchBox().addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                val search = getEtAccountsSearchBox().text.toString()
+                populateCategories(search)
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
     }
 }

@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 
 open class AccountsProcessClass : Fragment() {
@@ -47,6 +48,11 @@ open class AccountsProcessClass : Fragment() {
         lvAccountsContainer = appCompatActivity.findViewById(R.id.lvAccountsContainer)
     }
 
+    fun setActionBarTitle() {
+        val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
+        tAppBarToolbar.title = getString(R.string.accounts_categories)
+    }
+
     fun closeKeyboard() {
         val immKeyboard: InputMethodManager =
                 appCompatActivity.getSystemService(
@@ -65,7 +71,7 @@ open class AccountsProcessClass : Fragment() {
     fun populateCategories(categoryName: String) {                                                  // Populate list view with categories
         val userCategory: List<UserCategoryModelClass> =
                 databaseHandlerClass.viewCategory("", "")
-        val userCategoryIdName = ArrayList<String>(0)
+        val userCategoryItemValue = ArrayList<String>(0)
         val userCategoryName = ArrayList<String>(0)
         val userNumberOfPlatforms = ArrayList<String>(0)
 
@@ -73,7 +79,9 @@ open class AccountsProcessClass : Fragment() {
             val uCategoryName = encodingClass.decodeData(u.categoryName)
 
             if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
-                userCategoryIdName.add(encodingClass.decodeData(u.categoryId) + uCategoryName)
+                userCategoryItemValue.add(
+                        encodingClass.decodeData(u.categoryId) + uCategoryName
+                )
                 userCategoryName.add(uCategoryName)
                 userNumberOfPlatforms.add(
                         (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
@@ -83,7 +91,8 @@ open class AccountsProcessClass : Fragment() {
 
         val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
                 attActivity,
-                userCategoryIdName,
+                "Platforms:",
+                userCategoryItemValue,
                 userCategoryName,
                 userNumberOfPlatforms
         )
