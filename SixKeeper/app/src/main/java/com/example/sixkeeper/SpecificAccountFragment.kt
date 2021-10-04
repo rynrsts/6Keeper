@@ -140,6 +140,8 @@ class SpecificAccountFragment : Fragment() {
     private fun setOnClick() {
         val clSpecificAccEdit: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clSpecificAccEdit)
+        val clSpecificAccDelete: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clSpecificAccDelete)
 
         clSpecificAccEdit.setOnClickListener {
             val action = SpecificAccountFragmentDirections
@@ -149,6 +151,10 @@ class SpecificAccountFragment : Fragment() {
                             args.specificAccountId
                     )
             findNavController().navigate(action)
+        }
+
+        clSpecificAccDelete.setOnClickListener {
+
         }
     }
 }

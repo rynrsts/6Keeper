@@ -116,6 +116,15 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                     R.anim.anim_enter_bottom_to_top_2,
                     R.anim.anim_0
             )
+
+            it.apply {
+                clPassGeneratorView.isClickable = false                                             // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clPassGeneratorView.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clPassGeneratorSave.setOnClickListener {
@@ -133,6 +142,15 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                     setGravity(Gravity.CENTER, 0, 0)
                     show()
                 }
+            }
+
+            it.apply {
+                clPassGeneratorSave.isClickable = false                                             // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clPassGeneratorSave.isClickable = true
+                        }, 1000
+                )
             }
         }
     }

@@ -50,8 +50,18 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
 
         ivSpecificCatAddPlatforms.setOnClickListener {
             showAddUpdatePlatform("add", "", "")
+
+            it.apply {
+                ivSpecificCatAddPlatforms.isClickable = false                                       // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            ivSpecificCatAddPlatforms.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
+//        TODO: Fix bug when clicked many times
         getLvSpecificCatContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
             val selectedPlatformId = selectedPlatform.substring(0, 5)

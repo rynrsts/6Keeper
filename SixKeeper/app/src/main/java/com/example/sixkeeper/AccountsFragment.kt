@@ -45,8 +45,18 @@ class AccountsFragment : AccountsProcessClass() {
 
         ivAccountsAddCategories.setOnClickListener {
             showAddUpdateCategory("add", "", "")
+
+            it.apply {
+                ivAccountsAddCategories.isClickable = false                                         // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            ivAccountsAddCategories.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
+//        TODO: Fix bug when clicked many times
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
             val selectedCategoryId = selectedCategory.substring(0, 5)

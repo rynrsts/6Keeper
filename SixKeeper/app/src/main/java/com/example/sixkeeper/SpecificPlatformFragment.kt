@@ -133,6 +133,7 @@ class SpecificPlatformFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+//        TODO: Disable for 1 second on click
         lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
             selectedAccountId = selectedAccount.substring(0, 6)

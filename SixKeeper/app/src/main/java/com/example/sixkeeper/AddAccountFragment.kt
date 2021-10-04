@@ -194,6 +194,15 @@ class AddAccountFragment : Fragment() {
                     show()
                 }
             }
+
+            it.apply {
+                clAddAccountButton.isClickable = false                                              // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clAddAccountButton.isClickable = true
+                        }, 1000
+                )
+            }
         }
     }
 

@@ -54,6 +54,30 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         val acbCreateNewAccP4Register: Button =
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP4Register)
 
+        acbCreateNewAccP4MasterPIN.setOnClickListener {
+            val goToCreateMasterPINActivity = Intent(
+                    activity,
+                    CreateMasterPINActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToCreateMasterPINActivity, 14523)
+
+            getAppCompatActivity().overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
+            )
+
+            it.apply {
+                acbCreateNewAccP4MasterPIN.isClickable = false                                      // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            acbCreateNewAccP4MasterPIN.isClickable = true
+                        }, 1000
+                )
+            }
+        }
+
         tvCreateNewAccP4Terms.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
             val inflater = this.layoutInflater
@@ -75,6 +99,15 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                         )
                 )
                 show()
+            }
+
+            it.apply {
+                tvCreateNewAccP4Terms.isClickable = false                                           // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            tvCreateNewAccP4Terms.isClickable = true
+                        }, 1000
+                )
             }
         }
 
@@ -100,27 +133,12 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                 )
                 show()
             }
-        }
-
-        acbCreateNewAccP4MasterPIN.setOnClickListener {
-            val goToCreateMasterPINActivity = Intent(
-                    activity,
-                    CreateMasterPINActivity::class.java
-            )
-
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToCreateMasterPINActivity, 14523)
-
-            getAppCompatActivity().overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
 
             it.apply {
-                acbCreateNewAccP4MasterPIN.isClickable = false                                      // Set button un-clickable for 1 second
+                tvCreateNewAccP4Privacy.isClickable = false                                         // Set un-clickable for 1 second
                 postDelayed(
                         {
-                            acbCreateNewAccP4MasterPIN.isClickable = true
+                            tvCreateNewAccP4Privacy.isClickable = true
                         }, 1000
                 )
             }
@@ -149,6 +167,15 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                     val alert: AlertDialog = builder.create()
                     alert.setTitle(R.string.many_alert_title_confirm)
                     alert.show()
+
+                    it.apply {
+                        acbCreateNewAccP4Register.isClickable = false                               // Set button un-clickable for 1 second
+                        postDelayed(
+                                {
+                                    acbCreateNewAccP4Register.isClickable = true
+                                }, 1000
+                        )
+                    }
                 }
                 isMasterPINSetup() && !isTermsChecked() -> {
                     val toast: Toast = Toast.makeText(

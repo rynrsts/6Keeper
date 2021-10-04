@@ -155,7 +155,7 @@ open class UserAccountEditProcessClass : Fragment() {
         tvUserEditLabel.setText(R.string.many_mobile_number)
         etUserEditTextBox.apply {
             inputType = InputType.TYPE_CLASS_NUMBER
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
         }
         ivUserEditIcon.setImageResource(R.drawable.ic_phone_gray)
     }
@@ -376,6 +376,15 @@ open class UserAccountEditProcessClass : Fragment() {
             val alert: AlertDialog = builder.create()
             alert.setTitle(R.string.many_alert_title)
             alert.show()
+
+            it.apply {
+                clUserEditCancel.isClickable = false                                                // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserEditCancel.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserEditSave.setOnClickListener {
@@ -384,10 +393,19 @@ open class UserAccountEditProcessClass : Fragment() {
 
                 if (
                         (viewId == "email" && isEmailValid(text)) ||
-                        (viewId == "mobile number" && text.length == 11) ||
+                        (viewId == "mobile number" && text.length == 10) ||
                         (viewId == "username" && isUsernameValid(text))
                 ) {
                     showSaveAlertDialog()
+
+                    it.apply {
+                        clUserEditSave.isClickable = false                                          // Set un-clickable for 1 second
+                        postDelayed(
+                                {
+                                    clUserEditSave.isClickable = true
+                                }, 1000
+                        )
+                    }
                 }
             } else if (viewId == "password") {
                 val currentPass = etUserEditCurrentPass.text.toString()
@@ -399,6 +417,15 @@ open class UserAccountEditProcessClass : Fragment() {
                         validateUserAccPass(currentPass)
                 ) {
                     showSaveAlertDialog()
+
+                    it.apply {
+                        clUserEditSave.isClickable = false                                          // Set un-clickable for 1 second
+                        postDelayed(
+                                {
+                                    clUserEditSave.isClickable = true
+                                }, 1000
+                        )
+                    }
                 } else {
                     if (confirmPass == newPass) {
                         tvUserEditConfirmPassNote.text = ""

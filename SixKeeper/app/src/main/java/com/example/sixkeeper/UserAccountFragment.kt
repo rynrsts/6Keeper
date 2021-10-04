@@ -69,31 +69,85 @@ class UserAccountFragment : Fragment() {
         clUserAccountFirstName.setOnClickListener {
             field = "first name"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountFirstName.isClickable = false                                          // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountFirstName.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountLastName.setOnClickListener {
             field = "last name"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountLastName.isClickable = false                                           // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountLastName.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountBirthDate.setOnClickListener {
             field = "birth date"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountBirthDate.isClickable = false                                          // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountBirthDate.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountEmail.setOnClickListener {
             field = "email"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountEmail.isClickable = false                                              // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountEmail.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountMobileNum.setOnClickListener {
             field = "mobile number"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountMobileNum.isClickable = false                                          // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountMobileNum.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountUsername.setOnClickListener {
             field = "username"
             openConfirmActionActivity()
+
+            it.apply {
+                clUserAccountUsername.isClickable = false                                           // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clUserAccountUsername.isClickable = true
+                        }, 1000
+                )
+            }
         }
 
         clUserAccountPassword.setOnClickListener {

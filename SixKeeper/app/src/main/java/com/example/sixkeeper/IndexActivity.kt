@@ -100,22 +100,4 @@ class IndexActivity : AppCompatActivity() {
                 R.id.action_fragments_to_userAccountFragment
         )
     }
-
-//    TODO: Show dialog box when in dashboard and back button was clicked
-//    override fun onBackPressed() {                                                                  // Override back button function
-//        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-//        builder.setMessage(R.string.many_exit_mes)
-//        builder.setCancelable(false)
-//
-//        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-//            super.onBackPressed()
-//        }
-//        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-//            dialog.cancel()
-//        }
-//
-//        val alert: AlertDialog = builder.create()
-//        alert.setTitle(R.string.many_alert_title)
-//        alert.show()
-//    }
 }

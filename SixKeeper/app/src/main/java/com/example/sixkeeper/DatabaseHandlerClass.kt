@@ -817,4 +817,43 @@ class DatabaseHandlerClass(context: Context) :
         db.close()
         return success
     }
+
+    fun removeCategory(categoryId: String): Int {
+        val db = this.writableDatabase
+
+        val success = db.delete(
+                TABLE_CATEGORIES,
+                "$KEY_CATEGORY_ID='$categoryId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun removePlatform(platformId: String): Int {
+        val db = this.writableDatabase
+
+        val success = db.delete(
+                TABLE_PLATFORMS,
+                "$KEY_PLATFORM_ID='$platformId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun removeAccount(accountId: String): Int {
+        val db = this.writableDatabase
+
+        val success = db.delete(
+                TABLE_ACCOUNTS,
+                "$KEY_ACCOUNT_ID='$accountId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
 }
