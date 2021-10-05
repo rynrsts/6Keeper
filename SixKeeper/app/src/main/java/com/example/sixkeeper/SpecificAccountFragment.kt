@@ -4,15 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
@@ -69,7 +70,7 @@ class SpecificAccountFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InflateParams")
     private fun populateAccountData() {
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
         val encodingClass = EncodingClass()
@@ -95,8 +96,8 @@ class SpecificAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.tvSpecificAccWebsiteURL)
         val tvSpecificAccDescription: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificAccDescription)
-        val tvSpecificAccFavorites: TextView =
-                appCompatActivity.findViewById(R.id.tvSpecificAccFavorites)
+        val llSpecificAccFavorites: LinearLayout =
+                appCompatActivity.findViewById(R.id.llSpecificAccFavorites)
 
         for (u in userAccount) {
             if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
@@ -108,9 +109,12 @@ class SpecificAccountFragment : Fragment() {
                 tvSpecificAccDescription.text = encodingClass.decodeData(u.accountDescription)
 
                 if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
-                    tvSpecificAccFavorites.text = "Yes"
-                } else {
-                    tvSpecificAccFavorites.text = "No"
+                    val inflatedView = layoutInflater.inflate(
+                            R.layout.layout_favorites_star,
+                            null,
+                            true
+                    )
+                    llSpecificAccFavorites.addView(inflatedView)
                 }
             }
         }

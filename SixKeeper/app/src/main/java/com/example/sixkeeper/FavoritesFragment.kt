@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +14,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ class FavoritesFragment : Fragment() {
         closeKeyboard()
         populateAccounts("")
         setOnClick()
+        setEditTextOnChange()
     }
 
     @Suppress("DEPRECATION")
@@ -125,16 +127,6 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setOnClick() {
-        val ivFavoritesSearchButton: ImageView =
-                appCompatActivity.findViewById(R.id.ivFavoritesSearchButton)
-
-        ivFavoritesSearchButton.setOnClickListener {
-            val search = etFavoritesSearchBox.text.toString()
-
-            populateAccounts(search)
-            closeKeyboard()
-        }
-
         lvFavoritesContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedAccount = lvFavoritesContainer.getItemAtPosition(i).toString()
             selectedPlatformId = selectedAccount.substring(0, 5)
@@ -152,6 +144,18 @@ class FavoritesFragment : Fragment() {
                     R.anim.anim_enter_bottom_to_top_2,
                     R.anim.anim_0
             )
+        })
+    }
+
+    private fun setEditTextOnChange() {                                                             // Search real-time
+        etFavoritesSearchBox.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                val search = etFavoritesSearchBox.text.toString()
+                populateAccounts(search)
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
 

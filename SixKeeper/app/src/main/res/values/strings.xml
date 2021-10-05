@@ -260,13 +260,13 @@
 
     <!-- Settings -->
     <string name="settings_auto_lock">Auto Lock</string>
-    <string name="settings_auto_lock_delay">Auto Lock Delay</string>
-    <string name="settings_block_app_ss">Block App Screenshot</string>
-    <string name="settings_block_textual_copy">Block Textual Copy</string>
-    <string name="settings_disable_notifications">Disable Notifications</string>
-    <string name="settings_disable_search">Disable Search</string>
+    <string name="settings_categories">Categories</string>
+    <string name="settings_copy">Copy</string>
     <string name="settings_general">General</string>
-    <string name="settings_hide_categories">Hide Categories</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_screen_record">Screen Record</string>
+    <string name="settings_screenshot">Screenshot</string>
+    <string name="settings_search">Search</string>
     <string name="settings_security">Security</string>
     <string name="settings_themes">Themes</string>
 

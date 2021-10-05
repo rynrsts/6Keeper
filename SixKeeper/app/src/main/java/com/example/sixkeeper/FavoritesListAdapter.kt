@@ -5,6 +5,7 @@ import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
 class FavoritesListAdapter(
@@ -26,12 +27,14 @@ class FavoritesListAdapter(
                 null,
                 true
         )
-
+        val ivCategoriesPlatformsIcon =
+                rowView.findViewById(R.id.ivCategoriesPlatformsIcon) as ImageView
         val tvCategoriesPlatformsName =
                 rowView.findViewById(R.id.tvCategoriesPlatformsName) as TextView
         val tvCategoriesPlatformsNumber =
                 rowView.findViewById(R.id.tvCategoriesPlatformsNumber) as TextView
 
+        ivCategoriesPlatformsIcon.setImageResource(R.drawable.ic_star_yellow)
         tvCategoriesPlatformsName.text = name[position]
         tvCategoriesPlatformsNumber.text = number[position]
 

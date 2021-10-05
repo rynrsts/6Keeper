@@ -36,12 +36,20 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent=".93" />
 
+            <LinearLayout
+                android:id="@+id/llSpecificAccFavorites"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tvSpecificAccName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="19sp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
+                app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
                 app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
+                app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
                 app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccName" />
 
@@ -76,7 +84,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc1Vertical45"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +92,6 @@
                     android:id="@+id/tvSpecificAccCredential"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/gSpecificAcc1Vertical45"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -114,7 +120,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:text="@string/many_password"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc2Vertical45"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -123,7 +128,6 @@
                     android:id="@+id/tvSpecificAccPassword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/gSpecificAcc2Vertical45"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +156,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:text="@string/add_account_website"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc3Vertical45"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -161,7 +164,6 @@
                     android:id="@+id/tvSpecificAccWebsiteURL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/gSpecificAcc3Vertical45"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -190,7 +192,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:text="@string/specific_account_desc"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc4Vertical45"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -199,50 +200,49 @@
                     android:id="@+id/tvSpecificAccDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/gSpecificAcc4Vertical45"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSpecificAccFavorites"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccDescription">
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/clSpecificAccFavorites"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="21dp"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccDescription">-->
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gSpecificAcc5Vertical45"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".45" />
+<!--                <androidx.constraintlayout.widget.Guideline-->
+<!--                    android:id="@+id/gSpecificAcc5Vertical45"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="vertical"-->
+<!--                    app:layout_constraintGuide_percent=".45" />-->
 
-                <TextView
-                    android:id="@+id/tvSpecificAccFavoritesField"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/add_account_favorites"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc5Vertical45"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tvSpecificAccFavoritesField"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="15dp"-->
+<!--                    android:text="@string/add_account_favorites"-->
+<!--                    android:textSize="14sp"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc5Vertical45"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/tvSpecificAccFavorites"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc5Vertical45"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tvSpecificAccFavorites"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="14sp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc5Vertical45"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

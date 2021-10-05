@@ -20,7 +20,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
-
 class AddAccountFragment : Fragment() {
     private val args: AddAccountFragmentArgs by navArgs()
 
@@ -46,6 +45,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var websiteURL: String
     private lateinit var description: String
     private var isFavorites: Int = 0
+    private var addOrSave = 0
 
     private val items = arrayOf("-- Select Item --", "Email", "Mobile Number", "Username", "Other")
 
@@ -74,31 +74,37 @@ class AddAccountFragment : Fragment() {
         attActivity = activity                                                                      // Attach activity
     }
 
+//    TODO: Apply this on Action Bar back
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {                                                    // Override back press
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                builder.setCancelable(false)
-
-                if (args.addOrEdit == "add") {
-                    builder.setMessage(R.string.create_new_acc_alert_message)
-                } else if (args.addOrEdit == "edit") {
-                    builder.setMessage(R.string.many_alert_discard_change)
-                }
-
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                if (addOrSave == 1) {
                     val controller = Navigation.findNavController(view!!)
                     controller.popBackStack(R.id.addAccountFragment, true)
-                }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
+                } else {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    builder.setCancelable(false)
 
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title)
-                alert.show()
+                    if (args.addOrEdit == "add") {
+                        builder.setMessage(R.string.create_new_acc_alert_message)
+                    } else if (args.addOrEdit == "edit") {
+                        builder.setMessage(R.string.many_alert_discard_change)
+                    }
+
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        val controller = Navigation.findNavController(view!!)
+                        controller.popBackStack(R.id.addAccountFragment, true)
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title)
+                    alert.show()
+                }
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -325,6 +331,7 @@ class AddAccountFragment : Fragment() {
                     )
                 }
 
+                addOrSave = 1
                 appCompatActivity.onBackPressed()
             } else if (args.addOrEdit == "edit") {                                                  // Update Account
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
@@ -402,6 +409,7 @@ class AddAccountFragment : Fragment() {
 
                 postDelayed(
                         {
+                            addOrSave = 1
                             appCompatActivity.onBackPressed()
                         }, 250
                 )
