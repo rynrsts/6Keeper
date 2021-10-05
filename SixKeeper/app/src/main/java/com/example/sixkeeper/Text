@@ -46,3 +46,8 @@ To add fragments in NavigationDrawer:
     1. Add fragments in graph_navigation.xml
     2. Add items in menu_drawer
     3. Add fragments in appBarConfiguration
+
+
+Search Off
+Do not Disturb
+Content Paste Off

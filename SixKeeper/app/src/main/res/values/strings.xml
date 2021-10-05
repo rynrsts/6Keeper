@@ -70,7 +70,7 @@
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
-    <string name="login_enter_credentials">Please enter your credentials.</string>
+    <string name="login_enter_credentials">Please enter your credentials</string>
 
     <!-- Many -->
     <string name="many_about_us">About</string>
@@ -126,6 +126,9 @@
     <string name="many_mobile_number_prefix">+63</string>
     <string name="many_next">Next</string>
     <string name="many_nine">9</string>
+    <string name="many_no_account">No account to show</string>
+    <string name="many_no_category">No category to show</string>
+    <string name="many_no_platform">No platform to show</string>
     <string name="many_nothing_to_add">Nothing to add</string>
     <string name="many_nothing_to_update">Nothing to update</string>
     <string name="many_nothing_to_search">Nothing to search</string>
@@ -259,19 +262,26 @@
     <string name="recycle_bin_select_all">Select All</string>
 
     <!-- Settings -->
+    <string name="settings_allow_copy">Allow Textual Copy</string>
+    <string name="settings_allow_screen_record">Allow App Screen Record</string>
+    <string name="settings_allow_screenshot">Allow App Screenshot</string>
     <string name="settings_auto_lock">Auto Lock</string>
-    <string name="settings_categories">Categories</string>
+    <string name="settings_block_copy">Block Textual Copy</string>
+    <string name="settings_block_screen_record">Block App Screen Record</string>
+    <string name="settings_block_screenshot">Block App Screenshot</string>
     <string name="settings_copy">Copy</string>
+    <string name="settings_disable_notifications">Disable Notifications</string>
+    <string name="settings_enable_notifications">Enable Notifications</string>
     <string name="settings_general">General</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_screen_record">Screen Record</string>
     <string name="settings_screenshot">Screenshot</string>
-    <string name="settings_search">Search</string>
     <string name="settings_security">Security</string>
-    <string name="settings_themes">Themes</string>
 
     <!-- Specific Account -->
     <string name="specific_account_desc">Description</string>
+    <string name="specific_account_remove">Remove from Favorites</string>
+    <string name="specific_account_appear">Appear in Favorites</string>
 
     <!-- Specific Category -->
     <string name="specific_category_edit_platform">Edit Platform</string>

@@ -147,8 +147,22 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         ""
                 )
         )
+        val userSettingsStatus = databaseHandlerClass.addSettings(
+                UserSettingsModelClass(
+                        encodingClass.encodeData(userId.toString()),
+                        encodingClass.encodeData(1.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString())
+                )
+        )
 
-        if (tableStatus > -1 && userInfoStatus > -1 && userAccStatus > -1) {
+        if (
+                tableStatus > -1 &&
+                userInfoStatus > -1 &&
+                userAccStatus > -1 &&
+                userSettingsStatus > -1
+        ) {
             val toast: Toast = Toast.makeText(
                     applicationContext,
                     R.string.create_new_acc_success, Toast.LENGTH_SHORT

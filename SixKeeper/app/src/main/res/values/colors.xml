@@ -16,6 +16,9 @@
     <color name="maroon">#DB3F54</color>
     <color name="bgLightGray">#F2F2F2</color>
 
+    <color name="lightCyanBlue">#99BEEE</color>
+    <color name="cyanBlue">#2471D7</color>
+
     <color name="orange">#F28123</color>
     <color name="pinkRed">#EE4266</color>
     <color name="blueMagenta">#6A4C93</color>

@@ -81,7 +81,14 @@
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSpecificCatHierarchy">
+        app:layout_constraintTop_toBottomOf="@+id/vSpecificCatHierarchy"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llSpecificCatNoItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
         <ListView
             android:id="@+id/lvSpecificCatContainer"

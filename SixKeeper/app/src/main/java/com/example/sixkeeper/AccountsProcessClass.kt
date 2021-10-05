@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -20,6 +18,7 @@ open class AccountsProcessClass : Fragment() {
 
     private lateinit var etAccountsSearchBox: EditText
     private lateinit var lvAccountsContainer: ListView
+    private lateinit var llAccountsNoItem: LinearLayout
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -46,6 +45,7 @@ open class AccountsProcessClass : Fragment() {
 
         etAccountsSearchBox = appCompatActivity.findViewById(R.id.etAccountsSearchBox)
         lvAccountsContainer = appCompatActivity.findViewById(R.id.lvAccountsContainer)
+        llAccountsNoItem = appCompatActivity.findViewById(R.id.llAccountsNoItem)
     }
 
     fun setActionBarTitle() {
@@ -67,7 +67,7 @@ open class AccountsProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint("DefaultLocale", "InflateParams")
     fun populateCategories(categoryName: String) {                                                  // Populate list view with categories
         val userCategory: List<UserCategoryModelClass> =
                 databaseHandlerClass.viewCategory("", "")
@@ -75,29 +75,44 @@ open class AccountsProcessClass : Fragment() {
         val userCategoryName = ArrayList<String>(0)
         val userNumberOfPlatforms = ArrayList<String>(0)
 
-        for (u in userCategory) {
-            val uCategoryName = encodingClass.decodeData(u.categoryName)
+        if (userCategory.isNullOrEmpty()) {
+            val inflatedView = layoutInflater.inflate(
+                    R.layout.layout_accounts_no_item,
+                    null,
+                    true
+            )
+            val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
-            if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
-                userCategoryItemValue.add(
-                        encodingClass.decodeData(u.categoryId) + uCategoryName
-                )
-                userCategoryName.add(uCategoryName)
-                userNumberOfPlatforms.add(
-                        (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
-                )
+            tvAccountsNoItem.setText(R.string.many_no_category)
+            llAccountsNoItem.apply {
+                removeAllViews()
+                addView(inflatedView)
             }
+        } else {
+            for (u in userCategory) {
+                val uCategoryName = encodingClass.decodeData(u.categoryName)
+
+                if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
+                    userCategoryItemValue.add(
+                            encodingClass.decodeData(u.categoryId) + uCategoryName
+                    )
+                    userCategoryName.add(uCategoryName)
+                    userNumberOfPlatforms.add(
+                            (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
+                    )
+                }
+            }
+
+            val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
+                    attActivity,
+                    "Platforms:",
+                    userCategoryItemValue,
+                    userCategoryName,
+                    userNumberOfPlatforms
+            )
+
+            lvAccountsContainer.adapter = categoriesPlatformsListAdapter
         }
-
-        val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
-                attActivity,
-                "Platforms:",
-                userCategoryItemValue,
-                userCategoryName,
-                userNumberOfPlatforms
-        )
-
-        lvAccountsContainer.adapter = categoriesPlatformsListAdapter
     }
 
     @SuppressLint("ShowToast")
@@ -164,6 +179,7 @@ open class AccountsProcessClass : Fragment() {
             }
 
             populateCategories("")
+            llAccountsNoItem.removeAllViews()
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,

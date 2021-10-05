@@ -21,6 +21,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val TABLE_CATEGORIES = "CategoriesTable"
         private const val TABLE_PLATFORMS = "PlatformsTable"
         private const val TABLE_ACCOUNTS = "AccountsTable"
+        private const val TABLE_SETTINGS = "SettingsTable"
 
         private const val KEY_USER_ID = "user_id"
 
@@ -39,6 +40,13 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_STATUS = "account_status"
         private const val KEY_CREATION_DATE = "creation_date"
         private const val KEY_LAST_LOGIN = "last_login"
+
+        // TABLE_SETTINGS
+//        private const val KEY_USER_ID = "user_id"
+        private const val KEY_NOTIFICATION = "notifications"
+        private const val KEY_SCREENSHOT = "screenshot"
+        private const val KEY_SCREEN_RECORD = "screen_record"
+        private const val KEY_COPY = "copy"
 
         // TABLE_SAVED_PASS
         private const val KEY_PASS_ID = "pass_id"
@@ -125,6 +133,15 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_PLATFORM_ID + " TEXT" +
                         ")"
                 )
+        val createSettingsTable = (
+                "CREATE TABLE " + TABLE_SETTINGS + "(" +
+                        KEY_USER_ID + " TEXT," +
+                        KEY_NOTIFICATION + " TEXT," +
+                        KEY_SCREENSHOT + " TEXT," +
+                        KEY_SCREEN_RECORD + " TEXT," +
+                        KEY_COPY + " TEXT" +
+                        ")"
+                )
 
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
@@ -132,6 +149,7 @@ class DatabaseHandlerClass(context: Context) :
         db?.execSQL(createCategoriesTable)
         db?.execSQL(createPlatformsTable)
         db?.execSQL(createAccountsTable)
+        db?.execSQL(createSettingsTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -141,6 +159,7 @@ class DatabaseHandlerClass(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNTS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
         onCreate(db)
     }
 
@@ -187,6 +206,24 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_USER_ACC, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addSettings(userSettings: UserSettingsModelClass): Long {                                   // Add Settings
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_USER_ID, userSettings.userId)
+            put(KEY_NOTIFICATION, userSettings.notifications)
+            put(KEY_SCREENSHOT, userSettings.screenshot)
+            put(KEY_SCREEN_RECORD, userSettings.screenRecord)
+            put(KEY_COPY, userSettings.copy)
+        }
+
+        val success = db.insert(TABLE_SETTINGS, null, contentValues)
 
         db.close()
         return success
@@ -631,6 +668,49 @@ class DatabaseHandlerClass(context: Context) :
         return userAccountList
     }
 
+    fun viewSettings(): List<UserSettingsModelClass> {                                              // View Settings
+        val userSettingsList: ArrayList<UserSettingsModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_SETTINGS"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var accountId: String
+        var notification: String
+        var screenshot: String
+        var screenRecord: String
+        var copy: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                accountId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
+                notification = cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION))
+                screenshot = cursor.getString(cursor.getColumnIndex(KEY_SCREENSHOT))
+                screenRecord = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_RECORD))
+                copy = cursor.getString(cursor.getColumnIndex(KEY_COPY))
+
+                val user = UserSettingsModelClass(
+                        userId = accountId,
+                        notifications = notification,
+                        screenshot = screenshot,
+                        screenRecord = screenRecord,
+                        copy = copy
+                )
+                userSettingsList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userSettingsList
+    }
+
     /*
      *******************************************************************************************
      *******************************************************************************************
@@ -730,6 +810,20 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun updateSettings(field: String, value: String): Int {                                         // Update Settings
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(field, value)
+        }
+
+        val success = db.update(TABLE_SETTINGS, contentValues, "", null)
+
+        db.close()
+        return success
+    }
+
     fun updateCategory(userCategory: UserCategoryModelClass): Int {                                 // Update Specific Category
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -763,6 +857,25 @@ class DatabaseHandlerClass(context: Context) :
                 TABLE_PLATFORMS,
                 contentValues,
                 "$KEY_PLATFORM_ID='$platformId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun updateIsFavorites(accountId: String, isFavorites: String): Int {                            // Update Specific Account
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_ACCOUNT_IS_FAVORITES, isFavorites)
+        }
+
+        val success = db.update(
+                TABLE_ACCOUNTS,
+                contentValues,
+                "$KEY_ACCOUNT_ID='$accountId'",
                 null
         )
 
@@ -813,6 +926,7 @@ class DatabaseHandlerClass(context: Context) :
         db.delete(TABLE_CATEGORIES, "", null)
         db.delete(TABLE_PLATFORMS, "", null)
         db.delete(TABLE_ACCOUNTS, "", null)
+        db.delete(TABLE_SETTINGS, "", null)
 
         db.close()
         return success
