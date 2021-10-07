@@ -3,11 +3,14 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 open class AccountsProcessClass : Fragment() {
@@ -19,6 +22,9 @@ open class AccountsProcessClass : Fragment() {
     private lateinit var etAccountsSearchBox: EditText
     private lateinit var lvAccountsContainer: ListView
     private lateinit var llAccountsNoItem: LinearLayout
+
+//    private lateinit var categoryIdTemp: String
+//    private lateinit var categoryNameTemp: String
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -91,15 +97,16 @@ open class AccountsProcessClass : Fragment() {
         } else {
             for (u in userCategory) {
                 val uCategoryName = encodingClass.decodeData(u.categoryName)
+                val uNumOfPlatforms =
+                        databaseHandlerClass.viewNumberOfPlatforms(u.categoryId).toString()
 
                 if (uCategoryName.toLowerCase().startsWith(categoryName.toLowerCase())) {
                     userCategoryItemValue.add(
-                            encodingClass.decodeData(u.categoryId) + uCategoryName
+                            encodingClass.decodeData(u.categoryId) + "ramjcammjar" +
+                                    uCategoryName + "ramjcammjar" + uNumOfPlatforms
                     )
                     userCategoryName.add(uCategoryName)
-                    userNumberOfPlatforms.add(
-                            (databaseHandlerClass.viewNumberOfPlatforms(u.categoryId)).toString()
-                    )
+                    userNumberOfPlatforms.add(uNumOfPlatforms)
                 }
             }
 
@@ -112,6 +119,102 @@ open class AccountsProcessClass : Fragment() {
             )
 
             lvAccountsContainer.adapter = categoriesPlatformsListAdapter
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    fun showAddUpdateCategory(
+            addOrUpdate: String,
+            selectedCategoryName: String,
+            selectedCategoryId: String
+    ) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.layout_accounts_add_new, null)
+
+        builder.apply {
+            setView(dialogView)
+            setCancelable(false)
+        }
+
+        val tvAccountsAddNew: TextView = dialogView.findViewById(R.id.tvAccountsAddNew)
+        val etAccountsAddNew: EditText = dialogView.findViewById(R.id.etAccountsAddNew)
+        val ivAccountsAddNew: ImageView = dialogView.findViewById(R.id.ivAccountsAddNew)
+
+        tvAccountsAddNew.setText(R.string.accounts_category_name)
+        ivAccountsAddNew.setImageResource(R.drawable.ic_format_list_bulleted_light_black)
+
+        var buttonName = ""
+        var dialogTitle = ""
+        var toastMes = ""
+
+        if (addOrUpdate == "add") {
+            buttonName = "Add"
+            dialogTitle = resources.getString(R.string.accounts_new_category)
+            toastMes = resources.getString(R.string.many_nothing_to_add)
+        } else if (addOrUpdate == "update") {
+            buttonName = "Update"
+            dialogTitle = resources.getString(R.string.accounts_edit_category) + ": " +
+                    selectedCategoryName
+            toastMes = resources.getString(R.string.many_nothing_to_update)
+
+            etAccountsAddNew.apply {
+                setText(selectedCategoryName)
+                setSelection(etAccountsAddNew.text.length)
+            }
+        }
+
+        builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
+            val categoryName = etAccountsAddNew.text.toString()
+
+            if (categoryName.isNotEmpty()) {
+                addOrUpdateCategory(
+                        addOrUpdate,
+                        categoryName,
+                        selectedCategoryId,
+                        selectedCategoryName
+                )
+            } else {
+                val toast: Toast = Toast.makeText(
+                        getAppCompatActivity().applicationContext,
+                        toastMes,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+
+            view?.apply {
+                postDelayed(
+                        {
+                            closeKeyboard()
+                        }, 50
+                )
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+
+            view?.apply {
+                postDelayed(
+                        {
+                            closeKeyboard()
+                        }, 50
+                )
+            }
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.apply {
+            window?.setBackgroundDrawable(
+                    ContextCompat.getDrawable(
+                            getAppCompatActivity(), R.drawable.layout_alert_dialog
+                    )
+            )
+            setTitle(dialogTitle)
+            show()
         }
     }
 
@@ -194,4 +297,80 @@ open class AccountsProcessClass : Fragment() {
         }
         closeKeyboard()
     }
+
+//    fun showDeleteCategory(
+//            selectedCategoryId: String,
+//            selectedCategoryName: String,
+//            selectedCategoryNum: String
+//    ) {
+//        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+//
+//        val toastMessage = if (selectedCategoryNum == "0") {
+//            "Delete category?"
+//        } else {
+//            "Selected category is not empty. Delete anyway?"
+//        }
+//
+//        builder.apply {
+//            setMessage(toastMessage)
+//            setCancelable(false)
+//        }
+//
+//        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+//            categoryIdTemp = selectedCategoryId
+//            categoryNameTemp = selectedCategoryName
+//
+//            if (selectedCategoryNum == "0") {
+//                deleteCategory()
+//            } else {
+//                val goToConfirmActivity = Intent(
+//                        appCompatActivity,
+//                        ConfirmActionActivity::class.java
+//                )
+//
+//                @Suppress("DEPRECATION")
+//                startActivityForResult(goToConfirmActivity, 16914)
+//                appCompatActivity.overridePendingTransition(
+//                        R.anim.anim_enter_bottom_to_top_2,
+//                        R.anim.anim_0
+//                )
+//            }
+//        }
+//        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+//            dialog.cancel()
+//        }
+//
+//        val alert: AlertDialog = builder.create()
+//        alert.setTitle(R.string.many_alert_title_confirm)
+//        alert.show()
+//    }
+
+//    private fun deleteCategory() {                                                                  // Delete Category
+//        val status = databaseHandlerClass.removeCategory(encodingClass.encodeData(categoryIdTemp))
+//
+//        if (status > -1) {
+//            val toast = Toast.makeText(
+//                    appCompatActivity.applicationContext,
+//                    "Category '$categoryNameTemp' deleted!",
+//                    Toast.LENGTH_SHORT
+//            )
+//            toast?.apply {
+//                setGravity(Gravity.CENTER, 0, 0)
+//                show()
+//            }
+//        }
+//
+//        populateCategories("")
+//    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        @Suppress("DEPRECATION")
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        when {
+//            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+//                deleteCategory()
+//            }
+//        }
+//    }
 }

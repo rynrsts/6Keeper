@@ -80,7 +80,8 @@ class FavoritesFragment : Fragment() {
         val encodingClass = EncodingClass()
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "accountIsFavorites",
-                encodingClass.encodeData("1")
+                encodingClass.encodeData("1"),
+                encodingClass.encodeData(1.toString())
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)

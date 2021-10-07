@@ -3,13 +3,18 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +27,8 @@ class SpecificAccountFragment : Fragment() {
 
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -49,6 +56,8 @@ class SpecificAccountFragment : Fragment() {
 
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
     }
 
     private fun setActionBarTitle() {
@@ -72,11 +81,10 @@ class SpecificAccountFragment : Fragment() {
 
     @SuppressLint("SetTextI18n", "InflateParams")
     private fun populateAccountData() {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
-                encodingClass.encodeData(args.specificPlatformId)
+                encodingClass.encodeData(args.specificPlatformId),
+                encodingClass.encodeData(0.toString())
         )
         var platformName = ""
         var categoryId = ""
@@ -158,7 +166,77 @@ class SpecificAccountFragment : Fragment() {
         }
 
         clSpecificAccDelete.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+            builder.setMessage(R.string.specific_account_delete)
+            builder.setCancelable(false)
 
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            }
+            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setTitle(R.string.many_alert_title_confirm)
+            alert.show()
+
+            it.apply {
+                clSpecificAccDelete.isClickable = false                                             // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clSpecificAccDelete.isClickable = true
+                        }, 1000
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    val status = databaseHandlerClass.updateDeleteAccount(
+                            encodingClass.encodeData(args.specificAccountId),
+                            encodingClass.encodeData(1.toString()),
+                            "AccountsTable",
+                            "account_id",
+                            "account_deleted"
+                    )
+
+                    if (status > -1) {
+                        val toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                "Account '${args.specificAccountName}' deleted!",
+                                Toast.LENGTH_SHORT
+                        )
+                        toast?.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
+
+                    postDelayed(
+                            {
+                                appCompatActivity.onBackPressed()
+                            }, 250
+                    )
+                }
+
+            }
         }
     }
 }

@@ -79,27 +79,8 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         }
 
         tvCreateNewAccP4Terms.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-            val inflater = this.layoutInflater
-            val dialogView = inflater.inflate(R.layout.fragment_terms_conditions, null)
-
-            builder.apply {
-                setView(dialogView)
-                setCancelable(false)
-            }
-            builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
-
-            val alert: AlertDialog = builder.create()
-            alert.apply {
-                window?.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
-                                context, R.drawable.layout_alert_dialog
-                        )
-                )
-                show()
-            }
+            val dialogView = layoutInflater.inflate(R.layout.fragment_terms_conditions, null)
+            showTermsOrPrivacy(dialogView)
 
             it.apply {
                 tvCreateNewAccP4Terms.isClickable = false                                           // Set un-clickable for 1 second
@@ -112,27 +93,8 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         }
 
         tvCreateNewAccP4Privacy.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-            val inflater = this.layoutInflater
-            val dialogView = inflater.inflate(R.layout.fragment_privacy_policy, null)
-
-            builder.apply {
-                setView(dialogView)
-                setCancelable(false)
-            }
-            builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
-
-            val alert: AlertDialog = builder.create()
-            alert.apply {
-                window?.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
-                                context, R.drawable.layout_alert_dialog
-                        )
-                )
-                show()
-            }
+            val dialogView = layoutInflater.inflate(R.layout.fragment_privacy_policy, null)
+            showTermsOrPrivacy(dialogView)
 
             it.apply {
                 tvCreateNewAccP4Privacy.isClickable = false                                         // Set un-clickable for 1 second
@@ -147,7 +109,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         acbCreateNewAccP4Register.setOnClickListener {
             when {
                 isMasterPINSetup() && isTermsChecked() -> {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(attActivity)
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
                     builder.setMessage(R.string.create_new_acc_message)
                     builder.setCancelable(false)
 

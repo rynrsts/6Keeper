@@ -15,7 +15,6 @@
 
     <!-- Add Account -->
     <string name="add_account_add">Add</string>
-    <string name="add_account_alert_existing">Account name is already existing</string>
     <string name="add_account_credential_1">Credential Field</string>
     <string name="add_account_desc">Description (Optional)</string>
     <string name="add_account_favorites">Appear in Favorites</string>
@@ -31,7 +30,7 @@
     <string name="accounts_new_category">New Category</string>
     <string name="accounts_new_category_mes">New category added!</string>
     <string name="accounts_new_category_alert_existing">
-        Category is already existing
+        Category name is already existing
     </string>
 
     <!-- Confirm Action -->
@@ -279,6 +278,7 @@
     <string name="specific_account_desc">Description</string>
     <string name="specific_account_remove">Remove from Favorites</string>
     <string name="specific_account_appear">Appear in Favorites</string>
+    <string name="specific_account_delete">Delete account?</string>
 
     <!-- Specific Category -->
     <string name="specific_category_edit_platform">Edit Platform</string>
@@ -287,8 +287,11 @@
     <string name="specific_category_platform_name">Platform Name</string>
     <string name="specific_category_new_platform">New Platform</string>
     <string name="specific_category_new_platform_alert_existing">
-        Platform is already existing
+        Platform name is already existing
     </string>
+
+    <!-- Specific Platform -->
+    <string name="specific_platform_delete">Delete Account</string>
 
     <!-- Terms and Conditions -->
     <string name="terms_age_content">

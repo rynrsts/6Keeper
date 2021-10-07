@@ -1,8 +1,12 @@
 package com.example.sixkeeper
 
+import android.content.DialogInterface
+import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 open class CreateNewAccountP4ValidationClass : Fragment() {
@@ -40,5 +44,27 @@ open class CreateNewAccountP4ValidationClass : Fragment() {
 
     fun isTermsChecked(): Boolean {
         return cbCreateNewAccP4AgreeToTerms.isChecked
+    }
+
+    fun showTermsOrPrivacy(dialogView: View) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+
+        builder.apply {
+            setView(dialogView)
+            setCancelable(false)
+        }
+        builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.apply {
+            window?.setBackgroundDrawable(
+                    ContextCompat.getDrawable(
+                            context, R.drawable.layout_alert_dialog
+                    )
+            )
+            show()
+        }
     }
 }

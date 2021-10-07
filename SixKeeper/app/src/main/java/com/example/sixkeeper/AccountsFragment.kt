@@ -1,7 +1,6 @@
 package com.example.sixkeeper
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -54,8 +53,11 @@ class AccountsFragment : AccountsProcessClass() {
 //        TODO: Fix bug when clicked many times
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
-            val selectedCategoryId = selectedCategory.substring(0, 5)
-            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
+//            val selectedCategoryId = selectedCategory.substring(0, 5)
+//            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
+            val selectedCategoryValue = selectedCategory.split("ramjcammjar")
+            val selectedCategoryId = selectedCategoryValue[0]
+            val selectedCategoryName = selectedCategoryValue[1]
 
             val action = AccountsFragmentDirections
                     .actionAccountsFragmentToSpecificCategoryFragment(
@@ -72,8 +74,12 @@ class AccountsFragment : AccountsProcessClass() {
     private fun setOnLongClick() {                                                                  // Set item long click
         getLvAccountsContainer().onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(pos).toString()
-            val selectedCategoryId = selectedCategory.substring(0, 5)
-            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
+//            val selectedCategoryId = selectedCategory.substring(0, 5)
+//            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
+            val selectedCategoryValue = selectedCategory.split("ramjcammjar")
+            val selectedCategoryId = selectedCategoryValue[0]
+            val selectedCategoryName = selectedCategoryValue[1]
+//            val selectedCategoryNum = selectedCategoryValue[2]
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
             val inflater = this.layoutInflater
@@ -116,105 +122,11 @@ class AccountsFragment : AccountsProcessClass() {
 
             llCategoryPlatformDelete.setOnClickListener {
                 alert.cancel()
+//                showDeleteCategory(selectedCategoryId, selectedCategoryName, selectedCategoryNum)
             }
 
             true
         })
-    }
-
-    @SuppressLint("InflateParams")
-    private fun showAddUpdateCategory(
-            addOrUpdate: String,
-            selectedCategoryName: String,
-            selectedCategoryId: String
-    ) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-        val inflater = this.layoutInflater
-        val dialogView = inflater.inflate(R.layout.layout_accounts_add_new, null)
-
-        builder.apply {
-            setView(dialogView)
-            setCancelable(false)
-        }
-
-        val tvAccountsAddNew: TextView = dialogView.findViewById(R.id.tvAccountsAddNew)
-        val etAccountsAddNew: EditText = dialogView.findViewById(R.id.etAccountsAddNew)
-        val ivAccountsAddNew: ImageView = dialogView.findViewById(R.id.ivAccountsAddNew)
-
-        tvAccountsAddNew.setText(R.string.accounts_category_name)
-        ivAccountsAddNew.setImageResource(R.drawable.ic_format_list_bulleted_light_black)
-
-        var buttonName = ""
-        var dialogTitle = ""
-        var toastMes = ""
-
-        if (addOrUpdate == "add") {
-            buttonName = "Add"
-            dialogTitle = resources.getString(R.string.accounts_new_category)
-            toastMes = resources.getString(R.string.many_nothing_to_add)
-        } else if (addOrUpdate == "update") {
-            buttonName = "Update"
-            dialogTitle = resources.getString(R.string.accounts_edit_category) + ": " + selectedCategoryName
-            toastMes = resources.getString(R.string.many_nothing_to_update)
-
-            etAccountsAddNew.apply {
-                setText(selectedCategoryName)
-                setSelection(etAccountsAddNew.text.length)
-            }
-        }
-
-        builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
-            val categoryName = etAccountsAddNew.text.toString()
-
-            if (categoryName.isNotEmpty()) {
-                addOrUpdateCategory(
-                        addOrUpdate,
-                        categoryName,
-                        selectedCategoryId,
-                        selectedCategoryName
-                )
-            } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        toastMes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
-            }
-
-            view?.apply {
-                postDelayed(
-                        {
-                            closeKeyboard()
-                        }, 50
-                )
-            }
-        }
-        builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
-            dialog.cancel()
-
-            view?.apply {
-                postDelayed(
-                        {
-                            closeKeyboard()
-                        }, 50
-                )
-            }
-        }
-
-        val alert: AlertDialog = builder.create()
-        alert.apply {
-            window?.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            getAppCompatActivity(), R.drawable.layout_alert_dialog
-                    )
-            )
-            setTitle(dialogTitle)
-            show()
-        }
     }
 
     private fun setEditTextOnChange() {                                                             // Search real-time

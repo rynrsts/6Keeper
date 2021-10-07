@@ -3,6 +3,7 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -37,7 +38,10 @@ class SpecificPlatformFragment : Fragment() {
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedAccountIsFavorites: String
+    private lateinit var accountIdTemp: String
+    private lateinit var accountNameTemp: String
     private var setIsFavorites: Int = 0
+    private lateinit var clickAction: String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -80,7 +84,7 @@ class SpecificPlatformFragment : Fragment() {
         tAppBarToolbar.title = getString(R.string.many_accounts)
     }
 
-    private fun setHierarchy(){
+    private fun setHierarchy() {
         val tvSpecificPlatHierarchy: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificPlatHierarchy)
         val titleText = args.specificCategoryName + " > " + args.specificPlatformName
@@ -105,7 +109,8 @@ class SpecificPlatformFragment : Fragment() {
     private fun populateAccounts(accountName: String) {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
-                encodingClass.encodeData(args.specificPlatformId)
+                encodingClass.encodeData(args.specificPlatformId),
+                encodingClass.encodeData(0.toString())
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -169,12 +174,11 @@ class SpecificPlatformFragment : Fragment() {
 //        TODO: Disable for 1 second on click
         lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
-//            selectedAccountId = selectedAccount.substring(0, 6)
-//            selectedAccountName = selectedAccount.substring(6, selectedAccount.length)
             val selectedAccountValue = selectedAccount.split("ramjcammjar")
             selectedAccountId = selectedAccountValue[0]
             selectedAccountName = selectedAccountValue[1]
             selectedAccountIsFavorites = selectedAccountValue[2]
+            clickAction = "View Account"
 
             val goToConfirmActivity = Intent(
                     appCompatActivity,
@@ -190,31 +194,6 @@ class SpecificPlatformFragment : Fragment() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                view?.apply {
-                    postDelayed(
-                            {
-                                val action = SpecificPlatformFragmentDirections
-                                        .actionSpecificPlatformFragmentToSpecificAccountFragment(
-                                                selectedAccountId,
-                                                selectedAccountName,
-                                                args.specificPlatformId
-                                        )
-                                findNavController().navigate(action)
-
-                                etSpecificPlatSearchBox.setText("")
-                            }, 250
-                    )
-                }
-            }
-        }
-    }
-
     @SuppressLint("InflateParams")
     private fun setOnLongClick() {                                                                  // Set item long click
         lvSpecificPlatContainer.onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
@@ -223,6 +202,8 @@ class SpecificPlatformFragment : Fragment() {
             selectedAccountId = selectedAccountValue[0]
             selectedAccountName = selectedAccountValue[1]
             selectedAccountIsFavorites = selectedAccountValue[2]
+            accountIdTemp = selectedAccountId
+            accountNameTemp = selectedAccountName
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
             val inflater = this.layoutInflater
@@ -258,10 +239,11 @@ class SpecificPlatformFragment : Fragment() {
 
             closeKeyboard()
 
-
             val llAccountsFavorites: LinearLayout =
                     dialogView.findViewById(R.id.llAccountsFavorites)
-
+            val llAccountsDelete: LinearLayout =
+                    dialogView.findViewById(R.id.llAccountsDelete)
+            // Appear in or remove from Favorites
             llAccountsFavorites.setOnClickListener {
                 val status = databaseHandlerClass.updateIsFavorites(
                         encodingClass.encodeData(selectedAccountId),
@@ -283,9 +265,92 @@ class SpecificPlatformFragment : Fragment() {
                 alert.cancel()
                 populateAccounts("")
             }
+            // Delete Account
+            llAccountsDelete.setOnClickListener {
+                alert.cancel()
+                showDelete()
+            }
 
             true
         })
+    }
+
+    private fun showDelete() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+        builder.setMessage(R.string.specific_account_delete)
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            val goToConfirmActivity = Intent(
+                    appCompatActivity,
+                    ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            appCompatActivity.overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
+            )
+
+            clickAction = "Delete Account"
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title_confirm)
+        alert.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                if (clickAction == "View Account") {
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    val action = SpecificPlatformFragmentDirections
+                                            .actionSpecificPlatformFragmentToSpecificAccountFragment(
+                                                    selectedAccountId,
+                                                    selectedAccountName,
+                                                    args.specificPlatformId
+                                            )
+                                    findNavController().navigate(action)
+
+                                    etSpecificPlatSearchBox.setText("")
+                                }, 250
+                        )
+                    }
+                } else if (clickAction == "Delete Account") {
+                    val status = databaseHandlerClass.updateDeleteAccount(
+                            encodingClass.encodeData(accountIdTemp),
+                            encodingClass.encodeData(1.toString()),
+                            "AccountsTable",
+                            "account_id",
+                            "account_deleted"
+                    )
+
+                    if (status > -1) {
+                        val toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                "Account '$accountNameTemp' deleted!",
+                                Toast.LENGTH_SHORT
+                        )
+                        toast?.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
+
+                    populateAccounts("")
+                }
+            }
+        }
     }
 
     private fun setEditTextOnChange() {                                                             // Search real-time

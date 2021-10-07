@@ -9,5 +9,6 @@ class UserAccountModelClass(
         val accountWebsiteURL: String,
         val accountDescription: String,
         val accountIsFavorites: String,
+        val accountDeleted: String,
         val platformId: String
 )

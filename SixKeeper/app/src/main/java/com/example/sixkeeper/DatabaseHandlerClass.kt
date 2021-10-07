@@ -70,6 +70,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_WEBSITE_URL = "account_website_url"
         private const val KEY_ACCOUNT_DESCRIPTION = "account_description"
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
+        private const val KEY_ACCOUNT_DELETED = "account_deleted"
 //        private const val KEY_PLATFORM_ID = "platform_id"
     }
 
@@ -129,6 +130,7 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_WEBSITE_URL + " TEXT," +
                         KEY_ACCOUNT_DESCRIPTION + " TEXT," +
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
+                        KEY_ACCOUNT_DELETED + " TEXT," +
                         KEY_PLATFORM_ID + " TEXT" +
                         ")"
                 )
@@ -286,6 +288,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+            put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
             put(KEY_PLATFORM_ID, userAccount.platformId)
         }
 
@@ -604,14 +607,15 @@ class DatabaseHandlerClass(context: Context) :
         return userPlatformList
     }
 
-    fun viewNumberOfAccounts(platformId: String): Int {                                             // View number of accounts in a platform
+    fun viewNumberOfAccounts(deleted: String, platformId: String): Int {                            // View number of accounts in a platform
         val db = this.readableDatabase
         val cursor: Cursor?
 
         val selectQuery = if (platformId.isNotEmpty()) {
-            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$platformId'"
+            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
+                    "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PLATFORM_ID = '$platformId'"
         } else {
-            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS"
+            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_DELETED = '$deleted'"
         }
 
         try {
@@ -630,16 +634,24 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewAccount(conditionField: String, idOrIsFavorites: String): List<UserAccountModelClass> { // View Specific Account
+    fun viewAccount(
+            conditionField: String,
+            idOrIsFavorites: String,
+            deleted: String
+    ): List<UserAccountModelClass> { // View Specific Account
         val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
         var selectQuery = ""
         val db = this.readableDatabase
         val cursor: Cursor?
 
         if (conditionField == "platformId") {
-            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PLATFORM_ID = '$idOrIsFavorites'"
+            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                    "WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                    "AND $KEY_PLATFORM_ID = '$idOrIsFavorites'"
         } else if (conditionField == "accountIsFavorites") {
-            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_IS_FAVORITES = '$idOrIsFavorites'"
+            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                    "WHERE $KEY_ACCOUNT_IS_FAVORITES = '$idOrIsFavorites' " +
+                    "AND $KEY_ACCOUNT_DELETED = '$deleted'"
         }
 
         try {
@@ -657,6 +669,7 @@ class DatabaseHandlerClass(context: Context) :
         var accountWebsiteURL: String
         var accountDescription: String
         var accountIsFavorites: String
+        var accountDeleted: String
         var platformId: String
 
         if (cursor.moveToFirst()) {
@@ -669,6 +682,7 @@ class DatabaseHandlerClass(context: Context) :
                 accountWebsiteURL = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_WEBSITE_URL))
                 accountDescription = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
                 accountIsFavorites = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
+                accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
 
                 val user = UserAccountModelClass(
@@ -680,6 +694,7 @@ class DatabaseHandlerClass(context: Context) :
                         accountWebsiteURL = accountWebsiteURL,
                         accountDescription = accountDescription,
                         accountIsFavorites = accountIsFavorites,
+                        accountDeleted = accountDeleted,
                         platformId = platformId
                 )
                 userAccountList.add(user)
@@ -689,6 +704,27 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return userAccountList
+    }
+
+    fun viewTotalNumOfAccounts(): Int {                                                             // View total number of accounts
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS"
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
     }
 
     fun viewSettings(): List<UserSettingsModelClass> {                                              // View Settings
@@ -903,6 +939,31 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun updateDeleteAccount(
+            accountId: String,
+            accountDeleted: String,
+            tableName: String,
+            fieldId: String,
+            field: String
+    ): Int {                                                                                        // Update Specific Account
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(field, accountDeleted)
+        }
+
+        val success = db.update(
+                tableName,
+                contentValues,
+                "$fieldId='$accountId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
     fun updateAccount(userAccount: UserAccountModelClass): Int {                                    // Update Specific Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -952,42 +1013,42 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun removeCategory(categoryId: String): Int {
-        val db = this.writableDatabase
-
-        val success = db.delete(
-                TABLE_CATEGORIES,
-                "$KEY_CATEGORY_ID='$categoryId'",
-                null
-        )
-
-        db.close()
-        return success
-    }
-
-    fun removePlatform(platformId: String): Int {
-        val db = this.writableDatabase
-
-        val success = db.delete(
-                TABLE_PLATFORMS,
-                "$KEY_PLATFORM_ID='$platformId'",
-                null
-        )
-
-        db.close()
-        return success
-    }
-
-    fun removeAccount(accountId: String): Int {
-        val db = this.writableDatabase
-
-        val success = db.delete(
-                TABLE_ACCOUNTS,
-                "$KEY_ACCOUNT_ID='$accountId'",
-                null
-        )
-
-        db.close()
-        return success
-    }
+//    fun removeCategory(categoryId: String): Int {
+//        val db = this.writableDatabase
+//
+//        val success = db.delete(
+//                TABLE_CATEGORIES,
+//                "$KEY_CATEGORY_ID='$categoryId'",
+//                null
+//        )
+//
+//        db.close()
+//        return success
+//    }
+//
+//    fun removePlatform(platformId: String): Int {
+//        val db = this.writableDatabase
+//
+//        val success = db.delete(
+//                TABLE_PLATFORMS,
+//                "$KEY_PLATFORM_ID='$platformId'",
+//                null
+//        )
+//
+//        db.close()
+//        return success
+//    }
+//
+//    fun removeAccount(accountId: String): Int {
+//        val db = this.writableDatabase
+//
+//        val success = db.delete(
+//                TABLE_ACCOUNTS,
+//                "$KEY_ACCOUNT_ID='$accountId'",
+//                null
+//        )
+//
+//        db.close()
+//        return success
+//    }
 }

@@ -29,7 +29,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         attActivity = activity                                                                      // Attach activity
     }
 
-    fun getArgsSpecificCategoryName(): String  {
+    fun getArgsSpecificCategoryName(): String {
         return args.specificCategoryName
     }
 
@@ -60,7 +60,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         tAppBarToolbar.title = getString(R.string.specific_category_platforms)
     }
 
-    fun setHierarchy(){
+    fun setHierarchy() {
         val tvSpecificCatHierarchy: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificCatHierarchy)
         tvSpecificCatHierarchy.text = args.specificCategoryName
@@ -111,7 +111,12 @@ open class SpecificCategoryProcessClass : Fragment() {
                     userPlatformId.add(encodingClass.decodeData(u.platformId) + uPlatformName)
                     userPlatformName.add(uPlatformName)
                     userNumberOfAccounts.add(
-                            (databaseHandlerClass.viewNumberOfAccounts(u.platformId)).toString()
+                            (
+                                    databaseHandlerClass.viewNumberOfAccounts(
+                                            encodingClass.encodeData(0.toString()),
+                                            u.platformId
+                                    )
+                            ).toString()
                     )
                 }
             }
