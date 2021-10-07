@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Gravity
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -118,6 +119,13 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         acbConfirmActionButton0 = findViewById(R.id.acbConfirmActionButton0)
         acbConfirmActionButtonDelete = findViewById(R.id.acbConfirmActionButtonDelete)
         acbConfirmActionButtonCancel = findViewById(R.id.acbConfirmActionButtonCancel)
+    }
+
+    fun blockCapture() {
+        window.setFlags(                                                                            // Block capture
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 
     fun pushNumber(i: Int) {

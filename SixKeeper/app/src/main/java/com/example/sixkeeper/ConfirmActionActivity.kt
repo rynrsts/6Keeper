@@ -9,6 +9,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass() {
 
         changeStatusBarColor()
         setVariables()
+        blockCapture()
         setButtonOnClick()
     }
 

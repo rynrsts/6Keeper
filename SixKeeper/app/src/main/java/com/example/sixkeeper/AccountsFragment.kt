@@ -115,7 +115,7 @@ class AccountsFragment : AccountsProcessClass() {
             }
 
             llCategoryPlatformDelete.setOnClickListener {
-
+                alert.cancel()
             }
 
             true

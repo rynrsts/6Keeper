@@ -263,19 +263,16 @@
 
     <!-- Settings -->
     <string name="settings_allow_copy">Allow Textual Copy</string>
-    <string name="settings_allow_screen_record">Allow App Screen Record</string>
-    <string name="settings_allow_screenshot">Allow App Screenshot</string>
+    <string name="settings_allow_screen_capture">Allow Screenshot and Screen Record</string>
     <string name="settings_auto_lock">Auto Lock</string>
     <string name="settings_block_copy">Block Textual Copy</string>
-    <string name="settings_block_screen_record">Block App Screen Record</string>
-    <string name="settings_block_screenshot">Block App Screenshot</string>
+    <string name="settings_block_screen_capture">Block Screenshot and Screen Record</string>
     <string name="settings_copy">Copy</string>
     <string name="settings_disable_notifications">Disable Notifications</string>
     <string name="settings_enable_notifications">Enable Notifications</string>
     <string name="settings_general">General</string>
     <string name="settings_notifications">Notifications</string>
-    <string name="settings_screen_record">Screen Record</string>
-    <string name="settings_screenshot">Screenshot</string>
+    <string name="settings_screen_capture">Screen Capture</string>
     <string name="settings_security">Security</string>
 
     <!-- Specific Account -->

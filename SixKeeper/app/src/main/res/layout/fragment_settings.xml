@@ -119,7 +119,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision1" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSettingsScreenshot"
+                android:id="@+id/clSettingsScreenCapture"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="21dp"
@@ -128,7 +128,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvSettingsSecurity">
 
                 <ImageView
-                    android:id="@+id/ivSettingsScreenshot"
+                    android:id="@+id/ivSettingsScreenCapture"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="@drawable/layout_blue_magenta_circle"
@@ -140,82 +140,28 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tvSettingsScreenshot"
+                    android:id="@+id/tvSettingsScreenCapture"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="@string/settings_screenshot"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenshot"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenshot"
+                    android:text="@string/settings_screen_capture"
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenCapture"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenCapture"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvSettingsScreenshotDesc"
+                    android:id="@+id/tvSettingsScreenCaptureDesc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="3dp"
                     android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenshot"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenshot"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsScreenshot" />
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenCapture"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenCapture"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsScreenCapture" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scSettingsScreenshot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@drawable/style_switch_thumb"
-                    app:trackTint="@drawable/style_switch_track" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSettingsScreenRecord"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsScreenshot">
-
-                <ImageView
-                    android:id="@+id/ivSettingsScreenRecord"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/layout_pink_red_circle"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_video_library_white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvSettingsScreenRecord"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:text="@string/settings_screen_record"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenRecord"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenRecord"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvSettingsScreenRecordDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsScreenRecord"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsScreenRecord"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsScreenRecord" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scSettingsScreenRecord"
+                    android:id="@+id/scSettingsScreenCapture"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -233,13 +179,13 @@
                 android:layout_marginTop="18dp"
                 app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsScreenRecord">
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsScreenCapture">
 
                 <ImageView
                     android:id="@+id/ivSettingsTextualCopy"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_dark_cyan_circle"
+                    android:background="@drawable/layout_pink_red_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_content_copy_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -293,7 +239,7 @@
                     android:id="@+id/ivSettingsAutoLock"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_medium_dark_cyan_blue_circle"
+                    android:background="@drawable/layout_dark_cyan_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_lock_white"
                     app:layout_constraintBottom_toBottomOf="parent"

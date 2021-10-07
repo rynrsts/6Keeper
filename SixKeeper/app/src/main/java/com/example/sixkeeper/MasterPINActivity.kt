@@ -12,6 +12,7 @@ class MasterPINActivity : MasterPINProcessClass() {
 
         changeStatusBarColor()
         setVariables()
+        blockCapture()
         setButtonOnClick()
     }
 

@@ -44,8 +44,7 @@ class DatabaseHandlerClass(context: Context) :
         // TABLE_SETTINGS
 //        private const val KEY_USER_ID = "user_id"
         private const val KEY_NOTIFICATION = "notifications"
-        private const val KEY_SCREENSHOT = "screenshot"
-        private const val KEY_SCREEN_RECORD = "screen_record"
+        private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_COPY = "copy"
 
         // TABLE_SAVED_PASS
@@ -137,8 +136,7 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_SETTINGS + "(" +
                         KEY_USER_ID + " TEXT," +
                         KEY_NOTIFICATION + " TEXT," +
-                        KEY_SCREENSHOT + " TEXT," +
-                        KEY_SCREEN_RECORD + " TEXT," +
+                        KEY_SCREEN_CAPTURE + " TEXT," +
                         KEY_COPY + " TEXT" +
                         ")"
                 )
@@ -218,8 +216,7 @@ class DatabaseHandlerClass(context: Context) :
         contentValues.apply {
             put(KEY_USER_ID, userSettings.userId)
             put(KEY_NOTIFICATION, userSettings.notifications)
-            put(KEY_SCREENSHOT, userSettings.screenshot)
-            put(KEY_SCREEN_RECORD, userSettings.screenRecord)
+            put(KEY_SCREEN_CAPTURE, userSettings.screenCapture)
             put(KEY_COPY, userSettings.copy)
         }
 
@@ -357,6 +354,32 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return userAccList
+    }
+
+    @SuppressLint("Recycle")
+    fun viewAccStatus(): String {                                                                   // View Account Status
+        val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return String.toString()
+        }
+
+        var userStatus = ""
+
+        if (cursor.moveToFirst()) {
+            do {
+                userStatus = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_STATUS))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userStatus
     }
 
     @SuppressLint("Recycle")
@@ -683,23 +706,20 @@ class DatabaseHandlerClass(context: Context) :
 
         var accountId: String
         var notification: String
-        var screenshot: String
-        var screenRecord: String
+        var screenCapture: String
         var copy: String
 
         if (cursor.moveToFirst()) {
             do {
                 accountId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
                 notification = cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION))
-                screenshot = cursor.getString(cursor.getColumnIndex(KEY_SCREENSHOT))
-                screenRecord = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_RECORD))
+                screenCapture = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_CAPTURE))
                 copy = cursor.getString(cursor.getColumnIndex(KEY_COPY))
 
                 val user = UserSettingsModelClass(
                         userId = accountId,
                         notifications = notification,
-                        screenshot = screenshot,
-                        screenRecord = screenRecord,
+                        screenCapture = screenCapture,
                         copy = copy
                 )
                 userSettingsList.add(user)

@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 
@@ -42,6 +43,13 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     fun getPassword(): String {
         return password
+    }
+
+    fun blockCapture() {
+        window.setFlags(                                                                            // Block capture
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 
     fun isNotEmpty(): Boolean {                                                                     // Validate EditTexts are not empty

@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -21,6 +22,7 @@ class LoginActivity : LoginValidationClass() {
 
         changeStatusBarColor()
         setVariables()
+        blockCapture()
         setButtonOnClick()
         setEditTextOnChange()
         setImageViewOnClick()

@@ -19,13 +19,11 @@ class SettingsFragment : Fragment() {
     private lateinit var encodingClass: EncodingClass
 
     private lateinit var scSettingsNotifications: SwitchCompat
-    private lateinit var scSettingsScreenshot: SwitchCompat
-    private lateinit var scSettingsScreenRecord: SwitchCompat
+    private lateinit var scSettingsScreenCapture: SwitchCompat
     private lateinit var scSettingsTextualCopy: SwitchCompat
 
     private lateinit var tvSettingsNotifDesc: TextView
-    private lateinit var tvSettingsScreenshotDesc: TextView
-    private lateinit var tvSettingsScreenRecordDesc: TextView
+    private lateinit var tvSettingsScreenCaptureDesc: TextView
     private lateinit var tvSettingsTextualCopyDesc: TextView
 
     override fun onCreateView(
@@ -57,13 +55,12 @@ class SettingsFragment : Fragment() {
         encodingClass = EncodingClass()
 
         scSettingsNotifications = appCompatActivity.findViewById(R.id.scSettingsNotifications)
-        scSettingsScreenshot = appCompatActivity.findViewById(R.id.scSettingsScreenshot)
-        scSettingsScreenRecord = appCompatActivity.findViewById(R.id.scSettingsScreenRecord)
+        scSettingsScreenCapture = appCompatActivity.findViewById(R.id.scSettingsScreenCapture)
         scSettingsTextualCopy = appCompatActivity.findViewById(R.id.scSettingsTextualCopy)
 
         tvSettingsNotifDesc = appCompatActivity.findViewById(R.id.tvSettingsNotifDesc)
-        tvSettingsScreenshotDesc = appCompatActivity.findViewById(R.id.tvSettingsScreenshotDesc)
-        tvSettingsScreenRecordDesc = appCompatActivity.findViewById(R.id.tvSettingsScreenRecordDesc)
+        tvSettingsScreenCaptureDesc =
+                appCompatActivity.findViewById(R.id.tvSettingsScreenCaptureDesc)
         tvSettingsTextualCopyDesc = appCompatActivity.findViewById(R.id.tvSettingsTextualCopyDesc)
     }
 
@@ -101,36 +98,20 @@ class SettingsFragment : Fragment() {
                 tvSettingsNotifDesc.setText(R.string.settings_disable_notifications)
             }
 
-            if (encodingClass.decodeData(u.screenshot) == "1") {
-                scSettingsScreenshot.apply {
+            if (encodingClass.decodeData(u.screenCapture) == "1") {
+                scSettingsScreenCapture.apply {
                     tag = "notifications"
                     isChecked = true
                 }
 
-                tvSettingsScreenshotDesc.setText(R.string.settings_allow_screenshot)
-            } else if (encodingClass.decodeData(u.screenshot) == "0") {
-                scSettingsScreenshot.apply {
+                tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
+            } else if (encodingClass.decodeData(u.screenCapture) == "0") {
+                scSettingsScreenCapture.apply {
                     tag = "notifications"
                     isChecked = false
                 }
 
-                tvSettingsScreenshotDesc.setText(R.string.settings_block_screenshot)
-            }
-
-            if (encodingClass.decodeData(u.screenRecord) == "1") {
-                scSettingsScreenRecord.apply {
-                    tag = "notifications"
-                    isChecked = true
-                }
-
-                tvSettingsScreenRecordDesc.setText(R.string.settings_allow_screen_record)
-            } else if (encodingClass.decodeData(u.screenRecord) == "0") {
-                scSettingsScreenRecord.apply {
-                    tag = "notifications"
-                    isChecked = false
-                }
-
-                tvSettingsScreenRecordDesc.setText(R.string.settings_block_screen_record)
+                tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
             }
 
             if (encodingClass.decodeData(u.copy) == "1") {
@@ -170,39 +151,21 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        scSettingsScreenshot.setOnClickListener {
-            if (scSettingsScreenshot.isChecked) {
+        scSettingsScreenCapture.setOnClickListener {
+            if (scSettingsScreenCapture.isChecked) {
                 databaseHandlerClass.updateSettings(
-                        "screenshot",
+                        "screen_capture",
                         encodingClass.encodeData(1.toString())
                 )
 
-                tvSettingsScreenshotDesc.setText(R.string.settings_allow_screenshot)
+                tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
             } else {
                 databaseHandlerClass.updateSettings(
-                        "screenshot",
+                        "screen_capture",
                         encodingClass.encodeData(0.toString())
                 )
 
-                tvSettingsScreenshotDesc.setText(R.string.settings_block_screenshot)
-            }
-        }
-
-        scSettingsScreenRecord.setOnClickListener {
-            if (scSettingsScreenRecord.isChecked) {
-                databaseHandlerClass.updateSettings(
-                        "screen_record",
-                        encodingClass.encodeData(1.toString())
-                )
-
-                tvSettingsScreenRecordDesc.setText(R.string.settings_allow_screen_record)
-            } else {
-                databaseHandlerClass.updateSettings(
-                        "screen_record",
-                        encodingClass.encodeData(0.toString())
-                )
-
-                tvSettingsScreenRecordDesc.setText(R.string.settings_block_screen_record)
+                tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
             }
         }
 

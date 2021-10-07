@@ -25,7 +25,6 @@ class IndexActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_index)
 
-
         populate()
         setUsername()
         setOnClick()
