@@ -371,7 +371,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         alert.show()
     }
 
-    private fun deletePlatform() {                                                                  // Delete Category
+    private fun deletePlatform() {                                                                  // Delete Platform
         val status = databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
                 "platform_id",
@@ -394,7 +394,7 @@ open class SpecificCategoryProcessClass : Fragment() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun deleteAccount() {
+    private fun deleteAccount() {                                                                   // Delete Platforms' contents
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)

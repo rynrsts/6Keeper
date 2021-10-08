@@ -19,7 +19,8 @@
             android:id="@+id/cbRecycleBinSelectAll"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="20dp"
+            android:buttonTint="@drawable/style_checked_blue"
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +29,7 @@
             android:id="@+id/tvRecycleBinSelectAll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
             android:gravity="center_vertical"
             android:text="@string/recycle_bin_select_all"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,19 +38,26 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
-        android:scrollbarThumbVertical="@null"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintTop_toBottomOf="@+id/llRecycleBinSelectAll">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/llRecycleBinNoItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
-    </ScrollView>
+        <ListView
+            android:id="@+id/lvRecycleBinContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/vRecycleBinDivision1"

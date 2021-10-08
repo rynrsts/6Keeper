@@ -7,20 +7,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.EditText
-import android.widget.ListView
+import android.widget.AdapterView.OnItemLongClickListener
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 
 class FavoritesFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     private lateinit var lvFavoritesContainer: ListView
     private lateinit var etFavoritesSearchBox: EditText
@@ -44,6 +49,7 @@ class FavoritesFragment : Fragment() {
         closeKeyboard()
         populateAccounts("")
         setOnClick()
+        setOnLongClick()
         setEditTextOnChange()
     }
 
@@ -55,6 +61,8 @@ class FavoritesFragment : Fragment() {
 
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
 
         lvFavoritesContainer = appCompatActivity.findViewById(R.id.lvFavoritesContainer)
         etFavoritesSearchBox = appCompatActivity.findViewById(R.id.etFavoritesSearchBox)
@@ -74,65 +82,83 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint("DefaultLocale", "InflateParams")
     private fun populateAccounts(accountName: String) {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "accountIsFavorites",
-                encodingClass.encodeData("1"),
-                encodingClass.encodeData(1.toString())
+                encodingClass.encodeData(1.toString()),
+                encodingClass.encodeData(0.toString())
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)
 
-        for (u in userAccount) {
-            val uAccountName = encodingClass.decodeData(u.accountName)
+        if (userAccount.isNullOrEmpty()) {
+            val llFavoritesNoItem: LinearLayout =
+                    appCompatActivity.findViewById(R.id.llFavoritesNoItem)
+            val inflatedView = layoutInflater.inflate(
+                    R.layout.layout_accounts_no_item,
+                    null,
+                    true
+            )
+            val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
-            if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
-                userAccountId.add(
-                        encodingClass.decodeData(u.platformId) +
-                                encodingClass.decodeData(u.accountId) + uAccountName
-                )
-                userAccountName.add(uAccountName)
+            tvAccountsNoItem.setText(R.string.many_no_account)
+            lvFavoritesContainer.adapter = null
+            llFavoritesNoItem.apply {
+                removeAllViews()
+                addView(inflatedView)
+            }
+        } else {
+            for (u in userAccount) {
+                val uAccountName = encodingClass.decodeData(u.accountName)
 
-                val userPlatform: List<UserPlatformModelClass> =
-                        databaseHandlerClass.viewPlatform("platform", u.platformId)
-                var uPlatformName: String
+                if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
+                    userAccountId.add(
+                            encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+                                    uAccountName + "ramjcammjar" +
+                                    encodingClass.decodeData(u.platformId)
+                    )
+                    userAccountName.add(uAccountName)
 
-                for (up in userPlatform) {
-                    uPlatformName = encodingClass.decodeData(up.platformName)
+                    val userPlatform: List<UserPlatformModelClass> =
+                            databaseHandlerClass.viewPlatform("platform", u.platformId)
+                    var uPlatformName: String
 
-                    val userCategory: List<UserCategoryModelClass> =
-                            databaseHandlerClass.viewCategory("category", up.categoryId)
-                    var uCategoryName = ""
+                    for (up in userPlatform) {
+                        uPlatformName = encodingClass.decodeData(up.platformName)
 
-                    for (uc in userCategory) {
-                        uCategoryName = encodingClass.decodeData(uc.categoryName)
+                        val userCategory: List<UserCategoryModelClass> =
+                                databaseHandlerClass.viewCategory("category", up.categoryId)
+                        var uCategoryName = ""
+
+                        for (uc in userCategory) {
+                            uCategoryName = encodingClass.decodeData(uc.categoryName)
+                        }
+
+                        userAccountDirectory.add("$uCategoryName > $uPlatformName")
                     }
-
-                    userAccountDirectory.add("$uCategoryName > $uPlatformName")
                 }
             }
+
+            val accountsListAdapter = FavoritesListAdapter(
+                    attActivity,
+                    userAccountId,
+                    userAccountName,
+                    userAccountDirectory
+            )
+
+            lvFavoritesContainer.adapter = accountsListAdapter
         }
-
-        val accountsListAdapter = FavoritesListAdapter(
-                attActivity,
-                userAccountId,
-                userAccountName,
-                userAccountDirectory
-        )
-
-        lvFavoritesContainer.adapter = accountsListAdapter
     }
 
     private fun setOnClick() {
         lvFavoritesContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedAccount = lvFavoritesContainer.getItemAtPosition(i).toString()
-            selectedPlatformId = selectedAccount.substring(0, 5)
-            selectedAccountId = selectedAccount.substring(5, 11)
-            selectedAccountName = selectedAccount.substring(11, selectedAccount.length)
+            val selectedAccountValue = selectedAccount.split("ramjcammjar")
+            selectedAccountId = selectedAccountValue[0]
+            selectedAccountName = selectedAccountValue[1]
+            selectedPlatformId = selectedAccountValue[2]
 
             val goToConfirmActivity = Intent(
                     appCompatActivity,
@@ -145,6 +171,66 @@ class FavoritesFragment : Fragment() {
                     R.anim.anim_enter_bottom_to_top_2,
                     R.anim.anim_0
             )
+        })
+    }
+
+    private fun setOnLongClick() {                                                                  // Set item long click
+        lvFavoritesContainer.onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
+            val selectedAccount = lvFavoritesContainer.getItemAtPosition(pos).toString()
+            val selectedAccountValue = selectedAccount.split("ramjcammjar")
+            selectedAccountId = selectedAccountValue[0]
+            selectedAccountName = selectedAccountValue[1]
+            selectedPlatformId = selectedAccountValue[2]
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+            val inflater = this.layoutInflater
+            val dialogView = inflater.inflate(R.layout.layout_accounts_favorites, null)
+            val ivAccountsIcon: ImageView = dialogView.findViewById(R.id.ivAccountsIcon)
+            val tvAccountsText: TextView = dialogView.findViewById(R.id.tvAccountsText)
+            val llAccountsFavorites: LinearLayout = dialogView.findViewById(R.id.llAccountsFavorites)
+            val llAccountsDelete: LinearLayout =  dialogView.findViewById(R.id.llAccountsDelete)
+
+            ivAccountsIcon.setImageResource(R.drawable.ic_star_outline_light_black)
+            tvAccountsText.setText(R.string.specific_account_remove)
+            llAccountsDelete.removeAllViews()
+            builder.setView(dialogView)
+
+            val alert: AlertDialog = builder.create()
+            alert.apply {
+                window?.setBackgroundDrawable(
+                        ContextCompat.getDrawable(
+                                context, R.drawable.layout_alert_dialog
+                        )
+                )
+                setTitle("Account: $selectedAccountName")
+                show()
+            }
+
+            closeKeyboard()
+                                                                                                    // Appear in or remove from Favorites
+            llAccountsFavorites.setOnClickListener {
+                val status = databaseHandlerClass.updateIsFavorites(
+                        encodingClass.encodeData(selectedAccountId),
+                        encodingClass.encodeData(0.toString())
+                )
+
+                if (status > -1) {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Account '$selectedAccountName' removed from favorites!",
+                            Toast.LENGTH_SHORT
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
+
+                alert.cancel()
+                populateAccounts("")
+            }
+
+            true
         })
     }
 

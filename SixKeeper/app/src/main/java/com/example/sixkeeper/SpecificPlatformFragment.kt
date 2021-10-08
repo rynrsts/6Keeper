@@ -175,7 +175,6 @@ class SpecificPlatformFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-//        TODO: Disable for 1 second on click
         lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
             val selectedAccountValue = selectedAccount.split("ramjcammjar")
@@ -247,7 +246,7 @@ class SpecificPlatformFragment : Fragment() {
                     dialogView.findViewById(R.id.llAccountsFavorites)
             val llAccountsDelete: LinearLayout =
                     dialogView.findViewById(R.id.llAccountsDelete)
-            // Appear in or remove from Favorites
+                                                                                                    // Appear in or remove from Favorites
             llAccountsFavorites.setOnClickListener {
                 val status = databaseHandlerClass.updateIsFavorites(
                         encodingClass.encodeData(selectedAccountId),
@@ -269,7 +268,7 @@ class SpecificPlatformFragment : Fragment() {
                 alert.cancel()
                 populateAccounts("")
             }
-            // Delete Account
+                                                                                                    // Delete Account
             llAccountsDelete.setOnClickListener {
                 alert.cancel()
                 showDelete()

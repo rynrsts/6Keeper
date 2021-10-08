@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Gravity
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -15,7 +16,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.schedule
 
 open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
@@ -133,14 +133,14 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         )
     }
 
-    fun pushNumber(i: Int) {
+    fun pushNumber(i: Int, view: View) {
         if (pin.size < 6) {
             pin.push(i)
-            shadePin()
+            shadePin(view)
         }
     }
 
-    private fun shadePin() {
+    private fun shadePin(view: View) {
         when (pin.size) {
             1 ->
                 ivMasterPINCircle1.setImageResource(R.drawable.layout_blue_circle)
@@ -168,8 +168,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 val goToIndexActivity = Intent(this, IndexActivity::class.java)
                 startActivity(goToIndexActivity)
                 overridePendingTransition(
-                    R.anim.anim_enter_top_to_bottom_2,
-                    R.anim.anim_exit_top_to_bottom_2
+                        R.anim.anim_enter_top_to_bottom_2,
+                        R.anim.anim_exit_top_to_bottom_2
                 )
 
                 this.finish()
@@ -193,41 +193,45 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 acbMasterPINButtonDelete.isClickable = false
                 acbMasterPINButtonCancel.isClickable = false
 
-                Timer().schedule(200) {
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
+                view.apply {
+                    postDelayed(
+                            {
+                                toast.apply {
+                                    setGravity(Gravity.CENTER, 0, 0)
+                                    show()
+                                }
 
-                    val vibrator: Vibrator =
-                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                val vibrator: Vibrator =
+                                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-                    @Suppress("DEPRECATION")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
-                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
-                                VibrationEffect.createOneShot(
-                                        350,
-                                        VibrationEffect.DEFAULT_AMPLITUDE
-                                )
-                        )
-                    } else {
-                        vibrator.vibrate(350)
-                    }
+                                @Suppress("DEPRECATION")
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {               // If android version is Oreo and above
+                                    vibrator.vibrate(                                               // Vibrate for wrong confirmation
+                                            VibrationEffect.createOneShot(
+                                                    350,
+                                                    VibrationEffect.DEFAULT_AMPLITUDE
+                                            )
+                                    )
+                                } else {
+                                    vibrator.vibrate(350)
+                                }
 
-                    acbMasterPINButton1.isClickable = true
-                    acbMasterPINButton2.isClickable = true
-                    acbMasterPINButton3.isClickable = true
-                    acbMasterPINButton4.isClickable = true
-                    acbMasterPINButton5.isClickable = true
-                    acbMasterPINButton6.isClickable = true
-                    acbMasterPINButton7.isClickable = true
-                    acbMasterPINButton8.isClickable = true
-                    acbMasterPINButton9.isClickable = true
-                    acbMasterPINButton0.isClickable = true
-                    acbMasterPINButtonDelete.isClickable = true
-                    acbMasterPINButtonCancel.isClickable = true
+                                acbMasterPINButton1.isClickable = true
+                                acbMasterPINButton2.isClickable = true
+                                acbMasterPINButton3.isClickable = true
+                                acbMasterPINButton4.isClickable = true
+                                acbMasterPINButton5.isClickable = true
+                                acbMasterPINButton6.isClickable = true
+                                acbMasterPINButton7.isClickable = true
+                                acbMasterPINButton8.isClickable = true
+                                acbMasterPINButton9.isClickable = true
+                                acbMasterPINButton0.isClickable = true
+                                acbMasterPINButtonDelete.isClickable = true
+                                acbMasterPINButtonCancel.isClickable = true
 
-                    unShadeAllPin()
+                                unShadeAllPin()
+                            }, 200
+                    )
                 }
             }
         }

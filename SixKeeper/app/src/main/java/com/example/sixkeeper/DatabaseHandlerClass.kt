@@ -645,14 +645,21 @@ class DatabaseHandlerClass(context: Context) :
         val db = this.readableDatabase
         val cursor: Cursor?
 
-        if (conditionField == "platformId") {
-            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
-                    "WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
-                    "AND $KEY_PLATFORM_ID = '$idOrIsFavorites'"
-        } else if (conditionField == "accountIsFavorites") {
-            selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
-                    "WHERE $KEY_ACCOUNT_IS_FAVORITES = '$idOrIsFavorites' " +
-                    "AND $KEY_ACCOUNT_DELETED = '$deleted'"
+        when (conditionField) {
+            "platformId" -> {
+                selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                        "WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                        "AND $KEY_PLATFORM_ID = '$idOrIsFavorites'"
+            }
+            "accountIsFavorites" -> {
+                selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                        "WHERE $KEY_ACCOUNT_IS_FAVORITES = '$idOrIsFavorites' " +
+                        "AND $KEY_ACCOUNT_DELETED = '$deleted'"
+            }
+            "deleted" -> {
+                selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                        "WHERE $KEY_ACCOUNT_DELETED = '$deleted'"
+            }
         }
 
         try {
@@ -974,7 +981,8 @@ class DatabaseHandlerClass(context: Context) :
     fun updateDeleteMultipleAccount(
             accountDeleted: String,
             accountDeleteDate: String,
-            platformId: Array<String?>
+            id: Array<String?>,
+            fieldId: String
     ): Int {                                                        // Update Specific Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -987,8 +995,8 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_ACCOUNTS,
                 contentValues,
-                "$KEY_PLATFORM_ID IN (?)",
-                platformId
+                "$fieldId IN (?)",
+                id
         )
 
         db.close()

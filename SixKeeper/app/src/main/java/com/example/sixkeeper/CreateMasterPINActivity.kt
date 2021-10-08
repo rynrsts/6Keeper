@@ -14,43 +14,43 @@ class CreateMasterPINActivity : CreateMasterPINProcessClass() {
 
     private fun setButtonOnClick() {
         getAcbCreateMasterPINButton1().setOnClickListener {
-            pushNumber(1)
+            pushNumber(1, it)
         }
 
         getAcbCreateMasterPINButton2().setOnClickListener {
-            pushNumber(2)
+            pushNumber(2, it)
         }
 
         getAcbCreateMasterPINButton3().setOnClickListener {
-            pushNumber(3)
+            pushNumber(3, it)
         }
 
         getAcbCreateMasterPINButton4().setOnClickListener {
-            pushNumber(4)
+            pushNumber(4, it)
         }
 
         getAcbCreateMasterPINButton5().setOnClickListener {
-            pushNumber(5)
+            pushNumber(5, it)
         }
 
         getAcbCreateMasterPINButton6().setOnClickListener {
-            pushNumber(6)
+            pushNumber(6, it)
         }
 
         getAcbCreateMasterPINButton7().setOnClickListener {
-            pushNumber(7)
+            pushNumber(7, it)
         }
 
         getAcbCreateMasterPINButton8().setOnClickListener {
-            pushNumber(8)
+            pushNumber(8, it)
         }
 
         getAcbCreateMasterPINButton9().setOnClickListener {
-            pushNumber(9)
+            pushNumber(9, it)
         }
 
         getAcbCreateMasterPINButton0().setOnClickListener {
-            pushNumber(0)
+            pushNumber(0, it)
         }
 
         getAcbCreateMasterPINButtonDelete().setOnClickListener {

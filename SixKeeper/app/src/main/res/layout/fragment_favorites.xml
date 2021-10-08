@@ -61,7 +61,14 @@
         android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vFavoritesSearch">
+        app:layout_constraintTop_toBottomOf="@+id/vFavoritesSearch"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llFavoritesNoItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
         <ListView
             android:id="@+id/lvFavoritesContainer"

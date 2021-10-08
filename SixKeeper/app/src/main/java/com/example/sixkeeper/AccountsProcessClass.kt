@@ -373,7 +373,7 @@ open class AccountsProcessClass : Fragment() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun deleteCategoryContents() {
+    private fun deleteCategoryContents() {                                                          // Delete Categories' contents
         val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                 "category",
                 encodingClass.encodeData(categoryIdTemp)
@@ -400,7 +400,8 @@ open class AccountsProcessClass : Fragment() {
         databaseHandlerClass.updateDeleteMultipleAccount(
                 encodingClass.encodeData(1.toString()),
                 encodingClass.encodeData(date),
-                userPlatformIdNoDuplicate
+                userPlatformIdNoDuplicate,
+                "platform_id"
         )
     }
 
