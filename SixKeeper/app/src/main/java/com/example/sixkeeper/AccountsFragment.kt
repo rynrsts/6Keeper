@@ -50,11 +50,8 @@ class AccountsFragment : AccountsProcessClass() {
             }
         }
 
-//        TODO: Fix bug when clicked many times
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
-//            val selectedCategoryId = selectedCategory.substring(0, 5)
-//            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
             val selectedCategoryValue = selectedCategory.split("ramjcammjar")
             val selectedCategoryId = selectedCategoryValue[0]
             val selectedCategoryName = selectedCategoryValue[1]
@@ -74,12 +71,10 @@ class AccountsFragment : AccountsProcessClass() {
     private fun setOnLongClick() {                                                                  // Set item long click
         getLvAccountsContainer().onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedCategory = getLvAccountsContainer().getItemAtPosition(pos).toString()
-//            val selectedCategoryId = selectedCategory.substring(0, 5)
-//            val selectedCategoryName = selectedCategory.substring(5, selectedCategory.length)
             val selectedCategoryValue = selectedCategory.split("ramjcammjar")
             val selectedCategoryId = selectedCategoryValue[0]
             val selectedCategoryName = selectedCategoryValue[1]
-//            val selectedCategoryNum = selectedCategoryValue[2]
+            val selectedCategoryNum = selectedCategoryValue[2]
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
             val inflater = this.layoutInflater
@@ -122,7 +117,7 @@ class AccountsFragment : AccountsProcessClass() {
 
             llCategoryPlatformDelete.setOnClickListener {
                 alert.cancel()
-//                showDeleteCategory(selectedCategoryId, selectedCategoryName, selectedCategoryNum)
+                showDeleteCategory(selectedCategoryId, selectedCategoryName, selectedCategoryNum)
             }
 
             true

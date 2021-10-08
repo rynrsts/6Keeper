@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 
+
 class DatabaseHandlerClass(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -71,6 +72,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_DESCRIPTION = "account_description"
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
+        private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
 //        private const val KEY_PLATFORM_ID = "platform_id"
     }
 
@@ -104,14 +106,12 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_CREATION_DATE + " TEXT" +
                         ")"
                 )
-
         val createCategoriesTable = (
                 "CREATE TABLE " + TABLE_CATEGORIES + "(" +
                         KEY_CATEGORY_ID + " TEXT," +
                         KEY_CATEGORY_NAME + " TEXT" +
                         ")"
                 )
-
         val createPlatformsTable = (
                 "CREATE TABLE " + TABLE_PLATFORMS + "(" +
                         KEY_PLATFORM_ID + " TEXT," +
@@ -119,7 +119,6 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_CATEGORY_ID + " TEXT" +
                         ")"
                 )
-
         val createAccountsTable = (
                 "CREATE TABLE " + TABLE_ACCOUNTS + "(" +
                         KEY_ACCOUNT_ID + " TEXT," +
@@ -131,6 +130,7 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_DESCRIPTION + " TEXT," +
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_ACCOUNT_DELETED + " TEXT," +
+                        KEY_ACCOUNT_DELETE_DATE + " TEXT," +
                         KEY_PLATFORM_ID + " TEXT" +
                         ")"
                 )
@@ -289,6 +289,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
             put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
+            put(KEY_ACCOUNT_DELETE_DATE, userAccount.accountDeleteDate)
             put(KEY_PLATFORM_ID, userAccount.platformId)
         }
 
@@ -670,6 +671,7 @@ class DatabaseHandlerClass(context: Context) :
         var accountDescription: String
         var accountIsFavorites: String
         var accountDeleted: String
+        var accountDeleteDate: String
         var platformId: String
 
         if (cursor.moveToFirst()) {
@@ -683,6 +685,7 @@ class DatabaseHandlerClass(context: Context) :
                 accountDescription = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
                 accountIsFavorites = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
                 accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
+                accountDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETE_DATE))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
 
                 val user = UserAccountModelClass(
@@ -695,6 +698,7 @@ class DatabaseHandlerClass(context: Context) :
                         accountDescription = accountDescription,
                         accountIsFavorites = accountIsFavorites,
                         accountDeleted = accountDeleted,
+                        accountDeleteDate = accountDeleteDate,
                         platformId = platformId
                 )
                 userAccountList.add(user)
@@ -942,15 +946,18 @@ class DatabaseHandlerClass(context: Context) :
     fun updateDeleteAccount(
             accountId: String,
             accountDeleted: String,
+            accountDeleteDate: String,
             tableName: String,
             fieldId: String,
-            field: String
+            fieldDelete: String,
+            fieldDate: String
     ): Int {                                                                                        // Update Specific Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
         contentValues.apply {
-            put(field, accountDeleted)
+            put(fieldDelete, accountDeleted)
+            put(fieldDate, accountDeleteDate)
         }
 
         val success = db.update(
@@ -958,6 +965,30 @@ class DatabaseHandlerClass(context: Context) :
                 contentValues,
                 "$fieldId='$accountId'",
                 null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun updateDeleteMultipleAccount(
+            accountDeleted: String,
+            accountDeleteDate: String,
+            platformId: Array<String?>
+    ): Int {                                                        // Update Specific Account
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_ACCOUNT_DELETED, accountDeleted)
+            put(KEY_ACCOUNT_DELETE_DATE, accountDeleteDate)
+        }
+
+        val success = db.update(
+                TABLE_ACCOUNTS,
+                contentValues,
+                "$KEY_PLATFORM_ID IN (?)",
+                platformId
         )
 
         db.close()
@@ -1013,42 +1044,16 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-//    fun removeCategory(categoryId: String): Int {
-//        val db = this.writableDatabase
-//
-//        val success = db.delete(
-//                TABLE_CATEGORIES,
-//                "$KEY_CATEGORY_ID='$categoryId'",
-//                null
-//        )
-//
-//        db.close()
-//        return success
-//    }
-//
-//    fun removePlatform(platformId: String): Int {
-//        val db = this.writableDatabase
-//
-//        val success = db.delete(
-//                TABLE_PLATFORMS,
-//                "$KEY_PLATFORM_ID='$platformId'",
-//                null
-//        )
-//
-//        db.close()
-//        return success
-//    }
-//
-//    fun removeAccount(accountId: String): Int {
-//        val db = this.writableDatabase
-//
-//        val success = db.delete(
-//                TABLE_ACCOUNTS,
-//                "$KEY_ACCOUNT_ID='$accountId'",
-//                null
-//        )
-//
-//        db.close()
-//        return success
-//    }
+    fun removeCatPlatAcc(table: String, field: String, fieldId: String): Int {                      // Delete Category, Platform and Account
+        val db = this.writableDatabase
+
+        val success = db.delete(
+                table,
+                "$field='$fieldId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
 }

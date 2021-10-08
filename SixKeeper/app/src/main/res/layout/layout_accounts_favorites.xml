@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables, UselessParent">
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/ivAccountsIcon"
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables, UselessParent">
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/ivAccountsDeleteIcon"

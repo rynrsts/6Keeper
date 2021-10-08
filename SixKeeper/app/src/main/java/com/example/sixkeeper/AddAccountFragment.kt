@@ -304,6 +304,7 @@ class AddAccountFragment : Fragment() {
                             encodingClass.encodeData(description),
                             encodingClass.encodeData(isFavorites.toString()),
                             deleted,
+                            "",
                             encodedSpecificPlatformId
                     )
             )
@@ -369,6 +370,7 @@ class AddAccountFragment : Fragment() {
                                     encodingClass.encodeData(websiteURL),
                                     encodingClass.encodeData(description),
                                     encodingClass.encodeData(isFavorites.toString()),
+                                    "",
                                     "",
                                     ""
                             )

@@ -21,6 +21,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SpecificAccountFragment : Fragment() {
     private val args: SpecificAccountFragmentArgs by navArgs()
@@ -202,6 +204,7 @@ class SpecificAccountFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -209,12 +212,18 @@ class SpecificAccountFragment : Fragment() {
         when {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 view?.apply {
+                    val calendar: Calendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                    val date: String = dateFormat.format(calendar.time)
+
                     val status = databaseHandlerClass.updateDeleteAccount(
                             encodingClass.encodeData(args.specificAccountId),
                             encodingClass.encodeData(1.toString()),
+                            encodingClass.encodeData(date),
                             "AccountsTable",
                             "account_id",
-                            "account_deleted"
+                            "account_deleted",
+                            "account_delete_date"
                     )
 
                     if (status > -1) {

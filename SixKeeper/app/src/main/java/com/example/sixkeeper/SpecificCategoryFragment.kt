@@ -1,11 +1,9 @@
 package com.example.sixkeeper
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,11 +54,11 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
             }
         }
 
-//        TODO: Fix bug when clicked many times
         getLvSpecificCatContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
             val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
-            val selectedPlatformId = selectedPlatform.substring(0, 5)
-            val selectedPlatformName = selectedPlatform.substring(5, selectedPlatform.length)
+            val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
+            val selectedPlatformId = selectedPlatformValue[0]
+            val selectedPlatformName = selectedPlatformValue[1]
 
             val action = SpecificCategoryFragmentDirections
                     .actionSpecificCategoryFragmentToSpecificPlatformFragment(
@@ -78,8 +76,10 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
     private fun setOnLongClick() {                                                                  // Set item long click
         getLvSpecificCatContainer().onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(pos).toString()
-            val selectedCPlatformId = selectedPlatform.substring(0, 5)
-            val selectedPlatformName = selectedPlatform.substring(5, selectedPlatform.length)
+            val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
+            val selectedPlatformId = selectedPlatformValue[0]
+            val selectedPlatformName = selectedPlatformValue[1]
+            val selectedPlatformNum = selectedPlatformValue[2]
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
             val inflater = this.layoutInflater
@@ -116,112 +116,17 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
                 showAddUpdatePlatform(
                         "update",
                         selectedPlatformName,
-                        selectedCPlatformId
+                        selectedPlatformId
                 )
             }
 
             llCategoryPlatformDelete.setOnClickListener {
-
+                alert.cancel()
+                showDeletePlatform(selectedPlatformId, selectedPlatformName, selectedPlatformNum)
             }
 
             true
         })
-    }
-
-    @SuppressLint("InflateParams")
-    private fun showAddUpdatePlatform(
-            addOrUpdate: String,
-            selectedPlatformName: String,
-            selectedPlatformId: String
-    ) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-        val inflater = this.layoutInflater
-        val dialogView = inflater.inflate(R.layout.layout_accounts_add_new, null)
-
-        builder.apply {
-            setView(dialogView)
-            setCancelable(false)
-        }
-
-        val tvAccountsAddNew: TextView = dialogView.findViewById(R.id.tvAccountsAddNew)
-        val etAccountsAddNew: EditText = dialogView.findViewById(R.id.etAccountsAddNew)
-        val ivAccountsAddNew: ImageView = dialogView.findViewById(R.id.ivAccountsAddNew)
-
-        tvAccountsAddNew.setText(R.string.specific_category_platform_name)
-        ivAccountsAddNew.setImageResource(R.drawable.ic_globe_light_black)
-
-        var buttonName = ""
-        var dialogTitle = ""
-        var toastMes = ""
-
-        if (addOrUpdate == "add") {
-            buttonName = "Add"
-            dialogTitle = resources.getString(R.string.specific_category_new_platform)
-            toastMes = resources.getString(R.string.many_nothing_to_add)
-        } else if (addOrUpdate == "update") {
-            buttonName = "Update"
-            dialogTitle = resources.getString(R.string.specific_category_edit_platform) + ": " + selectedPlatformName
-            toastMes = resources.getString(R.string.many_nothing_to_update)
-
-            etAccountsAddNew.apply {
-                setText(selectedPlatformName)
-                setSelection(etAccountsAddNew.text.length)
-            }
-        }
-
-        builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
-            val platformName = etAccountsAddNew.text.toString()
-
-            if (platformName.isNotEmpty()) {
-                addOrUpdatePlatform(
-                        addOrUpdate,
-                        platformName,
-                        selectedPlatformId,
-                        selectedPlatformName
-                )
-            } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        toastMes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
-            }
-
-            view?.apply {
-                postDelayed(
-                        {
-                            closeKeyboard()
-                        }, 50
-                )
-            }
-        }
-        builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
-            dialog.cancel()
-
-            view?.apply {
-                postDelayed(
-                        {
-                            closeKeyboard()
-                        }, 50
-                )
-            }
-        }
-
-        val alert: AlertDialog = builder.create()
-        alert.apply {
-            window?.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            getAppCompatActivity(),
-                            R.drawable.layout_alert_dialog
-                    )
-            )
-            setTitle(dialogTitle)
-            show()
-        }
     }
 
     private fun setEditTextOnChange() {                                                             // Search real-time

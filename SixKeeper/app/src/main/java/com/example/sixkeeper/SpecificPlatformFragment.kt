@@ -23,6 +23,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SpecificPlatformFragment : Fragment() {
     private val args: SpecificPlatformFragmentArgs by navArgs()
@@ -127,6 +130,7 @@ class SpecificPlatformFragment : Fragment() {
             val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
             tvAccountsNoItem.setText(R.string.many_no_account)
+            lvSpecificPlatContainer.adapter = null
             llSpecificPlatNoItem.apply {
                 removeAllViews()
                 addView(inflatedView)
@@ -304,6 +308,7 @@ class SpecificPlatformFragment : Fragment() {
         alert.show()
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -327,12 +332,18 @@ class SpecificPlatformFragment : Fragment() {
                         )
                     }
                 } else if (clickAction == "Delete Account") {
+                    val calendar: Calendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                    val date: String = dateFormat.format(calendar.time)
+
                     val status = databaseHandlerClass.updateDeleteAccount(
                             encodingClass.encodeData(accountIdTemp),
                             encodingClass.encodeData(1.toString()),
+                            encodingClass.encodeData(date),
                             "AccountsTable",
                             "account_id",
-                            "account_deleted"
+                            "account_deleted",
+                            "account_delete_date"
                     )
 
                     if (status > -1) {

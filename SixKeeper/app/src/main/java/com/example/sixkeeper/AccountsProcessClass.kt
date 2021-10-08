@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -12,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class AccountsProcessClass : Fragment() {
     private lateinit var attActivity: Activity
@@ -23,8 +27,8 @@ open class AccountsProcessClass : Fragment() {
     private lateinit var lvAccountsContainer: ListView
     private lateinit var llAccountsNoItem: LinearLayout
 
-//    private lateinit var categoryIdTemp: String
-//    private lateinit var categoryNameTemp: String
+    private lateinit var categoryIdTemp: String
+    private lateinit var categoryNameTemp: String
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -90,6 +94,7 @@ open class AccountsProcessClass : Fragment() {
             val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
             tvAccountsNoItem.setText(R.string.many_no_category)
+            lvAccountsContainer.adapter = null
             llAccountsNoItem.apply {
                 removeAllViews()
                 addView(inflatedView)
@@ -298,79 +303,116 @@ open class AccountsProcessClass : Fragment() {
         closeKeyboard()
     }
 
-//    fun showDeleteCategory(
-//            selectedCategoryId: String,
-//            selectedCategoryName: String,
-//            selectedCategoryNum: String
-//    ) {
-//        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-//
-//        val toastMessage = if (selectedCategoryNum == "0") {
-//            "Delete category?"
-//        } else {
-//            "Selected category is not empty. Delete anyway?"
-//        }
-//
-//        builder.apply {
-//            setMessage(toastMessage)
-//            setCancelable(false)
-//        }
-//
-//        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-//            categoryIdTemp = selectedCategoryId
-//            categoryNameTemp = selectedCategoryName
-//
-//            if (selectedCategoryNum == "0") {
-//                deleteCategory()
-//            } else {
-//                val goToConfirmActivity = Intent(
-//                        appCompatActivity,
-//                        ConfirmActionActivity::class.java
-//                )
-//
-//                @Suppress("DEPRECATION")
-//                startActivityForResult(goToConfirmActivity, 16914)
-//                appCompatActivity.overridePendingTransition(
-//                        R.anim.anim_enter_bottom_to_top_2,
-//                        R.anim.anim_0
-//                )
-//            }
-//        }
-//        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-//            dialog.cancel()
-//        }
-//
-//        val alert: AlertDialog = builder.create()
-//        alert.setTitle(R.string.many_alert_title_confirm)
-//        alert.show()
-//    }
+    fun showDeleteCategory(
+            selectedCategoryId: String,
+            selectedCategoryName: String,
+            selectedCategoryNum: String
+    ) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
 
-//    private fun deleteCategory() {                                                                  // Delete Category
-//        val status = databaseHandlerClass.removeCategory(encodingClass.encodeData(categoryIdTemp))
-//
-//        if (status > -1) {
-//            val toast = Toast.makeText(
-//                    appCompatActivity.applicationContext,
-//                    "Category '$categoryNameTemp' deleted!",
-//                    Toast.LENGTH_SHORT
-//            )
-//            toast?.apply {
-//                setGravity(Gravity.CENTER, 0, 0)
-//                show()
-//            }
-//        }
-//
-//        populateCategories("")
-//    }
+        val toastMessage = if (selectedCategoryNum == "0") {
+            "Delete category?"
+        } else {
+            "Selected category is not empty. Deleting it will also delete its contents. Delete anyway?"
+        }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        @Suppress("DEPRECATION")
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        when {
-//            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-//                deleteCategory()
-//            }
-//        }
-//    }
+        builder.apply {
+            setMessage(toastMessage)
+            setCancelable(false)
+        }
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            categoryIdTemp = selectedCategoryId
+            categoryNameTemp = selectedCategoryName
+
+            if (selectedCategoryNum == "0") {
+                deleteCategory()
+            } else {
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            }
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title_confirm)
+        alert.show()
+    }
+
+    private fun deleteCategory() {                                                                  // Delete Category
+        val deleteCategoryStatus = databaseHandlerClass.removeCatPlatAcc(
+                "CategoriesTable",
+                "category_id",
+                encodingClass.encodeData(categoryIdTemp)
+        )
+
+        if (deleteCategoryStatus > -1 ) {
+            val toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    "Category '$categoryNameTemp' deleted!",
+                    Toast.LENGTH_SHORT
+            )
+            toast?.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+
+        populateCategories("")
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun deleteCategoryContents() {
+        val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
+                "category",
+                encodingClass.encodeData(categoryIdTemp)
+        )
+        val userPlatformId = ArrayList<String>(0)
+
+        for (u in userPlatform) {
+            userPlatformId.add(u.platformId)
+        }
+
+        val linkedHashSet: LinkedHashSet<String> = LinkedHashSet(userPlatformId)
+        var userPlatformIdNoDuplicate = arrayOfNulls<String>(linkedHashSet.size)
+        userPlatformIdNoDuplicate = userPlatformId.toArray(userPlatformIdNoDuplicate)
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
+        databaseHandlerClass.removeCatPlatAcc(
+                "PlatformsTable",
+                "category_id",
+                encodingClass.encodeData(categoryIdTemp)
+        )
+        databaseHandlerClass.updateDeleteMultipleAccount(
+                encodingClass.encodeData(1.toString()),
+                encodingClass.encodeData(date),
+                userPlatformIdNoDuplicate
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                deleteCategory()
+                deleteCategoryContents()
+            }
+        }
+    }
 }

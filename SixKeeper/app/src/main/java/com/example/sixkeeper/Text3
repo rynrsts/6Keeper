@@ -10,7 +10,7 @@ Additional
     User Account: Make Fingerprint changeable
     User Account: Add deactivate
     Dashboard: Add content
-    Accounts: Make Categories and Platforms deletable
+    Accounts: Make Categories and Platforms deletable                                               *
     Accounts: Add auto-fill login
     Favorites: Add message when there is no account shown
     Favorites: Make Accounts removable
