@@ -186,32 +186,45 @@
     <string name="master_pin_forgot">Forgot Master PIN?</string>
 
     <!-- Password Generator -->
-    <string name="pass_generator_enter_special_char">
-        If you want to only include specific special characters, please enter separated by spaces,
-        otherwise, leave it blank.
-    </string>
+<!--    <string name="pass_generator_enter_special_char">-->
+<!--        If you want to only include specific special characters, please enter separated by spaces,-->
+<!--        otherwise, leave it blank.-->
+<!--    </string>-->
     <string name="pass_generator_copy"><u>Copy to Clipboard</u></string>
-    <string name="pass_generator_fill_length">Please fill the Length field first.</string>
+    <string name="pass_generator_custom">Custom</string>
+<!--    <string name="pass_generator_fill_length">Please fill the Length field first.</string>-->
     <string name="pass_generator_generate">Generate</string>
     <string name="pass_generator_generated_pass">Generated Password</string>
-    <string name="pass_generator_generate_pass">Please generate a password first.  </string>
+<!--    <string name="pass_generator_generate_pass">Please generate a password first.  </string>-->
     <string name="pass_generator_include">Include:</string>
-    <string name="pass_generator_length">Length (minimum of 4)</string>
-    <string name="pass_generator_less_than_four">Length must be minimum of 4.</string>
+    <string name="pass_generator_length_of_4">Length must be minimum of 4</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
+    <string name="pass_generator_medium">Medium</string>
+    <string name="pass_generator_medium_desc_1">* 8 – 11 characters</string>
+    <string name="pass_generator_medium_desc_2">
+        * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), and numbers (0-9)
+    </string>
+    <string name="pass_generator_minus">-</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
-    <string name="pass_generator_pass_already_saved">Password already saved.</string>
-    <string name="pass_generator_pass_saved">Password Saved!</string>
+<!--    <string name="pass_generator_pass_already_saved">Password already saved.</string>-->
+<!--    <string name="pass_generator_pass_saved">Password Saved!</string>-->
     <string name="pass_generator_pass_type">Password Type</string>
+    <string name="pass_generator_plus">+</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
     <string name="pass_generator_saved_pass">Saved Password</string>
     <string name="pass_generator_save_generated_pass">Save Generated Password</string>
-    <string name="pass_generator_select_char">
-        Please select desired characters to generate password.
-    </string>
+<!--    <string name="pass_generator_select_char">-->
+<!--        Please select desired characters to generate password.-->
+<!--    </string>-->
     <string name="pass_generator_special_char">Special Characters</string>
+    <string name="pass_generator_strong">Strong</string>
+    <string name="pass_generator_strong_desc_1">* 12 – 15 characters</string>
+    <string name="pass_generator_strong_desc_2">
+        * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), numbers (0-9), and
+        special characters
+    </string>
     <string name="pass_generator_view_saved_pass">View Saved Password</string>
-    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>
+<!--    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>-->
 
     <!-- Privacy Policy -->
 
