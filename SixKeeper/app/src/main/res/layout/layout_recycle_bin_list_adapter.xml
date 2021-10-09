@@ -27,25 +27,15 @@
         <TextView
             android:id="@+id/tvRecycleBinName"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="21dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivRecycleBinIcon"
             app:layout_constraintStart_toEndOf="@+id/cbRecycleBinCheckBox"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvRecycleBinDesc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="21dp"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/ivRecycleBinIcon"
-            app:layout_constraintStart_toEndOf="@+id/cbRecycleBinCheckBox"
-            app:layout_constraintTop_toBottomOf="@+id/tvRecycleBinName" />
 
         <ImageView
             android:id="@+id/ivRecycleBinIcon"

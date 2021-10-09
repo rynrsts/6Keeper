@@ -37,6 +37,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var etAddAccountDescription: EditText
     private lateinit var cbAddAccountFavorites: CheckBox
 
+    private var accountName: String = ""
     private lateinit var name: String
     private lateinit var credentialField: String
     private lateinit var credential: String
@@ -188,7 +189,7 @@ class AddAccountFragment : Fragment() {
 
         for (u in userAccount) {
             if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
-                val accountName = encodingClass.decodeData(u.accountName)
+                accountName = encodingClass.decodeData(u.accountName)
                 etAddAccountName.apply {
                     setText(accountName)
                     setSelection(etAddAccountName.text.length)
@@ -290,67 +291,92 @@ class AddAccountFragment : Fragment() {
 
     @SuppressLint("ShowToast")
     private fun addOrEditAccount() {
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "platformId",
+                encodedSpecificPlatformId,
+                deleted
+
+        )
         val accountId = 100001 + databaseHandlerClass.viewTotalNumOfAccounts()
+        var existing = false
+        var toast: Toast? = null
 
-        if (args.addOrEdit == "add") {                                                          // Add Account
-            val status = databaseHandlerClass.addAccount(
-                    UserAccountModelClass(
-                            encodingClass.encodeData(accountId.toString()),
-                            encodingClass.encodeData(name),
-                            encodingClass.encodeData(credentialField),
-                            encodingClass.encodeData(credential),
-                            encodingClass.encodeData(password),
-                            encodingClass.encodeData(websiteURL),
-                            encodingClass.encodeData(description),
-                            encodingClass.encodeData(isFavorites.toString()),
-                            deleted,
-                            "",
-                            encodedSpecificPlatformId
-                    )
-            )
-
-            if (status > -1) {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        "Account '$name' added!",
-                        Toast.LENGTH_SHORT
-                )
-
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+        for (u in userAccount) {
+            if (
+                    name.equals(encodingClass.decodeData(u.accountName),ignoreCase = true) &&
+                    !name.equals(accountName, ignoreCase = true)
+            ) {
+                existing = true
+                break
             }
-
-            addOrSave = 1
-            appCompatActivity.onBackPressed()
-        } else if (args.addOrEdit == "edit") {                                                  // Update Account
-            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-            builder.setMessage(R.string.user_edit_save_alert_mes)
-            builder.setCancelable(false)
-
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
-
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
-            }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
-
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title_confirm)
-            alert.show()
         }
 
+        if (!existing) {
+            if (args.addOrEdit == "add") {                                                          // Add Account
+                val status = databaseHandlerClass.addAccount(
+                        UserAccountModelClass(
+                                encodingClass.encodeData(accountId.toString()),
+                                encodingClass.encodeData(name),
+                                encodingClass.encodeData(credentialField),
+                                encodingClass.encodeData(credential),
+                                encodingClass.encodeData(password),
+                                encodingClass.encodeData(websiteURL),
+                                encodingClass.encodeData(description),
+                                encodingClass.encodeData(isFavorites.toString()),
+                                deleted,
+                                "",
+                                encodedSpecificPlatformId
+                        )
+                )
+
+                if (status > -1) {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Account '$name' added!",
+                            Toast.LENGTH_SHORT
+                    )
+                }
+
+                addOrSave = 1
+                appCompatActivity.onBackPressed()
+            } else if (args.addOrEdit == "edit") {                                                  // Update Account
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setMessage(R.string.user_edit_save_alert_mes)
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            }
+        } else {
+            toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.add_account_new_account_alert_existing,
+                    Toast.LENGTH_SHORT
+            )
+        }
+
+        toast?.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

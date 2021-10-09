@@ -24,7 +24,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
 
         setVariables()
         closeKeyboard()
-        setOnClick()
+//        setOnClick()
     }
 
     private fun setOnClick() {

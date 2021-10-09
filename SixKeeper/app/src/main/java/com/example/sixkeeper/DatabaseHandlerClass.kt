@@ -986,6 +986,12 @@ class DatabaseHandlerClass(context: Context) :
     ): Int {                                                        // Update Specific Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
+        var questionMark = ""
+
+        for (i in 1..id.size) {
+            questionMark += "?,"
+        }
+        questionMark = questionMark.dropLast(1)
 
         contentValues.apply {
             put(KEY_ACCOUNT_DELETED, accountDeleted)
@@ -995,7 +1001,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.update(
                 TABLE_ACCOUNTS,
                 contentValues,
-                "$fieldId IN (?)",
+                "$fieldId IN ($questionMark)",
                 id
         )
 
@@ -1059,6 +1065,25 @@ class DatabaseHandlerClass(context: Context) :
                 table,
                 "$field='$fieldId'",
                 null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun removeRecycleBin(id: Array<String?>): Int {                                                 // Delete selected items from Recycle Bin
+        val db = this.writableDatabase
+        var questionMark = ""
+
+        for (i in 1..id.size) {
+            questionMark += "?,"
+        }
+        questionMark = questionMark.dropLast(1)
+
+        val success = db.delete(
+                TABLE_ACCOUNTS,
+                "$KEY_ACCOUNT_ID IN ($questionMark)",
+                id
         )
 
         db.close()

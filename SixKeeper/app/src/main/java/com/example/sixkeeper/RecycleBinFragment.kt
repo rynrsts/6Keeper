@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,7 +79,6 @@ class RecycleBinFragment : Fragment() {
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
-        val userAccountDirectory = ArrayList<String>(0)
 
         if (userAccount.isNullOrEmpty()) {
             val llRecycleBinNoItem: LinearLayout =
@@ -90,7 +90,7 @@ class RecycleBinFragment : Fragment() {
             )
             val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
-            tvAccountsNoItem.setText(R.string.many_no_account)
+            tvAccountsNoItem.setText(R.string.recycle_bin_no_item)
             lvRecycleBinContainer.adapter = null
             llRecycleBinNoItem.apply {
                 removeAllViews()
@@ -105,32 +105,13 @@ class RecycleBinFragment : Fragment() {
                             encodingClass.decodeData(u.accountId) + "ramjcammjar" + uAccountName
                     )
                     userAccountName.add(uAccountName)
-
-                    val userPlatform: List<UserPlatformModelClass> =
-                            databaseHandlerClass.viewPlatform("platform", u.platformId)
-                    var uPlatformName: String
-
-                    for (up in userPlatform) {
-                        uPlatformName = encodingClass.decodeData(up.platformName)
-
-                        val userCategory: List<UserCategoryModelClass> =
-                                databaseHandlerClass.viewCategory("category", up.categoryId)
-                        var uCategoryName = ""
-
-                        for (uc in userCategory) {
-                            uCategoryName = encodingClass.decodeData(uc.categoryName)
-                        }
-
-                        userAccountDirectory.add("$uCategoryName > $uPlatformName")
-                    }
                 }
             }
 
             val accountsListAdapter = RecycleBinListAdapter(
                     attActivity,
                     userAccountId,
-                    userAccountName,
-                    userAccountDirectory
+                    userAccountName
             )
 
             lvRecycleBinContainer.adapter = accountsListAdapter
@@ -138,6 +119,8 @@ class RecycleBinFragment : Fragment() {
     }
 
     private fun setOnClick() {
+        val clRecycleBinDelete: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clRecycleBinDelete)
         val clRecycleBinRestore: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clRecycleBinRestore)
 
@@ -156,19 +139,40 @@ class RecycleBinFragment : Fragment() {
             }
         })
 
-        clRecycleBinRestore.setOnClickListener {
-            var selectedIdNoDuplicate = arrayOfNulls<String>(selectedIdContainer.size)
-            selectedIdNoDuplicate = selectedIdContainer.toArray(selectedIdNoDuplicate)
+        clRecycleBinDelete.setOnClickListener {
+            var selectedId = arrayOfNulls<String>(selectedIdContainer.size)
+            selectedId = selectedIdContainer.toArray(selectedId)
 
-            databaseHandlerClass.updateDeleteMultipleAccount(
-                    encodingClass.encodeData(0.toString()),
-                    "",
-                    selectedIdNoDuplicate,
-                    "account_id"
-            )
+            val status = databaseHandlerClass.removeRecycleBin(selectedId)
 
-            selectedIdContainer.clear()
+            if (status > -1) {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.recycle_bin_selected_items_delete_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+
             populateDeletedItems("")
+        }
+
+        clRecycleBinRestore.setOnClickListener {
+//            var selectedIdNoDuplicate = arrayOfNulls<String>(selectedIdContainer.size)
+//            selectedIdNoDuplicate = selectedIdContainer.toArray(selectedIdNoDuplicate)
+//
+//            databaseHandlerClass.updateDeleteMultipleAccount(
+//                    encodingClass.encodeData(0.toString()),
+//                    "",
+//                    selectedIdNoDuplicate,
+//                    "account_id"
+//            )
+//
+//            selectedIdContainer.clear()
+//            populateDeletedItems("")
         }
     }
 }

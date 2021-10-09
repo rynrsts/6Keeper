@@ -20,6 +20,9 @@
     <string name="add_account_favorites">Appear in Favorites</string>
     <string name="add_account_title">Add New Account</string>
     <string name="add_account_name">Name</string>
+    <string name="add_account_new_account_alert_existing">
+        Account name is already existing
+    </string>
     <string name="add_account_website">Website URL</string>
 
     <!-- Accounts -->
@@ -187,6 +190,7 @@
         If you want to only include specific special characters, please enter separated by spaces,
         otherwise, leave it blank.
     </string>
+    <string name="pass_generator_copy"><u>Copy to Clipboard</u></string>
     <string name="pass_generator_fill_length">Please fill the Length field first.</string>
     <string name="pass_generator_generate">Generate</string>
     <string name="pass_generator_generated_pass">Generated Password</string>
@@ -198,6 +202,7 @@
     <string name="pass_generator_number">Numbers (0–9)</string>
     <string name="pass_generator_pass_already_saved">Password already saved.</string>
     <string name="pass_generator_pass_saved">Password Saved!</string>
+    <string name="pass_generator_pass_type">Password Type</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
     <string name="pass_generator_saved_pass">Saved Password</string>
     <string name="pass_generator_save_generated_pass">Save Generated Password</string>
@@ -257,8 +262,10 @@
     <string name="privacy_security_title"><b>Security</b></string>
 
     <!-- Recycle Bin -->
+    <string name="recycle_bin_no_item">No deleted item to show</string>
     <string name="recycle_bin_restore">Restore</string>
     <string name="recycle_bin_select_all">Select All</string>
+    <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
 
     <!-- Settings -->
     <string name="settings_allow_copy">Allow Textual Copy</string>

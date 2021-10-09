@@ -11,8 +11,7 @@ import android.widget.TextView
 class RecycleBinListAdapter(
         private val context: Activity,
         idName: ArrayList<String>,
-        private val name: ArrayList<String>,
-        private val desc: ArrayList<String>
+        private val name: ArrayList<String>
 ) : ArrayAdapter<String>(
         context,
         R.layout.layout_recycle_bin_list_adapter,
@@ -28,11 +27,9 @@ class RecycleBinListAdapter(
                 true
         )
         val tvRecycleBinName = rowView.findViewById(R.id.tvRecycleBinName) as TextView
-        val tvRecycleBinDesc = rowView.findViewById(R.id.tvRecycleBinDesc) as TextView
         val ivRecycleBinIcon = rowView.findViewById(R.id.ivRecycleBinIcon) as ImageView
 
         tvRecycleBinName.text = name[position]
-        tvRecycleBinDesc.text = desc[position]
         ivRecycleBinIcon.setImageResource(R.drawable.ic_account_circle_light_gray)
 
         return rowView

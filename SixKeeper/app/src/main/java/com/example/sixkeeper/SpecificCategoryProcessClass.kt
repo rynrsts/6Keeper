@@ -253,11 +253,9 @@ open class SpecificCategoryProcessClass : Fragment() {
                 "category",
                 encodedArgs
         )
-        var platformId = 10001
+        val platformId = 10001 + databaseHandlerClass.viewNumberOfPlatforms("")
         var existing = false
         var toast: Toast? = null
-
-        platformId += databaseHandlerClass.viewNumberOfPlatforms("")
 
         for (u in userPlatform) {
             if (
