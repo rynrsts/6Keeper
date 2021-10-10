@@ -249,13 +249,16 @@ open class SpecificCategoryProcessClass : Fragment() {
             selectedPlatformName: String
     ) {
         val encodedArgs = encodingClass.encodeData(args.specificCategoryId)
-        val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
-                "category",
-                encodedArgs
-        )
-        val platformId = 10001 + databaseHandlerClass.viewNumberOfPlatforms("")
+        val userPlatform: List<UserPlatformModelClass> =
+                databaseHandlerClass.viewPlatform("category", encodedArgs)
+        var platformId = 10001
+        val lastId = databaseHandlerClass.getLastIdOfPlatform()
         var existing = false
         var toast: Toast? = null
+
+        if (lastId.isNotEmpty()) {
+            platformId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
 
         for (u in userPlatform) {
             if (
@@ -391,6 +394,18 @@ open class SpecificCategoryProcessClass : Fragment() {
         populatePlatforms("")
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                deletePlatform()
+                deleteAccount()
+            }
+        }
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun deleteAccount() {                                                                   // Delete Platforms' contents
         val calendar: Calendar = Calendar.getInstance()
@@ -406,17 +421,5 @@ open class SpecificCategoryProcessClass : Fragment() {
                 "account_deleted",
                 "account_delete_date"
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                deletePlatform()
-                deleteAccount()
-            }
-        }
     }
 }

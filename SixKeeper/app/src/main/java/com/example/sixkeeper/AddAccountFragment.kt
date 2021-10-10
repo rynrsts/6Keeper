@@ -297,9 +297,14 @@ class AddAccountFragment : Fragment() {
                 deleted
 
         )
-        val accountId = 100001 + databaseHandlerClass.viewTotalNumOfAccounts()
+        var accountId = 100001
+        val lastId = databaseHandlerClass.getLastIdOfAccount()
         var existing = false
         var toast: Toast? = null
+
+        if (lastId.isNotEmpty()) {
+            accountId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
 
         for (u in userAccount) {
             if (

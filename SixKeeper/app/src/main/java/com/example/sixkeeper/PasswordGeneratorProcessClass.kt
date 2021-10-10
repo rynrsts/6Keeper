@@ -1,6 +1,7 @@
 package com.example.sixkeeper
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.View
@@ -9,14 +10,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import java.lang.StringBuilder
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
-//    private lateinit var attActivity: Activity
-//    private lateinit var databaseHandlerClass: DatabaseHandlerClass
-//    private lateinit var encodingClass: EncodingClass
+    private lateinit var attActivity: Activity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     private lateinit var tvPassGeneratorGeneratedPass: TextView
     private lateinit var llPassGeneratorContainer: LinearLayout
@@ -30,11 +34,11 @@ open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var passwordType: String
 //    private lateinit var passwordGeneratorLength: String
 
-//    @Suppress("DEPRECATION")
-//    override fun onAttach(activity: Activity) {                                                     // Override on attach
-//        super.onAttach(activity)
-//        attActivity = activity                                                                      // Attach activity
-//    }
+    @Suppress("DEPRECATION")
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
+        super.onAttach(activity)
+        attActivity = activity                                                                      // Attach activity
+    }
 
     fun getAppCompatActivity(): AppCompatActivity {
         return appCompatActivity
@@ -44,9 +48,9 @@ open class PasswordGeneratorProcessClass : Fragment() {
         tvPassGeneratorGeneratedPass.text = s
     }
 
-//    fun getTvPassGeneratorGeneratedPass(): TextView {
-//        return tvPassGeneratorGeneratedPass
-//    }
+    fun getTvPassGeneratorGeneratedPass(): TextView {
+        return tvPassGeneratorGeneratedPass
+    }
 
     fun getCustomInflatedLayout(): View {
         return customInflatedLayout
@@ -90,8 +94,8 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
-//        databaseHandlerClass = DatabaseHandlerClass(attActivity)
-//        encodingClass = EncodingClass()
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
 
         tvPassGeneratorGeneratedPass =
                 appCompatActivity.findViewById(R.id.tvPassGeneratorGeneratedPass)
@@ -144,7 +148,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
     }
 
     @SuppressLint("InflateParams")
-    fun populateCustom() {
+    fun populateCustom() {                                                                          // Show Custom content
         customInflatedLayout = layoutInflater.inflate(
                 R.layout.layout_pass_gen_tab_custom,
                 null,
@@ -238,7 +242,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         }
     }
 
-    fun generatePassword(i: Int): String {                                                     // Generate password
+    fun generatePassword(i: Int): String {                                                          // Generate password
         val lowercase = "abcdefghijklmnopqrstuvwxyz"
         val uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         val number = "0123456789"
@@ -247,8 +251,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val include = booleanArrayOf(false, false, false, false)
         val boolChar = booleanArrayOf(false, false, false, false)
         var length = 4
-        val randomList = ArrayList<String>(0)
-        var shuffledRandom = ""
 
         characters.add(lowercase)
         characters.add(uppercase)
@@ -287,6 +289,8 @@ open class PasswordGeneratorProcessClass : Fragment() {
             }
         }
 
+        val randomString = StringBuilder(length)
+
         for (x in 1..length) {
             var charRandom: Int
 
@@ -316,86 +320,82 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
             val randomTemp: String = characters.elementAt(charRandom)
             val random = randomTemp.random()
-            randomList.add(random.toString())
+            randomString.append(random.toString())
         }
 
-        randomList.shuffle()
-
-        for (letter in randomList) {
-            shuffledRandom += letter
-        }
-
-        return shuffledRandom
+        return shuffle(randomString.toString())
     }
 
-//    private fun shuffle(input: String): String {
-//        val characters: MutableList<Char> = ArrayList()
-//
-//        for (c in input.toCharArray()) {
-//            characters.add(c)
-//        }
-//
-//        val output: java.lang.StringBuilder = java.lang.StringBuilder(input.length)
-//
-//        while (characters.size != 0) {
-//            val randPicker = (Math.random() * characters.size).toInt()
-//            output.append(characters.removeAt(randPicker))
-//        }
-//
-//        return output.toString()
-//    }
+    private fun shuffle(input: String): String {
+        val characters: MutableList<Char> = ArrayList()
+
+        for (c in input.toCharArray()) {
+            characters.add(c)
+        }
+
+        val output = StringBuilder(input.length)
+
+        while (characters.size != 0) {
+            val randPicker = (Math.random() * characters.size).toInt()
+            output.append(characters.removeAt(randPicker))
+        }
+
+        return output.toString()
+    }
 
     // Save generated password to database
-//    @SuppressLint("SimpleDateFormat", "ShowToast")
-//    fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
-//        val userSavedPass: List<UserSavedPassModelClass> = databaseHandlerClass.viewSavedPass()
-//        var passId = 100001
-//        val encodedGeneratedPass = encodingClass.encodeData(generatedPass)
-//        var existing = false
-//        var toast: Toast? = null
-//
-//        val calendar: Calendar = Calendar.getInstance()
-//        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-//        val date: String = dateFormat.format(calendar.time)
-//
-//        for (u in userSavedPass) {
-//            if (encodedGeneratedPass == u.generatedPassword) {
-//                existing = true
-//                break
-//            }
-//
-//            if (!userSavedPass.isNullOrEmpty()) {
-//                passId = Integer.parseInt(encodingClass.decodeData(u.passId)) + 1
-//            }
-//        }
-//
-//        if (!existing) {
-//            val status = databaseHandlerClass.addGeneratedPass(
-//                    UserSavedPassModelClass(
-//                            encodingClass.encodeData(passId.toString()),
-//                            encodedGeneratedPass,
-//                            encodingClass.encodeData(date)
-//                    )
-//            )
-//
-//            if (status > -1) {
-//                toast = Toast.makeText(
-//                        appCompatActivity.applicationContext,
-//                        R.string.pass_generator_pass_saved,
-//                        Toast.LENGTH_SHORT
-//                )
-//            }
-//        } else {
-//            toast = Toast.makeText(
-//                    appCompatActivity.applicationContext,
-//                    R.string.pass_generator_pass_already_saved,
-//                    Toast.LENGTH_SHORT
-//            )
-//        }
-//
-//        toast?.apply {
-//            setGravity(Gravity.CENTER, 0, 0)
-//            show()
-//        }
-//    }
+    @SuppressLint("SimpleDateFormat", "ShowToast")
+    fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
+        val encodedDelete = encodingClass.encodeData(0.toString())
+        val userSavedPass: List<UserSavedPassModelClass> =
+                databaseHandlerClass.viewSavedPass(encodedDelete)
+        val encodedGeneratedPass = encodingClass.encodeData(generatedPass)
+        var passId = 100001 + userSavedPass.size
+        var existing = false
+        var toast: Toast? = null
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
+        for (u in userSavedPass) {
+            if (encodedGeneratedPass == u.generatedPassword) {
+                existing = true
+                break
+            }
+
+            passId = Integer.parseInt(encodingClass.decodeData(u.passId)) + 1
+        }
+
+        if (!existing) {
+            val status = databaseHandlerClass.addGeneratedPass(
+                    UserSavedPassModelClass(
+                            encodingClass.encodeData(passId.toString()),
+                            encodedGeneratedPass,
+                            encodingClass.encodeData(date),
+                            encodedDelete,
+                            ""
+                    )
+            )
+
+            if (status > -1) {
+                toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.pass_generator_pass_saved,
+                        Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.pass_generator_pass_already_saved,
+                    Toast.LENGTH_SHORT
+            )
+        }
+
+        toast?.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
 }

@@ -18,11 +18,11 @@ class DatabaseHandlerClass(context: Context) :
 
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
-        private const val TABLE_SAVED_PASS = "SavedPasswordTable"
+        private const val TABLE_SETTINGS = "SettingsTable"
         private const val TABLE_CATEGORIES = "CategoriesTable"
         private const val TABLE_PLATFORMS = "PlatformsTable"
         private const val TABLE_ACCOUNTS = "AccountsTable"
-        private const val TABLE_SETTINGS = "SettingsTable"
+        private const val TABLE_SAVED_PASS = "SavedPasswordTable"
 
         private const val KEY_USER_ID = "user_id"
 
@@ -48,11 +48,6 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_COPY = "copy"
 
-        // TABLE_SAVED_PASS
-        private const val KEY_PASS_ID = "pass_id"
-        private const val KEY_SAVED_PASS = "saved_password"
-        // KEY_CREATION_DATE = "creation_date"
-
         // TABLE_CATEGORIES
         private const val KEY_CATEGORY_ID = "category_id"
         private const val KEY_CATEGORY_NAME = "category_name"
@@ -74,6 +69,13 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
 //        private const val KEY_PLATFORM_ID = "platform_id"
+
+        // TABLE_SAVED_PASS
+        private const val KEY_PASS_ID = "pass_id"
+        private const val KEY_SAVED_PASS = "saved_password"
+        // KEY_CREATION_DATE = "creation_date"
+        private const val KEY_PASS_DELETED = "pass_deleted"
+        private const val KEY_PASS_DELETE_DATE = "pass_delete_date"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -99,11 +101,12 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_LAST_LOGIN + " TEXT" +
                         ")"
                 )
-        val createSavedPassTable = (
-                "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
-                        KEY_PASS_ID + " TEXT," +
-                        KEY_SAVED_PASS + " TEXT," +
-                        KEY_CREATION_DATE + " TEXT" +
+        val createSettingsTable = (
+                "CREATE TABLE " + TABLE_SETTINGS + "(" +
+                        KEY_USER_ID + " TEXT," +
+                        KEY_NOTIFICATION + " TEXT," +
+                        KEY_SCREEN_CAPTURE + " TEXT," +
+                        KEY_COPY + " TEXT" +
                         ")"
                 )
         val createCategoriesTable = (
@@ -134,32 +137,33 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_PLATFORM_ID + " TEXT" +
                         ")"
                 )
-        val createSettingsTable = (
-                "CREATE TABLE " + TABLE_SETTINGS + "(" +
-                        KEY_USER_ID + " TEXT," +
-                        KEY_NOTIFICATION + " TEXT," +
-                        KEY_SCREEN_CAPTURE + " TEXT," +
-                        KEY_COPY + " TEXT" +
+        val createSavedPassTable = (
+                "CREATE TABLE " + TABLE_SAVED_PASS + "(" +
+                        KEY_PASS_ID + " TEXT," +
+                        KEY_SAVED_PASS + " TEXT," +
+                        KEY_CREATION_DATE + " TEXT," +
+                        KEY_PASS_DELETED + " TEXT," +
+                        KEY_PASS_DELETE_DATE + " TEXT" +
                         ")"
                 )
 
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
-        db?.execSQL(createSavedPassTable)
+        db?.execSQL(createSettingsTable)
         db?.execSQL(createCategoriesTable)
         db?.execSQL(createPlatformsTable)
         db?.execSQL(createAccountsTable)
-        db?.execSQL(createSettingsTable)
+        db?.execSQL(createSavedPassTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_SAVED_PASS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNTS")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_SAVED_PASS")
         onCreate(db)
     }
 
@@ -228,22 +232,6 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun addGeneratedPass(userSavedPass: UserSavedPassModelClass): Long {                            // Add Generated Password
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_PASS_ID, userSavedPass.passId)
-            put(KEY_SAVED_PASS, userSavedPass.generatedPassword)
-            put(KEY_CREATION_DATE, userSavedPass.creationDate)
-        }
-
-        val success = db.insert(TABLE_SAVED_PASS, null, contentValues)
-
-        db.close()
-        return success
-    }
-
     fun addCategory(userCategory: UserCategoryModelClass): Long {                                   // Add Category
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -294,6 +282,24 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_ACCOUNTS, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addGeneratedPass(userSavedPass: UserSavedPassModelClass): Long {                            // Add Generated Password
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_PASS_ID, userSavedPass.passId)
+            put(KEY_SAVED_PASS, userSavedPass.generatedPassword)
+            put(KEY_CREATION_DATE, userSavedPass.creationDate)
+            put(KEY_PASS_DELETED, userSavedPass.passDeleted)
+            put(KEY_PASS_DELETE_DATE, userSavedPass.passDeleteDate)
+        }
+
+        val success = db.insert(TABLE_SAVED_PASS, null, contentValues)
 
         db.close()
         return success
@@ -463,45 +469,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewSavedPass(): List<UserSavedPassModelClass> {                                            // View Saved Password
-        val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var passId: String
-        var passPassword: String
-        var passCreationDate: String
-
-        if (cursor.moveToFirst()) {
-            do {
-                passId = cursor.getString(cursor.getColumnIndex(KEY_PASS_ID))
-                passPassword = cursor.getString(cursor.getColumnIndex(KEY_SAVED_PASS))
-                passCreationDate = cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
-
-                val user = UserSavedPassModelClass(
-                        passId = passId,
-                        generatedPassword = passPassword,
-                        creationDate = passCreationDate
-                )
-                userSavedPassList.add(user)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userSavedPassList
-    }
-
-    @SuppressLint("Recycle")
-    fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                     // View categories
+    fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                                               // View Categories
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
         var selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
         val db = this.readableDatabase
@@ -540,14 +508,10 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun viewNumberOfPlatforms(categoryId: String): Int {                                            // View number of platforms in a category
+        val selectQuery =
+                "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
         val db = this.readableDatabase
         val cursor: Cursor?
-
-        val selectQuery = if (categoryId.isNotEmpty()) {
-            "SELECT COUNT(*) FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$categoryId'"
-        } else {
-            "SELECT COUNT(*) FROM $TABLE_PLATFORMS"
-        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -565,15 +529,13 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewPlatform(field: String, id: String): List<UserPlatformModelClass> {                     // View platforms
+    fun viewPlatform(field: String, id: String): List<UserPlatformModelClass> {                                    // View Platforms
         val userPlatformList: ArrayList<UserPlatformModelClass> = ArrayList()
-        var selectQuery = ""
+        var selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
         val db = this.readableDatabase
         val cursor: Cursor?
 
-        if (field == "category") {
-            selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_CATEGORY_ID = '$id'"
-        } else if (field == "platform") {
+        if (field == "platform") {
             selectQuery = "SELECT * FROM $TABLE_PLATFORMS WHERE $KEY_PLATFORM_ID = '$id'"
         }
 
@@ -609,15 +571,10 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun viewNumberOfAccounts(deleted: String, platformId: String): Int {                            // View number of accounts in a platform
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
+                "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PLATFORM_ID = '$platformId'"
         val db = this.readableDatabase
         val cursor: Cursor?
-
-        val selectQuery = if (platformId.isNotEmpty()) {
-            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
-                    "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PLATFORM_ID = '$platformId'"
-        } else {
-            "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_DELETED = '$deleted'"
-        }
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -634,12 +591,34 @@ class DatabaseHandlerClass(context: Context) :
         return num
     }
 
+    fun getLastIdOfPlatform(): String {                                                             // Get last Id of of Platforms
+        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS ORDER BY $KEY_PLATFORM_ID DESC LIMIT 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var lastId = ""
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ""
+        }
+
+        if (cursor.moveToFirst()) {
+            lastId = cursor.getString(0)
+        }
+
+        cursor.close()
+        db.close()
+        return lastId
+    }
+
     @SuppressLint("Recycle")
     fun viewAccount(
             conditionField: String,
             idOrIsFavorites: String,
             deleted: String
-    ): List<UserAccountModelClass> { // View Specific Account
+    ): List<UserAccountModelClass> {                                                                // View Specific Account
         val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
         var selectQuery = ""
         val db = this.readableDatabase
@@ -685,12 +664,15 @@ class DatabaseHandlerClass(context: Context) :
             do {
                 accountId = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_ID))
                 accountName = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_NAME))
-                accountCredentialField = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL_FIELD))
+                accountCredentialField =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL_FIELD))
                 accountCredential = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL))
                 accountPassword = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_PASSWORD))
                 accountWebsiteURL = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_WEBSITE_URL))
-                accountDescription = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
-                accountIsFavorites = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
+                accountDescription =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
+                accountIsFavorites =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
                 accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
                 accountDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETE_DATE))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
@@ -717,25 +699,70 @@ class DatabaseHandlerClass(context: Context) :
         return userAccountList
     }
 
-    fun viewTotalNumOfAccounts(): Int {                                                             // View total number of accounts
+    fun getLastIdOfAccount(): String {                                                              // Get last Id of of Accounts
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS ORDER BY $KEY_ACCOUNT_ID DESC LIMIT 1"
         val db = this.readableDatabase
         val cursor: Cursor?
-
-        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS"
+        var lastId = ""
 
         try {
             cursor = db.rawQuery(selectQuery, null)
         } catch (e: SQLiteException) {
             db.execSQL(selectQuery)
-            return 0
+            return ""
         }
 
-        cursor.moveToFirst()
-        val num = cursor.getInt(0)
+        if (cursor.moveToFirst()) {
+            lastId = cursor.getString(0)
+        }
 
         cursor.close()
         db.close()
-        return num
+        return lastId
+    }
+
+    @SuppressLint("Recycle")
+    fun viewSavedPass(deleted: String): List<UserSavedPassModelClass> {                             // View Saved Password
+        val userSavedPassList: ArrayList<UserSavedPassModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_SAVED_PASS WHERE $KEY_PASS_DELETED = '$deleted'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var passId: String
+        var passPassword: String
+        var passCreationDate: String
+        var passDeleted: String
+        var passDeleteDate: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                passId = cursor.getString(cursor.getColumnIndex(KEY_PASS_ID))
+                passPassword = cursor.getString(cursor.getColumnIndex(KEY_SAVED_PASS))
+                passCreationDate = cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
+                passDeleted = cursor.getString(cursor.getColumnIndex(KEY_PASS_DELETED))
+                passDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_PASS_DELETE_DATE))
+
+                val user = UserSavedPassModelClass(
+                        passId = passId,
+                        generatedPassword = passPassword,
+                        creationDate = passCreationDate,
+                        passDeleted = passDeleted,
+                        passDeleteDate = passDeleteDate
+                )
+                userSavedPassList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userSavedPassList
     }
 
     fun viewSettings(): List<UserSettingsModelClass> {                                              // View Settings
@@ -951,9 +978,9 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun updateDeleteAccount(
-            accountId: String,
-            accountDeleted: String,
-            accountDeleteDate: String,
+            id: String,
+            deleted: String,
+            deleteDate: String,
             tableName: String,
             fieldId: String,
             fieldDelete: String,
@@ -963,14 +990,14 @@ class DatabaseHandlerClass(context: Context) :
         val contentValues = ContentValues()
 
         contentValues.apply {
-            put(fieldDelete, accountDeleted)
-            put(fieldDate, accountDeleteDate)
+            put(fieldDelete, deleted)
+            put(fieldDate, deleteDate)
         }
 
         val success = db.update(
                 tableName,
                 contentValues,
-                "$fieldId='$accountId'",
+                "$fieldId='$id'",
                 null
         )
 
@@ -979,11 +1006,14 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun updateDeleteMultipleAccount(
-            accountDeleted: String,
-            accountDeleteDate: String,
             id: Array<String?>,
-            fieldId: String
-    ): Int {                                                        // Update Specific Account
+            deleted: String,
+            deleteDate: String,
+            tableName: String,
+            fieldId: String,
+            fieldDelete: String,
+            fieldDate: String
+    ): Int {                                                                                        // Update Specific Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
         var questionMark = ""
@@ -994,12 +1024,12 @@ class DatabaseHandlerClass(context: Context) :
         questionMark = questionMark.dropLast(1)
 
         contentValues.apply {
-            put(KEY_ACCOUNT_DELETED, accountDeleted)
-            put(KEY_ACCOUNT_DELETE_DATE, accountDeleteDate)
+            put(fieldDelete, deleted)
+            put(fieldDate, deleteDate)
         }
 
         val success = db.update(
-                TABLE_ACCOUNTS,
+                tableName,
                 contentValues,
                 "$fieldId IN ($questionMark)",
                 id

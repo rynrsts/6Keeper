@@ -9,10 +9,10 @@ import android.widget.TextView
 
 class SavedPasswordListAdapter(
         private val context: Activity,
-        private val id: Array<String>,
-        private val password: Array<String>,
-        private val creationDate: Array<String>
-) : ArrayAdapter<String>(context, R.layout.layout_saved_password_list_adapter, password) {
+        id: ArrayList<String>,
+        private val password: ArrayList<String>,
+        private val creationDate: ArrayList<String>
+) : ArrayAdapter<String>(context, R.layout.layout_saved_password_list_adapter, id) {
 
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
@@ -23,11 +23,9 @@ class SavedPasswordListAdapter(
                 true
         )
 
-        val tvSavedPassId = rowView.findViewById(R.id.tvSavedPassId) as TextView
         val tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword) as TextView
         val tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate) as TextView
 
-        tvSavedPassId.text = "ID: ${id[position]}"
         tvSavedPassPassword.text = "Password: ${password[position]}"
         tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
 

@@ -398,10 +398,13 @@ open class AccountsProcessClass : Fragment() {
                 encodingClass.encodeData(categoryIdTemp)
         )
         databaseHandlerClass.updateDeleteMultipleAccount(
+                userPlatformIdNoDuplicate,
                 encodingClass.encodeData(1.toString()),
                 encodingClass.encodeData(date),
-                userPlatformIdNoDuplicate,
-                "platform_id"
+                "AccountsTable",
+                "platform_id",
+                "account_deleted",
+                "account_delete_date"
         )
     }
 

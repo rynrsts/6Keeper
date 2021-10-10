@@ -132,6 +132,7 @@
     <string name="many_no_category">No category to show</string>
     <string name="many_no_platform">No platform to show</string>
     <string name="many_nothing_to_add">Nothing to add</string>
+    <string name="many_nothing_to_delete">Nothing to delete</string>
     <string name="many_nothing_to_update">Nothing to update</string>
     <string name="many_nothing_to_search">Nothing to search</string>
     <string name="many_one">1</string>
@@ -194,7 +195,7 @@
     <string name="pass_generator_custom">Custom</string>
     <string name="pass_generator_generate">Generate</string>
     <string name="pass_generator_generated_pass">Generated Password</string>
-    <!--    <string name="pass_generator_generate_pass">Please generate a password first.  </string>-->
+    <string name="pass_generator_generate_pass">Please generate a password first</string>
     <string name="pass_generator_include">Include:</string>
     <string name="pass_generator_length_of_4">Length must be minimum of 4</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
@@ -204,9 +205,11 @@
         * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), and numbers (0-9)
     </string>
     <string name="pass_generator_minus">-</string>
+    <string name="pass_generator_nothing_to_copy">Nothing to copy</string>
     <string name="pass_generator_number">Numbers (0–9)</string>
-    <!--    <string name="pass_generator_pass_already_saved">Password already saved.</string>-->
-    <!--    <string name="pass_generator_pass_saved">Password Saved!</string>-->
+    <string name="pass_generator_pass_already_saved">Password already saved</string>
+    <string name="pass_generator_pass_copy">Generated password has been copied!</string>
+    <string name="pass_generator_pass_saved">Password Saved!</string>
     <string name="pass_generator_pass_type">Password Type</string>
     <string name="pass_generator_plus">+</string>
     <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
@@ -226,7 +229,6 @@
     <!--    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>-->
 
     <!-- Privacy Policy -->
-
     <string name="privacy_communication_content">
         We may use your personal information to contact you with marketing or promotional materials
         and other information that you might need to know.
@@ -278,6 +280,11 @@
     <string name="recycle_bin_restore">Restore</string>
     <string name="recycle_bin_select_all">Select All</string>
     <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
+
+    <!-- Saved Password -->
+    <string name="saved_password_no_item">No saved password to show</string>
+    <string name="saved_password_delete_mes">Saved Password/s deleted!</string>
+    <string name="saved_password_delete_alert">Delete Saved Password/s?</string>
 
     <!-- Settings -->
     <string name="settings_allow_copy">Allow Textual Copy</string>
