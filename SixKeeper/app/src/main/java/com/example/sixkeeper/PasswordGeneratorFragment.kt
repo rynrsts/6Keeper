@@ -38,6 +38,10 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                 getAppCompatActivity().findViewById(R.id.tvPassGeneratorCustom)
         val acbPassGeneratorGenerate: Button =
                 getAppCompatActivity().findViewById(R.id.acbPassGeneratorGenerate)
+        val clPassGeneratorView: ConstraintLayout =
+                getAppCompatActivity().findViewById(R.id.clPassGeneratorView)
+        val clPassGeneratorSave: ConstraintLayout =
+                getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
         tvPassGeneratorMedium.setOnClickListener {
             if (getPasswordType() != "medium") {
@@ -112,10 +116,70 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         }
 
         acbPassGeneratorGenerate.setOnClickListener {
-            if (getPasswordType() == "medium" && getPasswordType() == "strong") {
-
+            if (getPasswordType() == "medium" || getPasswordType() == "strong") {
+                setTvPassGeneratorGeneratedPass(generatePassword(0))
             } else if (getPasswordType() == "custom") {
+                val etPassGeneratorLength: EditText =
+                        getCustomInflatedLayout().findViewById(R.id.etPassGeneratorLength)
+                val passGeneratorLength = etPassGeneratorLength.text.toString()
 
+                if (passGeneratorLength.isNotEmpty()) {
+                    val length = Integer.parseInt(passGeneratorLength)
+
+                    if (length in 4..99) {
+                        if (
+                                getCbPassGeneratorLowercase().isChecked ||
+                                getCbPassGeneratorUppercase().isChecked ||
+                                getCbPassGeneratorSpecialChar().isChecked ||
+                                getCbPassGeneratorNumber().isChecked
+                        ) {
+                            setTvPassGeneratorGeneratedPass(generatePassword(length))
+                        } else {
+                            val toast: Toast = Toast.makeText(
+                                    getAppCompatActivity().applicationContext,
+                                    R.string.pass_generator_select_char,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
+                    } else {
+                        toastMinimumOf4(etPassGeneratorLength)
+                        etPassGeneratorLength.clearFocus()
+                        closeKeyboard()
+                    }
+                } else {
+                    toastMinimumOf4(etPassGeneratorLength)
+                    etPassGeneratorLength.clearFocus()
+                    closeKeyboard()
+                }
+            }
+        }
+
+        clPassGeneratorView.setOnClickListener {
+            closeKeyboard()
+
+            val goToConfirmActivity = Intent(
+                    getAppCompatActivity(),
+                    ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            getAppCompatActivity().overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2,
+                    R.anim.anim_0
+            )
+
+            it.apply {
+                clPassGeneratorView.isClickable = false                                             // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clPassGeneratorView.isClickable = true
+                        }, 1000
+                )
             }
         }
 
@@ -244,22 +308,22 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
 //        }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        @Suppress("DEPRECATION")
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        when {
-//            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-//                view?.apply {
-//                    postDelayed(
-//                            {
-//                                findNavController().navigate(                                       // Go to Saved Password
-//                                        R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
-//                                )
-//                            }, 250
-//                    )
-//                }
-//            }
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    postDelayed(
+                            {
+                                findNavController().navigate(                                       // Go to Saved Password
+                                        R.id.action_passwordGeneratorFragment_to_savedPasswordFragment
+                                )
+                            }, 250
+                    )
+                }
+            }
+        }
+    }
 }
