@@ -7,13 +7,119 @@
     android:paddingTop="?attr/actionBarSize"
     tools:context=".RecycleBinFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clRecycleBinTab"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gRecycleBinVertical50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".50" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRecycleBinAccounts"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toStartOf="@+id/gRecycleBinVertical50"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ivRecycleBinAccounts"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_account_circle_light_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRecycleBinAccounts"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvRecycleBinAccounts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:text="@string/many_accounts"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivRecycleBinAccounts"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/vRecycleBinDivisionA"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/blue"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRecycleBinPassword"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/gRecycleBinVertical50">
+
+            <ImageView
+                android:id="@+id/ivRecycleBinPassword"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_lock_light_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRecycleBinPassword"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvRecycleBinPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:text="@string/recycle_bin_pass_generator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivRecycleBinPassword"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/vRecycleBinDivisionB"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/vUserAccountDivisionTab"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:background="@color/lightGray"
+        app:layout_constraintTop_toBottomOf="@+id/clRecycleBinTab" />
+
     <LinearLayout
         android:id="@+id/llRecycleBinSelectAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/vUserAccountDivisionTab">
 
         <CheckBox
             android:id="@+id/cbRecycleBinSelectAll"
@@ -38,6 +144,7 @@
         app:layout_constraintTop_toBottomOf="@+id/llRecycleBinSelectAll" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"

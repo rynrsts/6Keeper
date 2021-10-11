@@ -276,15 +276,18 @@
     <string name="privacy_security_title"><b>Security</b></string>
 
     <!-- Recycle Bin -->
+    <string name="recycle_bin_pass_generator">Password\nGenerator</string>
     <string name="recycle_bin_no_item">No deleted item to show</string>
     <string name="recycle_bin_restore">Restore</string>
     <string name="recycle_bin_select_all">Select All</string>
     <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
 
     <!-- Saved Password -->
-    <string name="saved_password_no_item">No saved password to show</string>
-    <string name="saved_password_delete_mes">Saved Password/s deleted!</string>
     <string name="saved_password_delete_alert">Delete Saved Password/s?</string>
+    <string name="saved_password_delete_mes">Saved Password/s deleted!</string>
+    <string name="saved_password_no_item">No saved password to show</string>
+    <string name="saved_password_one_pass">One password can only be copied at a time</string>
+    <string name="saved_password_pass_copy">Password has been copied!</string>
 
     <!-- Settings -->
     <string name="settings_allow_copy">Allow Textual Copy</string>
