@@ -276,6 +276,7 @@
     <string name="privacy_security_title"><b>Security</b></string>
 
     <!-- Recycle Bin -->
+    <string name="recycle_bin_delete_mes">Delete selected items?</string>
     <string name="recycle_bin_pass_generator">Password\nGenerator</string>
     <string name="recycle_bin_no_item">No deleted item to show</string>
     <string name="recycle_bin_restore">Restore</string>

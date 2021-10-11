@@ -326,7 +326,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return shuffle(randomString.toString())
     }
 
-    private fun shuffle(input: String): String {
+    private fun shuffle(input: String): String {                                                    // Shuffle for true randomness
         val characters: MutableList<Char> = ArrayList()
 
         for (c in input.toCharArray()) {

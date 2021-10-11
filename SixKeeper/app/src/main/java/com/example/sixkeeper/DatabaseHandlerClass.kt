@@ -1101,7 +1101,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun removeRecycleBin(id: Array<String?>): Int {                                                 // Delete selected items from Recycle Bin
+    fun removeRecycleBin(id: Array<String?>, tableName: String, field: String): Int {               // Delete selected items from Recycle Bin
         val db = this.writableDatabase
         var questionMark = ""
 
@@ -1111,8 +1111,8 @@ class DatabaseHandlerClass(context: Context) :
         questionMark = questionMark.dropLast(1)
 
         val success = db.delete(
-                TABLE_ACCOUNTS,
-                "$KEY_ACCOUNT_ID IN ($questionMark)",
+                tableName,
+                "$field IN ($questionMark)",
                 id
         )
 

@@ -11,11 +11,7 @@ Additional
     User Account: Add deactivate
     Dashboard: Add content
     Accounts: Add auto-fill login
-    Favorites: Add message when there is no account shown
-    Favorites: Make Accounts removable
-    Password Generator: Add easy option
     Saved Password: Sort items newest first
-    Saved Passwords: Make passwords deletable
     Recycle Bin: Add restore
     Settings: Add note
     Settings: Add Notifications
@@ -40,5 +36,7 @@ Bug
     Accounts: Override back arrow function
     Accounts: Fix long press delete on Accounts
     Favorites: Fix missing content when menu item is clicked again
+    Saved Passwords: ListView
     Recycle Bin: Fix missing content when menu item is clicked again
+    Recycle Bin: ListView
     Settings: Fix missing content when menu item is clicked again

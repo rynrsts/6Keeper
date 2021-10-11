@@ -237,15 +237,6 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                     show()
                 }
             }
-
-            it.apply {
-                clPassGeneratorSave.isClickable = false                                             // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clPassGeneratorSave.isClickable = true
-                        }, 1000
-                )
-            }
         }
     }
 
