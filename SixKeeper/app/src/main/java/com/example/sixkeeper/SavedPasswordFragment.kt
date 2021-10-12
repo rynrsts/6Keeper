@@ -2,6 +2,7 @@ package com.example.sixkeeper
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.*
 import android.os.Bundle
 import android.view.Gravity
@@ -24,11 +25,6 @@ class SavedPasswordFragment : Fragment() {
 
     private lateinit var cbSavedPassSelectAll: CheckBox
     private lateinit var lvSavedPasswordContainer: ListView
-
-    private var selectedPositionContainer = ArrayList<Int>(0)
-    private val selectedIdContainer = ArrayList<String>(0)
-    private var selectedPasswordContainer = ArrayList<String>(0)
-    private val itemSelected = ArrayList<Int>(0)
 
     private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
@@ -90,17 +86,17 @@ class SavedPasswordFragment : Fragment() {
             }
         } else {
             for (u in userSavedPass) {
+                val uId = encodingClass.decodeData(u.passId)
                 val uPassword = encodingClass.decodeData(u.generatedPassword)
 
-                userSavedPassId.add(
-                        encodingClass.decodeData(u.passId) + "ramjcammjar" + uPassword
-                )
+                userSavedPassId.add(uId)
                 userSavedPassPassword.add(uPassword)
                 userSavedPassCreationDate.add(encodingClass.decodeData(u.creationDate))
-                itemSelected.add(0)
 
                 savedPasswordModelClass = SavedPasswordModelClass()
                 savedPasswordModelClass.setSelected(false)
+                savedPasswordModelClass.setId(Integer.parseInt(uId))
+                savedPasswordModelClass.setPassword(uPassword)
                 modelArrayList.add(savedPasswordModelClass)
             }
 
@@ -122,68 +118,52 @@ class SavedPasswordFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clSavedPassDelete)
         val clSavedPassCopy: ConstraintLayout = appCompatActivity.findViewById(R.id.clSavedPassCopy)
 
-//        lvSavedPasswordContainer.onItemClickListener = (OnItemClickListener { _, view, pos, _ ->
-//            val selectedItem = lvSavedPasswordContainer.getItemAtPosition(pos).toString()
-//            val selectedItemValue = selectedItem.split("ramjcammjar")
-//            val selectedItemId = selectedItemValue[0]
-//            val selectedItemPassword = selectedItemValue[1]
-//            val cbSavedPassCheckBox: CheckBox = view.findViewById(R.id.cbSavedPassCheckBox)
-//
-//            if (cbSavedPassCheckBox.isChecked) {
-//                cbSavedPassCheckBox.isChecked = false
-//                selectedPositionContainer.remove(pos)
-//                selectedIdContainer.remove(encodingClass.encodeData(selectedItemId))
-//                selectedPasswordContainer.remove(selectedItemPassword)
-//                itemSelected[pos] = 0
-//            } else {
-//                cbSavedPassCheckBox.isChecked = true
-//                selectedPositionContainer.add(pos)
-//                selectedIdContainer.add(encodingClass.encodeData(selectedItemId))
-//                selectedPasswordContainer.add(selectedItemPassword)
-//                itemSelected[pos] = 1
-//            }
-//        })
-
         clSavedPassDelete.setOnClickListener {
-//            val userSavedPass: List<UserSavedPassModelClass> =
-//                    databaseHandlerClass.viewSavedPass(encodingClass.encodeData(0.toString()))
-//
-//            if (!userSavedPass.isNullOrEmpty() && !selectedIdContainer.isNullOrEmpty()) {
-//                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-//                builder.setMessage(R.string.saved_password_delete_alert)
-//                builder.setCancelable(false)
-//
-//                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-//                    val goToConfirmActivity = Intent(
-//                            appCompatActivity,
-//                            ConfirmActionActivity::class.java
-//                    )
-//
-//                    @Suppress("DEPRECATION")
-//                    startActivityForResult(goToConfirmActivity, 16914)
-//                    appCompatActivity.overridePendingTransition(
-//                            R.anim.anim_enter_bottom_to_top_2,
-//                            R.anim.anim_0
-//                    )
-//                }
-//                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-//                    dialog.cancel()
-//                }
-//
-//                val alert: AlertDialog = builder.create()
-//                alert.setTitle(R.string.many_alert_title_confirm)
-//                alert.show()
-//            } else {
-//                val toast = Toast.makeText(
-//                        appCompatActivity.applicationContext,
-//                        R.string.many_nothing_to_delete,
-//                        Toast.LENGTH_SHORT
-//                )
-//                toast?.apply {
-//                    setGravity(Gravity.CENTER, 0, 0)
-//                    show()
-//                }
-//            }
+            var itemCheck = false
+
+            for (i in 0 until modelArrayList.size) {
+                if (modelArrayList[i].getSelected()) {
+                    itemCheck = true
+                    break
+                }
+            }
+
+            if (itemCheck) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setMessage(R.string.saved_password_delete_alert)
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            } else {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.many_nothing_to_delete,
+                        Toast.LENGTH_SHORT
+                )
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
 
             it.apply {
                 clSavedPassDelete.isClickable = false                                             // Set un-clickable for 1 second
@@ -195,63 +175,67 @@ class SavedPasswordFragment : Fragment() {
             }
         }
 
-//        clSavedPassCopy.setOnClickListener {
-//            val toast: Toast
-//
-//            if (!selectedPasswordContainer.isNullOrEmpty()) {
-//                if (selectedPasswordContainer.size == 1) {
-//                    val clipboard: ClipboardManager =
-//                            appCompatActivity.getSystemService(
-//                                    Context.CLIPBOARD_SERVICE
-//                            ) as ClipboardManager
-//                    val clip = ClipData.newPlainText("pw", selectedPasswordContainer[0])
-//                    clipboard.setPrimaryClip(clip)
-//
-//                    lvSavedPasswordContainer.performItemClick(
-//                            lvSavedPasswordContainer.getChildAt(selectedPositionContainer[0]),
-//                            selectedPositionContainer[0],
-//                            lvSavedPasswordContainer.adapter.getItemId(selectedPositionContainer[0])
-//                    )
-//
-//                    cbSavedPassSelectAll.isChecked = false
-//                    selectedPositionContainer.clear()
-//                    selectedIdContainer.clear()
-//                    selectedPasswordContainer.clear()
-//
-//                    toast = Toast.makeText(
-//                            appCompatActivity.applicationContext,
-//                            R.string.saved_password_pass_copy,
-//                            Toast.LENGTH_SHORT
-//                    )
-//                } else {
-//                    toast = Toast.makeText(
-//                            appCompatActivity.applicationContext,
-//                            R.string.saved_password_one_pass,
-//                            Toast.LENGTH_SHORT
-//                    )
-//                }
-//            } else {
-//                toast = Toast.makeText(
-//                        appCompatActivity.applicationContext,
-//                        R.string.pass_generator_nothing_to_copy,
-//                        Toast.LENGTH_SHORT
-//                )
-//            }
-//
-//            toast.apply {
-//                setGravity(Gravity.CENTER, 0, 0)
-//                show()
-//            }
-//
-//            it.apply {
-//                clSavedPassCopy.isClickable = false                                                 // Set un-clickable for 1 second
-//                postDelayed(
-//                        {
-//                            clSavedPassCopy.isClickable = true
-//                        }, 100
-//                )
-//            }
-//        }
+        clSavedPassCopy.setOnClickListener {
+            var numOfSelected = 0
+            var onlyOneIsSelected =  true
+            var password = ""
+            val toast: Toast?
+
+            for (i in 0 until modelArrayList.size) {
+                if (modelArrayList[i].getSelected()) {
+                    numOfSelected++
+                    password = modelArrayList[i].getPassword()
+
+                    if (numOfSelected == 2) {
+                        onlyOneIsSelected = false
+                        break
+                    }
+                }
+            }
+
+            if (numOfSelected > 0) {
+                if (onlyOneIsSelected) {
+                    val clipboard: ClipboardManager =
+                            appCompatActivity.getSystemService(
+                                    Context.CLIPBOARD_SERVICE
+                            ) as ClipboardManager
+                    val clip = ClipData.newPlainText("pw", password)
+                    clipboard.setPrimaryClip(clip)
+
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.saved_password_pass_copy,
+                            Toast.LENGTH_SHORT
+                    )
+                } else {
+                    toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.saved_password_one_pass,
+                            Toast.LENGTH_SHORT
+                    )
+                }
+            } else {
+                toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.pass_generator_nothing_to_copy,
+                        Toast.LENGTH_SHORT
+                )
+            }
+
+            toast?.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+
+            it.apply {
+                clSavedPassCopy.isClickable = false                                                 // Set un-clickable for 1 second
+                postDelayed(
+                        {
+                            clSavedPassCopy.isClickable = true
+                        }, 100
+                )
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -261,8 +245,22 @@ class SavedPasswordFragment : Fragment() {
 
         when {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                var selectedId = arrayOfNulls<String>(selectedIdContainer.size)
-                selectedId = selectedIdContainer.toArray(selectedId)
+                val container = ArrayList<String>(0)
+                val cbSavedPassSelectAll: CheckBox =
+                        appCompatActivity.findViewById(R.id.cbSavedPassSelectAll)
+
+                for (i in 0 until modelArrayList.size) {
+                    if (modelArrayList[i].getSelected()) {
+                        container.add(
+                                encodingClass.encodeData(
+                                        modelArrayList[i].getId().toString()
+                                )
+                        )
+                    }
+                }
+
+                var selectedId = arrayOfNulls<String>(container.size)
+                selectedId = container.toArray(selectedId)
 
                 val calendar: Calendar = Calendar.getInstance()
                 val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
@@ -290,11 +288,12 @@ class SavedPasswordFragment : Fragment() {
                     }
                 }
 
-                cbSavedPassSelectAll.isChecked = false
+                if (cbSavedPassSelectAll.isChecked) {
+                    cbSavedPassSelectAll.performClick()
+                }
+
+                modelArrayList.clear()
                 viewSavedPass()
-                selectedPositionContainer.clear()
-                selectedIdContainer.clear()
-                selectedPasswordContainer.clear()
             }
         }
     }

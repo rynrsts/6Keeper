@@ -169,6 +169,8 @@ class SpecificPlatformFragment : Fragment() {
             val action = SpecificPlatformFragmentDirections
                     .actionSpecificPlatformFragmentToAddAccountFragment(
                             args.specificPlatformId,
+                            args.specificPlatformName,
+                            args.specificCategoryName,
                             "add",
                             ""
                     )

@@ -114,30 +114,16 @@ class FavoritesFragment : Fragment() {
                 val uAccountName = encodingClass.decodeData(u.accountName)
 
                 if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
+                    val uPlatformName = encodingClass.decodeData(u.platformName)
+                    val uCategoryName = encodingClass.decodeData(u.categoryName)
+
                     userAccountId.add(
                             encodingClass.decodeData(u.accountId) + "ramjcammjar" +
                                     uAccountName + "ramjcammjar" +
                                     encodingClass.decodeData(u.platformId)
                     )
                     userAccountName.add(uAccountName)
-
-                    val userPlatform: List<UserPlatformModelClass> =
-                            databaseHandlerClass.viewPlatform("platform", u.platformId)
-                    var uPlatformName: String
-
-                    for (up in userPlatform) {
-                        uPlatformName = encodingClass.decodeData(up.platformName)
-
-                        val userCategory: List<UserCategoryModelClass> =
-                                databaseHandlerClass.viewCategory("category", up.categoryId)
-                        var uCategoryName = ""
-
-                        for (uc in userCategory) {
-                            uCategoryName = encodingClass.decodeData(uc.categoryName)
-                        }
-
-                        userAccountDirectory.add("$uCategoryName > $uPlatformName")
-                    }
+                    userAccountDirectory.add("$uCategoryName > $uPlatformName")
                 }
             }
 

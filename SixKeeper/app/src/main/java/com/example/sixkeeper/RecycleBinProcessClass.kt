@@ -3,12 +3,15 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import java.util.LinkedHashSet
 import kotlin.collections.ArrayList
 
 open class RecycleBinProcessClass : Fragment() {
@@ -21,13 +24,12 @@ open class RecycleBinProcessClass : Fragment() {
     private lateinit var llRecycleBinNoItem: LinearLayout
     private lateinit var lvRecycleBinContainer: ListView
 
+    private val modelArrayList = ArrayList<RecycleBinModelClass>(0)
+    private lateinit var recycleBinModelClass: RecycleBinModelClass
+
     private lateinit var selectedTab: String
     private val itemSelected = ArrayList<Int>(0)
     private val selectedIdContainer = ArrayList<String>(0)
-
-    fun getEncodingClass(): EncodingClass {
-        return encodingClass
-    }
 
     fun getAppCompatActivity(): AppCompatActivity {
         return appCompatActivity
@@ -39,6 +41,10 @@ open class RecycleBinProcessClass : Fragment() {
 
     fun getLvRecycleBinContainer(): ListView {
         return lvRecycleBinContainer
+    }
+
+    fun getModelArrayList(): ArrayList<RecycleBinModelClass> {
+        return modelArrayList
     }
 
     fun setSelectedTab(s: String) {
@@ -104,16 +110,27 @@ open class RecycleBinProcessClass : Fragment() {
             inflateNoItem()
         } else {
             for (u in userAccount) {
-                userAccountId.add(encodingClass.decodeData(u.accountId))
+                val uId = encodingClass.decodeData(u.accountId)
+
+                userAccountId.add(uId)
                 userAccountName.add(encodingClass.decodeData(u.accountName))
-                itemSelected.add(0)
+//                itemSelected.add(0)
+
+                recycleBinModelClass = RecycleBinModelClass()
+                recycleBinModelClass.setSelected(false)
+                recycleBinModelClass.setId(Integer.parseInt(uId))
+                recycleBinModelClass.setAccountName(encodingClass.decodeData(u.accountName))
+                recycleBinModelClass.setPlatformName(encodingClass.decodeData(u.platformName))
+                recycleBinModelClass.setCategoryName(encodingClass.decodeData(u.categoryName))
+                modelArrayList.add(recycleBinModelClass)
             }
 
             val accountsListAdapter = RecycleBinListAdapter(
                     attActivity,
                     userAccountId,
                     userAccountName,
-                    "accounts"
+                    "accounts",
+                    modelArrayList
             )
 
             llRecycleBinNoItem.removeAllViews()
@@ -133,16 +150,24 @@ open class RecycleBinProcessClass : Fragment() {
             inflateNoItem()
         } else {
             for (u in userSavedPass) {
-                userPasswordId.add(encodingClass.decodeData(u.passId))
+                val uId = encodingClass.decodeData(u.passId)
+
+                userPasswordId.add(uId)
                 userPasswordPass.add(encodingClass.decodeData(u.generatedPassword))
-                itemSelected.add(0)
+//                itemSelected.add(0)
+
+                recycleBinModelClass = RecycleBinModelClass()
+                recycleBinModelClass.setSelected(false)
+                recycleBinModelClass.setId(Integer.parseInt(uId))
+                modelArrayList.add(recycleBinModelClass)
             }
 
             val accountsListAdapter = RecycleBinListAdapter(
                     attActivity,
                     userPasswordId,
                     userPasswordPass,
-                    "passwords"
+                    "passwords",
+                    modelArrayList
             )
 
             llRecycleBinNoItem.removeAllViews()
@@ -151,9 +176,15 @@ open class RecycleBinProcessClass : Fragment() {
     }
 
     private fun clearAll() {
-        cbRecycleBinSelectAll.isChecked = false
-        itemSelected.clear()
-        selectedIdContainer.clear()
+        if (cbRecycleBinSelectAll.isChecked) {
+            cbRecycleBinSelectAll.performClick()
+        }
+
+        modelArrayList.clear()
+
+//        cbRecycleBinSelectAll.isChecked = false
+//        itemSelected.clear()
+//        selectedIdContainer.clear()
     }
 
     @SuppressLint("InflateParams")
@@ -193,8 +224,20 @@ open class RecycleBinProcessClass : Fragment() {
 
         when {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                var selectedId = arrayOfNulls<String>(selectedIdContainer.size)
-                selectedId = selectedIdContainer.toArray(selectedId)
+                val container = ArrayList<String>(0)
+
+                for (i in 0 until modelArrayList.size) {
+                    if (modelArrayList[i].getSelected()) {
+                        container.add(
+                                encodingClass.encodeData(
+                                        modelArrayList[i].getId().toString()
+                                )
+                        )
+                    }
+                }
+
+                var selectedId = arrayOfNulls<String>(container.size)
+                selectedId = container.toArray(selectedId)
                 var tableName = ""
                 var field = ""
 
@@ -206,7 +249,7 @@ open class RecycleBinProcessClass : Fragment() {
                     field = "pass_id"
                 }
 
-                val status = databaseHandlerClass.removeRecycleBin(selectedId, tableName, field)
+                val status = databaseHandlerClass.removeRecycleBin(selectedId, tableName, field)    // Delete selected items
 
                 if (status > -1) {
                     val toast = Toast.makeText(
@@ -227,5 +270,231 @@ open class RecycleBinProcessClass : Fragment() {
                 }
             }
         }
+    }
+
+    fun restoreSelectedItems() {                                                                    // Restore selected items
+        val containerId = ArrayList<String>(0)
+        val containerAccountName = ArrayList<String>(0)
+        val containerPlatformName = ArrayList<String>(0)
+        val containerCategoryName = ArrayList<String>(0)
+
+        for (i in 0 until modelArrayList.size) {
+            if (modelArrayList[i].getSelected()) {
+                containerId.add(modelArrayList[i].getId().toString())
+                containerAccountName.add(modelArrayList[i].getAccountName())
+                containerPlatformName.add(modelArrayList[i].getPlatformName())
+                containerCategoryName.add(modelArrayList[i].getCategoryName())
+            }
+        }
+
+        var selectedId = arrayOfNulls<String>(containerId.size)
+        selectedId = containerId.toArray(selectedId)
+
+        var selectedAccountName = arrayOfNulls<String>(containerAccountName.size)
+        selectedAccountName = containerAccountName.toArray(selectedAccountName)
+
+        var selectedPlatformName = arrayOfNulls<String>(containerPlatformName.size)
+        selectedPlatformName = containerPlatformName.toArray(selectedPlatformName)
+
+        var selectedCategoryName = arrayOfNulls<String>(containerCategoryName.size)
+        selectedCategoryName = containerCategoryName.toArray(selectedCategoryName)
+
+        if (selectedTab == "accounts") {
+            restoreAccounts(
+                    selectedId, selectedAccountName, selectedPlatformName, selectedCategoryName
+            )
+        } else if (selectedTab == "password generator") {
+            restoreSavedPasswords(selectedId)
+        }
+    }
+
+    private fun restoreSavedPasswords(selectedId: Array<String?>) {                                 // Restore Saved Passwords
+        val status = databaseHandlerClass.updateDeleteMultipleAccount(
+                selectedId,
+                encodingClass.encodeData(0.toString()),
+                "",
+                "SavedPasswordTable",
+                "pass_id",
+                "pass_deleted",
+                "pass_delete_date"
+        )
+
+        if (status > -1) {
+            val toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.recycle_bin_selected_items_restore_mes,
+                    Toast.LENGTH_SHORT
+            )
+            toast?.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+
+        populateDeletedPasswords()
+    }
+
+    private fun restoreAccounts(                                                                    // Restore Accounts
+            selectedId: Array<String?>,
+            selectedAccountName: Array<String?>,
+            selectedPlatformName: Array<String?>,
+            selectedCategoryName: Array<String?>
+    ) {
+        for (i in selectedId.indices) {
+            val encodedId = encodingClass.encodeData(selectedId[i]!!)
+            val encodedPlatformName = encodingClass.encodeData(selectedPlatformName[i]!!)
+            val encodedCategoryName = encodingClass.encodeData(selectedCategoryName[i]!!)
+
+            val userCategory: List<UserCategoryModelClass> =
+                    databaseHandlerClass.viewCategory("", "")
+            var categoryId = 10001
+            var isExisting = false
+            var exEncodedCategoryId = ""
+
+            var done = true
+
+            for (u in userCategory) {
+                if (selectedCategoryName[i].equals(
+                                encodingClass.decodeData(u.categoryName), ignoreCase = true)
+                ) {
+                    isExisting = true
+                    exEncodedCategoryId = u.categoryId
+                    break
+                }
+
+                categoryId = Integer.parseInt(encodingClass.decodeData(u.categoryId)) + 1
+            }
+
+            if (!isExisting) {                                                                      // If Category is not existing...
+                val encodedCategoryId = encodingClass.encodeData(categoryId.toString())
+
+                databaseHandlerClass.addCategory(                                                   // Add Category
+                        UserCategoryModelClass(encodedCategoryId, encodedCategoryName)
+                )
+
+                databaseHandlerClass.addPlatform(                                                   // Add Platform
+                        UserPlatformModelClass(
+                                encodingClass.encodeData(10001.toString()),
+                                encodedPlatformName,
+                                encodedCategoryId,
+                                encodedCategoryName
+                        )
+                )
+
+                updateDeleteStateOfAccount(encodedId)
+            } else {
+                val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
+                        "category",
+                        exEncodedCategoryId
+                )
+                var platformId = 10001
+                var isExistingP = false
+                var exEncodedPlatformId = ""
+
+                for (up in userPlatform) {
+                    if (selectedPlatformName[i].equals(
+                                    encodingClass.decodeData(up.platformName), ignoreCase = true)
+                    ) {
+                        isExistingP = true
+                        exEncodedPlatformId = up.platformId
+                        break
+                    }
+
+                    platformId = Integer.parseInt(encodingClass.decodeData(up.platformId)) + 1
+                }
+
+                if (!isExistingP) {                                                                 // If Platform is not existing...
+                    databaseHandlerClass.addPlatform(                                               // Add Platform
+                            UserPlatformModelClass(
+                                    encodingClass.encodeData(platformId.toString()),
+                                    encodedPlatformName,
+                                    exEncodedCategoryId,
+                                    encodedCategoryName
+                            )
+                    )
+
+                    updateDeleteStateOfAccount(encodedId)
+                } else {
+                    val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                            "platformId",
+                            exEncodedPlatformId,
+                            encodingClass.encodeData(0.toString())
+                    )
+                    var isExistingA = false
+                    var encodedExistingId = ""
+
+                    for (ua in userAccount) {
+                        if (selectedAccountName[i].equals(
+                                        encodingClass.decodeData(ua.accountName), ignoreCase = true)
+                        ) {
+                            isExistingA = true
+                            encodedExistingId = ua.accountId
+                            break
+                        }
+                    }
+
+                    if (!isExistingA) {                                                             // If account is not existing...
+                        updateDeleteStateOfAccount(encodedId)
+                    } else {
+                        val builder: AlertDialog.Builder =
+                                AlertDialog.Builder(getAppCompatActivity())
+                        val name = selectedAccountName[i]!!
+
+                        builder.setMessage("Account $name is already existing. Replace it?")
+                        builder.setCancelable(false)
+
+                        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                            val idTemp = ArrayList<String>(0)
+                            idTemp.add(encodedExistingId)
+                            var accountIdTemp = arrayOfNulls<String>(idTemp.size)
+                            accountIdTemp = idTemp.toArray(accountIdTemp)
+
+                            databaseHandlerClass.removeRecycleBin(
+                                    accountIdTemp,
+                                    "AccountsTable",
+                                    "account_id"
+                            )
+
+                            updateDeleteStateOfAccount(encodedId)
+                        }
+                        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                            dialog.cancel()
+                        }
+
+                        val alert: AlertDialog = builder.create()
+                        alert.setTitle(R.string.many_alert_title)
+                        alert.show()
+                    }
+                }
+            }
+        }
+
+        success()
+    }
+
+    private fun updateDeleteStateOfAccount(id: String) {
+        databaseHandlerClass.updateDeleteAccount(
+                id,
+                encodingClass.encodeData(0.toString()),
+                "",
+                "AccountsTable",
+                "account_id",
+                "account_deleted",
+                "account_delete_date"
+        )
+    }
+
+    private fun success() {
+        val toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.recycle_bin_selected_items_restore_mes,
+                Toast.LENGTH_SHORT
+        )
+        toast?.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+
+        populateDeletedAccounts()
     }
 }

@@ -56,6 +56,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_PLATFORM_ID = "platform_id"
         private const val KEY_PLATFORM_NAME = "platform_name"
 //        private const val KEY_CATEGORY_ID = "category_id"
+//        private const val KEY_CATEGORY_NAME = "category_name"
 
         // TABLE_ACCOUNTS
         private const val KEY_ACCOUNT_ID = "account_id"
@@ -69,6 +70,8 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
 //        private const val KEY_PLATFORM_ID = "platform_id"
+//        private const val KEY_PLATFORM_NAME = "platform_name"
+//        private const val KEY_CATEGORY_NAME = "category_name"
 
         // TABLE_SAVED_PASS
         private const val KEY_PASS_ID = "pass_id"
@@ -119,7 +122,8 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_PLATFORMS + "(" +
                         KEY_PLATFORM_ID + " TEXT," +
                         KEY_PLATFORM_NAME + " TEXT," +
-                        KEY_CATEGORY_ID + " TEXT" +
+                        KEY_CATEGORY_ID + " TEXT," +
+                        KEY_CATEGORY_NAME + " TEXT" +
                         ")"
                 )
         val createAccountsTable = (
@@ -134,7 +138,9 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_ACCOUNT_DELETED + " TEXT," +
                         KEY_ACCOUNT_DELETE_DATE + " TEXT," +
-                        KEY_PLATFORM_ID + " TEXT" +
+                        KEY_PLATFORM_ID + " TEXT," +
+                        KEY_PLATFORM_NAME + " TEXT," +
+                        KEY_CATEGORY_NAME + " TEXT" +
                         ")"
                 )
         val createSavedPassTable = (
@@ -255,6 +261,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_PLATFORM_ID, userPlatform.platformId)
             put(KEY_PLATFORM_NAME, userPlatform.platformName)
             put(KEY_CATEGORY_ID, userPlatform.categoryId)
+            put(KEY_CATEGORY_NAME, userPlatform.categoryName)
         }
 
         val success = db.insert(TABLE_PLATFORMS, null, contentValues)
@@ -279,6 +286,8 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
             put(KEY_ACCOUNT_DELETE_DATE, userAccount.accountDeleteDate)
             put(KEY_PLATFORM_ID, userAccount.platformId)
+            put(KEY_PLATFORM_NAME, userAccount.platformName)
+            put(KEY_CATEGORY_NAME, userAccount.categoryName)
         }
 
         val success = db.insert(TABLE_ACCOUNTS, null, contentValues)
@@ -549,17 +558,20 @@ class DatabaseHandlerClass(context: Context) :
         var platformId: String
         var platformName: String
         var categoryId: String
+        var categoryName: String
 
         if (cursor.moveToFirst()) {
             do {
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
                 platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
                 categoryId = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_ID))
+                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
 
                 val user = UserPlatformModelClass(
                         platformId = platformId,
                         platformName = platformName,
-                        categoryId = categoryId
+                        categoryId = categoryId,
+                        categoryName = categoryName
                 )
                 userPlatformList.add(user)
             } while (cursor.moveToNext())
@@ -659,6 +671,8 @@ class DatabaseHandlerClass(context: Context) :
         var accountDeleted: String
         var accountDeleteDate: String
         var platformId: String
+        var platformName: String
+        var categoryName: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -676,6 +690,8 @@ class DatabaseHandlerClass(context: Context) :
                 accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
                 accountDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETE_DATE))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
+                platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
+                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
 
                 val user = UserAccountModelClass(
                         accountId = accountId,
@@ -688,7 +704,9 @@ class DatabaseHandlerClass(context: Context) :
                         accountIsFavorites = accountIsFavorites,
                         accountDeleted = accountDeleted,
                         accountDeleteDate = accountDeleteDate,
-                        platformId = platformId
+                        platformId = platformId,
+                        platformName = platformName,
+                        categoryName = categoryName
                 )
                 userAccountList.add(user)
             } while (cursor.moveToNext())
@@ -933,6 +951,12 @@ class DatabaseHandlerClass(context: Context) :
                 "$KEY_CATEGORY_ID='$categoryId'",
                 null
         )
+        db.update(
+                TABLE_PLATFORMS,
+                contentValues,
+                "$KEY_CATEGORY_ID='$categoryId'",
+                null
+        )
 
         db.close()
         return success
@@ -949,6 +973,12 @@ class DatabaseHandlerClass(context: Context) :
 
         val success = db.update(
                 TABLE_PLATFORMS,
+                contentValues,
+                "$KEY_PLATFORM_ID='$platformId'",
+                null
+        )
+        db.update(
+                TABLE_ACCOUNTS,
                 contentValues,
                 "$KEY_PLATFORM_ID='$platformId'",
                 null

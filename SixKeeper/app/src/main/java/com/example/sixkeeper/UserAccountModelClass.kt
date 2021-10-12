@@ -11,5 +11,7 @@ class UserAccountModelClass(
         val accountIsFavorites: String,
         val accountDeleted: String,
         val accountDeleteDate: String,
-        val platformId: String
+        val platformId: String,
+        val platformName: String,
+        val categoryName: String
 )

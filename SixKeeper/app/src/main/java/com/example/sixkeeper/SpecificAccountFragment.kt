@@ -89,7 +89,6 @@ class SpecificAccountFragment : Fragment() {
                 encodingClass.encodeData(0.toString())
         )
         var platformName = ""
-        var categoryId = ""
         var categoryName = ""
 
         val tvSpecificAccName: TextView =
@@ -112,7 +111,8 @@ class SpecificAccountFragment : Fragment() {
         for (u in userAccount) {
             if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
                 tvSpecificAccName.text = encodingClass.decodeData(u.accountName)
-                tvSpecificAccCredentialField.text = encodingClass.decodeData(u.accountCredentialField)
+                tvSpecificAccCredentialField.text =
+                        encodingClass.decodeData(u.accountCredentialField)
                 tvSpecificAccCredential.text = encodingClass.decodeData(u.accountCredential)
                 tvSpecificAccPassword.text = encodingClass.decodeData(u.accountPassword)
                 tvSpecificAccWebsiteURL.text = encodingClass.decodeData(u.accountWebsiteURL)
@@ -126,26 +126,10 @@ class SpecificAccountFragment : Fragment() {
                     )
                     llSpecificAccFavorites.addView(inflatedView)
                 }
+
+                platformName = encodingClass.decodeData(u.platformName)
+                categoryName = encodingClass.decodeData(u.categoryName)
             }
-        }
-
-        val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
-                "platform",
-                encodingClass.encodeData(args.specificPlatformId)
-        )
-
-        for (u in userPlatform) {
-            platformName = encodingClass.decodeData(u.platformName)
-            categoryId = encodingClass.decodeData(u.categoryId)
-        }
-
-        val userCategory: List<UserCategoryModelClass> = databaseHandlerClass.viewCategory(
-                "category",
-                encodingClass.encodeData(categoryId)
-        )
-
-        for (u in userCategory) {
-            categoryName = encodingClass.decodeData(u.categoryName)
         }
 
         tvSpecificAccCategoryPlatform.text = "$categoryName > $platformName"
@@ -161,8 +145,10 @@ class SpecificAccountFragment : Fragment() {
             val action = SpecificAccountFragmentDirections
                     .actionSpecificAccountFragmentToAddAccountFragment(
                             args.specificPlatformId,
+                            "",
+                            "",
                             "edit",
-                            args.specificAccountId
+                            args.specificAccountId,
                     )
             findNavController().navigate(action)
         }

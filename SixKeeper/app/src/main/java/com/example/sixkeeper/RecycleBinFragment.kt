@@ -65,47 +65,56 @@ class RecycleBinFragment : RecycleBinProcessClass() {
             }
         }
 
-        getCbRecycleBinSelectAll().setOnClickListener {
-            if (getCbRecycleBinSelectAll().isChecked) {
-                for (i in 0 until getLvRecycleBinContainer().childCount) {
-                    if (getItemSelected()[i] == 0) {
-                        getLvRecycleBinContainer().performItemClick(
-                                getLvRecycleBinContainer().getChildAt(i),
-                                i,
-                                getLvRecycleBinContainer().adapter.getItemId(i)
-                        )
-                    }
-                }
-            } else {
-                for (i in 0 until getLvRecycleBinContainer().childCount) {
-                    if (getItemSelected()[i] == 1) {
-                        getLvRecycleBinContainer().performItemClick(
-                                getLvRecycleBinContainer().getChildAt(i),
-                                i,
-                                getLvRecycleBinContainer().adapter.getItemId(i)
-                        )
-                    }
-                }
-            }
-        }
+//        getCbRecycleBinSelectAll().setOnClickListener {
+//            if (getCbRecycleBinSelectAll().isChecked) {
+//                for (i in 0 until getLvRecycleBinContainer().childCount) {
+//                    if (getItemSelected()[i] == 0) {
+//                        getLvRecycleBinContainer().performItemClick(
+//                                getLvRecycleBinContainer().getChildAt(i),
+//                                i,
+//                                getLvRecycleBinContainer().adapter.getItemId(i)
+//                        )
+//                    }
+//                }
+//            } else {
+//                for (i in 0 until getLvRecycleBinContainer().childCount) {
+//                    if (getItemSelected()[i] == 1) {
+//                        getLvRecycleBinContainer().performItemClick(
+//                                getLvRecycleBinContainer().getChildAt(i),
+//                                i,
+//                                getLvRecycleBinContainer().adapter.getItemId(i)
+//                        )
+//                    }
+//                }
+//            }
+//        }
 
-        getLvRecycleBinContainer().onItemClickListener = (OnItemClickListener { _, view, pos, _ ->
-            val selectedItem = getLvRecycleBinContainer().getItemAtPosition(pos).toString()
-            val cbRecycleBinCheckBox: CheckBox = view.findViewById(R.id.cbRecycleBinCheckBox)
-
-            if (cbRecycleBinCheckBox.isChecked) {
-                cbRecycleBinCheckBox.isChecked = false
-                getItemSelected()[pos] = 0
-                getSelectedIdContainer().remove(getEncodingClass().encodeData(selectedItem))
-            } else {
-                cbRecycleBinCheckBox.isChecked = true
-                getItemSelected()[pos] = 1
-                getSelectedIdContainer().add(getEncodingClass().encodeData(selectedItem))
-            }
-        })
+//        getLvRecycleBinContainer().onItemClickListener = (OnItemClickListener { _, view, pos, _ ->
+//            val selectedItem = getLvRecycleBinContainer().getItemAtPosition(pos).toString()
+//            val cbRecycleBinCheckBox: CheckBox = view.findViewById(R.id.cbRecycleBinCheckBox)
+//
+//            if (cbRecycleBinCheckBox.isChecked) {
+//                cbRecycleBinCheckBox.isChecked = false
+//                getItemSelected()[pos] = 0
+//                getSelectedIdContainer().remove(getEncodingClass().encodeData(selectedItem))
+//            } else {
+//                cbRecycleBinCheckBox.isChecked = true
+//                getItemSelected()[pos] = 1
+//                getSelectedIdContainer().add(getEncodingClass().encodeData(selectedItem))
+//            }
+//        })
 
         clRecycleBinDelete.setOnClickListener {
-            if (!getSelectedIdContainer().isNullOrEmpty()) {
+            var itemCheck = false
+
+            for (i in 0 until getModelArrayList().size) {
+                if (getModelArrayList()[i].getSelected()) {
+                    itemCheck = true
+                    break
+                }
+            }
+
+            if (itemCheck) {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
                 builder.setMessage(R.string.recycle_bin_delete_mes)
                 builder.setCancelable(false)
@@ -132,6 +141,33 @@ class RecycleBinFragment : RecycleBinProcessClass() {
                 }
             }
 
+//            if (!getSelectedIdContainer().isNullOrEmpty()) {
+//                val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+//                builder.setMessage(R.string.recycle_bin_delete_mes)
+//                builder.setCancelable(false)
+//
+//                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+//                    confirmMasterPIN()
+//                }
+//                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+//                    dialog.cancel()
+//                }
+//
+//                val alert: AlertDialog = builder.create()
+//                alert.setTitle(R.string.many_alert_title_confirm)
+//                alert.show()
+//            } else {
+//                val toast = Toast.makeText(
+//                        getAppCompatActivity().applicationContext,
+//                        R.string.many_nothing_to_delete,
+//                        Toast.LENGTH_SHORT
+//                )
+//                toast?.apply {
+//                    setGravity(Gravity.CENTER, 0, 0)
+//                    show()
+//                }
+//            }
+
             it.apply {
                 clRecycleBinDelete.isClickable = false                                              // Set un-clickable for 1 second
                 postDelayed(
@@ -143,6 +179,42 @@ class RecycleBinFragment : RecycleBinProcessClass() {
         }
 
         clRecycleBinRestore.setOnClickListener {
+            var itemCheck = false
+
+            for (i in 0 until getModelArrayList().size) {
+                if (getModelArrayList()[i].getSelected()) {
+                    itemCheck = true
+                    break
+                }
+            }
+
+            if (itemCheck) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                builder.setMessage(R.string.recycle_bin_restore_item)
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    restoreSelectedItems()
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            } else {
+                val toast = Toast.makeText(
+                        getAppCompatActivity().applicationContext,
+                        R.string.recycle_bin_nothing_to_restore,
+                        Toast.LENGTH_SHORT
+                )
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+
 //            var selectedIdNoDuplicate = arrayOfNulls<String>(selectedIdContainer.size)
 //            selectedIdNoDuplicate = selectedIdContainer.toArray(selectedIdNoDuplicate)
 //

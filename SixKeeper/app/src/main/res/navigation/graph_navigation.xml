@@ -129,6 +129,14 @@
             app:argType="string" />
 
         <argument
+            android:name="specificPlatformName"
+            app:argType="string" />
+
+        <argument
+            android:name="specificCategoryName"
+            app:argType="string" />
+
+        <argument
             android:name="addOrEdit"
             app:argType="string" />
 

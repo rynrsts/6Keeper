@@ -279,9 +279,12 @@
     <string name="recycle_bin_delete_mes">Delete selected items?</string>
     <string name="recycle_bin_pass_generator">Password\nGenerator</string>
     <string name="recycle_bin_no_item">No deleted item to show</string>
+    <string name="recycle_bin_nothing_to_restore">Nothing to restore</string>
     <string name="recycle_bin_restore">Restore</string>
+    <string name="recycle_bin_restore_item">Restore selected items?</string>
     <string name="recycle_bin_select_all">Select All</string>
     <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
+    <string name="recycle_bin_selected_items_restore_mes">Selected items restored!</string>
 
     <!-- Saved Password -->
     <string name="saved_password_delete_alert">Delete Saved Password/s?</string>

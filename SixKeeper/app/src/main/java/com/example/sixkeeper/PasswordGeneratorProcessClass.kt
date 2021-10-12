@@ -25,14 +25,12 @@ open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var tvPassGeneratorGeneratedPass: TextView
     private lateinit var llPassGeneratorContainer: LinearLayout
     private lateinit var customInflatedLayout: View
-//    private lateinit var etPassGeneratorLength: EditText
     private lateinit var cbPassGeneratorLowercase: CheckBox
     private lateinit var cbPassGeneratorUppercase: CheckBox
     private lateinit var cbPassGeneratorNumber: CheckBox
     private lateinit var cbPassGeneratorSpecialChar: CheckBox
 
     private lateinit var passwordType: String
-//    private lateinit var passwordGeneratorLength: String
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
@@ -72,18 +70,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return cbPassGeneratorSpecialChar
     }
 
-//    fun getEtPassGeneratorLength(): EditText {
-//        return etPassGeneratorLength
-//    }
-
-//    fun setPasswordGeneratorLength(s: String) {
-//        passwordGeneratorLength = s
-//    }
-
-//    fun getPassGeneratorLength(): String {
-//        return passwordGeneratorLength
-//    }
-
     fun setPasswordType(s: String) {
         passwordType = s
     }
@@ -101,11 +87,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 appCompatActivity.findViewById(R.id.tvPassGeneratorGeneratedPass)
         llPassGeneratorContainer = appCompatActivity.findViewById(R.id.llPassGeneratorContainer)
 
-//        etPassGeneratorLength = appCompatActivity.findViewById(R.id.etPassGeneratorLength)
-//        cbPassGeneratorLowercase = appCompatActivity.findViewById(R.id.cbPassGeneratorLowercase)
-//        cbPassGeneratorUppercase = appCompatActivity.findViewById(R.id.cbPassGeneratorUppercase)
-//        cbPassGeneratorSpecialChar = appCompatActivity.findViewById(R.id.cbPassGeneratorSpecialChar)
-//        cbPassGeneratorNumber = appCompatActivity.findViewById(R.id.cbPassGeneratorNumber)
         passwordType = "medium"
     }
 
@@ -343,7 +324,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return output.toString()
     }
 
-    // Save generated password to database
     @SuppressLint("SimpleDateFormat", "ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val encodedDelete = encodingClass.encodeData(0.toString())

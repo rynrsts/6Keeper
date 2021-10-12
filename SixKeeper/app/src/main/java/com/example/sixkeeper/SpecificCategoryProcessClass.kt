@@ -248,9 +248,9 @@ open class SpecificCategoryProcessClass : Fragment() {
             selectedPlatformId: String,
             selectedPlatformName: String
     ) {
-        val encodedArgs = encodingClass.encodeData(args.specificCategoryId)
+        val encodedArgsCategoryId = encodingClass.encodeData(args.specificCategoryId)
         val userPlatform: List<UserPlatformModelClass> =
-                databaseHandlerClass.viewPlatform("category", encodedArgs)
+                databaseHandlerClass.viewPlatform("category", encodedArgsCategoryId)
         var platformId = 10001
         val lastId = databaseHandlerClass.getLastIdOfPlatform()
         var existing = false
@@ -279,7 +279,8 @@ open class SpecificCategoryProcessClass : Fragment() {
                         UserPlatformModelClass(
                                 encodingClass.encodeData(platformId.toString()),
                                 encodingClass.encodeData(platformName),
-                                encodedArgs
+                                encodedArgsCategoryId,
+                                encodingClass.encodeData(args.specificCategoryName)
                         )
                 )
 
@@ -295,6 +296,7 @@ open class SpecificCategoryProcessClass : Fragment() {
                         UserPlatformModelClass(
                                 encodingClass.encodeData(selectedPlatformId),
                                 encodingClass.encodeData(platformName),
+                                "",
                                 ""
                         )
                 )
