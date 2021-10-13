@@ -31,6 +31,9 @@ open class RecycleBinProcessClass : Fragment() {
     private val itemSelected = ArrayList<Int>(0)
     private val selectedIdContainer = ArrayList<String>(0)
 
+    private var totalRestoreNum = 0
+    private var restoreCount = 0
+
     fun getAppCompatActivity(): AppCompatActivity {
         return appCompatActivity
     }
@@ -340,7 +343,9 @@ open class RecycleBinProcessClass : Fragment() {
             selectedPlatformName: Array<String?>,
             selectedCategoryName: Array<String?>
     ) {
-        for (i in selectedId.indices) {
+        totalRestoreNum = modelArrayList.size
+
+        for (i in 0 until modelArrayList.size) {
             val encodedId = encodingClass.encodeData(selectedId[i]!!)
             val encodedPlatformName = encodingClass.encodeData(selectedPlatformName[i]!!)
             val encodedCategoryName = encodingClass.encodeData(selectedCategoryName[i]!!)
@@ -350,8 +355,7 @@ open class RecycleBinProcessClass : Fragment() {
             var categoryId = 10001
             var isExisting = false
             var exEncodedCategoryId = ""
-
-            var done = true
+            var exEncodedCategoryName = ""
 
             for (u in userCategory) {
                 if (selectedCategoryName[i].equals(
@@ -359,11 +363,20 @@ open class RecycleBinProcessClass : Fragment() {
                 ) {
                     isExisting = true
                     exEncodedCategoryId = u.categoryId
+                    exEncodedCategoryName = u.categoryName
                     break
                 }
 
                 categoryId = Integer.parseInt(encodingClass.decodeData(u.categoryId)) + 1
             }
+
+            var platformId = 10001
+            val lastId = databaseHandlerClass.getLastIdOfPlatform()
+
+            if (lastId.isNotEmpty()) {
+                platformId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            }
+            val encodedPlatformId = encodingClass.encodeData(platformId.toString())
 
             if (!isExisting) {                                                                      // If Category is not existing...
                 val encodedCategoryId = encodingClass.encodeData(categoryId.toString())
@@ -371,25 +384,27 @@ open class RecycleBinProcessClass : Fragment() {
                 databaseHandlerClass.addCategory(                                                   // Add Category
                         UserCategoryModelClass(encodedCategoryId, encodedCategoryName)
                 )
-
                 databaseHandlerClass.addPlatform(                                                   // Add Platform
                         UserPlatformModelClass(
-                                encodingClass.encodeData(10001.toString()),
+                                encodedPlatformId,
                                 encodedPlatformName,
                                 encodedCategoryId,
                                 encodedCategoryName
                         )
                 )
-
-                updateDeleteStateOfAccount(encodedId)
-            } else {
+                databaseHandlerClass.updateAccountPath(
+                        encodedId, encodingClass.encodeData(0.toString()), "",
+                        encodedPlatformId, encodedPlatformName, encodedCategoryName
+                )
+                increaseRestoreCount()
+            } else {                                                                                // If Category is existing...
                 val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                         "category",
                         exEncodedCategoryId
                 )
-                var platformId = 10001
                 var isExistingP = false
                 var exEncodedPlatformId = ""
+                var exEncodedPlatformName = ""
 
                 for (up in userPlatform) {
                     if (selectedPlatformName[i].equals(
@@ -397,24 +412,26 @@ open class RecycleBinProcessClass : Fragment() {
                     ) {
                         isExistingP = true
                         exEncodedPlatformId = up.platformId
+                        exEncodedPlatformName = up.platformName
                         break
                     }
-
-                    platformId = Integer.parseInt(encodingClass.decodeData(up.platformId)) + 1
                 }
 
                 if (!isExistingP) {                                                                 // If Platform is not existing...
                     databaseHandlerClass.addPlatform(                                               // Add Platform
                             UserPlatformModelClass(
-                                    encodingClass.encodeData(platformId.toString()),
+                                    encodedPlatformId,
                                     encodedPlatformName,
                                     exEncodedCategoryId,
-                                    encodedCategoryName
+                                    exEncodedCategoryName
                             )
                     )
-
-                    updateDeleteStateOfAccount(encodedId)
-                } else {
+                    databaseHandlerClass.updateAccountPath(
+                            encodedId, encodingClass.encodeData(0.toString()), "",
+                            encodedPlatformId, encodedPlatformName, exEncodedCategoryName
+                    )
+                    increaseRestoreCount()
+                } else {                                                                            // If Platform is existing...
                     val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                             "platformId",
                             exEncodedPlatformId,
@@ -434,7 +451,11 @@ open class RecycleBinProcessClass : Fragment() {
                     }
 
                     if (!isExistingA) {                                                             // If account is not existing...
-                        updateDeleteStateOfAccount(encodedId)
+                        databaseHandlerClass.updateAccountPath(
+                                encodedId, encodingClass.encodeData(0.toString()), "",
+                                exEncodedPlatformId, exEncodedPlatformName, exEncodedCategoryName
+                        )
+                        increaseRestoreCount()
                     } else {
                         val builder: AlertDialog.Builder =
                                 AlertDialog.Builder(getAppCompatActivity())
@@ -454,11 +475,15 @@ open class RecycleBinProcessClass : Fragment() {
                                     "AccountsTable",
                                     "account_id"
                             )
-
-                            updateDeleteStateOfAccount(encodedId)
+                            databaseHandlerClass.updateAccountPath(
+                                    encodedId, encodingClass.encodeData(0.toString()), "",
+                                    exEncodedPlatformId, exEncodedPlatformName, exEncodedCategoryName
+                            )
+                            increaseRestoreCount()
                         }
                         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
                             dialog.cancel()
+                            increaseRestoreCount()
                         }
 
                         val alert: AlertDialog = builder.create()
@@ -468,33 +493,25 @@ open class RecycleBinProcessClass : Fragment() {
                 }
             }
         }
-
-        success()
     }
 
-    private fun updateDeleteStateOfAccount(id: String) {
-        databaseHandlerClass.updateDeleteAccount(
-                id,
-                encodingClass.encodeData(0.toString()),
-                "",
-                "AccountsTable",
-                "account_id",
-                "account_deleted",
-                "account_delete_date"
-        )
-    }
+    private fun increaseRestoreCount() {
+        restoreCount++
 
-    private fun success() {
-        val toast = Toast.makeText(
-                appCompatActivity.applicationContext,
-                R.string.recycle_bin_selected_items_restore_mes,
-                Toast.LENGTH_SHORT
-        )
-        toast?.apply {
-            setGravity(Gravity.CENTER, 0, 0)
-            show()
+        if (restoreCount == totalRestoreNum) {
+            val toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.recycle_bin_selected_items_restore_mes,
+                    Toast.LENGTH_SHORT
+            )
+            toast?.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+
+            populateDeletedAccounts()
+            totalRestoreNum = 0
+            restoreCount = 0
         }
-
-        populateDeletedAccounts()
     }
 }

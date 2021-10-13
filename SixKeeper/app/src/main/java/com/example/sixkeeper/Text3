@@ -13,15 +13,13 @@ Additional
     Accounts: Add auto-fill login
     Add Account: Add password visibility
     Specific Account: Add password visibility
-    Saved Password: Sort items newest first
-    Recycle Bin: Add restore
     Settings: Add note
     Settings: Add Notifications
     Settings: Add Copy
     Settings: Add Auto Lock
+    Settings: Export data
     FAQs: Add content
     Contact Us: Add content
-    Export:
 
 
 Enhancement
@@ -36,9 +34,6 @@ Bug
     Accounts: Fix missing content when menu item is clicked again
     Accounts: Fix double click on Categories, Platforms and Accounts
     Accounts: Override back arrow function
-    Accounts: Fix long press delete on Accounts
     Favorites: Fix missing content when menu item is clicked again
-    Saved Passwords: ListView
     Recycle Bin: Fix missing content when menu item is clicked again
-    Recycle Bin: ListView
     Settings: Fix missing content when menu item is clicked again

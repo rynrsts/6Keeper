@@ -604,7 +604,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun getLastIdOfPlatform(): String {                                                             // Get last Id of of Platforms
-        val selectQuery = "SELECT * FROM $TABLE_PLATFORMS ORDER BY $KEY_PLATFORM_ID DESC LIMIT 1"
+        val selectQuery = "SELECT $KEY_PLATFORM_ID FROM $TABLE_PLATFORMS"
         val db = this.readableDatabase
         val cursor: Cursor?
         var lastId = ""
@@ -616,7 +616,7 @@ class DatabaseHandlerClass(context: Context) :
             return ""
         }
 
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
             lastId = cursor.getString(0)
         }
 
@@ -718,7 +718,7 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     fun getLastIdOfAccount(): String {                                                              // Get last Id of of Accounts
-        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS ORDER BY $KEY_ACCOUNT_ID DESC LIMIT 1"
+        val selectQuery = "SELECT $KEY_ACCOUNT_ID FROM $TABLE_ACCOUNTS"
         val db = this.readableDatabase
         val cursor: Cursor?
         var lastId = ""
@@ -730,7 +730,7 @@ class DatabaseHandlerClass(context: Context) :
             return ""
         }
 
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
             lastId = cursor.getString(0)
         }
 
@@ -759,7 +759,7 @@ class DatabaseHandlerClass(context: Context) :
         var passDeleted: String
         var passDeleteDate: String
 
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
             do {
                 passId = cursor.getString(cursor.getColumnIndex(KEY_PASS_ID))
                 passPassword = cursor.getString(cursor.getColumnIndex(KEY_SAVED_PASS))
@@ -775,7 +775,7 @@ class DatabaseHandlerClass(context: Context) :
                         passDeleteDate = passDeleteDate
                 )
                 userSavedPassList.add(user)
-            } while (cursor.moveToNext())
+            } while (cursor.moveToPrevious())
         }
 
         cursor.close()
@@ -1082,6 +1082,43 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+        }
+
+        val success = db.update(
+                TABLE_ACCOUNTS,
+                contentValues,
+                "$KEY_ACCOUNT_ID='$accountId'",
+                null
+        )
+
+        db.close()
+        return success
+    }
+
+    fun updateAccountPath(
+            accountId: String,
+            deleted: String,
+            deleteDate: String,
+            platformId: String,
+            platformName: String,
+            categoryName: String
+    ): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_ACCOUNT_DELETED, deleted)
+            put(KEY_ACCOUNT_DELETE_DATE, deleteDate)
+        }
+
+        if (platformId.isNotEmpty()) {
+            contentValues.put(KEY_PLATFORM_ID, platformId)
+        }
+        if (platformName.isNotEmpty()) {
+            contentValues.put(KEY_PLATFORM_NAME, platformName)
+        }
+        if (categoryName.isNotEmpty()) {
+            contentValues.put(KEY_CATEGORY_NAME, categoryName)
         }
 
         val success = db.update(
