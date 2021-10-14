@@ -19,13 +19,14 @@
     <color name="lightCyanBlue">#99BEEE</color>
     <color name="cyanBlue">#2471D7</color>
 
-    <color name="orange">#F28123</color>
     <color name="pinkRed">#EE4266</color>
-    <color name="blueMagenta">#6A4C93</color>
-    <color name="darkCyan">#08BDBD</color>
-    <color name="shadeGreen">#4DA167</color>
-    <color name="mediumLightRed">#F64740</color>
-    <color name="mediumDarkCyanBlue">#155EA2</color>
+    <color name="orange">#FF831A</color>
+    <color name="blueMagenta">#B74BC3</color> <!-- #6A4C93 / magenta -->
+    <color name="darkCyan">#5693E3</color>  <!-- #08BDBD / medium light cyan blue -->
     <color name="yellowShade">#CBA415</color>
+    <color name="shadeGreen">#4DA167</color>
+    
+<!--    <color name="mediumLightRed">#F64740</color>-->
+<!--    <color name="mediumDarkCyanBlue">#155EA2</color>-->
 
 </resources>

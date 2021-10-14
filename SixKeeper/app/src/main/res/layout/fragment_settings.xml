@@ -58,7 +58,7 @@
                     android:id="@+id/ivSettingsNotifications"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_orange_circle"
+                    android:background="@drawable/layout_pink_red_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_notifications_active_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -131,7 +131,7 @@
                     android:id="@+id/ivSettingsScreenCapture"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_blue_magenta_circle"
+                    android:background="@drawable/layout_orange_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_screenshot_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -185,7 +185,7 @@
                     android:id="@+id/ivSettingsTextualCopy"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_pink_red_circle"
+                    android:background="@drawable/layout_blue_magenta_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_content_copy_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -282,6 +282,26 @@
                     tools:ignore="ContentDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSettingsDivision2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="30dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLock" />
+
+            <TextView
+                android:id="@+id/tvSettingsNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:text="@string/settings_note"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision2" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

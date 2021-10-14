@@ -68,6 +68,15 @@
     <string name="create_new_acc_p4_register">Register</string>
     <string name="create_new_acc_success">Registered successfully!</string>
 
+    <!-- Dashboard -->
+    <string name="dashboard_action_log">Action Log</string>
+    <string name="dashboard_analytics">Analytics</string>
+    <string name="dashboard_num_of_accounts">Number of Accounts</string>
+    <string name="dashboard_num_of_categories">Number of Categories</string>
+    <string name="dashboard_num_of_platforms">Number of Platforms</string>
+    <string name="dashboard_num_of_saved_pass">Number of Saved Passwords</string>
+    <string name="dashboard_summary">Summary</string>
+
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>
@@ -303,6 +312,7 @@
     <string name="settings_disable_notifications">Disable Notifications</string>
     <string name="settings_enable_notifications">Enable Notifications</string>
     <string name="settings_general">General</string>
+    <string name="settings_note">Note: Changes will be applied at the next launch.</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_screen_capture">Screen Capture</string>
     <string name="settings_security">Security</string>

@@ -6,6 +6,9 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.text.method.PasswordTransformationMethod
 import android.text.method.ScrollingMovementMethod
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -33,6 +36,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var sAddAccountCredential1: Spinner
     private lateinit var etAddAccountCredential1: EditText
     private lateinit var etAddAccountPassword: EditText
+    private lateinit var ivAddAccountTogglePass: ImageView
     private lateinit var etAddAccountWebsite: EditText
     private lateinit var etAddAccountDescription: EditText
     private lateinit var cbAddAccountFavorites: CheckBox
@@ -42,6 +46,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var credentialField: String
     private lateinit var credential: String
     private lateinit var password: String
+    private var passwordVisibility: Int = 0
     private lateinit var websiteURL: String
     private lateinit var description: String
     private lateinit var deleted: String
@@ -65,6 +70,8 @@ class AddAccountFragment : Fragment() {
         setSpinner()
         closeKeyboard()
         setButton()
+        setEditTextOnChange()
+        setImageViewOnClick()
         setOnClick()
         setOnTouchListener()
     }
@@ -129,6 +136,7 @@ class AddAccountFragment : Fragment() {
         sAddAccountCredential1 = appCompatActivity.findViewById(R.id.sAddAccountCredential1)
         etAddAccountCredential1 = appCompatActivity.findViewById(R.id.etAddAccountCredential1)
         etAddAccountPassword = appCompatActivity.findViewById(R.id.etAddAccountPassword)
+        ivAddAccountTogglePass = appCompatActivity.findViewById(R.id.ivAddAccountTogglePass)
         etAddAccountWebsite = appCompatActivity.findViewById(R.id.etAddAccountWebsite)
         etAddAccountDescription = appCompatActivity.findViewById(R.id.etAddAccountDescription)
         cbAddAccountFavorites = appCompatActivity.findViewById(R.id.cbAddAccountFavorites)
@@ -177,6 +185,59 @@ class AddAccountFragment : Fragment() {
 
             ivAddAccountButton.setImageResource(R.drawable.ic_save_white)
             tvAddAccountButton.setText(R.string.many_save)
+        }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
+        etAddAccountPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (etAddAccountPassword.text.toString().isNotEmpty()) {
+                    if (passwordVisibility == 0) {
+                        ivAddAccountTogglePass.setImageResource(
+                                R.drawable.ic_visibility_off_gray
+                        )
+                        passwordVisibility = 1
+
+                        etAddAccountPassword.apply {
+                            transformationMethod = PasswordTransformationMethod()
+                            setSelection(etAddAccountPassword.text.length)
+                        }
+                    }
+                } else {
+                    ivAddAccountTogglePass.setImageResource(0)
+                    passwordVisibility = 0
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun setImageViewOnClick() {                                                             // Set action when image was clicked
+        ivAddAccountTogglePass.setOnClickListener {
+            when (passwordVisibility) {
+                1 -> {                                                                              // Show password
+                    ivAddAccountTogglePass.apply {
+                        setImageResource(R.drawable.ic_visibility_gray)
+                    }
+                    etAddAccountPassword.apply {
+                        transformationMethod = null
+                        setSelection(etAddAccountPassword.text.length)
+                    }
+                    passwordVisibility = 2
+                }
+                2 -> {                                                                              // Hide password
+                    ivAddAccountTogglePass.apply {
+                        setImageResource(R.drawable.ic_visibility_off_gray)
+                    }
+                    etAddAccountPassword.apply {
+                        transformationMethod = PasswordTransformationMethod()
+                        setSelection(etAddAccountPassword.text.length)
+                    }
+                    passwordVisibility = 1
+                }
+            }
         }
     }
 

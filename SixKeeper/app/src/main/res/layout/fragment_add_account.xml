@@ -123,6 +123,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvAddAccountPassword"
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
+            <ImageView
+                android:id="@+id/ivAddAccountTogglePass"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/etAddAccountPassword"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
+                app:layout_constraintTop_toTopOf="@+id/etAddAccountPassword"
+                tools:ignore="ContentDescription" />
+
             <TextView
                 android:id="@+id/tvAddAccountWebsite"
                 android:layout_width="0dp"
