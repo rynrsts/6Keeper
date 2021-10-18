@@ -98,7 +98,6 @@ open class RecycleBinProcessClass : Fragment() {
 
                 userAccountId.add(uId)
                 userAccountName.add(encodingClass.decodeData(u.accountName))
-//                itemSelected.add(0)
 
                 recycleBinModelClass = RecycleBinModelClass()
                 recycleBinModelClass.setSelected(false)
@@ -164,10 +163,6 @@ open class RecycleBinProcessClass : Fragment() {
         }
 
         modelArrayList.clear()
-
-//        cbRecycleBinSelectAll.isChecked = false
-//        itemSelected.clear()
-//        selectedIdContainer.clear()
     }
 
     @SuppressLint("InflateParams")
@@ -263,10 +258,14 @@ open class RecycleBinProcessClass : Fragment() {
 
         for (i in 0 until modelArrayList.size) {
             if (modelArrayList[i].getSelected()) {
-                containerId.add(modelArrayList[i].getId().toString())
-                containerAccountName.add(modelArrayList[i].getAccountName())
-                containerPlatformName.add(modelArrayList[i].getPlatformName())
-                containerCategoryName.add(modelArrayList[i].getCategoryName())
+                if (selectedTab == "accounts") {
+                    containerId.add(modelArrayList[i].getId().toString())
+                    containerAccountName.add(modelArrayList[i].getAccountName())
+                    containerPlatformName.add(modelArrayList[i].getPlatformName())
+                    containerCategoryName.add(modelArrayList[i].getCategoryName())
+                } else if (selectedTab == "password generator") {
+                    containerId.add(encodingClass.encodeData(modelArrayList[i].getId().toString()))
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 package com.example.sixkeeper
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var attActivity: Activity
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
 
     private lateinit var llDashboardContainer: LinearLayout
 
@@ -40,7 +45,7 @@ class DashboardFragment : Fragment() {
                         closeKeyboard()
                         populateSummary()
                         setOnClick()
-                    }, 100
+                    }, 10
             )
         }
     }
@@ -69,8 +74,16 @@ class DashboardFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    @Suppress("DEPRECATION")
+    override fun onAttach(activity: Activity) {                                                     // Override on attach
+        super.onAttach(activity)
+        attActivity = activity                                                                      // Attach activity
+    }
+
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
 
         llDashboardContainer = appCompatActivity.findViewById(R.id.llDashboardContainer)
 
@@ -98,6 +111,55 @@ class DashboardFragment : Fragment() {
                 null,
                 true
         )
+
+        val tvDashboardCategories: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardCategories)
+        val tvDashboardPlatforms: TextView = inflatedLayout.findViewById(R.id.tvDashboardPlatforms)
+        val tvDashboardAccounts: TextView = inflatedLayout.findViewById(R.id.tvDashboardAccounts)
+        val tvDashboardFavorites: TextView = inflatedLayout.findViewById(R.id.tvDashboardFavorites)
+        val tvDashboardSavedPasswords: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardSavedPasswords)
+        val tvDashboardDeletedAccounts: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardDeletedAccounts)
+        val tvDashboardDeletedPasswords: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardDeletedPasswords)
+
+        tvDashboardCategories.text = databaseHandlerClass.viewTotalNumberDashboard1(
+                "CategoriesTable"
+        ).toString()
+        tvDashboardPlatforms.text = databaseHandlerClass.viewTotalNumberDashboard1(
+                "PlatformsTable"
+        ).toString()
+        tvDashboardAccounts.text = databaseHandlerClass.viewTotalNumberDashboard2(
+                "AccountsTable",
+                "account_deleted",
+                encodingClass.encodeData("0"),
+                ""
+        ).toString()
+        tvDashboardFavorites.text = databaseHandlerClass.viewTotalNumberDashboard2(
+                "AccountsTable",
+                "account_deleted",
+                encodingClass.encodeData("0"),
+                encodingClass.encodeData("1")
+        ).toString()
+        tvDashboardSavedPasswords.text = databaseHandlerClass.viewTotalNumberDashboard2(
+                "SavedPasswordTable",
+                "pass_deleted",
+                encodingClass.encodeData("0"),
+                ""
+        ).toString()
+        tvDashboardDeletedAccounts.text = databaseHandlerClass.viewTotalNumberDashboard2(
+                "AccountsTable",
+                "account_deleted",
+                encodingClass.encodeData("1"),
+                ""
+        ).toString()
+        tvDashboardDeletedPasswords.text = databaseHandlerClass.viewTotalNumberDashboard2(
+                "SavedPasswordTable",
+                "pass_deleted",
+                encodingClass.encodeData("1"),
+                ""
+        ).toString()
 
         llDashboardContainer.removeAllViews()
         llDashboardContainer.addView(inflatedLayout)
@@ -135,6 +197,7 @@ class DashboardFragment : Fragment() {
             }
 
             vDashboardDivision2.setBackgroundResource(R.color.blue)
+            populateAnalytics()
             selectedTab = "analytics"
         }
 
@@ -146,7 +209,24 @@ class DashboardFragment : Fragment() {
             }
 
             vDashboardDivision3.setBackgroundResource(R.color.blue)
+            populateActionLog()
             selectedTab = "action log"
         }
+    }
+
+    @SuppressLint("InflateParams")
+    private fun populateAnalytics() {
+        val inflatedLayout = layoutInflater.inflate(
+                R.layout.layout_dashboard_analytics,
+                null,
+                true
+        )
+
+        llDashboardContainer.removeAllViews()
+        llDashboardContainer.addView(inflatedLayout)
+    }
+
+    private fun populateActionLog() {
+        llDashboardContainer.removeAllViews()
     }
 }

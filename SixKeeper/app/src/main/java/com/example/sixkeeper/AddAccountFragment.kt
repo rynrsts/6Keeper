@@ -391,6 +391,7 @@ class AddAccountFragment : Fragment() {
                                 encodingClass.encodeData(isFavorites.toString()),
                                 deleted,
                                 "",
+                                encodingClass.encodeData(checkPasswordStatus(password)),
                                 encodedSpecificPlatformId,
                                 encodingClass.encodeData(args.specificPlatformName),
                                 encodingClass.encodeData(args.specificCategoryName)
@@ -447,6 +448,107 @@ class AddAccountFragment : Fragment() {
         }
     }
 
+    private fun checkPasswordStatus(password: String): String {                                     // Check if password is weak, medium, or strong
+        val lowercase = "abcdefghijklmnopqrstuvwxyz"
+        val uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val number = "0123456789"
+        val specialChar = "!@#$%^&*()=+._-"
+        val boolChar = booleanArrayOf(false, false, false, false)
+        var status = ""
+
+        for (i in password.indices) {
+            when {
+                lowercase.contains(password[i]) -> {
+                    boolChar[0] = true
+                }
+                uppercase.contains(password[i]) -> {
+                    boolChar[1] = true
+                }
+                number.contains(password[i]) -> {
+                    boolChar[2] = true
+                }
+                specialChar.contains(password[i]) -> {
+                    boolChar[3] = true
+                }
+            }
+
+            if (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]) {
+                break
+            }
+        }
+
+        if (
+                boolChar[0] && !boolChar[1] && !boolChar[2] && !boolChar[3] &&                      // Lower
+                !boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3] &&                      // Upper
+                !boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3] &&                      // Number
+                !boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3] &&                      // Special
+                (boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3]
+                        && password.length <= 9) &&                                                 // Lower, Upper, length <= 9
+                (boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length <= 10) &&                                                // Lower, Number, length <= 10
+                (boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length <= 10) &&                                                // Lower, Special, length <= 10
+                (!boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length <= 10) &&                                                // Upper, Number, length <= 10
+                (!boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length <= 10) &&                                                // Upper, Special, length <= 10
+                (!boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length <= 11) &&                                                // Number, Special, length <= 11
+                (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length <= 7) &&                                                 // Lower, Upper, Number, length <= 7
+                (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length <= 7) &&                                                 // Lower, Upper, Special, length <= 7
+                (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length <= 8) &&                                                 // Lower, Number, Special, length <= 8
+                (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length <= 8) &&                                                 // Upper, Number, Special, length <= 8
+                (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length <= 6)                                                    // Lower, Upper, Number, Special, length <= 6
+        ) {
+            status = "weak"
+        } else if (
+                (boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3]
+                        && password.length >= 10) &&                                                // Lower, Upper, length >= 10
+                (boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length >= 11) &&                                                // Lower, Number, length >= 11
+                (boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length >= 11) &&                                                // Lower, Special, length >= 11
+                (!boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length >= 11) &&                                                // Upper, Number, length >= 11
+                (!boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length >= 11) &&                                                // Upper, Special, length >= 11
+                (!boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length >= 12) &&                                                // Number, Special, length >= 12
+                (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length in 8..11) &&                                             // Lower, Upper, Number, 8 - 11
+                (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length in 8..11) &&                                             // Lower, Upper, Special, 8 - 11
+                (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length in 9..11) &&                                             // Lower, Number, Special, 9 - 11
+                (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length in 9..11) &&                                             // Upper, Number, Special, 9 - 11
+                (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length in 7..10)                                                // Lower, Upper, Number, Special, 7 - 10
+        ) {
+            status = "medium"
+        } else if (
+                (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
+                        && password.length >= 12) &&                                                // Lower, Upper, Number, length >= 12
+                (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
+                        && password.length >= 12) &&                                                // Lower, Upper, Special, length >= 12
+                (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length >= 12) &&                                                // Lower, Number, Special, length >= 12
+                (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length >= 12) &&                                                // Upper, Number, Special, length >= 12
+                (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
+                        && password.length >= 11)                                                   // Lower, Upper, Number, Special, length >= 11
+        ) {
+            status = "strong"
+        }
+
+        return status
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -466,6 +568,7 @@ class AddAccountFragment : Fragment() {
                                     encodingClass.encodeData(isFavorites.toString()),
                                     "",
                                     "",
+                                    encodingClass.encodeData(checkPasswordStatus(password)),
                                     "",
                                     "",
                                     ""

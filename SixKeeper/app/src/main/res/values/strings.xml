@@ -71,16 +71,15 @@
     <!-- Dashboard -->
     <string name="dashboard_action_log">Action Log</string>
     <string name="dashboard_analytics">Analytics</string>
-    <string name="dashboard_num_of_accounts">Number of Accounts</string>
-    <string name="dashboard_num_of_categories">Number of Categories</string>
-    <string name="dashboard_num_of_deleted_accounts">Number of Accounts in Recycle Bin</string>
-    <string name="dashboard_num_of_deleted_passwords">
-        Number of Deleted Passwords in Recycle Bin
-    </string>
-    <string name="dashboard_num_of_favorites">Number of Favorite Accounts</string>
-    <string name="dashboard_num_of_platforms">Number of Platforms</string>
-    <string name="dashboard_num_of_saved_pass">Number of Saved Passwords</string>
+    <string name="dashboard_num_of_accounts">Accounts</string>
+    <string name="dashboard_num_of_categories">Categories</string>
+    <string name="dashboard_num_of_deleted_accounts">Accounts in Recycle Bin</string>
+    <string name="dashboard_num_of_deleted_passwords">Deleted Passwords in Recycle Bin</string>
+    <string name="dashboard_num_of_favorites">Favorite Accounts</string>
+    <string name="dashboard_num_of_platforms">Platforms</string>
+    <string name="dashboard_num_of_saved_pass">Saved Passwords</string>
     <string name="dashboard_summary">Summary</string>
+    <string name="dashboard_weak_passwords">Weak Passwords</string>
 
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
@@ -234,7 +233,7 @@
     </string>
     <string name="pass_generator_special_char">Special Characters</string>
     <string name="pass_generator_strong">Strong</string>
-    <string name="pass_generator_strong_desc_1">* 12 – 15 characters</string>
+    <string name="pass_generator_strong_desc_1">* 11 – 13 characters</string>
     <string name="pass_generator_strong_desc_2">
         * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), numbers (0-9), and
         special characters

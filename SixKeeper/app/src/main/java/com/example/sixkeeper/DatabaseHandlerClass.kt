@@ -69,6 +69,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
+        private const val KEY_PASSWORD_STATUS = "password_status"
 //        private const val KEY_PLATFORM_ID = "platform_id"
 //        private const val KEY_PLATFORM_NAME = "platform_name"
 //        private const val KEY_CATEGORY_NAME = "category_name"
@@ -138,6 +139,7 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_ACCOUNT_DELETED + " TEXT," +
                         KEY_ACCOUNT_DELETE_DATE + " TEXT," +
+                        KEY_PASSWORD_STATUS + " TEXT," +
                         KEY_PLATFORM_ID + " TEXT," +
                         KEY_PLATFORM_NAME + " TEXT," +
                         KEY_CATEGORY_NAME + " TEXT" +
@@ -285,6 +287,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
             put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
             put(KEY_ACCOUNT_DELETE_DATE, userAccount.accountDeleteDate)
+            put(KEY_PASSWORD_STATUS, userAccount.passwordStatus)
             put(KEY_PLATFORM_ID, userAccount.platformId)
             put(KEY_PLATFORM_NAME, userAccount.platformName)
             put(KEY_CATEGORY_NAME, userAccount.categoryName)
@@ -321,6 +324,56 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      *******************************************************************************************
      */
+
+    fun viewTotalNumberDashboard1(tableName: String): Int {                                         // View total number
+        val selectQuery = "SELECT COUNT(*) FROM $tableName"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    fun viewTotalNumberDashboard2(
+            tableName: String,
+            columnDeleted: String,
+            deleted: String,
+            favorites: String
+    ): Int {                                                                                        // View total number
+        var selectQuery = "SELECT COUNT(*) FROM $tableName WHERE $columnDeleted = '$deleted'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        if (favorites.isNotEmpty()) {
+            selectQuery = "SELECT COUNT(*) FROM $tableName " +
+                    "WHERE $columnDeleted = '$deleted' AND $KEY_ACCOUNT_IS_FAVORITES = '$favorites'"
+        }
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
 
     @SuppressLint("Recycle")
     fun validateUserAcc(): List<UserAccModelClass> {                                                // Validate Username, Password, and/or Master PIN
@@ -670,6 +723,7 @@ class DatabaseHandlerClass(context: Context) :
         var accountIsFavorites: String
         var accountDeleted: String
         var accountDeleteDate: String
+        var passwordStatus: String
         var platformId: String
         var platformName: String
         var categoryName: String
@@ -689,6 +743,7 @@ class DatabaseHandlerClass(context: Context) :
                         cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
                 accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
                 accountDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETE_DATE))
+                passwordStatus = cursor.getString(cursor.getColumnIndex(KEY_PASSWORD_STATUS))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
                 platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
                 categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
@@ -704,6 +759,7 @@ class DatabaseHandlerClass(context: Context) :
                         accountIsFavorites = accountIsFavorites,
                         accountDeleted = accountDeleted,
                         accountDeleteDate = accountDeleteDate,
+                        passwordStatus = passwordStatus,
                         platformId = platformId,
                         platformName = platformName,
                         categoryName = categoryName
@@ -1082,6 +1138,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+            put(KEY_PASSWORD_STATUS, userAccount.passwordStatus)
         }
 
         val success = db.update(

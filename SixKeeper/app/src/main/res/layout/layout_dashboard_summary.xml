@@ -42,6 +42,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_categories"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardCategories"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardCategories" />
@@ -69,7 +70,7 @@
             android:id="@+id/ivDashboardPlatforms"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/layout_medium_light_cyan_blue_circle"
+            android:background="@drawable/layout_green_cyan_circle"
             android:padding="12dp"
             android:src="@drawable/ic_globe_light_black"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -94,6 +95,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_platforms"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardPlatforms"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardPlatforms" />
@@ -146,6 +148,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_accounts"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardAccounts"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardAccounts" />
@@ -198,6 +201,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_favorites"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardFavorites"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardFavorites" />
@@ -225,7 +229,7 @@
             android:id="@+id/ivDashboardSavedPasswords"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/layout_shade_green_circle"
+            android:background="@drawable/layout_dark_cyan_circle"
             android:padding="12dp"
             android:src="@drawable/ic_lock_white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -250,6 +254,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_saved_pass"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardSavedPasswords"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardSavedPasswords" />
@@ -277,7 +282,7 @@
             android:id="@+id/ivDashboardDeletedAccounts"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/layout_dark_cyan_circle"
+            android:background="@drawable/layout_shade_yellow_circle"
             android:padding="12dp"
             android:src="@drawable/ic_account_circle_white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -302,6 +307,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_deleted_accounts"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardDeletedAccounts"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardDeletedAccounts" />
@@ -329,7 +335,7 @@
             android:id="@+id/ivDashboardDeletedPasswords"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/layout_shade_yellow_circle"
+            android:background="@drawable/layout_medium_light_cyan_blue_circle"
             android:padding="12dp"
             android:src="@drawable/ic_lock_white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -354,6 +360,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="3dp"
             android:text="@string/dashboard_num_of_deleted_passwords"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardDeletedPasswords"
             app:layout_constraintTop_toBottomOf="@+id/tvDashboardDeletedPasswords" />

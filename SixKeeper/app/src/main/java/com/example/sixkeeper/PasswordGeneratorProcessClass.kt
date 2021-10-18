@@ -246,7 +246,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 include[2] = true
             }
             "strong" -> {
-                length = (12..15).random()
+                length = (11..13).random()
                 include[0] = true
                 include[1] = true
                 include[2] = true

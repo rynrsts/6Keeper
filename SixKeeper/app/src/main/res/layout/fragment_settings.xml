@@ -131,7 +131,7 @@
                     android:id="@+id/ivSettingsScreenCapture"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_medium_light_cyan_blue_circle"
+                    android:background="@drawable/layout_green_cyan_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_screenshot_white"
                     app:layout_constraintBottom_toBottomOf="parent"
