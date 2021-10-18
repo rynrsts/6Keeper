@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConfirmActionActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gConfirmActionVertical10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gConfirmActionVertical30"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".30" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gConfirmActionVertical70"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.70" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gConfirmActionVertical90"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <ImageView
+            android:id="@+id/ivConfirmActionLogo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/img_logo_and_name"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/gConfirmActionVertical70"
+            app:layout_constraintStart_toStartOf="@+id/gConfirmActionVertical30"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvConfirmActionHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:gravity="center"
+            android:text="@string/confirm_confirm_action"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/gConfirmActionVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gConfirmActionVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/ivConfirmActionLogo" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clConfirmActionCircle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/gConfirmActionVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gConfirmActionVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvConfirmActionHeading">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical20"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".20" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".30" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".40" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical50"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical60"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".70" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionCircleVertical80"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".80" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical30"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical20"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical40"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical30"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical50"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical40"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical60"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical50"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical70"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical60"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivConfirmActionCircle6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionCircleVertical80"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionCircleVertical70"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            app:layout_constraintEnd_toStartOf="@+id/gConfirmActionVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gConfirmActionVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/clConfirmActionCircle">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionButtonVertical3333"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".3333" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gConfirmActionButtonVertical6667"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".6667" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_one"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_two"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_three"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_four"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_five"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_six"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_seven"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_eight"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_nine"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButtonCancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_cancel"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton7" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButton0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_zero"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbConfirmActionButtonDelete"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_delete"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gConfirmActionButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbConfirmActionButton9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvConfirmActionForgotPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:text="@string/master_pin_forgot"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

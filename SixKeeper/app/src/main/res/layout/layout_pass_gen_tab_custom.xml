@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbPassGenMinus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:stateListAnimator="@null"
+        android:text="@string/pass_generator_minus"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/etPassGeneratorLength"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etPassGeneratorLength" />
+
+    <EditText
+        android:id="@+id/etPassGeneratorLength"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/layout_edit_text"
+        android:inputType="number"
+        android:maxLength="2"
+        android:text="@string/many_four"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/acbPassGenPlus"
+        app:layout_constraintStart_toEndOf="@+id/acbPassGenMinus"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="Autofill, LabelFor" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbPassGenPlus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:stateListAnimator="@null"
+        android:text="@string/pass_generator_plus"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/etPassGeneratorLength"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etPassGeneratorLength" />
+
+    <TextView
+        android:id="@+id/tvPassGeneratorInclude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/pass_generator_include"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassGeneratorLength" />
+
+    <CheckBox
+        android:id="@+id/cbPassGeneratorLowercase"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:buttonTint="@drawable/style_checked_blue"
+        android:paddingStart="12dp"
+        android:text="@string/pass_generator_lowercase"
+        android:textColor="@color/lightBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPassGeneratorInclude"
+        tools:ignore="RtlSymmetry" />
+
+    <CheckBox
+        android:id="@+id/cbPassGeneratorUppercase"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:buttonTint="@drawable/style_checked_blue"
+        android:paddingStart="12dp"
+        android:text="@string/pass_generator_uppercase"
+        android:textColor="@color/lightBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbPassGeneratorLowercase"
+        tools:ignore="RtlSymmetry" />
+
+    <CheckBox
+        android:id="@+id/cbPassGeneratorNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:buttonTint="@drawable/style_checked_blue"
+        android:paddingStart="12dp"
+        android:text="@string/pass_generator_number"
+        android:textColor="@color/lightBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbPassGeneratorUppercase"
+        tools:ignore="RtlSymmetry" />
+
+    <CheckBox
+        android:id="@+id/cbPassGeneratorSpecialChar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:buttonTint="@drawable/style_checked_blue"
+        android:paddingStart="12dp"
+        android:text="@string/pass_generator_special_char"
+        android:textColor="@color/lightBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbPassGeneratorNumber"
+        tools:ignore="RtlSymmetry" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

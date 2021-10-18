@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    tools:context=".TermsConditionsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gTermsVertical07"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".07" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gTermsVertical36"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".36" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gTermsVertical64"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".64" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gTermsVertical93"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".93" />
+
+            <ImageView
+                android:id="@+id/ivTermsHeadIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_terms_and_conditions_light_black"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical64"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical36"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvTermsTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:text="@string/many_terms_conditions_bold"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/ivTermsHeadIcon" />
+
+            <TextView
+                android:id="@+id/tvTermsLastUpdate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:text="@string/terms_last_update"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsTitle" />
+
+            <TextView
+                android:id="@+id/tvTermsConditionsTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:text="@string/terms_conditions_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsLastUpdate" />
+
+            <TextView
+                android:id="@+id/tvTermsConditionsContent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_conditions_content"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsConditionsTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsPrivacyTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_privacy_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsConditionsContent" />
+
+            <TextView
+                android:id="@+id/tvTermsPrivacyContent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_privacy_content"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsPrivacyTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsAgeTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_age_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsPrivacyContent" />
+
+            <TextView
+                android:id="@+id/tvTermsAgeContent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_age_content"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsAgeTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsUserTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_user_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsAgeContent" />
+
+            <TextView
+                android:id="@+id/tvTermsUserContent1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_user_content_1"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsUserTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsUserContent2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_user_content_2"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsUserContent1"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsUserContent3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_user_content_3"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsUserContent2"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsLawTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_law_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsUserContent3" />
+
+            <TextView
+                android:id="@+id/tvTermsLawContent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_law_content"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsLawTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsIndemnificationTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_indemnification_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsLawContent" />
+
+            <TextView
+                android:id="@+id/tvTermsIndemnificationContent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_indemnification_content"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsIndemnificationTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsLiabilityTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="27dp"
+                android:text="@string/terms_liability_title"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsIndemnificationContent" />
+
+            <TextView
+                android:id="@+id/tvTermsLiabilityContent1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_liability_content_1"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsLiabilityTitle"
+                tools:targetApi="o" />
+
+            <TextView
+                android:id="@+id/tvTermsLiabilityContent2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="21dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/terms_liability_content_2"
+                app:layout_constraintEnd_toStartOf="@+id/gTermsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gTermsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/tvTermsLiabilityContent1"
+                tools:targetApi="o" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

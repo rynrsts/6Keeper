@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    tools:context=".CreateNewAccountP3Fragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP3Vertical09"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".09" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP3Vertical91"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP3Username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/many_username"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP3Username"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3Username"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP3Username"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_person_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Username"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Username"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP3Username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3Username" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP3Password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_password"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP3Username" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP3Password"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPassword"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3Password"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP3Password"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_lock_password_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Password"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Password"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP3TogglePass"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3Password"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3Password"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP3Password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3Password" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP3ConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_confirm_password"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP3Password" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP3ConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPassword"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP3ConfirmPassword"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP3ConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_lock_password_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3ConfirmPassword"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP3ToggleConfirmPass"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP3ConfirmPassword"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP3ConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP3ConfirmPassword" />
+
+            <!--<View
+                android:id="@+id/vCreateNewAccP2Division"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="36dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP3ConfirmPassword" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateNewAccP3Next"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="36dp"
+                android:background="@drawable/layout_button_green_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_next"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP2Division" />
+            -->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP3BottomVertical09"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".09" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP3BottomVertical91"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.91" />
+
+        <View
+            android:id="@+id/vCreateNewAccP3Division1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acbCreateNewAccP3Next"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/layout_button_green_quadrilateral"
+            android:stateListAnimator="@null"
+            android:text="@string/many_next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP3BottomVertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP3BottomVertical09"
+            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP3Division1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,39 @@
+
+Additional
+    Create New Account: Add Face Recognition
+    Create New Account: Add Fingerprint
+    Login: Add forgot password
+    Login: Import
+    Master PIN Login: Add forgot Master PIN
+    User Account: Allow user to upload image
+    User Account: Make Face Recognition changeable
+    User Account: Make Fingerprint changeable
+    User Account: Add deactivate
+    Dashboard: Add content
+    Accounts: Add auto-fill login
+    Add Account: Add password visibility                                                            **
+    Specific Account: Add password visibility
+    Settings: Add note                                                                              **
+    Settings: Add Notifications
+    Settings: Add Copy
+    Settings: Add Auto Lock
+    Settings: Export data
+    FAQs: Add content
+    Contact Us: Add content
+
+
+Enhancement
+    Create New Account: Automate '/' in Birth Date
+    User Account: Confirm Email and Mobile Number
+
+
+Bug
+    Create New Account: Make Master PIN only be set once (after back press then next)
+    User Account Edit: Override back arrow function
+    Dashboard: Fix missing content when menu item is clicked again
+    Accounts: Fix missing content when menu item is clicked again
+    Accounts: Fix double click on Categories, Platforms and Accounts
+    Accounts: Override back arrow function
+    Favorites: Fix missing content when menu item is clicked again
+    Recycle Bin: Fix missing content when menu item is clicked again
+    Settings: Fix missing content when menu item is clicked again

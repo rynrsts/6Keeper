@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gUserEditMasterPINVertical09"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".09" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gUserEditMasterPINVertical91"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.91" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acbUserEditMasterPIN"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/layout_button_green_border"
+        android:stateListAnimator="@null"
+        android:text="@string/user_change_master_pin"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditMasterPINVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditMasterPINVertical09"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUserEditMasterPINNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="@string/user_edit_master_pin_note"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditMasterPINVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditMasterPINVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/acbUserEditMasterPIN" />
+
+    <TextView
+        android:id="@+id/tvUserEditMasterPINNote1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/user_edit_master_pin_note_1"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditMasterPINVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditMasterPINVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditMasterPINNote" />
+
+    <TextView
+        android:id="@+id/tvUserEditMasterPINNote2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/user_edit_master_pin_note_2"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditMasterPINVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditMasterPINVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditMasterPINNote1" />
+
+    <TextView
+        android:id="@+id/tvUserEditMasterPINNote3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/user_edit_master_pin_note_3"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditMasterPINVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditMasterPINVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditMasterPINNote2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    tools:context=".CreateNewAccountP1Fragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP1Vertical09"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".09" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP1Vertical91"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1Note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/create_new_acc_p1_note"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/many_first_name"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Note" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1FirstName"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_person_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1FirstName"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1FirstName"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1FirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1FirstName" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_last_name"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1FirstName" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1LastName"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_person_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1LastName"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1LastName"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1LastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1LastName" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_birth_date"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1LastName" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_birth_date_format"
+                android:inputType="text"
+                android:maxLength="10"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1BirthDate"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_date_range_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1BirthDate"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate"
+                tools:ignore="ContentDescription" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvCreateNewAccP1BirthDateSlash"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_marginStart="39dp"-->
+<!--                android:text="@string/many_birth_date_slash"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1BirthDate"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/ivCreateNewAccP1BirthDate"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate" />-->
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1BirthDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1BirthDate" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_email"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1BirthDate" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_email_hint"
+                android:inputType="textEmailAddress"
+                android:maxLength="60"
+                android:paddingStart="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Email"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_email_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1Email"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1Email"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1Email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1Email" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/many_mobile_number"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP1Email" />
+
+            <EditText
+                android:id="@+id/etCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/layout_edit_text"
+                android:hint="@string/many_mobile_number_hint"
+                android:inputType="number"
+                android:maxLength="10"
+                android:paddingStart="84dp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1MobileNumber"
+                tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+            <ImageView
+                android:id="@+id/ivCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_phone_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1MobileNumber"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1MobileNumber"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP1MobileNumberPrefix"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/many_mobile_number_prefix"
+                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1MobileNumber"
+                app:layout_constraintStart_toEndOf="@+id/ivCreateNewAccP1MobileNumber"
+                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1MobileNumber" />
+
+            <LinearLayout
+                android:id="@+id/llCreateNewAccP1MobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1MobileNumber" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP1BottomVertical09"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".09" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gCreateNewAccP1BottomVertical91"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.91" />
+
+        <View
+            android:id="@+id/vCreateNewAccP1Division1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acbCreateNewAccP1Next"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/layout_button_green_quadrilateral"
+            android:stateListAnimator="@null"
+            android:text="@string/many_next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1BottomVertical91"
+            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1BottomVertical09"
+            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

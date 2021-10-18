@@ -1,0 +1,443 @@
+<resources>
+
+    <!-- App Name -->
+    <string name="app_name">6Keeper</string>
+
+    <!-- About Us -->
+    <string name="about_us_version">Version 1.0</string>
+    <string name="about_us_about">
+        SixKeeper is a password manager application that will help users save and manage their
+        accounts and passwords in various platforms. It provides fast access to saved passwords to
+        not put mental stress in trying to remember all complicated passwords that the user needs.
+        It provides automated features to simplify cyber security for users. It is also capable of
+        assessing and suggesting passwords to mitigate risks and increase security.
+    </string>
+
+    <!-- Add Account -->
+    <string name="add_account_add">Add</string>
+    <string name="add_account_credential_1">Credential Field</string>
+    <string name="add_account_desc">Description (Optional)</string>
+    <string name="add_account_favorites">Appear in Favorites</string>
+    <string name="add_account_title">Add New Account</string>
+    <string name="add_account_name">Name</string>
+    <string name="add_account_new_account_alert_existing">
+        Account name is already existing
+    </string>
+    <string name="add_account_website">Website URL</string>
+
+    <!-- Accounts -->
+    <string name="accounts_categories">Categories</string>
+    <string name="accounts_category_name">Category Name</string>>
+    <string name="accounts_edit_category">Edit Category</string>
+    <string name="accounts_delete_category">Delete Category</string>
+    <string name="accounts_new_category">New Category</string>
+    <string name="accounts_new_category_mes">New category added!</string>
+    <string name="accounts_new_category_alert_existing">
+        Category name is already existing
+    </string>
+
+    <!-- Confirm Action -->
+    <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
+
+    <!-- Create Master PIN -->
+    <string name="create_master_pin_desc">
+        Master PIN is used for subsequent login and confirmation of actions. <b>Note: A digit
+        cannot be used for more than two (2) times.</b>
+    </string>
+
+    <!-- Create New Account -->
+    <string name="create_new_acc_alert_message">
+        Returning to previous page will discard data. Continue?
+    </string>
+    <string name="create_new_acc_message">Continue creating the account?</string>
+    <string name="create_new_acc_note">
+        Note: Once you click register, existing account and other saved data in the app will be
+        removed.
+    </string>
+    <string name="create_new_acc_p1_note">
+        Note: Please make sure that the First Name, Last Name and Birth Date fields are correct.
+        These cannot be changed once registered.
+    </string>
+    <string name="create_new_acc_p4_agree_to_terms">
+        I agree to the Terms and Conditions, and Privacy Policy.
+    </string>
+    <string name="create_new_acc_p4_agree_to_terms_mes">
+        Please read and agree to terms and conditions
+    </string>
+    <string name="create_new_acc_p4_master_pin_mes">Please setup a Master PIN</string>
+    <string name="create_new_acc_p4_register">Register</string>
+    <string name="create_new_acc_success">Registered successfully!</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_action_log">Action Log</string>
+    <string name="dashboard_analytics">Analytics</string>
+    <string name="dashboard_num_of_accounts">Number of Accounts</string>
+    <string name="dashboard_num_of_categories">Number of Categories</string>
+    <string name="dashboard_num_of_deleted_accounts">Number of Accounts in Recycle Bin</string>
+    <string name="dashboard_num_of_deleted_passwords">
+        Number of Deleted Passwords in Recycle Bin
+    </string>
+    <string name="dashboard_num_of_favorites">Number of Favorite Accounts</string>
+    <string name="dashboard_num_of_platforms">Number of Platforms</string>
+    <string name="dashboard_num_of_saved_pass">Number of Saved Passwords</string>
+    <string name="dashboard_summary">Summary</string>
+
+    <!-- Login -->
+    <string name="login_forgot_pass"><u>Forgot Password?</u></string>
+    <string name="login_import_data"><u>Import Data</u></string>
+    <string name="login_invalid_credentials">Invalid credentials!</string>
+    <string name="login_enter_credentials">Please enter your credentials</string>
+
+    <!-- Many -->
+    <string name="many_about_us">About</string>
+    <string name="many_accounts">Accounts</string>
+    <string name="many_action">Action</string>
+    <string name="many_alert_discard_change">
+        Returning to previous page will discard changes. Continue?
+    </string>
+    <string name="many_alert_title">Warning!</string>
+    <string name="many_alert_title_confirm">Confirm Action</string>
+    <string name="many_cancel">Cancel</string>
+    <string name="many_changes_saved">Changes saved!</string>
+    <string name="many_confirm_master_pin">Confirm Your Master PIN</string>
+    <string name="many_confirm_password">Confirm Password</string>
+    <string name="many_contact_us">Contact Us</string>
+    <string name="many_continue_mes">Do you want to continue?</string>
+    <string name="many_exit_mes">Do you want to exit the app?</string>
+    <string name="many_create_master_pin">Create Your Master PIN</string>
+    <string name="many_create_new_account">Create New Account</string>
+    <string name="many_birth_date">Birth Date</string>
+    <string name="many_birth_date_format">MM/DD/YYYY</string>
+    <string name="many_birth_date_format_message">
+        *Please use the format MM/DD/YYYY.
+    </string>
+    <string name="many_birth_date_slash">/</string>
+    <string name="many_dashboard">Dashboard</string>
+    <string name="many_delete">Delete</string>
+    <string name="many_edit">Edit</string>
+    <string name="many_eight">8</string>
+    <string name="many_email">Email</string>
+    <string name="many_email_hint"><i>ex. sample@domain.ext</i></string>
+    <!--    TODO: <string name="many_enter_code">Enter Code</string>-->
+    <string name="many_enter_code_mes">Please enter the code.</string>
+    <string name="many_enter_master_pin">Enter Your Master PIN</string>
+    <string name="many_favorites">Favorites</string>
+    <string name="many_fill_email_field">Please fill the Email field first.</string>
+    <string name="many_fill_missing_fields">Please fill the missing fields.</string>
+    <string name="many_fill_mobile_num_field">Please fill the Mobile Number field first.</string>
+    <string name="many_first_name">First Name</string>
+    <string name="many_five">5</string>
+    <string name="many_four">4</string>
+    <string name="many_help">FAQS</string>
+    <string name="many_incorrect_master_pin">Incorrect Master PIN!</string>
+    <string name="many_last_name">Last Name</string>
+    <string name="many_letters_only_message">
+        *Can only contain letters, and special characters: period (.) and hyphen (-).
+    </string>
+    <string name="many_login">Login</string>
+    <string name="many_logout">Logout</string>
+    <string name="many_logout_mes">Are you sure you want to log out?</string>
+    <string name="many_mobile_number">Mobile Number</string>
+    <string name="many_mobile_number_hint">9123456789</string>
+    <string name="many_mobile_number_prefix">+63</string>
+    <string name="many_next">Next</string>
+    <string name="many_nine">9</string>
+    <string name="many_no_account">No account to show</string>
+    <string name="many_no_category">No category to show</string>
+    <string name="many_no_platform">No platform to show</string>
+    <string name="many_nothing_to_add">Nothing to add</string>
+    <string name="many_nothing_to_delete">Nothing to delete</string>
+    <string name="many_nothing_to_update">Nothing to update</string>
+    <string name="many_nothing_to_search">Nothing to search</string>
+    <string name="many_one">1</string>
+    <string name="many_password">Password</string>
+    <string name="many_password_generator">Password Generator</string>
+    <string name="many_privacy_policy">Privacy Policy</string>
+    <string name="many_privacy_policy_bold"><b>Privacy Policy</b></string>
+    <string name="many_privacy_policy_underlined"><u>Privacy Policy</u></string>
+    <string name="many_recycle_bin">Recycle Bin</string>
+    <string name="many_required_mes">*Required</string>
+    <!--        TODO: <string name="many_send_code">Send Code</string>-->
+    <string name="many_save">Save</string>
+    <string name="many_search">Search</string>
+    <string name="many_settings">Settings</string>
+    <string name="many_setup_complete">Setup Complete!</string>
+    <string name="many_setup_face_recognition">Setup Face Recognition</string>
+    <string name="many_setup_fingerprint">Setup Fingerprint</string>
+    <string name="many_setup_master_pin">Setup Master PIN</string>
+    <string name="many_seven">7</string>
+    <string name="many_six">6</string>
+    <string name="many_specific_account">Specific Account</string>
+    <string name="many_specific_category">Specific Category</string>
+    <string name="many_specific_platform">Specific Platform</string>
+    <string name="many_terms_conditions">Terms and Conditions</string>
+    <string name="many_terms_conditions_bold"><b>Terms and Conditions</b></string>
+    <string name="many_terms_conditions_underlined"><u>Terms and Conditions</u></string>
+    <string name="many_three">3</string>
+    <string name="many_two">2</string>
+    <string name="many_user_account">User Account</string>
+    <string name="many_username">Username</string>
+    <string name="many_validate_confirm_pass">*Password does not match.</string>
+    <string name="many_validate_email">
+        *Must be a valid email address - username, at (@), domain, dot (.), and extension.
+    </string>
+    <string name="many_validate_mobile_num">*Must be a valid mobile number.</string>
+    <string name="many_validate_password">
+        *Must be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
+        (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),
+        without space/s.
+    </string>
+    <string name="many_validate_pass_equal">
+        *Password must not be the same with the username.
+    </string>
+    <string name="many_validate_username">
+        *Must be at least 6 characters. Can contain lower and upper case letters, numbers, and
+        special characters: dot (.), hyphen (-) and underscore (_), without space/s.
+    </string>
+    <!--    TODO: <string name="many_verify">Verify</string>-->
+    <string name="many_zero">0</string>
+
+    <!-- Master PIN -->
+    <string name="master_pin_forgot">Forgot Master PIN?</string>
+
+    <!-- Password Generator -->
+    <!--    <string name="pass_generator_enter_special_char">-->
+    <!--        If you want to only include specific special characters, please enter separated by spaces,-->
+    <!--        otherwise, leave it blank.-->
+    <!--    </string>-->
+    <string name="pass_generator_copy"><u>Copy to Clipboard</u></string>
+    <string name="pass_generator_custom">Custom</string>
+    <string name="pass_generator_generate">Generate</string>
+    <string name="pass_generator_generated_pass">Generated Password</string>
+    <string name="pass_generator_generate_pass">Please generate a password first</string>
+    <string name="pass_generator_include">Include:</string>
+    <string name="pass_generator_length_of_4">Length must be minimum of 4</string>
+    <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
+    <string name="pass_generator_medium">Medium</string>
+    <string name="pass_generator_medium_desc_1">* 8 – 11 characters</string>
+    <string name="pass_generator_medium_desc_2">
+        * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), and numbers (0-9)
+    </string>
+    <string name="pass_generator_minus">-</string>
+    <string name="pass_generator_nothing_to_copy">Nothing to copy</string>
+    <string name="pass_generator_number">Numbers (0–9)</string>
+    <string name="pass_generator_pass_already_saved">Password already saved</string>
+    <string name="pass_generator_pass_copy">Generated password has been copied!</string>
+    <string name="pass_generator_pass_saved">Password Saved!</string>
+    <string name="pass_generator_pass_type">Password Type</string>
+    <string name="pass_generator_plus">+</string>
+    <string name="pass_generator_uppercase">Uppercase Alphabets (A–Z)</string>
+    <string name="pass_generator_saved_pass">Saved Password</string>
+    <string name="pass_generator_save_generated_pass">Save Generated Password</string>
+    <string name="pass_generator_select_char">
+        Please select desired characters to generate password
+    </string>
+    <string name="pass_generator_special_char">Special Characters</string>
+    <string name="pass_generator_strong">Strong</string>
+    <string name="pass_generator_strong_desc_1">* 12 – 15 characters</string>
+    <string name="pass_generator_strong_desc_2">
+        * Combination of lowercase alphabets (a-z), uppercase alphabets (A-Z), numbers (0-9), and
+        special characters
+    </string>
+    <string name="pass_generator_view_saved_pass">View Saved Password</string>
+    <!--    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>-->
+
+    <!-- Privacy Policy -->
+    <string name="privacy_communication_content">
+        We may use your personal information to contact you with marketing or promotional materials
+        and other information that you might need to know.
+    </string>
+    <string name="privacy_changes_content_1">
+        This Privacy Policy is effective as of August 31, 2021 and will remain in effect except
+        with respect to any changes in its provisions in the future, which will be in effect
+        immediately after being posted on the application.
+    </string>
+    <string name="privacy_changes_content_2">
+        We reserve the right to update or change our Privacy Policy at any time and you should check
+        this Privacy Policy periodically. Your continued use of the service and application after we
+        post any modifications to the Privacy Policy on this page will constitute your
+        acknowledgment of the modifications and your consent to abide and be bound by the modified
+        Privacy Policy.
+    </string>
+    <string name="privacy_changes_content_3">
+        If we make any material changes to this Privacy Policy, we will notify you either through
+        the email address you have provided us, or by placing a prominent notice on our application.
+    </string>
+    <string name="privacy_content_1">
+        This document informs you of our policies regarding the collection, use and disclosure of
+        Personal Information we receive from users of the application.
+    </string>
+    <string name="privacy_content_2">
+        We use your Personal Information only for providing and improving the application. By using
+        the application, you agree to the collection and use of information in accordance with this
+        policy.
+    </string>
+    <string name="privacy_information_content">
+        While using our application, we may ask you to provide us with certain personally
+        identifiable information that can be used to contact or identify you. Personally
+        identifiable information may include but is not limited to your name and other personal
+        details.
+    </string>
+    <string name="privacy_security_content">
+        The security of your personal information is important to us but remember that no method of
+        transmission over the Internet, or method of electronic storage, is 100% secure. While we
+        strive to use acceptable means to protect your personal information.
+    </string>
+    <string name="privacy_changes_title"><b>Changes To This Privacy Policy</b></string>
+    <string name="privacy_communication_title"><b>Communications</b></string>
+    <string name="privacy_information_title"><b>Information Collection and Use</b></string>
+    <string name="privacy_last_update">Last updated: August 31, 2021</string>
+    <string name="privacy_security_title"><b>Security</b></string>
+
+    <!-- Recycle Bin -->
+    <string name="recycle_bin_delete_mes">Delete selected items?</string>
+    <string name="recycle_bin_pass_generator">Password\nGenerator</string>
+    <string name="recycle_bin_no_item">No deleted item to show</string>
+    <string name="recycle_bin_nothing_to_restore">Nothing to restore</string>
+    <string name="recycle_bin_restore">Restore</string>
+    <string name="recycle_bin_restore_item">Restore selected items?</string>
+    <string name="recycle_bin_select_all">Select All</string>
+    <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
+    <string name="recycle_bin_selected_items_restore_mes">Selected items restored!</string>
+
+    <!-- Saved Password -->
+    <string name="saved_password_delete_alert">Delete Saved Password/s?</string>
+    <string name="saved_password_delete_mes">Saved Password/s deleted!</string>
+    <string name="saved_password_no_item">No saved password to show</string>
+    <string name="saved_password_one_pass">One password can only be copied at a time</string>
+    <string name="saved_password_pass_copy">Password has been copied!</string>
+
+    <!-- Settings -->
+    <string name="settings_allow_copy">Allow Textual Copy</string>
+    <string name="settings_allow_screen_capture">Allow Screenshot and Screen Record</string>
+    <string name="settings_auto_lock">Auto Lock</string>
+    <string name="settings_block_copy">Block Textual Copy</string>
+    <string name="settings_block_screen_capture">Block Screenshot and Screen Record</string>
+    <string name="settings_copy">Copy</string>
+    <string name="settings_disable_notifications">Disable Notifications</string>
+    <string name="settings_enable_notifications">Enable Notifications</string>
+    <string name="settings_general">General</string>
+    <string name="settings_note">Note: Changes will be applied at the next launch.</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_screen_capture">Screen Capture</string>
+    <string name="settings_security">Security</string>
+
+    <!-- Specific Account -->
+    <string name="specific_account_desc">Description</string>
+    <string name="specific_account_remove">Remove from Favorites</string>
+    <string name="specific_account_appear">Appear in Favorites</string>
+    <string name="specific_account_delete">Delete account?</string>
+
+    <!-- Specific Category -->
+    <string name="specific_category_edit_platform">Edit Platform</string>
+    <string name="specific_category_delete_platform">Delete Platform</string>
+    <string name="specific_category_platforms">Platforms</string>
+    <string name="specific_category_platform_name">Platform Name</string>
+    <string name="specific_category_new_platform">New Platform</string>
+    <string name="specific_category_new_platform_alert_existing">
+        Platform name is already existing
+    </string>
+
+    <!-- Specific Platform -->
+    <string name="specific_platform_delete">Delete Account</string>
+
+    <!-- Terms and Conditions -->
+    <string name="terms_age_content">
+        You must be at least 15 years of age before you can use this application. By using this
+        application, you warrant that you are at least 15 years of age, and you may legally adhere
+        to this agreement. Team Sais assumes no responsibility for liabilities related to age
+        misrepresentation.
+    </string>
+    <string name="terms_conditions_content">
+        By using this application, you certify that you have read and reviewed this agreement and
+        that you agree to comply with its terms. If you do not want to be bound by the terms of this
+        agreement, you are advised not to use the application accordingly. 6Keeper only grants use
+        and access of this application and its services to those who have accepted its terms.
+    </string>
+    <string name="terms_indemnification_content">
+        You agree to compensate Team Sais and its affiliates and hold Team Sais harmless against
+        legal claims and demands that may arise from your use or misuse of our services. We reserve
+        the right to select our own legal counsel.
+    </string>
+    <string name="terms_law_content">
+        By using this application, you agree that the laws of the Philippines, without regard to
+        principles of conflict laws, will govern these terms and conditions, or any dispute of any
+        sort that might come between Team Sais and you, or its partners and associates.
+    </string>
+    <string name="terms_liability_content_1">
+        Team Sais is not liable for any damages that may occur to you as a result of your misuse of
+        our application.
+    </string>
+    <string name="terms_liability_content_2">
+        Team Sais reserves the right to edit, modify, and change this agreement at any time. We
+        shall let our users know of these changes to any medium that they provided to contact them.
+        This agreement is an understanding between Team Sais and the user, and this takes place and
+        replaces all prior agreements regarding the use of this application.
+    </string>
+    <string name="terms_privacy_content">
+        Before you continue using our application, we advise you to read our Privacy Policy
+        regarding our user data collection. It will help you better understand our practices.
+    </string>
+    <string name="terms_user_content_1">
+        As a user of this application, you may be asked to register with us and provide private
+        information. You are responsible for ensuring the accuracy of this information, and you are
+        responsible for maintaining the safety and security of your identifying information. You are
+        also responsible for all activities that occur under your account or password.
+    </string>
+    <string name="terms_user_content_2">
+        If you think there are any possible issues regarding the security of your account on the
+        application, inform us immediately so we may address them accordingly.
+    </string>
+    <string name="terms_user_content_3">
+        We reserve all rights to terminate accounts, edit or remove content and cancel any services
+        at our sole discretion.
+    </string>
+    <string name="terms_age_title"><b>Age Restriction</b></string>
+    <string name="terms_conditions_title"><b>Conditions of Use</b></string>
+    <string name="terms_indemnification_title"><b>Indemnification</b></string>
+    <string name="terms_last_update">Last updated: August 31, 2021</string>
+    <string name="terms_law_title"><b>Applicable Law</b></string>
+    <string name="terms_liability_title"><b>Limitation on Liability</b></string>
+    <string name="terms_privacy_title"><b>Privacy Policy</b></string>
+    <string name="terms_user_title"><b>User Accounts</b></string>
+
+    <!-- Title -->
+    <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <!-- User Account -->
+    <string name="user_deactivate_account">Deactivate Account</string>
+    <string name="user_face_recognition">Face Recognition</string>
+    <string name="user_fingerprint">Fingerprint</string>
+    <string name="user_change_master_pin">Change Master PIN</string>
+    <string name="user_change_password">Change Password</string>
+
+    <!-- User Account -->
+    <string name="user_edit_cancel_alert_mes">Canceling will discard changes. Continue?</string>
+    <string name="user_edit_confirm_pass">Confirm Password</string>
+    <string name="user_edit_current_pass">Current Password</string>
+    <string name="user_edit_new_pass">New Password</string>
+    <string name="user_edit_pass_mes">Wrong Current Password!</string>
+    <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
+    <string name="user_edit_master_pin_note">
+        Changing the Master PIN will require you to:
+    </string>
+    <string name="user_edit_master_pin_note_1">
+        (1) Enter the desired new Master PIN,
+    </string>
+    <string name="user_edit_master_pin_note_2">
+        (2) Confirm the Master PIN by reentering it again, and
+    </string>
+    <string name="user_edit_master_pin_note_3">
+        (3) Confirm the action of changing the Master PIN by entering the current or old Master PIN.
+    </string>
+
+    <!-- Dummy -->
+    <string name="dummy_dummy">Dummy</string>
+    <string name="dummy_username">Username</string>
+    <string name="dummy_lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.
+        Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
+        magna eros quis urna.
+    </string>
+
+</resources>

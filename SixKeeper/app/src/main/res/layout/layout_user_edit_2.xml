@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gUserEditPassVertical09"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".09" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gUserEditPassVertical91"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.91" />
+
+    <TextView
+        android:id="@+id/tvUserEditCurrentPass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/user_edit_current_pass"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etUserEditCurrentPass"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/layout_edit_text"
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:paddingStart="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditCurrentPass"
+        tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+    <ImageView
+        android:id="@+id/ivUserEditCurrentPass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_lock_password_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditCurrentPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditCurrentPass"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivUserEditCurrentTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditCurrentPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditCurrentPass"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvUserEditNewPass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="@string/user_edit_new_pass"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/etUserEditCurrentPass" />
+
+    <EditText
+        android:id="@+id/etUserEditNewPass"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/layout_edit_text"
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:paddingStart="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditNewPass"
+        tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+    <ImageView
+        android:id="@+id/ivUserEditNewPass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_lock_password_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditNewPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditNewPass"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivUserEditNewTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditNewPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditNewPass"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvUserEditNewPassNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/many_validate_password"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/etUserEditNewPass" />
+
+    <TextView
+        android:id="@+id/tvUserEditConfirmPass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="@string/user_edit_confirm_pass"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditNewPassNote" />
+
+    <EditText
+        android:id="@+id/etUserEditConfirmPass"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/layout_edit_text"
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:paddingStart="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserEditConfirmPass"
+        tools:ignore="Autofill, LabelFor, RtlSymmetry, TextFields" />
+
+    <ImageView
+        android:id="@+id/ivUserEditConfirmPass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_lock_password_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditConfirmPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditConfirmPass"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivUserEditConfirmTogglePass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserEditConfirmPass"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintTop_toTopOf="@+id/etUserEditConfirmPass"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvUserEditConfirmPassNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/red"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/gUserEditPassVertical91"
+        app:layout_constraintStart_toStartOf="@+id/gUserEditPassVertical09"
+        app:layout_constraintTop_toBottomOf="@+id/etUserEditConfirmPass" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
