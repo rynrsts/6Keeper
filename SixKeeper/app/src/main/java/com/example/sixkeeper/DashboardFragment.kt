@@ -16,6 +16,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -105,11 +108,15 @@ class DashboardFragment : Fragment() {
     }
 
     @SuppressLint("InflateParams")
-    private fun populateSummary() {
+    private fun populateSummary() {                                                                 // Populate summary tab
         val inflatedLayout = layoutInflater.inflate(
                 R.layout.layout_dashboard_summary,
                 null,
                 true
+        )
+        inflatedLayout.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
         val tvDashboardCategories: TextView =
@@ -214,13 +221,52 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    @SuppressLint("InflateParams")
-    private fun populateAnalytics() {
+    @SuppressLint("InflateParams", "SimpleDateFormat")
+    private fun populateAnalytics() {                                                               // Populate analytics tab
         val inflatedLayout = layoutInflater.inflate(
                 R.layout.layout_dashboard_analytics,
                 null,
                 true
         )
+        inflatedLayout.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val tvDashboardNumOfWeak: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfWeak)
+        val tvDashboardNumOfOld: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfOld)
+        val tvDashboardNumOfDuplicate: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardNumOfDuplicate)
+
+        tvDashboardNumOfWeak.text = databaseHandlerClass.viewTotalNumberOfWeakPasswords(
+                encodingClass.encodeData("weak")
+        ).toString()
+
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "deleted",
+                "",
+                encodingClass.encodeData(0.toString())
+        )
+        var oldPasswords = 0
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val calendar: Calendar = Calendar.getInstance()
+        val date: String = dateFormat.format(calendar.time)
+
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        val dateToday: Date = dateFormat.parse(date)
+
+        for (u in userAccount) {
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            val creationDate: Date = dateFormat.parse(encodingClass.decodeData(u.creationDate))
+            val timeDifference: Long = dateToday.time - creationDate.time
+
+            if (TimeUnit.MILLISECONDS.toDays(timeDifference) >= 90) {
+                oldPasswords++
+            }
+        }
+
+        tvDashboardNumOfOld.text = oldPasswords.toString()
+        tvDashboardNumOfDuplicate.text = "0"
 
         llDashboardContainer.removeAllViews()
         llDashboardContainer.addView(inflatedLayout)

@@ -71,6 +71,7 @@
     <!-- Dashboard -->
     <string name="dashboard_action_log">Action Log</string>
     <string name="dashboard_analytics">Analytics</string>
+    <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
     <string name="dashboard_num_of_accounts">Accounts</string>
     <string name="dashboard_num_of_categories">Categories</string>
     <string name="dashboard_num_of_deleted_accounts">Accounts in Recycle Bin</string>
@@ -78,6 +79,7 @@
     <string name="dashboard_num_of_favorites">Favorite Accounts</string>
     <string name="dashboard_num_of_platforms">Platforms</string>
     <string name="dashboard_num_of_saved_pass">Saved Passwords</string>
+    <string name="dashboard_old_passwords">Old Passwords</string>
     <string name="dashboard_summary">Summary</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
 

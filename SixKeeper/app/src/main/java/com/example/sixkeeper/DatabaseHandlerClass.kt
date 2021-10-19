@@ -69,6 +69,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
+        // KEY_CREATION_DATE = "creation_date"
         private const val KEY_PASSWORD_STATUS = "password_status"
 //        private const val KEY_PLATFORM_ID = "platform_id"
 //        private const val KEY_PLATFORM_NAME = "platform_name"
@@ -139,6 +140,7 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_ACCOUNT_DELETED + " TEXT," +
                         KEY_ACCOUNT_DELETE_DATE + " TEXT," +
+                        KEY_CREATION_DATE + " TEXT," +
                         KEY_PASSWORD_STATUS + " TEXT," +
                         KEY_PLATFORM_ID + " TEXT," +
                         KEY_PLATFORM_NAME + " TEXT," +
@@ -287,6 +289,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
             put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
             put(KEY_ACCOUNT_DELETE_DATE, userAccount.accountDeleteDate)
+            put(KEY_CREATION_DATE, userAccount.creationDate)
             put(KEY_PASSWORD_STATUS, userAccount.passwordStatus)
             put(KEY_PLATFORM_ID, userAccount.platformId)
             put(KEY_PLATFORM_NAME, userAccount.platformName)
@@ -359,6 +362,27 @@ class DatabaseHandlerClass(context: Context) :
             selectQuery = "SELECT COUNT(*) FROM $tableName " +
                     "WHERE $columnDeleted = '$deleted' AND $KEY_ACCOUNT_IS_FAVORITES = '$favorites'"
         }
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    fun viewTotalNumberOfWeakPasswords(status: String): Int {                                       // View total number of weak passwords
+        val selectQuery =
+                "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$status'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
 
         try {
             cursor = db.rawQuery(selectQuery, null)
@@ -723,6 +747,7 @@ class DatabaseHandlerClass(context: Context) :
         var accountIsFavorites: String
         var accountDeleted: String
         var accountDeleteDate: String
+        var creationDate: String
         var passwordStatus: String
         var platformId: String
         var platformName: String
@@ -743,6 +768,7 @@ class DatabaseHandlerClass(context: Context) :
                         cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_IS_FAVORITES))
                 accountDeleted = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETED))
                 accountDeleteDate = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DELETE_DATE))
+                creationDate = cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
                 passwordStatus = cursor.getString(cursor.getColumnIndex(KEY_PASSWORD_STATUS))
                 platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
                 platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
@@ -759,6 +785,7 @@ class DatabaseHandlerClass(context: Context) :
                         accountIsFavorites = accountIsFavorites,
                         accountDeleted = accountDeleted,
                         accountDeleteDate = accountDeleteDate,
+                        creationDate = creationDate,
                         passwordStatus = passwordStatus,
                         platformId = platformId,
                         platformName = platformName,
@@ -1138,6 +1165,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
+            put(KEY_CREATION_DATE, userAccount.creationDate)
             put(KEY_PASSWORD_STATUS, userAccount.passwordStatus)
         }
 

@@ -19,7 +19,7 @@
             android:layout_height="48dp"
             android:background="@drawable/layout_pink_red_circle"
             android:padding="12dp"
-            android:src="@drawable/ic_format_list_bulleted_light_black"
+            android:src="@drawable/ic_format_list_bulleted_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

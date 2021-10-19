@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddAccountFragment : Fragment() {
     private val args: AddAccountFragmentArgs by navArgs()
@@ -52,6 +54,8 @@ class AddAccountFragment : Fragment() {
     private lateinit var deleted: String
     private var isFavorites: Int = 0
     private var addOrSave = 0
+    private var passwordTemp = ""
+    private var encodedDateTemp = ""
 
     private val items = arrayOf("-- Select Item --", "Email", "Mobile Number", "Username", "Other")
 
@@ -262,8 +266,9 @@ class AddAccountFragment : Fragment() {
                     setText(encodingClass.decodeData(u.accountCredential))
                     setSelection(etAddAccountCredential1.text.length)
                 }
+                passwordTemp = encodingClass.decodeData(u.accountPassword)
                 etAddAccountPassword.apply {
-                    setText(encodingClass.decodeData(u.accountPassword))
+                    setText(passwordTemp)
                     setSelection(etAddAccountPassword.text.length)
                 }
                 etAddAccountWebsite.apply {
@@ -274,6 +279,7 @@ class AddAccountFragment : Fragment() {
                     setText(encodingClass.decodeData(u.accountDescription))
                     setSelection(etAddAccountDescription.text.length)
                 }
+                encodedDateTemp = u.creationDate
 
                 if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
                     cbAddAccountFavorites.isChecked = true
@@ -350,7 +356,7 @@ class AddAccountFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast")
+    @SuppressLint("ShowToast", "SimpleDateFormat")
     private fun addOrEditAccount() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
@@ -362,6 +368,10 @@ class AddAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfAccount()
         var existing = false
         var toast: Toast? = null
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
 
         if (lastId.isNotEmpty()) {
             accountId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
@@ -391,6 +401,7 @@ class AddAccountFragment : Fragment() {
                                 encodingClass.encodeData(isFavorites.toString()),
                                 deleted,
                                 "",
+                                encodingClass.encodeData(date),
                                 encodingClass.encodeData(checkPasswordStatus(password)),
                                 encodedSpecificPlatformId,
                                 encodingClass.encodeData(args.specificPlatformName),
@@ -478,68 +489,68 @@ class AddAccountFragment : Fragment() {
         }
 
         if (
-                boolChar[0] && !boolChar[1] && !boolChar[2] && !boolChar[3] &&                      // Lower
-                !boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3] &&                      // Upper
-                !boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3] &&                      // Number
-                !boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3] &&                      // Special
+                (boolChar[0] && !boolChar[1] && !boolChar[2] && !boolChar[3]) ||                    // Lower
+                (!boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3]) ||                    // Upper
+                (!boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3]) ||                    // Number
+                (!boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3]) ||                    // Special
                 (boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3]
-                        && password.length <= 9) &&                                                 // Lower, Upper, length <= 9
+                        && password.length <= 9) ||                                                 // Lower, Upper, length <= 9
                 (boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length <= 10) &&                                                // Lower, Number, length <= 10
+                        && password.length <= 10) ||                                                // Lower, Number, length <= 10
                 (boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length <= 10) &&                                                // Lower, Special, length <= 10
+                        && password.length <= 10) ||                                                // Lower, Special, length <= 10
                 (!boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length <= 10) &&                                                // Upper, Number, length <= 10
+                        && password.length <= 10) ||                                                // Upper, Number, length <= 10
                 (!boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length <= 10) &&                                                // Upper, Special, length <= 10
+                        && password.length <= 10) ||                                                // Upper, Special, length <= 10
                 (!boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length <= 11) &&                                                // Number, Special, length <= 11
+                        && password.length <= 11) ||                                                // Number, Special, length <= 11
                 (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length <= 7) &&                                                 // Lower, Upper, Number, length <= 7
+                        && password.length <= 7) ||                                                 // Lower, Upper, Number, length <= 7
                 (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length <= 7) &&                                                 // Lower, Upper, Special, length <= 7
+                        && password.length <= 7) ||                                                 // Lower, Upper, Special, length <= 7
                 (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length <= 8) &&                                                 // Lower, Number, Special, length <= 8
+                        && password.length <= 8) ||                                                 // Lower, Number, Special, length <= 8
                 (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length <= 8) &&                                                 // Upper, Number, Special, length <= 8
+                        && password.length <= 8) ||                                                 // Upper, Number, Special, length <= 8
                 (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
                         && password.length <= 6)                                                    // Lower, Upper, Number, Special, length <= 6
         ) {
             status = "weak"
         } else if (
                 (boolChar[0] && boolChar[1] && !boolChar[2] && !boolChar[3]
-                        && password.length >= 10) &&                                                // Lower, Upper, length >= 10
+                        && password.length >= 10) ||                                                // Lower, Upper, length >= 10
                 (boolChar[0] && !boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length >= 11) &&                                                // Lower, Number, length >= 11
+                        && password.length >= 11) ||                                                // Lower, Number, length >= 11
                 (boolChar[0] && !boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length >= 11) &&                                                // Lower, Special, length >= 11
+                        && password.length >= 11) ||                                                // Lower, Special, length >= 11
                 (!boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length >= 11) &&                                                // Upper, Number, length >= 11
+                        && password.length >= 11) ||                                                // Upper, Number, length >= 11
                 (!boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length >= 11) &&                                                // Upper, Special, length >= 11
+                        && password.length >= 11) ||                                                // Upper, Special, length >= 11
                 (!boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length >= 12) &&                                                // Number, Special, length >= 12
+                        && password.length >= 12) ||                                                // Number, Special, length >= 12
                 (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length in 8..11) &&                                             // Lower, Upper, Number, 8 - 11
+                        && password.length in 8..11) ||                                             // Lower, Upper, Number, 8 - 11
                 (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length in 8..11) &&                                             // Lower, Upper, Special, 8 - 11
+                        && password.length in 8..11) ||                                             // Lower, Upper, Special, 8 - 11
                 (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length in 9..11) &&                                             // Lower, Number, Special, 9 - 11
+                        && password.length in 9..11) ||                                             // Lower, Number, Special, 9 - 11
                 (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length in 9..11) &&                                             // Upper, Number, Special, 9 - 11
+                        && password.length in 9..11) ||                                             // Upper, Number, Special, 9 - 11
                 (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
                         && password.length in 7..10)                                                // Lower, Upper, Number, Special, 7 - 10
         ) {
             status = "medium"
         } else if (
                 (boolChar[0] && boolChar[1] && boolChar[2] && !boolChar[3]
-                        && password.length >= 12) &&                                                // Lower, Upper, Number, length >= 12
+                        && password.length >= 12) ||                                                // Lower, Upper, Number, length >= 12
                 (boolChar[0] && boolChar[1] && !boolChar[2] && boolChar[3]
-                        && password.length >= 12) &&                                                // Lower, Upper, Special, length >= 12
+                        && password.length >= 12) ||                                                // Lower, Upper, Special, length >= 12
                 (boolChar[0] && !boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length >= 12) &&                                                // Lower, Number, Special, length >= 12
+                        && password.length >= 12) ||                                                // Lower, Number, Special, length >= 12
                 (!boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
-                        && password.length >= 12) &&                                                // Upper, Number, Special, length >= 12
+                        && password.length >= 12) ||                                                // Upper, Number, Special, length >= 12
                 (boolChar[0] && boolChar[1] && boolChar[2] && boolChar[3]
                         && password.length >= 11)                                                   // Lower, Upper, Number, Special, length >= 11
         ) {
@@ -549,6 +560,7 @@ class AddAccountFragment : Fragment() {
         return status
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -556,6 +568,16 @@ class AddAccountFragment : Fragment() {
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
                 if (args.addOrEdit == "edit") {
+                    val encodedDatePlaceholder: String = if (password != passwordTemp) {
+                        val calendar: Calendar = Calendar.getInstance()
+                        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                        val date: String = dateFormat.format(calendar.time)
+
+                        encodingClass.encodeData(date)
+                    } else {
+                        encodedDateTemp
+                    }
+
                     val status = databaseHandlerClass.updateAccount(
                             UserAccountModelClass(
                                     encodingClass.encodeData(args.specificAccountId),
@@ -568,6 +590,7 @@ class AddAccountFragment : Fragment() {
                                     encodingClass.encodeData(isFavorites.toString()),
                                     "",
                                     "",
+                                    encodedDatePlaceholder,
                                     encodingClass.encodeData(checkPasswordStatus(password)),
                                     "",
                                     "",

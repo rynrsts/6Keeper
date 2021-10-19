@@ -10,8 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/layout_background_light_cyan_blue"
+        android:padding="18dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -29,8 +29,10 @@
                 android:id="@+id/tvDashboardNumOfWeak"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:includeFontPadding="false"
+                android:textAlignment="center"
                 android:textColor="@color/white"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,9 +44,9 @@
             android:id="@+id/tvDashboardWeakPasswords"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
             android:text="@string/dashboard_weak_passwords"
-            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivDashboardWeakPasswordsIcon"
             app:layout_constraintStart_toEndOf="@+id/ivDashboardWeakPasswords"
@@ -52,6 +54,130 @@
 
         <ImageView
             android:id="@+id/ivDashboardWeakPasswordsIcon"
+            android:layout_width="30dp"
+            android:layout_height="48dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:src="@drawable/ic_navigate_next_light_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clDashboardOldPasswords"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_background_light_cyan_blue"
+        android:padding="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clDashboardWeakPasswords">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ivDashboardOldPasswords"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/layout_orange_circle"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvDashboardNumOfOld"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvDashboardOldPasswords"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:text="@string/dashboard_old_passwords"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivDashboardOldPasswordsIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivDashboardOldPasswords"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivDashboardOldPasswordsIcon"
+            android:layout_width="30dp"
+            android:layout_height="48dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:src="@drawable/ic_navigate_next_light_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clDashboardDuplicatePasswords"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_background_light_cyan_blue"
+        android:padding="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clDashboardOldPasswords">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ivDashboardDuplicatePasswords"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/layout_medium_light_cyan_blue_circle"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvDashboardNumOfDuplicate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvDashboardDuplicatePasswords"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:layout_marginEnd="18dp"
+            android:text="@string/dashboard_duplicate_passwords"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivDashboardDuplicatePasswordsIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivDashboardDuplicatePasswords"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivDashboardDuplicatePasswordsIcon"
             android:layout_width="30dp"
             android:layout_height="48dp"
             android:paddingTop="3dp"
