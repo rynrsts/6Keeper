@@ -223,7 +223,7 @@ open class AccountsProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast")
+    @SuppressLint("ShowToast", "SimpleDateFormat")
     fun addOrUpdateCategory(
             addOrUpdate: String,
             categoryName: String,
@@ -254,6 +254,17 @@ open class AccountsProcessClass : Fragment() {
         }
 
         if (!existing) {
+            var actionLogId = 1000001
+            val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+            val calendar: Calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+            val date: String = dateFormat.format(calendar.time)
+
+            if (lastId.isNotEmpty()) {
+                actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            }
+
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addCategory(                                      // Add Category
                         UserCategoryModelClass(
@@ -269,6 +280,14 @@ open class AccountsProcessClass : Fragment() {
                             Toast.LENGTH_SHORT
                     )
                 }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Category $categoryName was added."),
+                                encodingClass.encodeData(date)
+                        )
+                )
             } else if (addOrUpdate == "update") {
                 val status = databaseHandlerClass.updateCategory(                                   // Update Category
                         UserCategoryModelClass(
@@ -280,10 +299,19 @@ open class AccountsProcessClass : Fragment() {
                 if (status > -1) {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            "Category updated to '$categoryName'",
+                            "Category '$selectedCategoryName' updated to '$categoryName'",
                             Toast.LENGTH_SHORT
                     )
                 }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Category '$selectedCategoryName'" +
+                                        " was updated to '$categoryName'."),
+                                encodingClass.encodeData(date)
+                        )
+                )
             }
 
             populateCategories("")
@@ -350,6 +378,7 @@ open class AccountsProcessClass : Fragment() {
         alert.show()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun deleteCategory() {                                                                  // Delete Category
         val deleteCategoryStatus = databaseHandlerClass.removeCatPlatAcc(
                 "CategoriesTable",
@@ -368,6 +397,25 @@ open class AccountsProcessClass : Fragment() {
                 show()
             }
         }
+
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData("Category '$categoryNameTemp' was deleted."),
+                        encodingClass.encodeData(date)
+                )
+        )
 
         populateCategories("")
     }

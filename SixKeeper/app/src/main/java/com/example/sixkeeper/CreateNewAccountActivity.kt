@@ -171,5 +171,20 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 show()
             }
         }
+
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData("App account was created."),
+                        encodingClass.encodeData(date)
+                )
+        )
     }
 }

@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
@@ -330,7 +329,8 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val userSavedPass: List<UserSavedPassModelClass> =
                 databaseHandlerClass.viewSavedPass(encodedDelete)
         val encodedGeneratedPass = encodingClass.encodeData(generatedPass)
-        var passId = 100001 + userSavedPass.size
+        var passId = 100001
+        val lastId = databaseHandlerClass.getLastIdOfSavedPasswords()
         var existing = false
         var toast: Toast? = null
 
@@ -338,13 +338,15 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
+        if (lastId.isNotEmpty()) {
+            passId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
         for (u in userSavedPass) {
             if (encodedGeneratedPass == u.generatedPassword) {
                 existing = true
                 break
             }
-
-            passId = Integer.parseInt(encodingClass.decodeData(u.passId)) + 1
         }
 
         if (!existing) {

@@ -1,5 +1,6 @@
 
 Additional
+    Create New Account: Add progress
     Create New Account: Add Face Recognition
     Create New Account: Add Fingerprint
     Login: Add forgot password
@@ -11,9 +12,7 @@ Additional
     User Account: Add deactivate
     Dashboard: Add content
     Accounts: Add auto-fill login
-    Add Account: Add password visibility                                                            **
     Specific Account: Add password visibility
-    Settings: Add note                                                                              **
     Settings: Add Notifications
     Settings: Add Copy
     Settings: Add Auto Lock

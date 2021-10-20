@@ -3,17 +3,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gDashboardVertical07"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".07" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gDashboardVertical93"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".93" />
+
+    <ProgressBar
+        android:id="@+id/pbDashboardAnalytics"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/layout_dashboard_progress_bar"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDashboardAnalytics"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pbDashboardAnalytics"
+        app:layout_constraintEnd_toEndOf="@+id/pbDashboardAnalytics"
+        app:layout_constraintStart_toStartOf="@+id/pbDashboardAnalytics"
+        app:layout_constraintTop_toTopOf="@+id/pbDashboardAnalytics" />
+
+    <TextView
+        android:id="@+id/tvDashboardSecurityScore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/dashboard_security_score"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/pbDashboardAnalytics" />
+
+    <TextView
+        android:id="@+id/tvDashboardSecurityStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/tvDashboardSecurityScore" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clDashboardWeakPasswords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:background="@drawable/layout_background_light_cyan_blue"
         android:padding="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/tvDashboardSecurityStatus">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ivDashboardWeakPasswords"
@@ -73,8 +134,8 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/layout_background_light_cyan_blue"
         android:padding="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardWeakPasswords">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,8 +196,8 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/layout_background_light_cyan_blue"
         android:padding="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardOldPasswords">
 
         <androidx.constraintlayout.widget.ConstraintLayout

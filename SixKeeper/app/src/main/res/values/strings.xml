@@ -80,6 +80,7 @@
     <string name="dashboard_num_of_platforms">Platforms</string>
     <string name="dashboard_num_of_saved_pass">Saved Passwords</string>
     <string name="dashboard_old_passwords">Old Passwords</string>
+    <string name="dashboard_security_score"><b>Security Score</b></string>
     <string name="dashboard_summary">Summary</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
 

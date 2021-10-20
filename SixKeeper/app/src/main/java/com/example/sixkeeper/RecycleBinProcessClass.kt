@@ -322,9 +322,9 @@ open class RecycleBinProcessClass : Fragment() {
             selectedPlatformName: Array<String?>,
             selectedCategoryName: Array<String?>
     ) {
-        totalRestoreNum = modelArrayList.size
+        totalRestoreNum = selectedId.size
 
-        for (i in 0 until modelArrayList.size) {
+        for (i in selectedId.indices) {
             val encodedId = encodingClass.encodeData(selectedId[i]!!)
             val encodedPlatformName = encodingClass.encodeData(selectedPlatformName[i]!!)
             val encodedCategoryName = encodingClass.encodeData(selectedCategoryName[i]!!)

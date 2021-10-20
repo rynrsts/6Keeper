@@ -123,32 +123,15 @@
         app:layout_constraintTop_toBottomOf="@+id/clDashboardTab">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clDashboardContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gDashboardVertical07"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent=".07" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gDashboardVertical93"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent=".93" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/llDashboardContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

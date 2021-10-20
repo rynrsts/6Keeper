@@ -3,14 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gDashboardVertical07"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".07" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gDashboardVertical93"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".93" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clDashboardCategories"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -50,11 +66,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision1"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision1"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardCategories" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,9 +80,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision1">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision1">
 
         <ImageView
             android:id="@+id/ivDashboardPlatforms"
@@ -103,11 +121,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision2"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision2"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardPlatforms" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,9 +135,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision2">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision2">
 
         <ImageView
             android:id="@+id/ivDashboardAccounts"
@@ -156,11 +176,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision3"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision3"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardAccounts" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -168,9 +190,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision3">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision3">
 
         <ImageView
             android:id="@+id/ivDashboardFavorites"
@@ -209,11 +231,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision4"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision4"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardFavorites" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -221,9 +245,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision4">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision4">
 
         <ImageView
             android:id="@+id/ivDashboardSavedPasswords"
@@ -262,11 +286,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision5"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision5"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardSavedPasswords" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -274,9 +300,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision5">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision5">
 
         <ImageView
             android:id="@+id/ivDashboardDeletedAccounts"
@@ -315,11 +341,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision6"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision6"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardDeletedAccounts" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -327,9 +355,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision6">
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
+        app:layout_constraintTop_toBottomOf="@+id/vDashboardDivision6">
 
         <ImageView
             android:id="@+id/ivDashboardDeletedPasswords"
@@ -368,11 +396,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/vSettingsDivision7"
-        android:layout_width="match_parent"
+        android:id="@+id/vDashboardDivision7"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toStartOf="@+id/gDashboardVertical93"
+        app:layout_constraintStart_toStartOf="@+id/gDashboardVertical07"
         app:layout_constraintTop_toBottomOf="@+id/clDashboardDeletedPasswords" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

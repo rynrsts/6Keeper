@@ -19,14 +19,15 @@ class DatabaseHandlerClass(context: Context) :
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
         private const val TABLE_SETTINGS = "SettingsTable"
+        private const val TABLE_ACTION_LOG = "ActionLogTable"
         private const val TABLE_CATEGORIES = "CategoriesTable"
         private const val TABLE_PLATFORMS = "PlatformsTable"
         private const val TABLE_ACCOUNTS = "AccountsTable"
         private const val TABLE_SAVED_PASS = "SavedPasswordTable"
 
-        private const val KEY_USER_ID = "user_id"
 
         // TABLE_USER_INFO
+        private const val KEY_USER_ID = "user_id"
         private const val KEY_FIRST_NAME = "first_name"
         private const val KEY_LAST_NAME = "last_name"
         private const val KEY_BIRTH_DATE = "birth_date"
@@ -35,6 +36,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_LAST_UPDATE = "last_update"
 
         // TABLE_USER_ACC
+//        private const val KEY_USER_ID = "user_id"
         private const val KEY_USERNAME = "username"
         private const val KEY_PASSWORD = "password"
         private const val KEY_MASTER_PIN = "master_pin"
@@ -47,6 +49,11 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_NOTIFICATION = "notifications"
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_COPY = "copy"
+
+        // TABLE_ACTION_LOG
+        private const val KEY_ACTION_LOG_ID = "action_log_id"
+        private const val KEY_ACTION_LOG_DESCRIPTION = "action_log_description"
+        private const val KEY_ACTION_LOG_DATE = "action_log_date"
 
         // TABLE_CATEGORIES
         private const val KEY_CATEGORY_ID = "category_id"
@@ -69,6 +76,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
+
         // KEY_CREATION_DATE = "creation_date"
         private const val KEY_PASSWORD_STATUS = "password_status"
 //        private const val KEY_PLATFORM_ID = "platform_id"
@@ -78,6 +86,7 @@ class DatabaseHandlerClass(context: Context) :
         // TABLE_SAVED_PASS
         private const val KEY_PASS_ID = "pass_id"
         private const val KEY_SAVED_PASS = "saved_password"
+
         // KEY_CREATION_DATE = "creation_date"
         private const val KEY_PASS_DELETED = "pass_deleted"
         private const val KEY_PASS_DELETE_DATE = "pass_delete_date"
@@ -112,6 +121,13 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_NOTIFICATION + " TEXT," +
                         KEY_SCREEN_CAPTURE + " TEXT," +
                         KEY_COPY + " TEXT" +
+                        ")"
+                )
+        val createActionLogTable = (
+                "CREATE TABLE " + TABLE_ACTION_LOG + "(" +
+                        KEY_ACTION_LOG_ID + " TEXT," +
+                        KEY_ACTION_LOG_DESCRIPTION + " TEXT," +
+                        KEY_ACTION_LOG_DATE + " TEXT" +
                         ")"
                 )
         val createCategoriesTable = (
@@ -160,6 +176,7 @@ class DatabaseHandlerClass(context: Context) :
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
         db?.execSQL(createSettingsTable)
+        db?.execSQL(createActionLogTable)
         db?.execSQL(createCategoriesTable)
         db?.execSQL(createPlatformsTable)
         db?.execSQL(createAccountsTable)
@@ -170,6 +187,7 @@ class DatabaseHandlerClass(context: Context) :
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_ACTION_LOG")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNTS")
@@ -237,6 +255,22 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_SETTINGS, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addEventToActionLog(userActionLog: UserActionLogModelClass): Long {                         // Add event to Action Log
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_ACTION_LOG_ID, userActionLog.actionLogId)
+            put(KEY_ACTION_LOG_DESCRIPTION, userActionLog.actionLogDescription)
+            put(KEY_ACTION_LOG_DATE, userActionLog.actionLogDate)
+        }
+
+        val success = db.insert(TABLE_ACTION_LOG, null, contentValues)
 
         db.close()
         return success
@@ -378,9 +412,9 @@ class DatabaseHandlerClass(context: Context) :
         return num
     }
 
-    fun viewTotalNumberOfWeakPasswords(status: String): Int {                                       // View total number of weak passwords
-        val selectQuery =
-                "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$status'"
+    fun viewTotalNumberOfWeakPasswords(deleted: String, status: String): Int {                      // View total number of weak passwords
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
+                "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PASSWORD_STATUS = '$status'"
         val db = this.readableDatabase
         val cursor: Cursor?
 
@@ -393,6 +427,32 @@ class DatabaseHandlerClass(context: Context) :
 
         cursor.moveToFirst()
         val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    fun viewTotalNumberOfDuplicatePasswords(deleted: String): Int {                                 // View total number of duplicate passwords
+        val selectQuery =
+                "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                        "GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var num = 0
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                num += cursor.getInt(0)
+            } while (cursor.moveToNext())
+        }
 
         cursor.close()
         db.close()
@@ -554,8 +614,69 @@ class DatabaseHandlerClass(context: Context) :
         return userUsername
     }
 
+    fun getLastIdOfActionLog(): String {                                                            // Get last Id of of Platforms
+        val selectQuery = "SELECT $KEY_ACTION_LOG_ID FROM $TABLE_ACTION_LOG"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var lastId = ""
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ""
+        }
+
+        if (cursor.moveToLast()) {
+            lastId = cursor.getString(0)
+        }
+
+        cursor.close()
+        db.close()
+        return lastId
+    }
+
     @SuppressLint("Recycle")
-    fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                                               // View Categories
+    fun viewActionLog(): List<UserActionLogModelClass> {                                            // View Action Log
+        val userActionLogList: ArrayList<UserActionLogModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_ACTION_LOG"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var actionLogId: String
+        var actionLogDescription: String
+        var actionLogDate: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                actionLogId = cursor.getString(cursor.getColumnIndex(KEY_ACTION_LOG_ID))
+                actionLogDescription =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACTION_LOG_DESCRIPTION))
+                actionLogDate = cursor.getString(cursor.getColumnIndex(KEY_ACTION_LOG_DATE))
+
+                val user = UserActionLogModelClass(
+                        actionLogId = actionLogId,
+                        actionLogDescription = actionLogDescription,
+                        actionLogDate = actionLogDate
+                )
+                userActionLogList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userActionLogList
+    }
+
+    @SuppressLint("Recycle")
+    fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                     // View Categories
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
         var selectQuery = "SELECT * FROM $TABLE_CATEGORIES"
         val db = this.readableDatabase
@@ -864,6 +985,28 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return userSavedPassList
+    }
+
+    fun getLastIdOfSavedPasswords(): String {                                                       // Get last Id of of Saved Passwords
+        val selectQuery = "SELECT $KEY_PASS_ID FROM $TABLE_SAVED_PASS"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var lastId = ""
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ""
+        }
+
+        if (cursor.moveToLast()) {
+            lastId = cursor.getString(0)
+        }
+
+        cursor.close()
+        db.close()
+        return lastId
     }
 
     fun viewSettings(): List<UserSettingsModelClass> {                                              // View Settings
@@ -1231,6 +1374,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.delete(TABLE_USER_ACC, "", null)
         db.delete(TABLE_USER_INFO, "", null)
         db.delete(TABLE_SAVED_PASS, "", null)
+        db.delete(TABLE_ACTION_LOG, "", null)
         db.delete(TABLE_CATEGORIES, "", null)
         db.delete(TABLE_PLATFORMS, "", null)
         db.delete(TABLE_ACCOUNTS, "", null)

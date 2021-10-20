@@ -5,20 +5,22 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -168,8 +170,10 @@ class DashboardFragment : Fragment() {
                 ""
         ).toString()
 
-        llDashboardContainer.removeAllViews()
-        llDashboardContainer.addView(inflatedLayout)
+        llDashboardContainer.apply {
+            removeAllViews()
+            addView(inflatedLayout)
+        }
     }
 
     private fun setOnClick() {
@@ -221,7 +225,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    @SuppressLint("InflateParams", "SimpleDateFormat")
+    @SuppressLint("InflateParams", "SimpleDateFormat", "SetTextI18n")
     private fun populateAnalytics() {                                                               // Populate analytics tab
         val inflatedLayout = layoutInflater.inflate(
                 R.layout.layout_dashboard_analytics,
@@ -233,16 +237,22 @@ class DashboardFragment : Fragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
+        val pbDashboardAnalytics: ProgressBar =
+                inflatedLayout.findViewById(R.id.pbDashboardAnalytics)
+        val tvDashboardAnalytics: TextView = inflatedLayout.findViewById(R.id.tvDashboardAnalytics)
+        val tvDashboardSecurityStatus: TextView =
+                inflatedLayout.findViewById(R.id.tvDashboardSecurityStatus)
         val tvDashboardNumOfWeak: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfWeak)
         val tvDashboardNumOfOld: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfOld)
         val tvDashboardNumOfDuplicate: TextView =
                 inflatedLayout.findViewById(R.id.tvDashboardNumOfDuplicate)
 
-        tvDashboardNumOfWeak.text = databaseHandlerClass.viewTotalNumberOfWeakPasswords(
+        val weakPasswords = databaseHandlerClass.viewTotalNumberOfWeakPasswords(                    // Start | Show number of weak passwords
+                encodingClass.encodeData(0.toString()),
                 encodingClass.encodeData("weak")
-        ).toString()
+        )
 
-        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(            // Start | Show number of old passwords
                 "deleted",
                 "",
                 encodingClass.encodeData(0.toString())
@@ -265,14 +275,76 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        tvDashboardNumOfOld.text = oldPasswords.toString()
-        tvDashboardNumOfDuplicate.text = "0"
+        var numOfDuplicates = 0                                                                     // Start | Show number of duplicate passwords
+        val duplicates = databaseHandlerClass.viewTotalNumberOfDuplicatePasswords(
+                encodingClass.encodeData(0.toString())
+        )
 
-        llDashboardContainer.removeAllViews()
-        llDashboardContainer.addView(inflatedLayout)
+        if (duplicates.toString().isNotEmpty()) {
+            numOfDuplicates = duplicates
+        }
+
+        val numberOfAccounts: Double = databaseHandlerClass.viewTotalNumberDashboard2(
+                "AccountsTable",
+                "account_deleted",
+                encodingClass.encodeData("0"),
+                ""
+        ).toDouble()
+        var score = 0
+
+        if (numberOfAccounts > 0) {
+            val accountsTimesThree: Double = numberOfAccounts * 3
+            val percentage: Double =
+                    ((accountsTimesThree - (weakPasswords + oldPasswords + numOfDuplicates).toDouble())
+                            / accountsTimesThree) * 100
+            score = percentage.roundToInt()
+        }
+
+        pbDashboardAnalytics.progress = score
+        tvDashboardAnalytics.text = "$score%"
+        tvDashboardNumOfWeak.text = weakPasswords.toString()
+        tvDashboardNumOfOld.text = oldPasswords.toString()
+        tvDashboardNumOfDuplicate.text = numOfDuplicates.toString()
+
+        when (score) {
+            in 1..70 -> {
+                tvDashboardSecurityStatus.text = "Bad"
+            }
+            in 71..85 -> {
+                tvDashboardSecurityStatus.text = "Good"
+            }
+            in 86..100 -> {
+                tvDashboardSecurityStatus.text = "Excellent"
+            }
+        }
+
+        llDashboardContainer.apply {
+            removeAllViews()
+            addView(inflatedLayout)
+        }
     }
 
     private fun populateActionLog() {
-        llDashboardContainer.removeAllViews()
+        val userActionLog: List<UserActionLogModelClass> = databaseHandlerClass.viewActionLog()
+        val userActionLogId = ArrayList<String>(0)
+        val userActionLogDescription = ArrayList<String>(0)
+        val userActionLogDate = ArrayList<String>(0)
+
+        for (u in userActionLog) {
+            userActionLogId.add(encodingClass.decodeData(u.actionLogId))
+            userActionLogDescription.add(encodingClass.decodeData(u.actionLogDescription))
+            userActionLogDate.add(encodingClass.decodeData(u.actionLogDate))
+        }
+
+        val actionLogListAdapter = ActionLogListAdapter(
+                attActivity,
+                userActionLogId,
+                userActionLogDescription,
+                userActionLogDate
+        )
+        
+        llDashboardContainer.apply {
+            removeAllViews()
+        }
     }
 }
