@@ -609,6 +609,14 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass.updateUserInfo(
                 field, encodingClass.encodeData(input), getCurrentDate()
         )
+
+        databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account $viewId was changed."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
     }
 
     private fun getLastActionLogId(): Int {

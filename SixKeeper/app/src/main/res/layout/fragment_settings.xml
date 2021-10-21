@@ -36,87 +36,14 @@
                 app:layout_constraintGuide_percent=".93" />
 
             <TextView
-                android:id="@+id/tvSettingsGeneral"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_general"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSettingsNotifications"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/tvSettingsGeneral">
-
-                <ImageView
-                    android:id="@+id/ivSettingsNotifications"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/layout_pink_red_circle"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_notifications_active_white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvSettingsNotifications"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:text="@string/settings_notifications"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsNotifications"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsNotifications"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvSettingsNotifDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsNotifications"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsNotifications"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsNotifications" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scSettingsNotifications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@drawable/style_switch_thumb"
-                    app:trackTint="@drawable/style_switch_track" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/vSettingsDivision1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="30dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsNotifications" />
-
-            <TextView
                 android:id="@+id/tvSettingsSecurity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
                 android:text="@string/settings_security"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision1" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clSettingsScreenCapture"

@@ -150,7 +150,6 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val userSettingsStatus = databaseHandlerClass.addSettings(
                 UserSettingsModelClass(
                         encodingClass.encodeData(userId.toString()),
-                        encodingClass.encodeData(1.toString()),
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(0.toString())
                 )

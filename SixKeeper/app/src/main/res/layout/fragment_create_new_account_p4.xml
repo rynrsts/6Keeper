@@ -54,45 +54,23 @@
             app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4MasterPIN" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acbCreateNewAccP4FaceRec"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="21dp"
-            android:background="@drawable/layout_button_green_border"
-            android:stateListAnimator="@null"
-            android:text="@string/many_setup_face_recognition"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4MasterPINMes" />
-
-        <LinearLayout
-            android:id="@+id/llCreateNewAccP4FaceRec"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4FaceRec" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/acbCreateNewAccP4Fingerprint"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="21dp"
             android:background="@drawable/layout_button_green_border"
             android:stateListAnimator="@null"
             android:text="@string/many_setup_fingerprint"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/llCreateNewAccP4FaceRec" />
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4MasterPINMes" />
 
         <LinearLayout
             android:id="@+id/llCreateNewAccP4Fingerprint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
             app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"

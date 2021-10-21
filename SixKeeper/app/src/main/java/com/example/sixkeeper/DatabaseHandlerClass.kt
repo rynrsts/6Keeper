@@ -46,7 +46,6 @@ class DatabaseHandlerClass(context: Context) :
 
         // TABLE_SETTINGS
 //        private const val KEY_USER_ID = "user_id"
-        private const val KEY_NOTIFICATION = "notifications"
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_COPY = "copy"
 
@@ -118,7 +117,6 @@ class DatabaseHandlerClass(context: Context) :
         val createSettingsTable = (
                 "CREATE TABLE " + TABLE_SETTINGS + "(" +
                         KEY_USER_ID + " TEXT," +
-                        KEY_NOTIFICATION + " TEXT," +
                         KEY_SCREEN_CAPTURE + " TEXT," +
                         KEY_COPY + " TEXT" +
                         ")"
@@ -249,7 +247,6 @@ class DatabaseHandlerClass(context: Context) :
 
         contentValues.apply {
             put(KEY_USER_ID, userSettings.userId)
-            put(KEY_NOTIFICATION, userSettings.notifications)
             put(KEY_SCREEN_CAPTURE, userSettings.screenCapture)
             put(KEY_COPY, userSettings.copy)
         }
@@ -1031,20 +1028,17 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         var accountId: String
-        var notification: String
         var screenCapture: String
         var copy: String
 
         if (cursor.moveToFirst()) {
             do {
                 accountId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
-                notification = cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION))
                 screenCapture = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_CAPTURE))
                 copy = cursor.getString(cursor.getColumnIndex(KEY_COPY))
 
                 val user = UserSettingsModelClass(
                         userId = accountId,
-                        notifications = notification,
                         screenCapture = screenCapture,
                         copy = copy
                 )

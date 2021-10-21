@@ -1,10 +1,10 @@
 package com.example.sixkeeper
 
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,8 +18,8 @@ class IndexActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var navigationView: NavigationView
+    private lateinit var clNavigationHeader: ConstraintLayout
     private lateinit var tvNavigationHeaderUsername: TextView
-    private lateinit var ivNavigationHeaderPhoto: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +48,10 @@ class IndexActivity : AppCompatActivity() {
                         R.id.recycleBinFragment,
                         R.id.settingsFragment,
                         R.id.aboutUsFragment,
-                        R.id.helpFragment,
+//                        R.id.helpFragment,
                         R.id.termsConditionsFragment,
                         R.id.privacyPolicyFragment,
-                        R.id.contactUsFragment
+//                        R.id.contactUsFragment
                 ), drawerLayout
         )
         setupActionBarWithNavController(navigationController, appBarConfiguration)
@@ -75,28 +75,19 @@ class IndexActivity : AppCompatActivity() {
 
         navigationView = findViewById(R.id.nvIndexNavigationView)
         val headerView = navigationView.getHeaderView(0)
+        clNavigationHeader = headerView.findViewById(R.id.clNavigationHeader)
         tvNavigationHeaderUsername = headerView.findViewById(R.id.tvNavigationHeaderUsername)
-        ivNavigationHeaderPhoto = headerView.findViewById(R.id.ivNavigationHeaderPhoto)
 
         tvNavigationHeaderUsername.text = username
-//        ivNavigationHeaderPhoto.setImageResource(R.drawable.ic_visibility_gray)
     }
 
     private fun setOnClick() {
-        tvNavigationHeaderUsername.setOnClickListener {
-            goToUserAccount()
+        clNavigationHeader.setOnClickListener {
+            drawerLayout.closeDrawers()
+
+            findNavController(R.id.fIndexNavigationHost).navigate(                                  // Go to User Account
+                    R.id.action_fragments_to_userAccountFragment
+            )
         }
-
-        ivNavigationHeaderPhoto.setOnClickListener {
-            goToUserAccount()
-        }
-    }
-
-    private fun goToUserAccount() {
-        drawerLayout.closeDrawers()
-
-        findNavController(R.id.fIndexNavigationHost).navigate(                                      // Go to User Account
-                R.id.action_fragments_to_userAccountFragment
-        )
     }
 }

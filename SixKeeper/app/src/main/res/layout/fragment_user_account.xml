@@ -439,57 +439,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/clUserAccountMasterPIN" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clUserAccountFaceRec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/vUserAccountDivision9">
-
-                <TextView
-                    android:id="@+id/tvUserAccountFaceRec"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="21dp"
-                    android:text="@string/user_face_recognition"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ivUserAccountFaceRecArrow"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_navigate_next_light_black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvUserAccountFaceRecPlaceholder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivUserAccountFaceRecArrow"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/vUserAccountDivision10"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/clUserAccountFaceRec" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clUserAccountFingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/vUserAccountDivision10">
+                app:layout_constraintTop_toBottomOf="@+id/vUserAccountDivision9">
 
                 <TextView
                     android:id="@+id/tvUserAccountFingerprint"

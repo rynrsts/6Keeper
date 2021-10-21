@@ -43,7 +43,27 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.sixkeeper.DashboardFragment"
         android:label="@string/many_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_analyticsPasswordsFragment"
+            app:destination="@id/analyticsPasswordsFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/analyticsPasswordsFragment"
+        android:name="com.example.sixkeeper.AnalyticsPasswordsFragment"
+        android:label="@string/dashboard_analytics"
+        tools:layout="@layout/fragment_analytics_passwords">
+
+        <argument
+            android:name="badPasswordType"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/accountsFragment"

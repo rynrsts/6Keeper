@@ -21,11 +21,9 @@ class SettingsFragment : Fragment() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
 
-    private lateinit var scSettingsNotifications: SwitchCompat
     private lateinit var scSettingsScreenCapture: SwitchCompat
     private lateinit var scSettingsTextualCopy: SwitchCompat
 
-    private lateinit var tvSettingsNotifDesc: TextView
     private lateinit var tvSettingsScreenCaptureDesc: TextView
     private lateinit var tvSettingsTextualCopyDesc: TextView
 
@@ -57,11 +55,9 @@ class SettingsFragment : Fragment() {
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
 
-        scSettingsNotifications = appCompatActivity.findViewById(R.id.scSettingsNotifications)
         scSettingsScreenCapture = appCompatActivity.findViewById(R.id.scSettingsScreenCapture)
         scSettingsTextualCopy = appCompatActivity.findViewById(R.id.scSettingsTextualCopy)
 
-        tvSettingsNotifDesc = appCompatActivity.findViewById(R.id.tvSettingsNotifDesc)
         tvSettingsScreenCaptureDesc =
                 appCompatActivity.findViewById(R.id.tvSettingsScreenCaptureDesc)
         tvSettingsTextualCopyDesc = appCompatActivity.findViewById(R.id.tvSettingsTextualCopyDesc)
@@ -85,22 +81,6 @@ class SettingsFragment : Fragment() {
         val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
 
         for (u in userSettings) {
-            if (encodingClass.decodeData(u.notifications) == "1") {
-                scSettingsNotifications.apply {
-                    tag = "notifications"
-                    isChecked = true
-                }
-
-                tvSettingsNotifDesc.setText(R.string.settings_enable_notifications)
-            } else if (encodingClass.decodeData(u.notifications) == "0") {
-                scSettingsNotifications.apply {
-                    tag = "notifications"
-                    isChecked = false
-                }
-
-                tvSettingsNotifDesc.setText(R.string.settings_disable_notifications)
-            }
-
             if (encodingClass.decodeData(u.screenCapture) == "1") {
                 scSettingsScreenCapture.apply {
                     tag = "notifications"
@@ -137,24 +117,6 @@ class SettingsFragment : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun setSwitchOnOff() {
-        scSettingsNotifications.setOnClickListener {
-            if (scSettingsNotifications.isChecked) {
-                databaseHandlerClass.updateSettings(
-                        "notifications",
-                        encodingClass.encodeData(1.toString())
-                )
-
-                tvSettingsNotifDesc.setText(R.string.settings_enable_notifications)
-            } else {
-                databaseHandlerClass.updateSettings(
-                        "notifications",
-                        encodingClass.encodeData(0.toString())
-                )
-
-                tvSettingsNotifDesc.setText(R.string.settings_disable_notifications)
-            }
-        }
-
         scSettingsScreenCapture.setOnClickListener {
             var actionLogId = 1000001
             val lastId = databaseHandlerClass.getLastIdOfActionLog()

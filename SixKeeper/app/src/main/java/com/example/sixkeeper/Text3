@@ -1,27 +1,21 @@
 
 Additional
-    Create New Account: Add progress
-    Create New Account: Add Face Recognition
     Create New Account: Add Fingerprint
     Login: Add forgot password
     Login: Import
     Master PIN Login: Add forgot Master PIN
     User Account: Allow user to upload image
-    User Account: Make Face Recognition changeable
     User Account: Make Fingerprint changeable
     User Account: Add deactivate
-    Dashboard: Add content
     Accounts: Add auto-fill login
     Specific Account: Add password visibility
-    Settings: Add Notifications
     Settings: Add Copy
     Settings: Add Auto Lock
     Settings: Export data
-    FAQs: Add content
-    Contact Us: Add content
 
 
 Enhancement
+    Create New Account: Add progress
     Create New Account: Automate '/' in Birth Date
     User Account: Confirm Email and Mobile Number
 

@@ -46,10 +46,10 @@
             android:icon="@drawable/ic_error_black"
             android:title="@string/many_about_us" />
 
-        <item
-            android:id="@+id/helpFragment"
-            android:icon="@drawable/ic_menu_book_black"
-            android:title="@string/many_help" />
+<!--        <item-->
+<!--            android:id="@+id/helpFragment"-->
+<!--            android:icon="@drawable/ic_menu_book_black"-->
+<!--            android:title="@string/many_help" />-->
 
         <item
             android:id="@+id/termsConditionsFragment"
@@ -61,10 +61,10 @@
             android:icon="@drawable/ic_privacy_tip_light_black"
             android:title="@string/many_privacy_policy" />
 
-        <item
-            android:id="@+id/contactUsFragment"
-            android:icon="@drawable/ic_feedback_black"
-            android:title="@string/many_contact_us" />
+<!--        <item-->
+<!--            android:id="@+id/contactUsFragment"-->
+<!--            android:icon="@drawable/ic_feedback_black"-->
+<!--            android:title="@string/many_contact_us" />-->
 
     </group>
 

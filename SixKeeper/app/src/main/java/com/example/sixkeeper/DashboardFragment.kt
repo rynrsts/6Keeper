@@ -312,9 +312,9 @@ class DashboardFragment : Fragment() {
 
         if (numberOfAccounts > 0) {
             val accountsTimesThree: Double = numberOfAccounts * 3
-            val percentage: Double =
-                    ((accountsTimesThree - (weakPasswords + oldPasswords + numOfDuplicates).toDouble())
-                            / accountsTimesThree) * 100
+            val percentage: Double = ((accountsTimesThree -
+                    (weakPasswords + oldPasswords + numOfDuplicates).toDouble()) /
+                    accountsTimesThree) * 100
             score = percentage.roundToInt()
         }
 
