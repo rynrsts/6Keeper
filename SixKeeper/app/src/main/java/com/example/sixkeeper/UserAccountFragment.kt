@@ -138,16 +138,9 @@ class UserAccountFragment : Fragment() {
 
         clUserAccountUsername.setOnClickListener {
             field = "username"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountUsername.isClickable = false                                           // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountUsername.isClickable = true
-                        }, 1000
-                )
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountPassword.setOnClickListener {

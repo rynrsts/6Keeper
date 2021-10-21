@@ -11,6 +11,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 open class RecycleBinProcessClass : Fragment() {
@@ -200,54 +202,81 @@ open class RecycleBinProcessClass : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                val container = ArrayList<String>(0)
+        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
+            val container = ArrayList<String>(0)
 
-                for (i in 0 until modelArrayList.size) {
-                    if (modelArrayList[i].getSelected()) {
-                        container.add(
-                                encodingClass.encodeData(
-                                        modelArrayList[i].getId().toString()
-                                )
-                        )
-                    }
-                }
-
-                var selectedId = arrayOfNulls<String>(container.size)
-                selectedId = container.toArray(selectedId)
-                var tableName = ""
-                var field = ""
-
-                if (selectedTab == "accounts") {
-                    tableName = "AccountsTable"
-                    field = "account_id"
-                } else if (selectedTab == "password generator") {
-                    tableName = "SavedPasswordTable"
-                    field = "pass_id"
-                }
-
-                val status = databaseHandlerClass.removeRecycleBin(selectedId, tableName, field)    // Delete selected items
-
-                if (status > -1) {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.recycle_bin_selected_items_delete_mes,
-                            Toast.LENGTH_SHORT
+            for (i in 0 until modelArrayList.size) {
+                if (modelArrayList[i].getSelected()) {
+                    container.add(
+                            encodingClass.encodeData(
+                                    modelArrayList[i].getId().toString()
+                            )
                     )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
-
-                if (selectedTab == "accounts") {
-                    populateDeletedAccounts()
-                } else if (selectedTab == "password generator") {
-                    populateDeletedPasswords()
                 }
             }
+
+            var selectedId = arrayOfNulls<String>(container.size)
+            selectedId = container.toArray(selectedId)
+            var tableName = ""
+            var field = ""
+
+            if (selectedTab == "accounts") {
+                tableName = "AccountsTable"
+                field = "account_id"
+            } else if (selectedTab == "password generator") {
+                tableName = "SavedPasswordTable"
+                field = "pass_id"
+            }
+
+            val status = databaseHandlerClass.removeRecycleBin(selectedId, tableName, field)        // Delete selected items
+
+            if (status > -1) {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.recycle_bin_selected_items_delete_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+            var actionLogMessage = ""
+
+            if (selectedTab == "accounts") {
+                populateDeletedAccounts()
+                actionLogMessage = "Selected account/s were deleted from Recycle Bin."
+            } else if (selectedTab == "password generator") {
+                populateDeletedPasswords()
+                actionLogMessage = "Selected generated password/s were deleted from Recycle Bin."
+            }
+
+            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
+                    UserActionLogModelClass(
+                            encodingClass.encodeData(getLastActionLogId().toString()),
+                            encodingClass.encodeData(actionLogMessage),
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+            )
         }
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 
     fun restoreSelectedItems() {                                                                    // Restore selected items
@@ -281,13 +310,25 @@ open class RecycleBinProcessClass : Fragment() {
         var selectedCategoryName = arrayOfNulls<String>(containerCategoryName.size)
         selectedCategoryName = containerCategoryName.toArray(selectedCategoryName)
 
+        var actionLogMessage = ""
+
         if (selectedTab == "accounts") {
             restoreAccounts(
                     selectedId, selectedAccountName, selectedPlatformName, selectedCategoryName
             )
+            actionLogMessage = "Selected account/s were restored to Accounts."
         } else if (selectedTab == "password generator") {
             restoreSavedPasswords(selectedId)
+            actionLogMessage = "Selected generated password/s were restored to Saved Passwords."
         }
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData(actionLogMessage),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
     }
 
     private fun restoreSavedPasswords(selectedId: Array<String?>) {                                 // Restore Saved Passwords

@@ -672,7 +672,7 @@ class DatabaseHandlerClass(context: Context) :
                 )
                 userActionLogList.add(user)
 
-                if (limit == 50) {
+                if (limit == 100) {
                     break
                 }
             } while (cursor.moveToPrevious())

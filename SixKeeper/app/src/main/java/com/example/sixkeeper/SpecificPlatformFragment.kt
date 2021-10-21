@@ -199,7 +199,7 @@ class SpecificPlatformFragment : Fragment() {
         })
     }
 
-    @SuppressLint("InflateParams", "SimpleDateFormat")
+    @SuppressLint("InflateParams")
     private fun setOnLongClick() {                                                                  // Set item long click
         lvSpecificPlatContainer.onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(pos).toString()
@@ -216,17 +216,20 @@ class SpecificPlatformFragment : Fragment() {
             val ivAccountsIcon: ImageView = dialogView.findViewById(R.id.ivAccountsIcon)
             val tvAccountsText: TextView = dialogView.findViewById(R.id.tvAccountsText)
             var message = ""
+            var actionMessage = ""
 
             if (selectedAccountIsFavorites == "1") {
                 ivAccountsIcon.setImageResource(R.drawable.ic_star_outline_light_black)
                 tvAccountsText.setText(R.string.specific_account_remove)
                 setIsFavorites = 0
-                message = "Account '$selectedAccountName' was removed from favorites!"
+                message = "Account '$selectedAccountName' removed from favorites!"
+                actionMessage = "Account '$selectedAccountName' was removed from Favorites."
             } else if (selectedAccountIsFavorites == "0") {
                 ivAccountsIcon.setImageResource(R.drawable.ic_star_yellow)
                 tvAccountsText.setText(R.string.specific_account_appear)
                 setIsFavorites = 1
-                message = "Account '$selectedAccountName' was added in favorites!"
+                message = "Account '$selectedAccountName' added in favorites!"
+                actionMessage = "Account '$selectedAccountName' was added in Favorites."
             }
 
             builder.setView(dialogView)
@@ -267,22 +270,11 @@ class SpecificPlatformFragment : Fragment() {
                     }
                 }
 
-                var actionLogId = 1000001
-                val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                val calendar: Calendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                val date: String = dateFormat.format(calendar.time)
-
-                if (lastId.isNotEmpty()) {
-                    actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                }
-
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
-                                encodingClass.encodeData(message),
-                                encodingClass.encodeData(date)
+                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                encodingClass.encodeData(actionMessage),
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
 
@@ -297,6 +289,24 @@ class SpecificPlatformFragment : Fragment() {
 
             true
         })
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 
     private fun showDelete() {
@@ -328,7 +338,6 @@ class SpecificPlatformFragment : Fragment() {
         alert.show()
     }
 
-    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -352,14 +361,10 @@ class SpecificPlatformFragment : Fragment() {
                         )
                     }
                 } else if (clickAction == "Delete Account") {
-                    val calendar: Calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    val date: String = dateFormat.format(calendar.time)
-
                     val status = databaseHandlerClass.updateDeleteAccount(
                             encodingClass.encodeData(accountIdTemp),
                             encodingClass.encodeData(1.toString()),
-                            encodingClass.encodeData(date),
+                            encodingClass.encodeData(getCurrentDate()),
                             "AccountsTable",
                             "account_id",
                             "account_deleted",
@@ -378,20 +383,13 @@ class SpecificPlatformFragment : Fragment() {
                         }
                     }
 
-                    var actionLogId = 1000001
-                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                    if (lastId.isNotEmpty()) {
-                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                    }
-
-                    databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encodingClass.encodeData(actionLogId.toString()),
+                                    encodingClass.encodeData(getLastActionLogId().toString()),
                                     encodingClass.encodeData(
                                             "Account '$accountNameTemp' was deleted."
                                     ),
-                                    encodingClass.encodeData(date)
+                                    encodingClass.encodeData(getCurrentDate())
                             )
                     )
 

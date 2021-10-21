@@ -611,12 +611,32 @@ open class UserAccountEditProcessClass : Fragment() {
         )
     }
 
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
     private fun updateAccUsername() {                                                               // Update Username
         val input = etUserEditTextBox.text.toString()
 
         if (viewId == "username") {
             databaseHandlerClass.updateUserUsername(
                     encodingClass.encodeData(input), getCurrentDate()
+            )
+
+            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
+                    UserActionLogModelClass(
+                            encodingClass.encodeData(getLastActionLogId().toString()),
+                            encodingClass.encodeData("App account username '$previousData'" +
+                                    " was changed to '$input'."),
+                            encodingClass.encodeData(getCurrentDate())
+                    )
             )
         }
     }
@@ -628,6 +648,14 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass.updateUserAcc(
                 "password", encryptionClass.hashData(encodedInput), getCurrentDate()
         )
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account password was changed."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
     }
 
     private fun updateAccMasterPIN() {                                                              // Update Master PIN
@@ -635,6 +663,14 @@ open class UserAccountEditProcessClass : Fragment() {
 
         databaseHandlerClass.updateUserAcc(
                 "master_pin", encryptionClass.hashData(encodedInput), getCurrentDate()
+        )
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account master pin was changed."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
         )
     }
     

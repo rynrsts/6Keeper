@@ -223,7 +223,7 @@ open class AccountsProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast", "SimpleDateFormat")
+    @SuppressLint("ShowToast")
     fun addOrUpdateCategory(
             addOrUpdate: String,
             categoryName: String,
@@ -254,17 +254,6 @@ open class AccountsProcessClass : Fragment() {
         }
 
         if (!existing) {
-            var actionLogId = 1000001
-            val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-            val calendar: Calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-            val date: String = dateFormat.format(calendar.time)
-
-            if (lastId.isNotEmpty()) {
-                actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-            }
-
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addCategory(                                      // Add Category
                         UserCategoryModelClass(
@@ -283,9 +272,9 @@ open class AccountsProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Category '$categoryName' was added."),
-                                encodingClass.encodeData(date)
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
             } else if (addOrUpdate == "update") {
@@ -299,17 +288,17 @@ open class AccountsProcessClass : Fragment() {
                 if (status > -1) {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            "Category '$selectedCategoryName' updated to '$categoryName'",
+                            "Category '$selectedCategoryName' changed to '$categoryName'",
                             Toast.LENGTH_SHORT
                     )
                 }
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Category '$selectedCategoryName'" +
-                                        " was updated to '$categoryName'."),
-                                encodingClass.encodeData(date)
+                                        " was changed to '$categoryName'."),
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
             }
@@ -329,6 +318,24 @@ open class AccountsProcessClass : Fragment() {
             show()
         }
         closeKeyboard()
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 
     fun showDeleteCategory(
@@ -398,22 +405,11 @@ open class AccountsProcessClass : Fragment() {
             }
         }
 
-        var actionLogId = 1000001
-        val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
-
-        if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-        }
-
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData(getLastActionLogId().toString()),
                         encodingClass.encodeData("Category '$categoryNameTemp' was deleted."),
-                        encodingClass.encodeData(date)
+                        encodingClass.encodeData(getCurrentDate())
                 )
         )
 
@@ -436,10 +432,6 @@ open class AccountsProcessClass : Fragment() {
         var userPlatformIdNoDuplicate = arrayOfNulls<String>(linkedHashSet.size)
         userPlatformIdNoDuplicate = userPlatformId.toArray(userPlatformIdNoDuplicate)
 
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
-
         databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
                 "category_id",
@@ -448,7 +440,7 @@ open class AccountsProcessClass : Fragment() {
         databaseHandlerClass.updateDeleteMultipleAccount(
                 userPlatformIdNoDuplicate,
                 encodingClass.encodeData(1.toString()),
-                encodingClass.encodeData(date),
+                encodingClass.encodeData(getCurrentDate()),
                 "AccountsTable",
                 "platform_id",
                 "account_deleted",

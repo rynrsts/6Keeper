@@ -207,6 +207,16 @@ class SavedPasswordFragment : Fragment() {
                             R.string.saved_password_pass_copy,
                             Toast.LENGTH_SHORT
                     )
+
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(getLastActionLogId().toString()),
+                                    encodingClass.encodeData(
+                                            "Selected saved password was copied."
+                                    ),
+                                    encodingClass.encodeData(getCurrentDate())
+                            )
+                    )
                 } else {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
@@ -238,7 +248,24 @@ class SavedPasswordFragment : Fragment() {
         }
     }
 
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
     @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -262,14 +289,10 @@ class SavedPasswordFragment : Fragment() {
                 var selectedId = arrayOfNulls<String>(container.size)
                 selectedId = container.toArray(selectedId)
 
-                val calendar: Calendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                val date: String = dateFormat.format(calendar.time)
-
                 val status = databaseHandlerClass.updateDeleteMultipleAccount(
                         selectedId,
                         encodingClass.encodeData(1.toString()),
-                        encodingClass.encodeData(date),
+                        encodingClass.encodeData(getCurrentDate()),
                         "SavedPasswordTable",
                         "pass_id",
                         "pass_deleted",
@@ -287,6 +310,16 @@ class SavedPasswordFragment : Fragment() {
                         show()
                     }
                 }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                encodingClass.encodeData(
+                                        "Selected saved password/s were deleted."
+                                ),
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+                )
 
                 if (cbSavedPassSelectAll.isChecked) {
                     cbSavedPassSelectAll.performClick()

@@ -241,7 +241,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast", "SimpleDateFormat")
+    @SuppressLint("ShowToast")
     fun addOrUpdatePlatform(
             addOrUpdate: String,
             platformName: String,
@@ -274,17 +274,6 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
 
         if (!existing) {
-            var actionLogId = 1000001
-            val actionLogLastId = databaseHandlerClass.getLastIdOfActionLog()
-
-            val calendar: Calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-            val date: String = dateFormat.format(calendar.time)
-
-            if (actionLogLastId.isNotEmpty()) {
-                actionLogId = Integer.parseInt(encodingClass.decodeData(actionLogLastId)) + 1
-            }
-
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addPlatform(                                      // Add Platform
                         UserPlatformModelClass(
@@ -305,11 +294,11 @@ open class SpecificCategoryProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData(
                                         "Platform '$platformName' was added."
                                 ),
-                                encodingClass.encodeData(date)
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
             } else if (addOrUpdate == "update") {
@@ -325,17 +314,17 @@ open class SpecificCategoryProcessClass : Fragment() {
                 if (status > -1) {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            "Platform updated to '$platformName'",
+                            "Platform changed to '$platformName'",
                             Toast.LENGTH_SHORT
                     )
                 }
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Platform '$selectedPlatformName'" +
-                                        " was updated to '$platformName'."),
-                                encodingClass.encodeData(date)
+                                        " was changed to '$platformName'."),
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
             }
@@ -355,6 +344,24 @@ open class SpecificCategoryProcessClass : Fragment() {
             show()
         }
         closeKeyboard()
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 
     fun showDeletePlatform(
@@ -404,7 +411,6 @@ open class SpecificCategoryProcessClass : Fragment() {
         alert.show()
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun deletePlatform() {                                                                  // Delete Platform
         val status = databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
@@ -424,22 +430,11 @@ open class SpecificCategoryProcessClass : Fragment() {
             }
         }
 
-        var actionLogId = 1000001
-        val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
-
-        if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-        }
-
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData(getLastActionLogId().toString()),
                         encodingClass.encodeData("Platform '$platformNameTemp' was deleted."),
-                        encodingClass.encodeData(date)
+                        encodingClass.encodeData(getCurrentDate())
                 )
         )
 
@@ -458,16 +453,11 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun deleteAccount() {                                                                   // Delete Platforms' contents
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
-
         databaseHandlerClass.updateDeleteAccount(
                 encodingClass.encodeData(platformIdTemp),
                 encodingClass.encodeData(1.toString()),
-                encodingClass.encodeData(date),
+                encodingClass.encodeData(getCurrentDate()),
                 "AccountsTable",
                 "platform_id",
                 "account_deleted",

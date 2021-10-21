@@ -195,42 +195,56 @@ class SpecificAccountFragment : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        when {
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                view?.apply {
-                    val calendar: Calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    val date: String = dateFormat.format(calendar.time)
+        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
+            view?.apply {
+                val calendar: Calendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                val date: String = dateFormat.format(calendar.time)
 
-                    val status = databaseHandlerClass.updateDeleteAccount(
-                            encodingClass.encodeData(args.specificAccountId),
-                            encodingClass.encodeData(1.toString()),
-                            encodingClass.encodeData(date),
-                            "AccountsTable",
-                            "account_id",
-                            "account_deleted",
-                            "account_delete_date"
+                val status = databaseHandlerClass.updateDeleteAccount(
+                        encodingClass.encodeData(args.specificAccountId),
+                        encodingClass.encodeData(1.toString()),
+                        encodingClass.encodeData(date),
+                        "AccountsTable",
+                        "account_id",
+                        "account_deleted",
+                        "account_delete_date"
+                )
+
+                if (status > -1) {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            "Account '${args.specificAccountName}' deleted!",
+                            Toast.LENGTH_SHORT
                     )
-
-                    if (status > -1) {
-                        val toast = Toast.makeText(
-                                appCompatActivity.applicationContext,
-                                "Account '${args.specificAccountName}' deleted!",
-                                Toast.LENGTH_SHORT
-                        )
-                        toast?.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
                     }
-
-                    postDelayed(
-                            {
-                                appCompatActivity.onBackPressed()
-                            }, 250
-                    )
                 }
 
+                var actionLogId = 1000001
+                val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                if (lastId.isNotEmpty()) {
+                    actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(
+                                        "Account '${args.specificAccountName}' was deleted."
+                                ),
+                                encodingClass.encodeData(date)
+                        )
+                )
+
+                postDelayed(
+                        {
+                            appCompatActivity.onBackPressed()
+                        }, 250
+                )
             }
         }
     }

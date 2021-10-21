@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SettingsFragment : Fragment() {
     private lateinit var attActivity: Activity
@@ -132,6 +135,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun setSwitchOnOff() {
         scSettingsNotifications.setOnClickListener {
             if (scSettingsNotifications.isChecked) {
@@ -152,10 +156,29 @@ class SettingsFragment : Fragment() {
         }
 
         scSettingsScreenCapture.setOnClickListener {
+            var actionLogId = 1000001
+            val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+            val calendar: Calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+            val date: String = dateFormat.format(calendar.time)
+
+            if (lastId.isNotEmpty()) {
+                actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            }
+
             if (scSettingsScreenCapture.isChecked) {
                 databaseHandlerClass.updateSettings(
                         "screen_capture",
                         encodingClass.encodeData(1.toString())
+                )
+
+                databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Screen Capture was allowed."),
+                                encodingClass.encodeData(date)
+                        )
                 )
 
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
@@ -163,6 +186,14 @@ class SettingsFragment : Fragment() {
                 databaseHandlerClass.updateSettings(
                         "screen_capture",
                         encodingClass.encodeData(0.toString())
+                )
+
+                databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Screen Capture was blocked."),
+                                encodingClass.encodeData(date)
+                        )
                 )
 
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)

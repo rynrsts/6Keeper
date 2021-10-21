@@ -303,7 +303,35 @@ open class PasswordGeneratorProcessClass : Fragment() {
             randomString.append(random.toString())
         }
 
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData(
+                                "A $passwordType type password was generated."
+                        ),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
+
         return shuffle(randomString.toString())
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 
     private fun shuffle(input: String): String {                                                    // Shuffle for true randomness
@@ -323,7 +351,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         return output.toString()
     }
 
-    @SuppressLint("SimpleDateFormat", "ShowToast")
+    @SuppressLint("ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
         val encodedDelete = encodingClass.encodeData(0.toString())
         val userSavedPass: List<UserSavedPassModelClass> =
@@ -333,10 +361,6 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfSavedPasswords()
         var existing = false
         var toast: Toast? = null
-
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
 
         if (lastId.isNotEmpty()) {
             passId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
@@ -354,7 +378,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
                     UserSavedPassModelClass(
                             encodingClass.encodeData(passId.toString()),
                             encodedGeneratedPass,
-                            encodingClass.encodeData(date),
+                            encodingClass.encodeData(getCurrentDate()),
                             encodedDelete,
                             ""
                     )
@@ -367,6 +391,14 @@ open class PasswordGeneratorProcessClass : Fragment() {
                         Toast.LENGTH_SHORT
                 )
             }
+
+            databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                    UserActionLogModelClass(
+                            encodingClass.encodeData(getLastActionLogId().toString()),
+                            encodingClass.encodeData("Generated password was saved."),
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+            )
         } else {
             toast = Toast.makeText(
                     appCompatActivity.applicationContext,

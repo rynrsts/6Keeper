@@ -358,7 +358,7 @@ class AddAccountFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast", "SimpleDateFormat")
+    @SuppressLint("ShowToast")
     private fun addOrEditAccount() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
@@ -370,10 +370,6 @@ class AddAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfAccount()
         var existing = false
         var toast: Toast? = null
-
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        val date: String = dateFormat.format(calendar.time)
 
         if (lastId.isNotEmpty()) {
             accountId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
@@ -403,7 +399,7 @@ class AddAccountFragment : Fragment() {
                                 encodingClass.encodeData(isFavorites.toString()),
                                 deleted,
                                 "",
-                                encodingClass.encodeData(date),
+                                encodingClass.encodeData(getCurrentDate()),
                                 encodingClass.encodeData(checkPasswordStatus(password)),
                                 encodedSpecificPlatformId,
                                 encodingClass.encodeData(args.specificPlatformName),
@@ -419,18 +415,11 @@ class AddAccountFragment : Fragment() {
                     )
                 }
 
-                var actionLogId = 1000001
-                val actionLogLastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                if (actionLogLastId.isNotEmpty()) {
-                    actionLogId = Integer.parseInt(encodingClass.decodeData(actionLogLastId)) + 1
-                }
-
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Account '$name' was added."),
-                                encodingClass.encodeData(date)
+                                encodingClass.encodeData(getCurrentDate())
                         )
                 )
 
@@ -577,7 +566,24 @@ class AddAccountFragment : Fragment() {
         return status
     }
 
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
     @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -585,20 +591,16 @@ class AddAccountFragment : Fragment() {
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
                 if (args.addOrEdit == "edit") {
-                    val calendar: Calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    val date: String = dateFormat.format(calendar.time)
-
                     val encodedDatePlaceholder = if (password != passwordTemp) {
-                        encodingClass.encodeData(date)
+                        encodingClass.encodeData(getCurrentDate())
                     } else {
                         encodedDateTemp
                     }
 
                     val actionMessage = if (name != nameTemp) {
-                        "Account '$nameTemp' was updated to '$name'."
+                        "Account '$nameTemp' was changed to '$name'."
                     } else {
-                        "Account '$name' was updated."
+                        "Account '$name' was changed."
                     }
 
                     val status = databaseHandlerClass.updateAccount(
@@ -624,7 +626,7 @@ class AddAccountFragment : Fragment() {
                     if (status > -1) {
                         val toast = Toast.makeText(
                                 appCompatActivity.applicationContext,
-                                "Account '$name' updated!",
+                                "Account '$name' changed!",
                                 Toast.LENGTH_SHORT
                         )
                         toast?.apply {
@@ -633,18 +635,11 @@ class AddAccountFragment : Fragment() {
                         }
                     }
 
-                    var actionLogId = 1000001
-                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                    if (lastId.isNotEmpty()) {
-                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                    }
-
-                    databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encodingClass.encodeData(actionLogId.toString()),
+                                    encodingClass.encodeData(getLastActionLogId().toString()),
                                     encodingClass.encodeData(actionMessage),
-                                    encodingClass.encodeData(date)
+                                    encodingClass.encodeData(getCurrentDate())
                             )
                     )
                 }

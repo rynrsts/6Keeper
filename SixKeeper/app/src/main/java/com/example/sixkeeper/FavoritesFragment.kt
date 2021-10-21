@@ -20,6 +20,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FavoritesFragment : Fragment() {
     private lateinit var attActivity: Activity
@@ -160,6 +163,7 @@ class FavoritesFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun setOnLongClick() {                                                                  // Set item long click
         lvFavoritesContainer.onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedAccount = lvFavoritesContainer.getItemAtPosition(pos).toString()
@@ -173,7 +177,8 @@ class FavoritesFragment : Fragment() {
             val dialogView = inflater.inflate(R.layout.layout_accounts_favorites, null)
             val ivAccountsIcon: ImageView = dialogView.findViewById(R.id.ivAccountsIcon)
             val tvAccountsText: TextView = dialogView.findViewById(R.id.tvAccountsText)
-            val llAccountsFavorites: LinearLayout = dialogView.findViewById(R.id.llAccountsFavorites)
+            val llAccountsFavorites: LinearLayout =
+                    dialogView.findViewById(R.id.llAccountsFavorites)
             val llAccountsDelete: LinearLayout =  dialogView.findViewById(R.id.llAccountsDelete)
 
             ivAccountsIcon.setImageResource(R.drawable.ic_star_outline_light_black)
@@ -211,6 +216,26 @@ class FavoritesFragment : Fragment() {
                         show()
                     }
                 }
+
+                var actionLogId = 1000001
+                val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                val calendar: Calendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                val date: String = dateFormat.format(calendar.time)
+
+                if (lastId.isNotEmpty()) {
+                    actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Account '$selectedAccountName' " +
+                                        "was removed from Favorites."),
+                                encodingClass.encodeData(date)
+                        )
+                )
 
                 alert.cancel()
                 populateAccounts("")
