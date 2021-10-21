@@ -199,7 +199,7 @@ class SpecificPlatformFragment : Fragment() {
         })
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "SimpleDateFormat")
     private fun setOnLongClick() {                                                                  // Set item long click
         lvSpecificPlatContainer.onItemLongClickListener = (OnItemLongClickListener { _, _, pos, _ ->
             val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(pos).toString()
@@ -221,12 +221,12 @@ class SpecificPlatformFragment : Fragment() {
                 ivAccountsIcon.setImageResource(R.drawable.ic_star_outline_light_black)
                 tvAccountsText.setText(R.string.specific_account_remove)
                 setIsFavorites = 0
-                message = "Account '$selectedAccountName' removed from favorites!"
+                message = "Account '$selectedAccountName' was removed from favorites!"
             } else if (selectedAccountIsFavorites == "0") {
                 ivAccountsIcon.setImageResource(R.drawable.ic_star_yellow)
                 tvAccountsText.setText(R.string.specific_account_appear)
                 setIsFavorites = 1
-                message = "Account '$selectedAccountName' added in favorites!"
+                message = "Account '$selectedAccountName' was added in favorites!"
             }
 
             builder.setView(dialogView)
@@ -266,6 +266,25 @@ class SpecificPlatformFragment : Fragment() {
                         show()
                     }
                 }
+
+                var actionLogId = 1000001
+                val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                val calendar: Calendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                val date: String = dateFormat.format(calendar.time)
+
+                if (lastId.isNotEmpty()) {
+                    actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(message),
+                                encodingClass.encodeData(date)
+                        )
+                )
 
                 alert.cancel()
                 populateAccounts("")
@@ -358,6 +377,23 @@ class SpecificPlatformFragment : Fragment() {
                             show()
                         }
                     }
+
+                    var actionLogId = 1000001
+                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                    if (lastId.isNotEmpty()) {
+                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                    }
+
+                    databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(actionLogId.toString()),
+                                    encodingClass.encodeData(
+                                            "Account '$accountNameTemp' was deleted."
+                                    ),
+                                    encodingClass.encodeData(date)
+                            )
+                    )
 
                     populateAccounts("")
                 }

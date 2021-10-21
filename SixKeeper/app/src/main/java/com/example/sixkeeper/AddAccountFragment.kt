@@ -54,6 +54,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var deleted: String
     private var isFavorites: Int = 0
     private var addOrSave = 0
+    private var nameTemp = ""
     private var passwordTemp = ""
     private var encodedDateTemp = ""
 
@@ -266,6 +267,7 @@ class AddAccountFragment : Fragment() {
                     setText(encodingClass.decodeData(u.accountCredential))
                     setSelection(etAddAccountCredential1.text.length)
                 }
+                nameTemp = encodingClass.decodeData(u.accountName)
                 passwordTemp = encodingClass.decodeData(u.accountPassword)
                 etAddAccountPassword.apply {
                     setText(passwordTemp)
@@ -416,6 +418,21 @@ class AddAccountFragment : Fragment() {
                             Toast.LENGTH_SHORT
                     )
                 }
+
+                var actionLogId = 1000001
+                val actionLogLastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                if (actionLogLastId.isNotEmpty()) {
+                    actionLogId = Integer.parseInt(encodingClass.decodeData(actionLogLastId)) + 1
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Account '$name' was added."),
+                                encodingClass.encodeData(date)
+                        )
+                )
 
                 addOrSave = 1
                 appCompatActivity.onBackPressed()
@@ -568,14 +585,20 @@ class AddAccountFragment : Fragment() {
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
                 if (args.addOrEdit == "edit") {
-                    val encodedDatePlaceholder: String = if (password != passwordTemp) {
-                        val calendar: Calendar = Calendar.getInstance()
-                        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                        val date: String = dateFormat.format(calendar.time)
+                    val calendar: Calendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                    val date: String = dateFormat.format(calendar.time)
 
+                    val encodedDatePlaceholder = if (password != passwordTemp) {
                         encodingClass.encodeData(date)
                     } else {
                         encodedDateTemp
+                    }
+
+                    val actionMessage = if (name != nameTemp) {
+                        "Account '$nameTemp' was updated to '$name'."
+                    } else {
+                        "Account '$name' was updated."
                     }
 
                     val status = databaseHandlerClass.updateAccount(
@@ -609,6 +632,21 @@ class AddAccountFragment : Fragment() {
                             show()
                         }
                     }
+
+                    var actionLogId = 1000001
+                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                    if (lastId.isNotEmpty()) {
+                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                    }
+
+                    databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(actionLogId.toString()),
+                                    encodingClass.encodeData(actionMessage),
+                                    encodingClass.encodeData(date)
+                            )
+                    )
                 }
 
                 postDelayed(

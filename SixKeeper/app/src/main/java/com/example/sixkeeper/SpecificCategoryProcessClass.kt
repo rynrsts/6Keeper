@@ -241,7 +241,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
     }
 
-    @SuppressLint("ShowToast")
+    @SuppressLint("ShowToast", "SimpleDateFormat")
     fun addOrUpdatePlatform(
             addOrUpdate: String,
             platformName: String,
@@ -274,6 +274,17 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
 
         if (!existing) {
+            var actionLogId = 1000001
+            val actionLogLastId = databaseHandlerClass.getLastIdOfActionLog()
+
+            val calendar: Calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+            val date: String = dateFormat.format(calendar.time)
+
+            if (actionLogLastId.isNotEmpty()) {
+                actionLogId = Integer.parseInt(encodingClass.decodeData(actionLogLastId)) + 1
+            }
+
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addPlatform(                                      // Add Platform
                         UserPlatformModelClass(
@@ -291,6 +302,16 @@ open class SpecificCategoryProcessClass : Fragment() {
                             Toast.LENGTH_SHORT
                     )
                 }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData(
+                                        "Platform '$platformName' was added."
+                                ),
+                                encodingClass.encodeData(date)
+                        )
+                )
             } else if (addOrUpdate == "update") {
                 val status = databaseHandlerClass.updatePlatform(                                   // Update Platform
                         UserPlatformModelClass(
@@ -308,6 +329,15 @@ open class SpecificCategoryProcessClass : Fragment() {
                             Toast.LENGTH_SHORT
                     )
                 }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(actionLogId.toString()),
+                                encodingClass.encodeData("Platform '$selectedPlatformName'" +
+                                        " was updated to '$platformName'."),
+                                encodingClass.encodeData(date)
+                        )
+                )
             }
 
             populatePlatforms("")
@@ -374,6 +404,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         alert.show()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun deletePlatform() {                                                                  // Delete Platform
         val status = databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
@@ -392,6 +423,25 @@ open class SpecificCategoryProcessClass : Fragment() {
                 show()
             }
         }
+
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val date: String = dateFormat.format(calendar.time)
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData("Platform '$platformNameTemp' was deleted."),
+                        encodingClass.encodeData(date)
+                )
+        )
 
         populatePlatforms("")
     }

@@ -284,7 +284,7 @@ open class AccountsProcessClass : Fragment() {
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
                                 encodingClass.encodeData(actionLogId.toString()),
-                                encodingClass.encodeData("Category $categoryName was added."),
+                                encodingClass.encodeData("Category '$categoryName' was added."),
                                 encodingClass.encodeData(date)
                         )
                 )

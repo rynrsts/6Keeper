@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -111,27 +112,27 @@ class DashboardFragment : Fragment() {
 
     @SuppressLint("InflateParams")
     private fun populateSummary() {                                                                 // Populate summary tab
-        val inflatedLayout = layoutInflater.inflate(
+        val layoutSummary = layoutInflater.inflate(
                 R.layout.layout_dashboard_summary,
                 null,
                 true
         )
-        inflatedLayout.layoutParams = LinearLayout.LayoutParams(
+        layoutSummary.layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
         val tvDashboardCategories: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardCategories)
-        val tvDashboardPlatforms: TextView = inflatedLayout.findViewById(R.id.tvDashboardPlatforms)
-        val tvDashboardAccounts: TextView = inflatedLayout.findViewById(R.id.tvDashboardAccounts)
-        val tvDashboardFavorites: TextView = inflatedLayout.findViewById(R.id.tvDashboardFavorites)
+                layoutSummary.findViewById(R.id.tvDashboardCategories)
+        val tvDashboardPlatforms: TextView = layoutSummary.findViewById(R.id.tvDashboardPlatforms)
+        val tvDashboardAccounts: TextView = layoutSummary.findViewById(R.id.tvDashboardAccounts)
+        val tvDashboardFavorites: TextView = layoutSummary.findViewById(R.id.tvDashboardFavorites)
         val tvDashboardSavedPasswords: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardSavedPasswords)
+                layoutSummary.findViewById(R.id.tvDashboardSavedPasswords)
         val tvDashboardDeletedAccounts: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardDeletedAccounts)
+                layoutSummary.findViewById(R.id.tvDashboardDeletedAccounts)
         val tvDashboardDeletedPasswords: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardDeletedPasswords)
+                layoutSummary.findViewById(R.id.tvDashboardDeletedPasswords)
 
         tvDashboardCategories.text = databaseHandlerClass.viewTotalNumberDashboard1(
                 "CategoriesTable"
@@ -170,9 +171,26 @@ class DashboardFragment : Fragment() {
                 ""
         ).toString()
 
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_dashboard_scroll_view,
+                null,
+                true
+        )
+        layoutContainer.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val llDashboardSummaryAnalytics: LinearLayout =
+                layoutContainer.findViewById(R.id.llDashboardSummaryAnalytics)
+
+        llDashboardSummaryAnalytics.apply {
+            removeAllViews()
+            addView(layoutSummary)
+        }
         llDashboardContainer.apply {
             removeAllViews()
-            addView(inflatedLayout)
+            addView(layoutContainer)
         }
     }
 
@@ -227,25 +245,25 @@ class DashboardFragment : Fragment() {
 
     @SuppressLint("InflateParams", "SimpleDateFormat", "SetTextI18n")
     private fun populateAnalytics() {                                                               // Populate analytics tab
-        val inflatedLayout = layoutInflater.inflate(
+        val layoutAnalytics = layoutInflater.inflate(
                 R.layout.layout_dashboard_analytics,
                 null,
                 true
         )
-        inflatedLayout.layoutParams = LinearLayout.LayoutParams(
+        layoutAnalytics.layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
         val pbDashboardAnalytics: ProgressBar =
-                inflatedLayout.findViewById(R.id.pbDashboardAnalytics)
-        val tvDashboardAnalytics: TextView = inflatedLayout.findViewById(R.id.tvDashboardAnalytics)
+                layoutAnalytics.findViewById(R.id.pbDashboardAnalytics)
+        val tvDashboardAnalytics: TextView = layoutAnalytics.findViewById(R.id.tvDashboardAnalytics)
         val tvDashboardSecurityStatus: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardSecurityStatus)
-        val tvDashboardNumOfWeak: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfWeak)
-        val tvDashboardNumOfOld: TextView = inflatedLayout.findViewById(R.id.tvDashboardNumOfOld)
+                layoutAnalytics.findViewById(R.id.tvDashboardSecurityStatus)
+        val tvDashboardNumOfWeak: TextView = layoutAnalytics.findViewById(R.id.tvDashboardNumOfWeak)
+        val tvDashboardNumOfOld: TextView = layoutAnalytics.findViewById(R.id.tvDashboardNumOfOld)
         val tvDashboardNumOfDuplicate: TextView =
-                inflatedLayout.findViewById(R.id.tvDashboardNumOfDuplicate)
+                layoutAnalytics.findViewById(R.id.tvDashboardNumOfDuplicate)
 
         val weakPasswords = databaseHandlerClass.viewTotalNumberOfWeakPasswords(                    // Start | Show number of weak passwords
                 encodingClass.encodeData(0.toString()),
@@ -318,12 +336,30 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_dashboard_scroll_view,
+                null,
+                true
+        )
+        layoutContainer.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val llDashboardSummaryAnalytics: LinearLayout =
+                layoutContainer.findViewById(R.id.llDashboardSummaryAnalytics)
+
+        llDashboardSummaryAnalytics.apply {
+            removeAllViews()
+            addView(layoutAnalytics)
+        }
         llDashboardContainer.apply {
             removeAllViews()
-            addView(inflatedLayout)
+            addView(layoutContainer)
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun populateActionLog() {
         val userActionLog: List<UserActionLogModelClass> = databaseHandlerClass.viewActionLog()
         val userActionLogId = ArrayList<String>(0)
@@ -342,9 +378,24 @@ class DashboardFragment : Fragment() {
                 userActionLogDescription,
                 userActionLogDate
         )
-        
+
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_dashboard_list_view,
+                null,
+                true
+        )
+        layoutContainer.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val lvDashboardActionLog: ListView =
+                layoutContainer.findViewById(R.id.lvDashboardActionLog)
+
+        lvDashboardActionLog.adapter = actionLogListAdapter
         llDashboardContainer.apply {
             removeAllViews()
+            addView(layoutContainer)
         }
     }
 }

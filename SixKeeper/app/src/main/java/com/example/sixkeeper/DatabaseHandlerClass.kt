@@ -654,8 +654,12 @@ class DatabaseHandlerClass(context: Context) :
         var actionLogDescription: String
         var actionLogDate: String
 
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
+            var limit = 0
+
             do {
+                limit++
+
                 actionLogId = cursor.getString(cursor.getColumnIndex(KEY_ACTION_LOG_ID))
                 actionLogDescription =
                         cursor.getString(cursor.getColumnIndex(KEY_ACTION_LOG_DESCRIPTION))
@@ -667,7 +671,11 @@ class DatabaseHandlerClass(context: Context) :
                         actionLogDate = actionLogDate
                 )
                 userActionLogList.add(user)
-            } while (cursor.moveToNext())
+
+                if (limit == 50) {
+                    break
+                }
+            } while (cursor.moveToPrevious())
         }
 
         cursor.close()
