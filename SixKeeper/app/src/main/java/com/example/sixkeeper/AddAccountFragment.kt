@@ -418,7 +418,9 @@ class AddAccountFragment : Fragment() {
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
                                 encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData("Account '$name' was added."),
+                                encodingClass.encodeData("Account '$name' was added to " +
+                                        "'${args.specificCategoryName} > " +
+                                        "${args.specificPlatformName}'."),
                                 encodingClass.encodeData(getCurrentDate())
                         )
                 )

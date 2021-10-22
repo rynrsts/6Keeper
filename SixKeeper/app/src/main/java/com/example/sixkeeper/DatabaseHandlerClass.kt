@@ -75,7 +75,6 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
-
         // KEY_CREATION_DATE = "creation_date"
         private const val KEY_PASSWORD_STATUS = "password_status"
 //        private const val KEY_PLATFORM_ID = "platform_id"
@@ -428,6 +427,60 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return num
+    }
+
+    @SuppressLint("Recycle")
+    fun viewWeakAccounts(weak: String): List<UserAccountModelClass> {                                                                // View Specific Account
+        val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$weak'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var accountId: String
+        var accountName: String
+        var platformId: String
+        var platformName: String
+        var categoryName: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                accountId = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_ID))
+                accountName = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_NAME))
+                platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
+                platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
+                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
+
+                val user = UserAccountModelClass(
+                        accountId = accountId,
+                        accountName = accountName,
+                        accountCredentialField = "",
+                        accountCredential = "",
+                        accountPassword = "",
+                        accountWebsiteURL = "",
+                        accountDescription = "",
+                        accountIsFavorites = "",
+                        accountDeleted = "",
+                        accountDeleteDate = "",
+                        creationDate = "",
+                        passwordStatus = "",
+                        platformId = platformId,
+                        platformName = platformName,
+                        categoryName = categoryName
+                )
+                userAccountList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userAccountList
     }
 
     fun viewTotalNumberOfDuplicatePasswords(deleted: String): Int {                                 // View total number of duplicate passwords

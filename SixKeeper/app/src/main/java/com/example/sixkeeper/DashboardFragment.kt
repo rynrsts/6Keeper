@@ -5,22 +5,22 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class DashboardFragment : Fragment() {
@@ -260,8 +260,14 @@ class DashboardFragment : Fragment() {
         val tvDashboardAnalytics: TextView = layoutAnalytics.findViewById(R.id.tvDashboardAnalytics)
         val tvDashboardSecurityStatus: TextView =
                 layoutAnalytics.findViewById(R.id.tvDashboardSecurityStatus)
+        val clDashboardWeakPasswords: ConstraintLayout =
+                layoutAnalytics.findViewById(R.id.clDashboardWeakPasswords)
         val tvDashboardNumOfWeak: TextView = layoutAnalytics.findViewById(R.id.tvDashboardNumOfWeak)
+        val clDashboardOldPasswords: ConstraintLayout =
+                layoutAnalytics.findViewById(R.id.clDashboardOldPasswords)
         val tvDashboardNumOfOld: TextView = layoutAnalytics.findViewById(R.id.tvDashboardNumOfOld)
+        val clDashboardDuplicatePasswords: ConstraintLayout =
+                layoutAnalytics.findViewById(R.id.clDashboardDuplicatePasswords)
         val tvDashboardNumOfDuplicate: TextView =
                 layoutAnalytics.findViewById(R.id.tvDashboardNumOfDuplicate)
 
@@ -356,6 +362,24 @@ class DashboardFragment : Fragment() {
         llDashboardContainer.apply {
             removeAllViews()
             addView(layoutContainer)
+        }
+
+        clDashboardWeakPasswords.setOnClickListener {
+            if (weakPasswords > 0) {
+                val action = DashboardFragmentDirections
+                        .actionDashboardFragmentToAnalyticsPasswordsFragment("weak")
+                findNavController().navigate(action)
+            } else {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.dashboard_weak_passwords_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
     }
 

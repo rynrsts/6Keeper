@@ -83,6 +83,7 @@
     <string name="dashboard_security_score"><b>Security Score</b></string>
     <string name="dashboard_summary">Summary</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
+    <string name="dashboard_weak_passwords_mes">No weak passwords</string>
 
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>

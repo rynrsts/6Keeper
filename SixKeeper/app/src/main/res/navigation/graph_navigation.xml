@@ -43,7 +43,7 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.sixkeeper.DashboardFragment"
         android:label="@string/many_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
 
         <action
             android:id="@+id/action_dashboardFragment_to_analyticsPasswordsFragment"
@@ -63,13 +63,21 @@
         <argument
             android:name="badPasswordType"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_analyticsPasswordsFragment_to_specificAccountFragment"
+            app:destination="@id/specificAccountFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
     </fragment>
 
     <fragment
         android:id="@+id/accountsFragment"
         android:name="com.example.sixkeeper.AccountsFragment"
         android:label="@string/many_accounts"
-        tools:layout="@layout/fragment_accounts" >
+        tools:layout="@layout/fragment_accounts">
 
         <action
             android:id="@+id/action_accountsFragment_to_specificCategoryFragment"
@@ -196,7 +204,7 @@
         android:id="@+id/favoritesFragment"
         android:name="com.example.sixkeeper.FavoritesFragment"
         android:label="@string/many_favorites"
-        tools:layout="@layout/fragment_favorites" >
+        tools:layout="@layout/fragment_favorites">
 
         <action
             android:id="@+id/action_favoritesFragment_to_specificAccountFragment"
@@ -250,7 +258,7 @@
         android:id="@+id/aboutUsFragment"
         android:name="com.example.sixkeeper.AboutUsFragment"
         android:label="@string/many_about_us"
-        tools:layout="@layout/fragment_about_us" >
+        tools:layout="@layout/fragment_about_us">
 
         <action
             android:id="@+id/action_aboutUsFragment_to_termsConditionsFragment"
