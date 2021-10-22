@@ -358,157 +358,6 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    fun viewTotalNumberDashboard1(tableName: String): Int {                                         // View total number
-        val selectQuery = "SELECT COUNT(*) FROM $tableName"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return 0
-        }
-
-        cursor.moveToFirst()
-        val num = cursor.getInt(0)
-
-        cursor.close()
-        db.close()
-        return num
-    }
-
-    fun viewTotalNumberDashboard2(
-            tableName: String,
-            columnDeleted: String,
-            deleted: String,
-            favorites: String
-    ): Int {                                                                                        // View total number
-        var selectQuery = "SELECT COUNT(*) FROM $tableName WHERE $columnDeleted = '$deleted'"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        if (favorites.isNotEmpty()) {
-            selectQuery = "SELECT COUNT(*) FROM $tableName " +
-                    "WHERE $columnDeleted = '$deleted' AND $KEY_ACCOUNT_IS_FAVORITES = '$favorites'"
-        }
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return 0
-        }
-
-        cursor.moveToFirst()
-        val num = cursor.getInt(0)
-
-        cursor.close()
-        db.close()
-        return num
-    }
-
-    fun viewTotalNumberOfWeakPasswords(deleted: String, status: String): Int {                      // View total number of weak passwords
-        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
-                "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PASSWORD_STATUS = '$status'"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return 0
-        }
-
-        cursor.moveToFirst()
-        val num = cursor.getInt(0)
-
-        cursor.close()
-        db.close()
-        return num
-    }
-
-    @SuppressLint("Recycle")
-    fun viewWeakAccounts(weak: String): List<UserAccountModelClass> {                                                                // View Specific Account
-        val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$weak'"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var accountId: String
-        var accountName: String
-        var platformId: String
-        var platformName: String
-        var categoryName: String
-
-        if (cursor.moveToFirst()) {
-            do {
-                accountId = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_ID))
-                accountName = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_NAME))
-                platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
-                platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
-                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
-
-                val user = UserAccountModelClass(
-                        accountId = accountId,
-                        accountName = accountName,
-                        accountCredentialField = "",
-                        accountCredential = "",
-                        accountPassword = "",
-                        accountWebsiteURL = "",
-                        accountDescription = "",
-                        accountIsFavorites = "",
-                        accountDeleted = "",
-                        accountDeleteDate = "",
-                        creationDate = "",
-                        passwordStatus = "",
-                        platformId = platformId,
-                        platformName = platformName,
-                        categoryName = categoryName
-                )
-                userAccountList.add(user)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userAccountList
-    }
-
-    fun viewTotalNumberOfDuplicatePasswords(deleted: String): Int {                                 // View total number of duplicate passwords
-        val selectQuery =
-                "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
-                        "GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-        var num = 0
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return 0
-        }
-
-        if (cursor.moveToFirst()) {
-            do {
-                num += cursor.getInt(0)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return num
-    }
-
     @SuppressLint("Recycle")
     fun validateUserAcc(): List<UserAccModelClass> {                                                // Validate Username, Password, and/or Master PIN
         val userAccList: ArrayList<UserAccModelClass> = ArrayList()
@@ -733,6 +582,193 @@ class DatabaseHandlerClass(context: Context) :
         return userActionLogList
     }
 
+    fun viewTotalNumberDashboard1(tableName: String): Int {                                         // View total number
+        val selectQuery = "SELECT COUNT(*) FROM $tableName"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    fun viewTotalNumberDashboard2(
+            tableName: String,
+            columnDeleted: String,
+            deleted: String,
+            favorites: String
+    ): Int {                                                                                        // View total number
+        var selectQuery = "SELECT COUNT(*) FROM $tableName WHERE $columnDeleted = '$deleted'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        if (favorites.isNotEmpty()) {
+            selectQuery = "SELECT COUNT(*) FROM $tableName " +
+                    "WHERE $columnDeleted = '$deleted' AND $KEY_ACCOUNT_IS_FAVORITES = '$favorites'"
+        }
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    fun viewTotalNumberOfWeakPasswords(deleted: String, status: String): Int {                      // View total number of weak passwords
+        val selectQuery = "SELECT COUNT(*) FROM $TABLE_ACCOUNTS " +
+                "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PASSWORD_STATUS = '$status'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        cursor.moveToFirst()
+        val num = cursor.getInt(0)
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    @SuppressLint("Recycle")
+    fun viewWeakAccounts(weak: String): List<UserAccountModelClass> {                               // View Weak Accounts
+        val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$weak'"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var accountId: String
+        var accountName: String
+        var platformId: String
+        var platformName: String
+        var categoryName: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                accountId = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_ID))
+                accountName = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_NAME))
+                platformId = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_ID))
+                platformName = cursor.getString(cursor.getColumnIndex(KEY_PLATFORM_NAME))
+                categoryName = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME))
+
+                val user = UserAccountModelClass(
+                        accountId = accountId,
+                        accountName = accountName,
+                        accountCredentialField = "",
+                        accountCredential = "",
+                        accountPassword = "",
+                        accountWebsiteURL = "",
+                        accountDescription = "",
+                        accountIsFavorites = "",
+                        accountDeleted = "",
+                        accountDeleteDate = "",
+                        creationDate = "",
+                        passwordStatus = "",
+                        platformId = platformId,
+                        platformName = platformName,
+                        categoryName = categoryName
+                )
+                userAccountList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userAccountList
+    }
+
+    fun viewTotalNumberOfDuplicatePasswords(deleted: String): Int {                                 // View total number of duplicate passwords
+        val selectQuery =
+                "SELECT COUNT(*) FROM $TABLE_ACCOUNTS WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                        "GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var num = 0
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return 0
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                num += cursor.getInt(0)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return num
+    }
+
+    @SuppressLint("Recycle")
+    fun getDuplicateAccountsCount(): List<UserAccountDuplicateModelClass> {                                      // View Duplicate Accounts
+        val userDuplicateCountList: ArrayList<UserAccountDuplicateModelClass> = ArrayList()
+        val selectQuery = "SELECT $KEY_ACCOUNT_PASSWORD, COUNT (*) AS 'count' " +
+                "FROM $TABLE_ACCOUNTS GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var accountPassword: String
+        var count: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                accountPassword = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_PASSWORD))
+                count = cursor.getString(cursor.getColumnIndex("count"))
+
+                val user = UserAccountDuplicateModelClass(
+                        accountPassword = accountPassword,
+                        count = count
+                )
+                userDuplicateCountList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userDuplicateCountList
+    }
+
     @SuppressLint("Recycle")
     fun viewCategory(field: String, id: String): List<UserCategoryModelClass> {                     // View Categories
         val userCategoryList: ArrayList<UserCategoryModelClass> = ArrayList()
@@ -906,6 +942,11 @@ class DatabaseHandlerClass(context: Context) :
             "deleted" -> {
                 selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
                         "WHERE $KEY_ACCOUNT_DELETED = '$deleted'"
+            }
+            "password" -> {
+                selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                        "WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                        "AND $KEY_ACCOUNT_PASSWORD = '$idOrIsFavorites'"
             }
         }
 

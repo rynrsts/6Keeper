@@ -381,6 +381,44 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
+
+        clDashboardOldPasswords.setOnClickListener {
+            if (oldPasswords > 0) {
+                val action = DashboardFragmentDirections
+                        .actionDashboardFragmentToAnalyticsPasswordsFragment("old")
+                findNavController().navigate(action)
+            } else {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.dashboard_old_passwords_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+        }
+
+        clDashboardDuplicatePasswords.setOnClickListener {
+            if (numOfDuplicates > 0) {
+                val action = DashboardFragmentDirections
+                        .actionDashboardFragmentToAnalyticsPasswordsFragment(
+                                "duplicate"
+                        )
+                findNavController().navigate(action)
+            } else {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.dashboard_duplicate_passwords_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+        }
     }
 
     @SuppressLint("InflateParams")

@@ -71,7 +71,7 @@
     <!-- Dashboard -->
     <string name="dashboard_action_log">Action Log</string>
     <string name="dashboard_analytics">Analytics</string>
-    <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
+    <string name="dashboard_duplicate_passwords_mes">No duplicate passwords</string>
     <string name="dashboard_num_of_accounts">Accounts</string>
     <string name="dashboard_num_of_categories">Categories</string>
     <string name="dashboard_num_of_deleted_accounts">Accounts in Recycle Bin</string>
@@ -79,11 +79,14 @@
     <string name="dashboard_num_of_favorites">Favorite Accounts</string>
     <string name="dashboard_num_of_platforms">Platforms</string>
     <string name="dashboard_num_of_saved_pass">Saved Passwords</string>
-    <string name="dashboard_old_passwords">Old Passwords</string>
+    <string name="dashboard_old_passwords_mes">No old passwords</string>
     <string name="dashboard_security_score"><b>Security Score</b></string>
     <string name="dashboard_summary">Summary</string>
-    <string name="dashboard_weak_passwords">Weak Passwords</string>
     <string name="dashboard_weak_passwords_mes">No weak passwords</string>
+
+    <string name="dashboard_old_passwords">Old Passwords</string>
+    <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
+    <string name="dashboard_weak_passwords">Weak Passwords</string>
 
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
@@ -185,9 +188,8 @@
     </string>
     <string name="many_validate_mobile_num">*Must be a valid mobile number.</string>
     <string name="many_validate_password">
-        *Must be at least 8 characters. Should contain one (1) lowercase, one (1) uppercase, one
-        (1) number, and one (1) special character: dot (.), hyphen (-) and underscore (_),
-        without space/s.
+        *Must be at least 8 characters. Should contain 1 lowercase, 1 uppercase, 1 number, and 1
+        special character: dot (.), hyphen (-) and underscore (_), without space/s.
     </string>
     <string name="many_validate_pass_equal">
         *Password must not be the same with the username.
@@ -203,10 +205,7 @@
     <string name="master_pin_forgot">Forgot Master PIN?</string>
 
     <!-- Password Generator -->
-    <!--    <string name="pass_generator_enter_special_char">-->
-    <!--        If you want to only include specific special characters, please enter separated by spaces,-->
-    <!--        otherwise, leave it blank.-->
-    <!--    </string>-->
+
     <string name="pass_generator_copy"><u>Copy to Clipboard</u></string>
     <string name="pass_generator_custom">Custom</string>
     <string name="pass_generator_generate">Generate</string>
@@ -242,7 +241,6 @@
         special characters
     </string>
     <string name="pass_generator_view_saved_pass">View Saved Password</string>
-    <!--    <string name="pass_generator_zero_length">Zero (0) is not a valid length.</string>-->
 
     <!-- Privacy Policy -->
     <string name="privacy_communication_content">
@@ -435,7 +433,5 @@
         Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo
         magna eros quis urna.
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

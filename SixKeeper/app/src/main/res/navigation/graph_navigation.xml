@@ -71,6 +71,33 @@
             app:exitAnim="@anim/anim_exit_right_to_left_1"
             app:popEnterAnim="@anim/anim_enter_left_to_right_1"
             app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+
+        <action
+            android:id="@+id/action_analyticsPasswordsFragment_to_duplicatePasswordsFragment"
+            app:destination="@id/duplicatePasswordsFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/duplicatePasswordsFragment"
+        android:name="com.example.sixkeeper.DuplicatePasswordsFragment"
+        android:label="@string/dashboard_duplicate_passwords"
+        tools:layout="@layout/fragment_duplicate_passwords">
+
+        <argument
+            android:name="encodedDuplicatePassword"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_duplicatePasswordsFragment_to_specificAccountFragment"
+            app:destination="@id/specificAccountFragment"
+            app:enterAnim="@anim/anim_enter_right_to_left_1"
+            app:exitAnim="@anim/anim_exit_right_to_left_1"
+            app:popEnterAnim="@anim/anim_enter_left_to_right_1"
+            app:popExitAnim="@anim/anim_exit_left_to_right_1" />
     </fragment>
 
     <fragment

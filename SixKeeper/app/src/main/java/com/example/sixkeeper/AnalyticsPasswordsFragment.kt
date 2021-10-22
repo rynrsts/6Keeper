@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class AnalyticsPasswordsFragment : Fragment() {
     private val args: AnalyticsPasswordsFragmentArgs by navArgs()
@@ -62,13 +67,23 @@ class AnalyticsPasswordsFragment : Fragment() {
     private fun populateView() {
         val tAppBarToolbar: Toolbar = appCompatActivity.findViewById(R.id.tAppBarToolbar)
 
-        if (args.badPasswordType == "weak") {
-            tAppBarToolbar.title = getString(R.string.dashboard_weak_passwords)
-            populateWeakPasswords()
+        when (args.badPasswordType) {
+            "weak" -> {
+                tAppBarToolbar.title = getString(R.string.dashboard_weak_passwords)
+                populateWeakPasswords()
+            }
+            "old" -> {
+                tAppBarToolbar.title = getString(R.string.dashboard_old_passwords)
+                populateOldPasswords()
+            }
+            "duplicate" -> {
+                tAppBarToolbar.title = getString(R.string.dashboard_duplicate_passwords)
+                populateDuplicatePasswords()
+            }
         }
     }
 
-    private fun populateWeakPasswords() {
+    private fun populateWeakPasswords() {                                                           // Weak passwords
         val userWeakAccount: List<UserAccountModelClass> =
                 databaseHandlerClass.viewWeakAccounts(encodingClass.encodeData("weak"))
         val userAccountId = ArrayList<String>(0)
@@ -99,25 +114,108 @@ class AnalyticsPasswordsFragment : Fragment() {
         lvAnalyticsPasswordsContainer.adapter = accountsListAdapter
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private fun populateOldPasswords() {                                                            // Old passwords
+        val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
+                "deleted",
+                "",
+                encodingClass.encodeData(0.toString())
+        )
+        val userAccountId = ArrayList<String>(0)
+        val userAccountName = ArrayList<String>(0)
+        val userAccountDirectory = ArrayList<String>(0)
+        val userAccountDate = ArrayList<String>(0)
+
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val calendar: Calendar = Calendar.getInstance()
+        val date: String = dateFormat.format(calendar.time)
+
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        val dateToday: Date = dateFormat.parse(date)
+
+        for (u in userAccount) {
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            val creationDate: Date = dateFormat.parse(encodingClass.decodeData(u.creationDate))
+            val timeDifference: Long = dateToday.time - creationDate.time
+
+            if (TimeUnit.MILLISECONDS.toDays(timeDifference) >= 90) {
+                val uAccountName = encodingClass.decodeData(u.accountName)
+                val uPlatformName = encodingClass.decodeData(u.platformName)
+                val uCategoryName = encodingClass.decodeData(u.categoryName)
+
+                userAccountId.add(
+                        encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+                                uAccountName + "ramjcammjar" +
+                                encodingClass.decodeData(u.platformId)
+                )
+                userAccountName.add(uAccountName)
+                userAccountDirectory.add("$uCategoryName > $uPlatformName")
+                userAccountDate.add(encodingClass.decodeData(u.creationDate))
+            }
+        }
+
+        val accountsListAdapter = AnalyticsOldPasswordsListAdapter(
+                attActivity,
+                userAccountId,
+                userAccountName,
+                userAccountDirectory,
+                userAccountDate
+        )
+
+        lvAnalyticsPasswordsContainer.adapter = accountsListAdapter
+    }
+
+    private fun populateDuplicatePasswords() {                                                      // Duplicate passwords
+        val userDuplicateAccount = databaseHandlerClass.getDuplicateAccountsCount()
+        val userAccountDuplicateId = ArrayList<String>(0)
+        val userAccountCount = ArrayList<String>(0)
+        var duplicateId = 1001
+
+        for (u in userDuplicateAccount) {
+            userAccountDuplicateId.add(u.accountPassword)
+            userAccountCount.add(u.count)
+            duplicateId++
+        }
+
+        val accountsListAdapter = AnalyticsDuplicatePasswordsListAdapter(
+                attActivity,
+                userAccountDuplicateId,
+                userAccountCount,
+        )
+
+        lvAnalyticsPasswordsContainer.adapter = accountsListAdapter
+    }
+
     private fun setOnClick() {
         lvAnalyticsPasswordsContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedAccount = lvAnalyticsPasswordsContainer.getItemAtPosition(i).toString()
-            val selectedAccountValue = selectedAccount.split("ramjcammjar")
-            selectedAccountId = selectedAccountValue[0]
-            selectedAccountName = selectedAccountValue[1]
-            selectedPlatformId = selectedAccountValue[2]
+            if (args.badPasswordType == "weak" || args.badPasswordType == "old") {
+                val selectedAccount = lvAnalyticsPasswordsContainer.getItemAtPosition(i).toString()
+                val selectedAccountValue = selectedAccount.split("ramjcammjar")
+                selectedAccountId = selectedAccountValue[0]
+                selectedAccountName = selectedAccountValue[1]
+                selectedPlatformId = selectedAccountValue[2]
 
-            val goToConfirmActivity = Intent(
-                    appCompatActivity,
-                    ConfirmActionActivity::class.java
-            )
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            } else if (args.badPasswordType == "duplicate") {
+                val selectedDuplicatePassword =
+                        lvAnalyticsPasswordsContainer.getItemAtPosition(i).toString()
+
+                val action = AnalyticsPasswordsFragmentDirections
+                        .actionAnalyticsPasswordsFragmentToDuplicatePasswordsFragment(
+                                selectedDuplicatePassword
+                        )
+                findNavController().navigate(action)
+            }
         })
     }
 
