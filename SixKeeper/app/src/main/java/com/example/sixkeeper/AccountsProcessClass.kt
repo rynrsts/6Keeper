@@ -348,7 +348,7 @@ open class AccountsProcessClass : Fragment() {
         val toastMessage = if (selectedCategoryNum == "0") {
             "Delete category?"
         } else {
-            "Selected category is not empty. Deleting it will also delete its contents. Delete anyway?"
+            "Selected category is not empty. Deleting it will also delete its contents. Continue?"
         }
 
         builder.apply {

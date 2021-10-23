@@ -374,7 +374,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         val toastMessage = if (selectedPlatformNum == "0") {
             "Delete platform?"
         } else {
-            "Selected platform is not empty. Deleting it will also delete its contents. Delete anyway?"
+            "Selected platform is not empty. Deleting it will also delete its contents. Continue?"
         }
 
         builder.apply {

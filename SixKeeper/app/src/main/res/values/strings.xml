@@ -93,6 +93,7 @@
 
     <string name="reset_password_alert">Do you want to reset password?</string>
     <string name="reset_password_mes">Password was reset!</string>
+    <string name="reset_password_title">Reset Password</string>
 
     <string name="security_question_confirm">Confirm</string>
     <string name="security_question_invalid">Entered information are incorrect!</string>
@@ -100,7 +101,6 @@
         Please provide the following information to confirm.
     </string>
     <string name="security_question_reset">Reset</string>
-    <string name="security_question_title">Security Questions</string>
 
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
@@ -305,7 +305,7 @@
 
     <!-- Recycle Bin -->
     <string name="recycle_bin_delete_mes">Delete selected items?</string>
-    <string name="recycle_bin_pass_generator">Password\nGenerator</string>
+    <string name="recycle_bin_generated_password">Generated\nPassword</string>
     <string name="recycle_bin_no_item">No deleted item to show</string>
     <string name="recycle_bin_nothing_to_restore">Nothing to restore</string>
     <string name="recycle_bin_restore">Restore</string>

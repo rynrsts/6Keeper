@@ -164,6 +164,7 @@ open class RecycleBinProcessClass : Fragment() {
             cbRecycleBinSelectAll.performClick()
         }
 
+        lvRecycleBinContainer.adapter = null
         modelArrayList.clear()
     }
 

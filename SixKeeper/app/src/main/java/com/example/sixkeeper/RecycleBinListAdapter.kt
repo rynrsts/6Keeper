@@ -44,30 +44,42 @@ class RecycleBinListAdapter(
         }
 
         cbRecycleBinSelectAll.setOnClickListener {
-            if (!modelArrayList.isNullOrEmpty()) {
-                var isChecked = false
+//            if (!modelArrayList.isNullOrEmpty()) {
+//                var isChecked = false
+//
+//                if (cbRecycleBinSelectAll.isChecked) {
+//                    isChecked = true
+//                }
+//
+//                for (i in 0 until name.size) {
+//                    modelArrayList[i].setSelected(isChecked)
+//                }
+//
+//                notifyDataSetChanged()
+//            }
 
-                if (cbRecycleBinSelectAll.isChecked) {
-                    isChecked = true
-                }
-
-                for (i in 0 until name.size) {
-                    modelArrayList[i].setSelected(isChecked)
-                }
-
-                notifyDataSetChanged()
+            for (i in 0 until name.size) {
+                modelArrayList[i].setSelected(cbRecycleBinSelectAll.isChecked)
             }
+
+            notifyDataSetChanged()
         }
 
         llRecycleBinListAdapter.setOnClickListener { v ->
+//            val currentPos = v.tag as Int
+//            var isChecked = false
+//
+//            if (!modelArrayList[currentPos].getSelected()){
+//                isChecked = true
+//            }
+//
+//            modelArrayList[currentPos].setSelected(isChecked)
+//            notifyDataSetChanged()
+
             val currentPos = v.tag as Int
-            var isChecked = false
+            val reverseSelect = !modelArrayList[currentPos].getSelected()
 
-            if (!modelArrayList[currentPos].getSelected()){
-                isChecked = true
-            }
-
-            modelArrayList[currentPos].setSelected(isChecked)
+            modelArrayList[currentPos].setSelected(reverseSelect)
             notifyDataSetChanged()
         }
 

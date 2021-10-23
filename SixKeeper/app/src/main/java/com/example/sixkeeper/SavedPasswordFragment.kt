@@ -326,6 +326,7 @@ class SavedPasswordFragment : Fragment() {
                 }
 
                 modelArrayList.clear()
+                lvSavedPasswordContainer.adapter = null
                 viewSavedPass()
             }
         }

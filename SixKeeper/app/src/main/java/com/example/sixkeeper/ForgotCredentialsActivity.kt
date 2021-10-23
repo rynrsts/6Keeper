@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ class ForgotCredentialsActivity : AppCompatActivity() {
         getExtra()
         changeActionBarTitle()
         manageForgotFragments(securityQuestion)
+        setOnClick()
     }
 
     private fun getExtra() {
@@ -43,7 +45,7 @@ class ForgotCredentialsActivity : AppCompatActivity() {
 
     private fun changeActionBarTitle() {
         val tvActionBarTitle: TextView = findViewById(R.id.tvActionBarTitle)
-        tvActionBarTitle.setText(R.string.security_question_title)
+        tvActionBarTitle.setText(R.string.reset_password_title)
     }
 
     fun manageForgotFragments(selectedFragment: String) {
@@ -93,6 +95,14 @@ class ForgotCredentialsActivity : AppCompatActivity() {
 
                 fragmentNum = 2
             }
+        }
+    }
+
+    private fun setOnClick() {
+        val ivActionBarBackArrow: ImageView = findViewById(R.id.ivActionBarBackArrow)
+
+        ivActionBarBackArrow.setOnClickListener {
+            onBackPressed()
         }
     }
 

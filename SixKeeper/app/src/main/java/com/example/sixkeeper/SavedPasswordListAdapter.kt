@@ -43,14 +43,20 @@ class SavedPasswordListAdapter(
 
         cbSavedPassSelectAll.setOnClickListener {
             if (!modelArrayList.isNullOrEmpty()) {
-                var isChecked = false
-
-                if (cbSavedPassSelectAll.isChecked) {
-                    isChecked = true
-                }
+//                var isChecked = false
+//
+//                if (cbSavedPassSelectAll.isChecked) {
+//                    isChecked = true
+//                }
+//
+//                for (i in 0 until password.size) {
+//                    modelArrayList[i].setSelected(isChecked)
+//                }
+//
+//                notifyDataSetChanged()
 
                 for (i in 0 until password.size) {
-                    modelArrayList[i].setSelected(isChecked)
+                    modelArrayList[i].setSelected(cbSavedPassSelectAll.isChecked)
                 }
 
                 notifyDataSetChanged()
@@ -58,14 +64,20 @@ class SavedPasswordListAdapter(
         }
 
         llSavedPasswordListAdapter.setOnClickListener { v ->
+//            val currentPos = v.tag as Int
+//            var isChecked = false
+//
+//            if (!modelArrayList[currentPos].getSelected()){
+//                isChecked = true
+//            }
+//
+//            modelArrayList[currentPos].setSelected(isChecked)
+//            notifyDataSetChanged()
+
             val currentPos = v.tag as Int
-            var isChecked = false
+            val reverseSelect = !modelArrayList[currentPos].getSelected()
 
-            if (!modelArrayList[currentPos].getSelected()){
-                isChecked = true
-            }
-
-            modelArrayList[currentPos].setSelected(isChecked)
+            modelArrayList[currentPos].setSelected(reverseSelect)
             notifyDataSetChanged()
         }
 
