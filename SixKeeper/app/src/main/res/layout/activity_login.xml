@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     tools:context=".LoginActivity">
 
     <ScrollView
@@ -143,10 +144,11 @@
             <TextView
                 android:id="@+id/tvLoginForgotPass"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="3dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:gravity="center_vertical"
                 android:text="@string/login_forgot_pass"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
@@ -156,7 +158,7 @@
                 android:id="@+id/acbLoginLogin"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/layout_button_green_quadrilateral"
                 android:stateListAnimator="@null"
                 android:text="@string/many_login"

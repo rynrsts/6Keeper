@@ -513,6 +513,44 @@ class DatabaseHandlerClass(context: Context) :
         return userUsername
     }
 
+    fun verifyInformation(                                                                          // Verify Infomratoin for Reset
+            firstName: String,
+            lastName: String,
+            birthDate: String,
+            email: String,
+            mobileNumber: String
+    ): Boolean {
+        val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        var correct = false
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return false
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                if (
+                        firstName == cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)) &&
+                        lastName == cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)) &&
+                        birthDate == cursor.getString(cursor.getColumnIndex(KEY_BIRTH_DATE)) &&
+                        email == cursor.getString(cursor.getColumnIndex(KEY_EMAIL)) &&
+                        mobileNumber == cursor.getString(cursor.getColumnIndex(KEY_MOBILE_NUMBER))
+                ) {
+                    correct = true
+                }
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return correct
+    }
+
     fun getLastIdOfActionLog(): String {                                                            // Get last Id of of Platforms
         val selectQuery = "SELECT $KEY_ACTION_LOG_ID FROM $TABLE_ACTION_LOG"
         val db = this.readableDatabase

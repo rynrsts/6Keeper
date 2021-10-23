@@ -88,6 +88,20 @@
     <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
 
+    <!-- Forgot Credentials -->
+    <string name="forgot_credentials_mes">Cancel reset?</string>
+
+    <string name="reset_password_alert">Do you want to reset password?</string>
+    <string name="reset_password_mes">Password was reset!</string>
+
+    <string name="security_question_confirm">Confirm</string>
+    <string name="security_question_invalid">Entered information are incorrect!</string>
+    <string name="security_question_mes">
+        Please provide the following information to confirm.
+    </string>
+    <string name="security_question_reset">Reset</string>
+    <string name="security_question_title">Security Questions</string>
+
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>

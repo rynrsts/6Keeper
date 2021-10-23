@@ -174,17 +174,6 @@
                 app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate"
                 tools:ignore="ContentDescription" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/tvCreateNewAccP1BirthDateSlash"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_marginStart="39dp"-->
-<!--                android:text="@string/many_birth_date_slash"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/etCreateNewAccP1BirthDate"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/ivCreateNewAccP1BirthDate"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/etCreateNewAccP1BirthDate" />-->
-
             <LinearLayout
                 android:id="@+id/llCreateNewAccP1BirthDate"
                 android:layout_width="0dp"

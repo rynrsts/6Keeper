@@ -7,13 +7,11 @@ import androidx.fragment.app.FragmentTransaction
 
 open class CreateNewAccountManageFragmentsClass : AppCompatActivity() {
     private val createNewAccP1 = "createNewAccP1"
-
     //    private val createNewAccP2 = "createNewAccP2"
     private val createNewAccP3 = "createNewAccP3"
     private val createNewAccP4 = "createNewAccP4"
     private val fragmentManager: FragmentManager = supportFragmentManager
     private val createNewAccountP1Fragment: Fragment = CreateNewAccountP1Fragment()
-
     //    private val createNewAccountP2Fragment: Fragment = CreateNewAccountP2Fragment()
     private val createNewAccountP3Fragment: Fragment = CreateNewAccountP3Fragment()
     private val createNewAccountP4Fragment: Fragment = CreateNewAccountP4Fragment()

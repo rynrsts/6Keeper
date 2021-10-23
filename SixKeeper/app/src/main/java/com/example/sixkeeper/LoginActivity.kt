@@ -29,6 +29,7 @@ class LoginActivity : LoginValidationClass() {
 
     private fun setButtonOnClick() {
         val acbLoginLogin: Button = findViewById(R.id.acbLoginLogin)
+        val tvLoginForgotPass: TextView = findViewById(R.id.tvLoginForgotPass)
         val acbLoginCreateNewAccount: Button = findViewById(R.id.acbLoginCreateNewAccount)
 
         acbLoginLogin.setOnClickListener {
@@ -80,6 +81,27 @@ class LoginActivity : LoginValidationClass() {
                 postDelayed(
                         {
                             getEtLoginPassword().isClickable = true
+                        }, 1000
+                )
+            }
+        }
+
+        tvLoginForgotPass.setOnClickListener {
+            val goToForgotCredentialsActivity =
+                    Intent(this, ForgotCredentialsActivity::class.java)
+            goToForgotCredentialsActivity.putExtra("credential", "password")
+
+            startActivity(goToForgotCredentialsActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_right_to_left_2,
+                    R.anim.anim_exit_right_to_left_2
+            )
+
+            it.apply {
+                tvLoginForgotPass.isClickable = false                                               // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            tvLoginForgotPass.isClickable = true
                         }, 1000
                 )
             }
