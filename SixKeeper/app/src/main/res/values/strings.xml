@@ -91,6 +91,10 @@
     <!-- Forgot Credentials -->
     <string name="forgot_credentials_mes">Cancel reset?</string>
 
+    <string name="reset_master_pin_alert">Do you want to reset master pin?</string>
+    <string name="reset_master_pin_mes">Master PIN was reset!</string>
+    <string name="reset_master_pin_title">Reset Master PIN</string>
+
     <string name="reset_password_alert">Do you want to reset password?</string>
     <string name="reset_password_mes">Password was reset!</string>
     <string name="reset_password_title">Reset Password</string>
@@ -322,12 +326,13 @@
     <string name="saved_password_pass_copy">Password has been copied!</string>
 
     <!-- Settings -->
-    <string name="settings_allow_copy">Allow Textual Copy</string>
     <string name="settings_allow_screen_capture">Allow Screenshot and Screen Record</string>
     <string name="settings_auto_lock">Auto Lock</string>
-    <string name="settings_block_copy">Block Textual Copy</string>
+    <string name="settings_auto_lock_timer">Auto Lock Timer</string>
     <string name="settings_block_screen_capture">Block Screenshot and Screen Record</string>
     <string name="settings_copy">Copy</string>
+    <string name="settings_disable_auto_lock">Disable Auto Lock</string>
+    <string name="settings_enable_auto_lock">Enable Auto Lock</string>
     <string name="settings_note">Note: Changes will be applied at the next launch.</string>
     <string name="settings_screen_capture">Screen Capture</string>
     <string name="settings_security">Security</string>

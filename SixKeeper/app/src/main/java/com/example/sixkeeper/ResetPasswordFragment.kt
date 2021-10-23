@@ -147,7 +147,7 @@ class ResetPasswordFragment : Fragment() {
                     alert.show()
 
                     it.apply {
-                        acbResetPasswordReset.isClickable = false                                       // Set un-clickable for 1 second
+                        acbResetPasswordReset.isClickable = false                                   // Set un-clickable for 1 second
                         postDelayed(
                                 {
                                     acbResetPasswordReset.isClickable = true

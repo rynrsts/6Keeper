@@ -14,7 +14,7 @@ class RecycleBinListAdapter(
         private val modelArrayList: ArrayList<RecycleBinModelClass>
 ) : ArrayAdapter<String>(context, R.layout.layout_recycle_bin_list_adapter, idName) {
 
-    private var recycleBinModelClass = RecycleBinModelClass()
+//    private var recycleBinModelClass = RecycleBinModelClass()
 
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
@@ -32,9 +32,10 @@ class RecycleBinListAdapter(
         val tvRecycleBinName = rowView.findViewById(R.id.tvRecycleBinName) as TextView
         val ivRecycleBinIcon = rowView.findViewById(R.id.ivRecycleBinIcon) as ImageView
 
-        recycleBinModelClass = modelArrayList[position]
+//        recycleBinModelClass = modelArrayList[position]
         llRecycleBinListAdapter.tag = position
-        cbRecycleBinCheckBox.isChecked = recycleBinModelClass.getSelected()
+//        cbRecycleBinCheckBox.isChecked = recycleBinModelClass.getSelected()
+        cbRecycleBinCheckBox.isChecked = modelArrayList[position].getSelected()
         tvRecycleBinName.text = name[position]
 
         if (icon == "accounts") {
@@ -80,6 +81,11 @@ class RecycleBinListAdapter(
             val reverseSelect = !modelArrayList[currentPos].getSelected()
 
             modelArrayList[currentPos].setSelected(reverseSelect)
+
+            if (!reverseSelect && cbRecycleBinSelectAll.isChecked) {
+                cbRecycleBinSelectAll.isChecked = false
+            }
+
             notifyDataSetChanged()
         }
 

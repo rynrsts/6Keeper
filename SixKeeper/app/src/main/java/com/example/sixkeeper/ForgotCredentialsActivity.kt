@@ -43,9 +43,26 @@ class ForgotCredentialsActivity : AppCompatActivity() {
         }
     }
 
+    fun getCredential(): String {
+        var reset = ""
+
+        if (credential == "password") {
+            reset = resetPassword
+        } else if (credential == "master pin") {
+            reset = resetMasterPIN
+        }
+
+        return reset
+    }
+
     private fun changeActionBarTitle() {
         val tvActionBarTitle: TextView = findViewById(R.id.tvActionBarTitle)
-        tvActionBarTitle.setText(R.string.reset_password_title)
+
+        if (credential == "password") {
+            tvActionBarTitle.setText(R.string.reset_password_title)
+        } else if (credential == "master pin") {
+            tvActionBarTitle.setText(R.string.reset_master_pin_title)
+        }
     }
 
     fun manageForgotFragments(selectedFragment: String) {

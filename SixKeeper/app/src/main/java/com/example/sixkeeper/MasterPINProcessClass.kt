@@ -103,7 +103,6 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
-        userAccList = databaseHandlerClass.validateUserAcc()
 
         ivMasterPINCircle1 = findViewById(R.id.ivMasterPINCircle1)
         ivMasterPINCircle2 = findViewById(R.id.ivMasterPINCircle2)
@@ -270,6 +269,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         val encodedMasterPIN = encodingClass.encodeData(pinI.toString())
         val encryptedMasterPIN = encryptionClass.hashData(encodedMasterPIN)
 
+        userAccList = databaseHandlerClass.validateUserAcc()
+
         for (u in userAccList) {
             bool = encryptedMasterPIN.contentEquals(u.masterPin)
             userId = u.userId
@@ -279,6 +280,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun updateUserStatus() {                                                                        // Update account status to 0
+        userAccList = databaseHandlerClass.validateUserAcc()
+
         for (u in userAccList) {
             userId = u.userId
         }

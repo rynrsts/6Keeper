@@ -10,13 +10,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 
-class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
+class CreateNewAccountP4Fragment : Fragment() {
     private lateinit var attActivity: Activity
+    private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var createNewAccountActivity: CreateNewAccountActivity
+
+    private lateinit var tvCreateNewAccP4MasterPinMes: TextView
+    private lateinit var cbCreateNewAccP4AgreeToTerms: CheckBox
+
+    private var masterPin = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -34,6 +44,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        setMasterPINText()
         setButtonOnClick()
     }
 
@@ -43,16 +54,42 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         attActivity = activity                                                                      // Attach activity
     }
 
+    private fun setVariables() {
+        appCompatActivity = activity as AppCompatActivity
+        createNewAccountActivity = activity as CreateNewAccountActivity
+
+        tvCreateNewAccP4MasterPinMes =
+                appCompatActivity.findViewById(R.id.tvCreateNewAccP4MasterPINMes)
+        cbCreateNewAccP4AgreeToTerms =
+                appCompatActivity.findViewById(R.id.cbCreateNewAccP4AgreeToTerms)
+    }
+
+    private fun setMasterPINText() {
+        if (masterPin != 0) {
+            tvCreateNewAccP4MasterPinMes.apply {
+                setText(R.string.many_setup_complete)
+                setTextColor(ContextCompat.getColor(context, R.color.blue))
+            }
+
+            createNewAccountActivity.setCreateNewAccountP4Data(masterPin)
+        } else {
+            tvCreateNewAccP4MasterPinMes.apply {
+                setText(R.string.many_required_mes)
+                setTextColor(ContextCompat.getColor(context, R.color.red))
+            }
+        }
+    }
+
     @SuppressLint("InflateParams")
     private fun setButtonOnClick() {
         val acbCreateNewAccP4MasterPIN: Button =
-                getAppCompatActivity().findViewById(R.id.acbCreateNewAccP4MasterPIN)
+                appCompatActivity.findViewById(R.id.acbCreateNewAccP4MasterPIN)
         val tvCreateNewAccP4Terms: TextView =
-                getAppCompatActivity().findViewById(R.id.tvCreateNewAccP4Terms)
+                appCompatActivity.findViewById(R.id.tvCreateNewAccP4Terms)
         val tvCreateNewAccP4Privacy: TextView =
-                getAppCompatActivity().findViewById(R.id.tvCreateNewAccP4Privacy)
+                appCompatActivity.findViewById(R.id.tvCreateNewAccP4Privacy)
         val acbCreateNewAccP4Register: Button =
-                getAppCompatActivity().findViewById(R.id.acbCreateNewAccP4Register)
+                appCompatActivity.findViewById(R.id.acbCreateNewAccP4Register)
 
         acbCreateNewAccP4MasterPIN.setOnClickListener {
             val goToCreateMasterPINActivity = Intent(
@@ -63,7 +100,7 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
             @Suppress("DEPRECATION")
             startActivityForResult(goToCreateMasterPINActivity, 14523)
 
-            getAppCompatActivity().overridePendingTransition(
+            appCompatActivity.overridePendingTransition(
                     R.anim.anim_enter_bottom_to_top_2,
                     R.anim.anim_0
             )
@@ -108,16 +145,16 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
 
         acbCreateNewAccP4Register.setOnClickListener {
             when {
-                isMasterPINSetup() && isTermsChecked() -> {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                masterPin != 0 && cbCreateNewAccP4AgreeToTerms.isChecked -> {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                     builder.setMessage(R.string.create_new_acc_message)
                     builder.setCancelable(false)
 
                     builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        getCreateNewAccountActivity().saveAccount()
+                        createNewAccountActivity.saveAccount()
 
-                        getAppCompatActivity().finish()
-                        getAppCompatActivity().overridePendingTransition(
+                        appCompatActivity.finish()
+                        appCompatActivity.overridePendingTransition(
                                 R.anim.anim_enter_left_to_right_2,
                                 R.anim.anim_exit_left_to_right_2
                         )
@@ -139,9 +176,9 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                         )
                     }
                 }
-                !isMasterPINSetup() -> {
+                masterPin == 0 -> {
                     val toast: Toast = Toast.makeText(
-                            getAppCompatActivity().applicationContext,
+                            appCompatActivity.applicationContext,
                             R.string.create_new_acc_p4_master_pin_mes,
                             Toast.LENGTH_SHORT
                     )
@@ -150,9 +187,9 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
                         show()
                     }
                 }
-                isMasterPINSetup() && !isTermsChecked() -> {
+                masterPin != 0 && !cbCreateNewAccP4AgreeToTerms.isChecked -> {
                     val toast: Toast = Toast.makeText(
-                            getAppCompatActivity().applicationContext,
+                            appCompatActivity.applicationContext,
                             R.string.create_new_acc_p4_agree_to_terms_mes,
                             Toast.LENGTH_SHORT
                     )
@@ -165,22 +202,42 @@ class CreateNewAccountP4Fragment : CreateNewAccountP4ValidationClass() {
         }
     }
 
+    private fun showTermsOrPrivacy(dialogView: View) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+
+        builder.apply {
+            setView(dialogView)
+            setCancelable(false)
+        }
+        builder.setNegativeButton("Ok") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.apply {
+            window?.setBackgroundDrawable(
+                    ContextCompat.getDrawable(
+                            context, R.drawable.layout_alert_dialog
+                    )
+            )
+            show()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {               // Get value from intent
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        val masterPin: Int = data?.getIntExtra("masterPin", 0)!!
+        masterPin = data?.getIntExtra("masterPin", 0)!!
 
         when {
             requestCode == 14523 && resultCode == 14523 -> {
-                getTvCreateNewAccP4MasterPinMes().apply {
+                tvCreateNewAccP4MasterPinMes.apply {
                     setText(R.string.many_setup_complete)
                     setTextColor(ContextCompat.getColor(context, R.color.blue))
                 }
 
-                getCreateNewAccountActivity().apply {
-                    setCreateNewAccountP4Data(masterPin)
-                }
+                createNewAccountActivity.setCreateNewAccountP4Data(masterPin)
             }
         }
     }

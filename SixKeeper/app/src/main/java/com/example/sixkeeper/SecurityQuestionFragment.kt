@@ -105,7 +105,9 @@ class SecurityQuestionFragment : Fragment() {
                         )
                     }
 
-                    forgotCredentialsActivity.manageForgotFragments("resetPassword")
+                    forgotCredentialsActivity.manageForgotFragments(
+                            forgotCredentialsActivity.getCredential()
+                    )
                 } else {
                     if (immKeyboard.isActive) {
                         immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard

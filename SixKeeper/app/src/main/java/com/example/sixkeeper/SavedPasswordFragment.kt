@@ -170,7 +170,7 @@ class SavedPasswordFragment : Fragment() {
                 postDelayed(
                         {
                             clSavedPassDelete.isClickable = true
-                        }, 1000
+                        }, 500
                 )
             }
         }

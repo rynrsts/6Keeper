@@ -47,7 +47,8 @@ class DatabaseHandlerClass(context: Context) :
         // TABLE_SETTINGS
 //        private const val KEY_USER_ID = "user_id"
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
-        private const val KEY_COPY = "copy"
+        private const val KEY_AUTO_LOCK = "auto_lock"
+        private const val KEY_AUTO_LOCK_TIMER = "auto_lock_timer"
 
         // TABLE_ACTION_LOG
         private const val KEY_ACTION_LOG_ID = "action_log_id"
@@ -117,7 +118,8 @@ class DatabaseHandlerClass(context: Context) :
                 "CREATE TABLE " + TABLE_SETTINGS + "(" +
                         KEY_USER_ID + " TEXT," +
                         KEY_SCREEN_CAPTURE + " TEXT," +
-                        KEY_COPY + " TEXT" +
+                        KEY_AUTO_LOCK + " TEXT," +
+                        KEY_AUTO_LOCK_TIMER + " TEXT" +
                         ")"
                 )
         val createActionLogTable = (
@@ -247,7 +249,8 @@ class DatabaseHandlerClass(context: Context) :
         contentValues.apply {
             put(KEY_USER_ID, userSettings.userId)
             put(KEY_SCREEN_CAPTURE, userSettings.screenCapture)
-            put(KEY_COPY, userSettings.copy)
+            put(KEY_AUTO_LOCK, userSettings.autoLock)
+            put(KEY_AUTO_LOCK_TIMER, userSettings.autoLockTimer)
         }
 
         val success = db.insert(TABLE_SETTINGS, null, contentValues)
@@ -1161,18 +1164,21 @@ class DatabaseHandlerClass(context: Context) :
 
         var accountId: String
         var screenCapture: String
-        var copy: String
+        var autoLock: String
+        var autoLockTimer: String
 
         if (cursor.moveToFirst()) {
             do {
                 accountId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
                 screenCapture = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_CAPTURE))
-                copy = cursor.getString(cursor.getColumnIndex(KEY_COPY))
+                autoLock = cursor.getString(cursor.getColumnIndex(KEY_AUTO_LOCK))
+                autoLockTimer = cursor.getString(cursor.getColumnIndex(KEY_AUTO_LOCK_TIMER))
 
                 val user = UserSettingsModelClass(
                         userId = accountId,
                         screenCapture = screenCapture,
-                        copy = copy
+                        autoLock = autoLock,
+                        autoLockTimer = autoLockTimer
                 )
                 userSettingsList.add(user)
             } while (cursor.moveToNext())

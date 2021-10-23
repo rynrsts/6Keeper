@@ -1,8 +1,10 @@
 package com.example.sixkeeper
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 
 class MasterPINActivity : MasterPINProcessClass() {
@@ -18,6 +20,7 @@ class MasterPINActivity : MasterPINProcessClass() {
 
     private fun setButtonOnClick() {
         val llMasterPinLogout: LinearLayout = findViewById(R.id.llMasterPinLogout)
+        val tvMasterPINForgotPass: TextView = findViewById(R.id.tvMasterPINForgotPass)
 
         getAcbMasterPINButton1().setOnClickListener {
             pushNumber(1, it)
@@ -105,6 +108,27 @@ class MasterPINActivity : MasterPINProcessClass() {
             val alert: AlertDialog = builder.create()
             alert.setTitle(R.string.many_alert_title_confirm)
             alert.show()
+        }
+
+        tvMasterPINForgotPass.setOnClickListener {
+            val goToForgotCredentialsActivity =
+                    Intent(this, ForgotCredentialsActivity::class.java)
+            goToForgotCredentialsActivity.putExtra("credential", "master pin")
+
+            startActivity(goToForgotCredentialsActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_right_to_left_2,
+                    R.anim.anim_exit_right_to_left_2
+            )
+
+            it.apply {
+                tvMasterPINForgotPass.isClickable = false                                           // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            tvMasterPINForgotPass.isClickable = true
+                        }, 1000
+                )
+            }
         }
     }
 }

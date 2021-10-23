@@ -1,6 +1,8 @@
 package com.example.sixkeeper
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 
 class ConfirmActionActivity : ConfirmActionProcessClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +16,8 @@ class ConfirmActionActivity : ConfirmActionProcessClass() {
     }
 
     private fun setButtonOnClick() {
+        val tvConfirmActionForgotPass: TextView = findViewById(R.id.tvConfirmActionForgotPass)
+
         getAcbConfirmActionButton1().setOnClickListener {
             pushNumber(1)
         }
@@ -72,6 +76,27 @@ class ConfirmActionActivity : ConfirmActionProcessClass() {
             }
 
             onBackPressed()
+        }
+
+        tvConfirmActionForgotPass.setOnClickListener {
+            val goToForgotCredentialsActivity =
+                    Intent(this, ForgotCredentialsActivity::class.java)
+            goToForgotCredentialsActivity.putExtra("credential", "master pin")
+
+            startActivity(goToForgotCredentialsActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_right_to_left_2,
+                    R.anim.anim_exit_right_to_left_2
+            )
+
+            it.apply {
+                tvConfirmActionForgotPass.isClickable = false                                       // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            tvConfirmActionForgotPass.isClickable = true
+                        }, 1000
+                )
+            }
         }
     }
 }

@@ -49,7 +49,9 @@
                 android:id="@+id/clSettingsScreenCapture"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
+                android:layout_marginTop="12dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
                 app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/tvSettingsSecurity">
@@ -58,7 +60,7 @@
                     android:id="@+id/ivSettingsScreenCapture"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_green_cyan_circle"
+                    android:background="@drawable/layout_pink_red_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_screenshot_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -100,73 +102,20 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSettingsTextualCopy"
+                android:id="@+id/clSettingsAutoLock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
                 app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/clSettingsScreenCapture">
 
                 <ImageView
-                    android:id="@+id/ivSettingsTextualCopy"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/layout_blue_magenta_circle"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_content_copy_white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvSettingsTextualCopy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:text="@string/settings_copy"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsTextualCopy"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsTextualCopy"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvSettingsTextualCopyDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/scSettingsTextualCopy"
-                    app:layout_constraintStart_toEndOf="@+id/ivSettingsTextualCopy"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsTextualCopy" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/scSettingsTextualCopy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@drawable/style_switch_thumb"
-                    app:trackTint="@drawable/style_switch_track" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSettingsAutoLock"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsTextualCopy">
-
-                <ImageView
                     android:id="@+id/ivSettingsAutoLock"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/layout_orange_circle"
+                    android:background="@drawable/layout_green_cyan_circle"
                     android:padding="8dp"
                     android:src="@drawable/ic_lock_white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -180,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:text="@string/settings_auto_lock"
-                    app:layout_constraintEnd_toStartOf="@+id/ivSettingsAutoLockArrow"
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsAutoLock"
                     app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLock"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -190,23 +139,62 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="3dp"
-                    android:text="@string/settings_auto_lock"
                     android:textSize="13sp"
-                    app:layout_constraintEnd_toStartOf="@+id/ivSettingsAutoLockArrow"
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsAutoLock"
                     app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLock"
                     app:layout_constraintTop_toBottomOf="@+id/tvSettingsAutoLock" />
 
-                <ImageView
-                    android:id="@+id/ivSettingsAutoLockArrow"
-                    android:layout_width="48dp"
-                    android:layout_height="match_parent"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:src="@drawable/ic_navigate_next_light_black"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/scSettingsAutoLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:thumbTint="@drawable/style_switch_thumb"
+                    app:trackTint="@drawable/style_switch_track" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsAutoLockTimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLock">
+
+                <ImageView
+                    android:id="@+id/ivSettingsAutoLockTimer"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLockTimer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/settings_auto_lock_timer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvSettingsAutoLockTimerSeconds"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsAutoLockTimer"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsAutoLockTimerSeconds"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -214,9 +202,9 @@
                 android:id="@+id/vSettingsDivision2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="21dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLock" />
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLockTimer" />
 
             <TextView
                 android:id="@+id/tvSettingsNote"
@@ -228,7 +216,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
                 app:layout_constraintTop_toBottomOf="@+id/vSettingsDivision2" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
