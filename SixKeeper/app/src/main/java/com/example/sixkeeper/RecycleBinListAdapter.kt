@@ -45,7 +45,7 @@ class RecycleBinListAdapter(
         }
 
         cbRecycleBinSelectAll.setOnClickListener {
-//            if (!modelArrayList.isNullOrEmpty()) {
+            if (!modelArrayList.isNullOrEmpty()) {
 //                var isChecked = false
 //
 //                if (cbRecycleBinSelectAll.isChecked) {
@@ -57,13 +57,13 @@ class RecycleBinListAdapter(
 //                }
 //
 //                notifyDataSetChanged()
-//            }
 
-            for (i in 0 until name.size) {
-                modelArrayList[i].setSelected(cbRecycleBinSelectAll.isChecked)
+                for (i in 0 until name.size) {
+                    modelArrayList[i].setSelected(cbRecycleBinSelectAll.isChecked)
+                }
+
+                notifyDataSetChanged()
             }
-
-            notifyDataSetChanged()
         }
 
         llRecycleBinListAdapter.setOnClickListener { v ->

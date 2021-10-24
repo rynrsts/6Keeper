@@ -68,6 +68,13 @@ class SavedPasswordFragment : Fragment() {
         val userSavedPassPassword = ArrayList<String>(0)
         val userSavedPassCreationDate = ArrayList<String>(0)
 
+        if (cbSavedPassSelectAll.isChecked) {
+            cbSavedPassSelectAll.performClick()
+        }
+
+        modelArrayList.clear()
+        lvSavedPasswordContainer.adapter = null
+
         if (userSavedPass.isNullOrEmpty()) {
             val llSavedPasswordNoItem: LinearLayout =
                     appCompatActivity.findViewById(R.id.llSavedPasswordNoItem)
@@ -273,8 +280,6 @@ class SavedPasswordFragment : Fragment() {
         when {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 val container = ArrayList<String>(0)
-                val cbSavedPassSelectAll: CheckBox =
-                        appCompatActivity.findViewById(R.id.cbSavedPassSelectAll)
 
                 for (i in 0 until modelArrayList.size) {
                     if (modelArrayList[i].getSelected()) {
@@ -321,12 +326,6 @@ class SavedPasswordFragment : Fragment() {
                         )
                 )
 
-                if (cbSavedPassSelectAll.isChecked) {
-                    cbSavedPassSelectAll.performClick()
-                }
-
-                modelArrayList.clear()
-                lvSavedPasswordContainer.adapter = null
                 viewSavedPass()
             }
         }
