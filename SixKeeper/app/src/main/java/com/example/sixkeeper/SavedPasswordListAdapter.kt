@@ -17,6 +17,8 @@ class SavedPasswordListAdapter(
         private val modelArrayList: ArrayList<SavedPasswordModelClass>
 ) : ArrayAdapter<String>(context, R.layout.layout_saved_password_list_adapter, id) {
 
+    private var savedPasswordModelClass = SavedPasswordModelClass()
+
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
@@ -33,8 +35,9 @@ class SavedPasswordListAdapter(
         val tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword) as TextView
         val tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate) as TextView
 
-        llSavedPasswordListAdapter.setTag(position, rowView)
-        cbSavedPassCheckBox.isChecked = modelArrayList[position].getSelected()
+        savedPasswordModelClass = modelArrayList[position]
+        llSavedPasswordListAdapter.tag = position
+        cbSavedPassCheckBox.isChecked = savedPasswordModelClass.getSelected()
         tvSavedPassPassword.text = "Password: ${password[position]}"
         tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
 

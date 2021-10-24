@@ -14,8 +14,6 @@ class RecycleBinListAdapter(
         private val modelArrayList: ArrayList<RecycleBinModelClass>
 ) : ArrayAdapter<String>(context, R.layout.layout_recycle_bin_list_adapter, idName) {
 
-//    private var recycleBinModelClass = RecycleBinModelClass()
-
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
@@ -32,9 +30,7 @@ class RecycleBinListAdapter(
         val tvRecycleBinName = rowView.findViewById(R.id.tvRecycleBinName) as TextView
         val ivRecycleBinIcon = rowView.findViewById(R.id.ivRecycleBinIcon) as ImageView
 
-//        recycleBinModelClass = modelArrayList[position]
-        llRecycleBinListAdapter.setTag(position, rowView)
-//        cbRecycleBinCheckBox.isChecked = recycleBinModelClass.getSelected()
+        llRecycleBinListAdapter.tag = position
         cbRecycleBinCheckBox.isChecked = modelArrayList[position].getSelected()
         tvRecycleBinName.text = name[position]
 
@@ -46,18 +42,6 @@ class RecycleBinListAdapter(
 
         cbRecycleBinSelectAll.setOnClickListener {
             if (!modelArrayList.isNullOrEmpty()) {
-//                var isChecked = false
-//
-//                if (cbRecycleBinSelectAll.isChecked) {
-//                    isChecked = true
-//                }
-//
-//                for (i in 0 until name.size) {
-//                    modelArrayList[i].setSelected(isChecked)
-//                }
-//
-//                notifyDataSetChanged()
-
                 for (i in 0 until name.size) {
                     modelArrayList[i].setSelected(cbRecycleBinSelectAll.isChecked)
                 }
@@ -67,16 +51,6 @@ class RecycleBinListAdapter(
         }
 
         llRecycleBinListAdapter.setOnClickListener { v ->
-//            val currentPos = v.tag as Int
-//            var isChecked = false
-//
-//            if (!modelArrayList[currentPos].getSelected()){
-//                isChecked = true
-//            }
-//
-//            modelArrayList[currentPos].setSelected(isChecked)
-//            notifyDataSetChanged()
-
             val currentPos = v.tag as Int
             val reverseSelect = !modelArrayList[currentPos].getSelected()
 

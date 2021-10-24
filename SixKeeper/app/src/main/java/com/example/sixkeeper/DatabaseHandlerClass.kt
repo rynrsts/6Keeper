@@ -25,7 +25,6 @@ class DatabaseHandlerClass(context: Context) :
         private const val TABLE_ACCOUNTS = "AccountsTable"
         private const val TABLE_SAVED_PASS = "SavedPasswordTable"
 
-
         // TABLE_USER_INFO
         private const val KEY_USER_ID = "user_id"
         private const val KEY_FIRST_NAME = "first_name"

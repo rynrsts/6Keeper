@@ -36,6 +36,11 @@
         Category name is already existing
     </string>
 
+    <!-- Auto Lock Login -->
+    <string name="auto_lock_login_mes">
+        You are inactive for set amount of time based on the Auto Lock Timer.
+    </string>
+
     <!-- Confirm Action -->
     <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
 

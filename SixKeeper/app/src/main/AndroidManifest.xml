@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SixKeeper"
         tools:ignore="AllowBackup">
-        <activity android:name=".ForgotCredentialsActivity"
+        <activity android:name=".AutoLockLoginActivity"></activity>
+        <activity
+            android:name=".ForgotCredentialsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity

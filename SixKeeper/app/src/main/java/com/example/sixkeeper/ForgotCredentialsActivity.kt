@@ -11,8 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 
-class ForgotCredentialsActivity : AppCompatActivity() {
+class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
     private val fragmentManager: FragmentManager = supportFragmentManager
 
     private val securityQuestionFragment: Fragment = SecurityQuestionFragment()
@@ -29,10 +33,16 @@ class ForgotCredentialsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_credentials)
 
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         getExtra()
         changeActionBarTitle()
         manageForgotFragments(securityQuestion)
         setOnClick()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppBackgrounded() {
+        this.finish()
     }
 
     private fun getExtra() {

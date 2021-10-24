@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AutoLockLoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gAutoLockLoginVertical10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gAutoLockLoginVertical30"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".30" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gAutoLockLoginVertical70"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.70" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gAutoLockLoginVertical90"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <ImageView
+            android:id="@+id/ivAutoLockLoginLogo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/img_logo_and_name"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical70"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical30"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvAutoLockLoginDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="@string/auto_lock_login_mes"
+            android:textColor="@color/red"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/ivAutoLockLoginLogo" />
+
+        <TextView
+            android:id="@+id/tvAutoLockLoginHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/many_enter_master_pin"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoLockLoginDesc" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAutoLockLoginCircle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoLockLoginHeading">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical20"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".20" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".30" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".40" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical50"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical60"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".60" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".70" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginCircleVertical80"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".80" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical30"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical20"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical40"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical30"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical50"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical40"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical60"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical50"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical70"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical60"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivAutoLockLoginCircle6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/layout_blue_border_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginCircleVertical80"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginCircleVertical70"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/clAutoLockLoginCircle">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginButtonVertical3333"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".3333" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gAutoLockLoginButtonVertical6667"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".6667" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_one"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_two"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_three"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_four"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_five"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_six"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_seven"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_eight"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_nine"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButtonCancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_cancel"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton7" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButton0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_zero"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical3333"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbAutoLockLoginButtonDelete"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/layout_button_white_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_delete"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:layout_constraintDimensionRatio="5:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginButtonVertical6667"
+                app:layout_constraintTop_toBottomOf="@+id/acbAutoLockLoginButton9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvAutoLockLoginForgotPass"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/master_pin_forgot"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

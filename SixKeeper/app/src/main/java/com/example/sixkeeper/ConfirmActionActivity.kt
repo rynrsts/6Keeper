@@ -3,16 +3,27 @@ package com.example.sixkeeper
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 
-class ConfirmActionActivity : ConfirmActionProcessClass() {
+class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirm_action)
 
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        IndexActivity().setBackgroundDate()
         changeStatusBarColor()
         setVariables()
         blockCapture()
         setButtonOnClick()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppBackgrounded() {
+        this.finish()
     }
 
     private fun setButtonOnClick() {
