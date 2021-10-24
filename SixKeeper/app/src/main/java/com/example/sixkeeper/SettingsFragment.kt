@@ -3,14 +3,15 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -163,23 +164,13 @@ class SettingsFragment : Fragment() {
         )
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("InflateParams")
     private fun setSwitchOnOff() {
         scSettingsScreenCapture.setOnClickListener {
-            var actionLogId = 1000001
-            val lastId = databaseHandlerClass.getLastIdOfActionLog()
-            var message = ""
-
-            val calendar: Calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-            val date: String = dateFormat.format(calendar.time)
-
-            if (lastId.isNotEmpty()) {
-                actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-            }
+            val message: String
 
             if (scSettingsScreenCapture.isChecked) {
-                databaseHandlerClass.updateSettings(
+                databaseHandlerClass.updateSettings(                                                // Update Screen Capture to 1
                         "screen_capture",
                         encodingClass.encodeData(1.toString())
                 )
@@ -187,7 +178,7 @@ class SettingsFragment : Fragment() {
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
                 message = "Screen Capture was allowed."
             } else {
-                databaseHandlerClass.updateSettings(
+                databaseHandlerClass.updateSettings(                                                // Update Screen Capture to 0
                         "screen_capture",
                         encodingClass.encodeData(0.toString())
                 )
@@ -198,33 +189,155 @@ class SettingsFragment : Fragment() {
 
             databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
                     UserActionLogModelClass(
-                            encodingClass.encodeData(actionLogId.toString()),
+                            encodingClass.encodeData(getLastActionLogId().toString()),
                             encodingClass.encodeData(message),
-                            encodingClass.encodeData(date)
+                            encodingClass.encodeData(getCurrentDate())
                     )
             )
         }
 
         scSettingsAutoLock.setOnClickListener {
+            val message: String
+
             if (scSettingsAutoLock.isChecked) {
-                databaseHandlerClass.updateSettings(
+                databaseHandlerClass.updateSettings(                                                // Update Auto Lock to 1
                         "auto_lock",
                         encodingClass.encodeData(1.toString())
                 )
 
                 enableAutoLock()
+                message = "Auto Lock was enabled."
             } else {
-                databaseHandlerClass.updateSettings(
+                databaseHandlerClass.updateSettings(                                                // Update Auto Lock to 0
                         "auto_lock",
                         encodingClass.encodeData(0.toString())
                 )
 
                 disableAutoLock()
+                message = "Auto Lock was disabled."
             }
+
+            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
+                    UserActionLogModelClass(
+                            encodingClass.encodeData(getLastActionLogId().toString()),
+                            encodingClass.encodeData(message),
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+            )
         }
 
         clSettingsAutoLockTimer.setOnClickListener {
-            //
+            if (scSettingsAutoLock.isChecked) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                val inflater = this.layoutInflater
+                val dialogView = inflater.inflate(
+                        R.layout.layout_settings_auto_lock_timer,
+                        null
+                )
+
+                builder.apply {
+                    setView(dialogView)
+                    setCancelable(false)
+                }
+
+                val tvAutoLockTimerLength: TextView =
+                        dialogView.findViewById(R.id.tvAutoLockTimerLength)
+                val acbAutoLockTimerMinus: Button =
+                        dialogView.findViewById(R.id.acbAutoLockTimerMinus)
+                val acbAutoLockTimerPlus: Button =
+                        dialogView.findViewById(R.id.acbAutoLockTimerPlus)
+
+                tvAutoLockTimerLength.text = tvSettingsAutoLockTimerSeconds.text.toString().replace(
+                        " sec",
+                        ""
+                )
+
+                acbAutoLockTimerMinus.setOnClickListener {
+                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+
+                    if (length > 5) {
+                        tvAutoLockTimerLength.text = (length - 1).toString()
+                    }
+                }
+
+                acbAutoLockTimerPlus.setOnClickListener {
+                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+
+                    if (length < 30) {
+                        tvAutoLockTimerLength.text = (length + 1).toString()
+                    }
+                }
+
+                builder.setPositiveButton("Save") { _: DialogInterface, _: Int ->
+                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+                    val timer = "$length sec"
+
+                    databaseHandlerClass.updateSettings(                                            // Update Auto Lock Timer
+                            "auto_lock_timer",
+                            encodingClass.encodeData(timer)
+                    )
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(getLastActionLogId().toString()),
+                                    encodingClass.encodeData(
+                                            "Auto Lock Timer was updated to $timer."
+                                    ),
+                                    encodingClass.encodeData(getCurrentDate())
+                            )
+                    )
+                    tvSettingsAutoLockTimerSeconds.text = timer
+
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    closeKeyboard()
+                                }, 50
+                        )
+                    }
+                }
+
+                builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    closeKeyboard()
+                                }, 50
+                        )
+                    }
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.apply {
+                    window?.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                    appCompatActivity, R.drawable.layout_alert_dialog
+                            )
+                    )
+                    setTitle(R.string.settings_auto_lock_timer)
+                    show()
+                }
+            }
         }
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+
+        return dateFormat.format(calendar.time)
     }
 }
