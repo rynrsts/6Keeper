@@ -17,8 +17,6 @@ class SavedPasswordListAdapter(
         private val modelArrayList: ArrayList<SavedPasswordModelClass>
 ) : ArrayAdapter<String>(context, R.layout.layout_saved_password_list_adapter, id) {
 
-//    private var savedPasswordModelClass = SavedPasswordModelClass()
-
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
@@ -35,28 +33,14 @@ class SavedPasswordListAdapter(
         val tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword) as TextView
         val tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate) as TextView
 
-//        savedPasswordModelClass = modelArrayList[position]
-        llSavedPasswordListAdapter.tag = position
-//        cbSavedPassCheckBox.isChecked = savedPasswordModelClass.getSelected()
+        llSavedPasswordListAdapter.setTag(position, rowView)
         cbSavedPassCheckBox.isChecked = modelArrayList[position].getSelected()
         tvSavedPassPassword.text = "Password: ${password[position]}"
         tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
 
         cbSavedPassSelectAll.setOnClickListener {
             if (!modelArrayList.isNullOrEmpty()) {
-//                var isChecked = false
-//
-//                if (cbSavedPassSelectAll.isChecked) {
-//                    isChecked = true
-//                }
-//
-//                for (i in 0 until password.size) {
-//                    modelArrayList[i].setSelected(isChecked)
-//                }
-//
-//                notifyDataSetChanged()
-
-                for (i in 0 until password.size) {
+                for (i in 0 until modelArrayList.size) {
                     modelArrayList[i].setSelected(cbSavedPassSelectAll.isChecked)
                 }
 
@@ -65,16 +49,6 @@ class SavedPasswordListAdapter(
         }
 
         llSavedPasswordListAdapter.setOnClickListener { v ->
-//            val currentPos = v.tag as Int
-//            var isChecked = false
-//
-//            if (!modelArrayList[currentPos].getSelected()){
-//                isChecked = true
-//            }
-//
-//            modelArrayList[currentPos].setSelected(isChecked)
-//            notifyDataSetChanged()
-
             val currentPos = v.tag as Int
             val reverseSelect = !modelArrayList[currentPos].getSelected()
 

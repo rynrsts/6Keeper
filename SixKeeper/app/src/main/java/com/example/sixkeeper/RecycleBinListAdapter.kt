@@ -33,7 +33,7 @@ class RecycleBinListAdapter(
         val ivRecycleBinIcon = rowView.findViewById(R.id.ivRecycleBinIcon) as ImageView
 
 //        recycleBinModelClass = modelArrayList[position]
-        llRecycleBinListAdapter.tag = position
+        llRecycleBinListAdapter.setTag(position, rowView)
 //        cbRecycleBinCheckBox.isChecked = recycleBinModelClass.getSelected()
         cbRecycleBinCheckBox.isChecked = modelArrayList[position].getSelected()
         tvRecycleBinName.text = name[position]
