@@ -6,14 +6,13 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +31,10 @@ class SpecificAccountFragment : Fragment() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
 
+    private lateinit var etSpecificAccPassword: EditText
+
+    private var passwordVisibility: Int = 0
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -47,6 +50,7 @@ class SpecificAccountFragment : Fragment() {
         setActionBarTitle()
         closeKeyboard()
         populateAccountData()
+        setImageViewOnClick()
         setOnClick()
     }
 
@@ -60,6 +64,8 @@ class SpecificAccountFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+
+        etSpecificAccPassword = appCompatActivity.findViewById(R.id.etSpecificAccPassword)
     }
 
     private fun setActionBarTitle() {
@@ -99,8 +105,6 @@ class SpecificAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.tvSpecificAccCredentialField)
         val tvSpecificAccCredential: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificAccCredential)
-        val tvSpecificAccPassword: TextView =
-                appCompatActivity.findViewById(R.id.tvSpecificAccPassword)
         val tvSpecificAccWebsiteURL: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificAccWebsiteURL)
         val tvSpecificAccDescription: TextView =
@@ -114,7 +118,7 @@ class SpecificAccountFragment : Fragment() {
                 tvSpecificAccCredentialField.text =
                         encodingClass.decodeData(u.accountCredentialField)
                 tvSpecificAccCredential.text = encodingClass.decodeData(u.accountCredential)
-                tvSpecificAccPassword.text = encodingClass.decodeData(u.accountPassword)
+                etSpecificAccPassword.setText(encodingClass.decodeData(u.accountPassword))
                 tvSpecificAccWebsiteURL.text = encodingClass.decodeData(u.accountWebsiteURL)
                 tvSpecificAccDescription.text = encodingClass.decodeData(u.accountDescription)
 
@@ -133,6 +137,28 @@ class SpecificAccountFragment : Fragment() {
         }
 
         tvSpecificAccCategoryPlatform.text = "$categoryName > $platformName"
+    }
+
+    private fun setImageViewOnClick() {                                                             // Set action when image was clicked
+        val ivSpecificAccTogglePass: ImageView =
+                appCompatActivity.findViewById(R.id.ivSpecificAccTogglePass)
+
+        ivSpecificAccTogglePass.setOnClickListener {
+            when (passwordVisibility) {
+                0 -> {                                                                              // Show password
+                    ivSpecificAccTogglePass.setImageResource(R.drawable.ic_visibility_light_black)
+                    etSpecificAccPassword.transformationMethod = null
+                    passwordVisibility = 1
+                }
+                1 -> {                                                                              // Hide password
+                    ivSpecificAccTogglePass.setImageResource(
+                            R.drawable.ic_visibility_off_light_black
+                    )
+                    etSpecificAccPassword.transformationMethod = PasswordTransformationMethod()
+                    passwordVisibility = 0
+                }
+            }
+        }
     }
 
     private fun setOnClick() {

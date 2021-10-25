@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
 
 class AboutUsFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -27,8 +29,28 @@ class AboutUsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         appCompatActivity = activity as AppCompatActivity
+        disableMenuItem()
         closeKeyboard()
         setOnClick()
+    }
+
+    private fun disableMenuItem() {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val clNavigationHeader: ConstraintLayout = headerView.findViewById(R.id.clNavigationHeader)
+
+        clNavigationHeader.isEnabled = true
+        navigationView.menu.findItem(R.id.dashboardFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.accountsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.favoritesFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.passwordGeneratorFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.recycleBinFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.settingsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.aboutUsFragment).isEnabled = false
+        navigationView.menu.findItem(R.id.termsConditionsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.privacyPolicyFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.logoutFragment).isEnabled = true
     }
 
     private fun closeKeyboard() {

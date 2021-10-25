@@ -26,6 +26,7 @@ class AccountsFragment : AccountsProcessClass() {
 
         setVariables()
         setActionBarTitle()
+        disableMenuItem()
         closeKeyboard()
         populateCategories("")
         setOnClick()

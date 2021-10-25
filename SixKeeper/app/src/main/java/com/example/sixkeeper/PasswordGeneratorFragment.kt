@@ -28,6 +28,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        disableMenuItem()
         closeKeyboard()
         populateMediumStrong("medium")
         setOnClick()

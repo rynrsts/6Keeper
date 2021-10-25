@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".07" />
+                app:layout_constraintGuide_begin="29dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gSpecificAccVertical93"
@@ -36,213 +36,188 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent=".93" />
 
-            <LinearLayout
-                android:id="@+id/llSpecificAccFavorites"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvSpecificAccName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="19sp"
-                app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvSpecificAccCategoryPlatform"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccName" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSpecificAccCredential"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:background="@drawable/layout_constraint_white_quadrilateral"
+                android:padding="30dp"
                 app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
                 app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccCategoryPlatform">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gSpecificAcc1Vertical45"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".45" />
+                <LinearLayout
+                    android:id="@+id/llSpecificAccFavorites"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSpecificAccName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSpecificAccCategoryPlatform"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/llSpecificAccFavorites"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccName" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccCredentialField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
-                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc1Vertical45"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccCategoryPlatform" />
+
+                <View
+                    android:id="@+id/vSpecificAccDivision1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccCredentialField"
+                    tools:layout_editor_absoluteX="30dp" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccCredential"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc1Vertical45"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSpecificAccPassword"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccCredential">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gSpecificAcc2Vertical45"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".45" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vSpecificAccDivision1" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccPasswordField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="24dp"
                     android:text="@string/many_password"
-                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc2Vertical45"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccCredential" />
 
-                <TextView
-                    android:id="@+id/tvSpecificAccPassword"
+                <View
+                    android:id="@+id/vSpecificAccDivision2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccPasswordField"
+                    tools:layout_editor_absoluteX="30dp" />
+
+                <EditText
+                    android:id="@+id/etSpecificAccPassword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:inputType="textPassword"
+                    app:layout_constraintEnd_toStartOf="@+id/ivSpecificAccTogglePass"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vSpecificAccDivision2"
+                    tools:ignore="Autofill, LabelFor" />
+
+                <ImageView
+                    android:id="@+id/ivSpecificAccTogglePass"
+                    android:layout_width="30dp"
+                    android:layout_height="36dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingTop="6dp"
+                    android:paddingStart="6dp"
+                    android:paddingBottom="6dp"
+                    android:src="@drawable/ic_visibility_off_light_black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc2Vertical45"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSpecificAccWebsiteURL"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccPassword">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gSpecificAcc3Vertical45"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".45" />
+                    app:layout_constraintTop_toBottomOf="@+id/vSpecificAccDivision2"
+                    tools:ignore="ContentDescription, RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccWebsiteURLField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="24dp"
                     android:text="@string/add_account_website"
-                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc3Vertical45"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/etSpecificAccPassword" />
+
+                <View
+                    android:id="@+id/vSpecificAccDivision3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccWebsiteURLField"
+                    tools:layout_editor_absoluteX="30dp" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccWebsiteURL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc3Vertical45"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSpecificAccDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"
-                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"
-                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccWebsiteURL">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gSpecificAcc4Vertical45"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".45" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vSpecificAccDivision3" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccDescriptionField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="24dp"
                     android:text="@string/specific_account_desc"
-                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc4Vertical45"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccWebsiteURL" />
+
+                <View
+                    android:id="@+id/vSpecificAccDivision4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccDescriptionField"
+                    tools:layout_editor_absoluteX="30dp" />
 
                 <TextView
                     android:id="@+id/tvSpecificAccDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc4Vertical45"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vSpecificAccDivision4" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/acbPassGeneratorGenerate"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/layout_button_green_quadrilateral"
+                    android:stateListAnimator="@null"
+                    android:text="@string/specific_account_auto_fill"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clSpecificAccFavorites"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="21dp"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/gSpecificAccVertical93"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/gSpecificAccVertical07"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clSpecificAccDescription">-->
-
-<!--                <androidx.constraintlayout.widget.Guideline-->
-<!--                    android:id="@+id/gSpecificAcc5Vertical45"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:orientation="vertical"-->
-<!--                    app:layout_constraintGuide_percent=".45" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tvSpecificAccFavoritesField"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:text="@string/add_account_favorites"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/gSpecificAcc5Vertical45"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tvSpecificAccFavorites"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="@+id/gSpecificAcc5Vertical45"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

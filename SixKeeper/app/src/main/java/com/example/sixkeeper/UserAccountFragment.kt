@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
 
 class UserAccountFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -28,13 +29,32 @@ class UserAccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        appCompatActivity = activity as AppCompatActivity
+        disableHeaderItem()
         closeKeyboard()
         setOnClick()
     }
 
-    private fun closeKeyboard() {
-        appCompatActivity = activity as AppCompatActivity
+    private fun disableHeaderItem() {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val clNavigationHeader: ConstraintLayout = headerView.findViewById(R.id.clNavigationHeader)
 
+        clNavigationHeader.isEnabled = false
+        navigationView.menu.findItem(R.id.dashboardFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.accountsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.favoritesFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.passwordGeneratorFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.recycleBinFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.settingsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.aboutUsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.termsConditionsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.privacyPolicyFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.logoutFragment).isEnabled = true
+    }
+
+    private fun closeKeyboard() {
         val immKeyboard: InputMethodManager =
             appCompatActivity.getSystemService(
                 Context.INPUT_METHOD_SERVICE

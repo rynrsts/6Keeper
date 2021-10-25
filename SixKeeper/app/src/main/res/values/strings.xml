@@ -347,6 +347,7 @@
     </string>
 
     <!-- Specific Account -->
+    <string name="specific_account_auto_fill">Auto-fill Login</string>
     <string name="specific_account_desc">Description</string>
     <string name="specific_account_remove">Remove from Favorites</string>
     <string name="specific_account_appear">Appear in Favorites</string>

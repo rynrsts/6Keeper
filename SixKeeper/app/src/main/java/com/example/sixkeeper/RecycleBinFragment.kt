@@ -23,6 +23,7 @@ class RecycleBinFragment : RecycleBinProcessClass() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        disableMenuItem()
         closeKeyboard()
         populateDeletedAccounts()
         setOnClick()

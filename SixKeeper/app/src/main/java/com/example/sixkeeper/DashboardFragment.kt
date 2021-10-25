@@ -5,10 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
@@ -17,11 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
+
 
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
@@ -48,6 +47,7 @@ class DashboardFragment : Fragment() {
             postDelayed(
                     {
                         setVariables()
+                        disableMenuItem()
                         closeKeyboard()
                         populateSummary()
                         setOnClick()
@@ -94,6 +94,25 @@ class DashboardFragment : Fragment() {
         llDashboardContainer = appCompatActivity.findViewById(R.id.llDashboardContainer)
 
         selectedTab = "summary"
+    }
+
+    private fun disableMenuItem() {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val clNavigationHeader: ConstraintLayout = headerView.findViewById(R.id.clNavigationHeader)
+
+        clNavigationHeader.isEnabled = true
+        navigationView.menu.findItem(R.id.dashboardFragment).isEnabled = false
+        navigationView.menu.findItem(R.id.accountsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.favoritesFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.passwordGeneratorFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.recycleBinFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.settingsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.aboutUsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.termsConditionsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.privacyPolicyFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.logoutFragment).isEnabled = true
     }
 
     private fun closeKeyboard() {

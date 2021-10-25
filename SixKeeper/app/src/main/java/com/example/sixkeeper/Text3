@@ -6,9 +6,6 @@ Additional
     User Account: Make Fingerprint changeable
     User Account: Add deactivate
     Accounts: Add auto-fill login
-    Specific Account: Add password visibility
-    Settings: Add Copy
-    Settings: Add Auto Lock
     Settings: Export data
 
 
@@ -19,12 +16,6 @@ Enhancement
 
 
 Bug
-    Create New Account: Make Master PIN only be set once (after back press then next)
     User Account Edit: Override back arrow function
-    Dashboard: Fix missing content when menu item is clicked again
-    Accounts: Fix missing content when menu item is clicked again
     Accounts: Fix double click on Categories, Platforms and Accounts
     Accounts: Override back arrow function
-    Favorites: Fix missing content when menu item is clicked again
-    Recycle Bin: Fix missing content when menu item is clicked again
-    Settings: Fix missing content when menu item is clicked again

@@ -35,6 +35,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
 
     private var backgroundDate = ""
     private var status = "unlocked"
+    private var start = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +47,21 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         setOnClick()
     }
 
+    override fun onStart() {
+        super.onStart()
+        start = false
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)                                                      // Stop
     fun onAppBackgrounded() {
         backgroundDate = getCurrentDate()
+        start = true
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)                                                    // Resume
     fun onAppForegrounded() {
-        if (status == "unlocked") {
+        if (!start && status == "unlocked") {
             if (backgroundDate.isNotEmpty()) {
                 val dateToday: Date = dateFormat.parse(getCurrentDate())
                 val dateBackground: Date = dateFormat.parse(backgroundDate)
@@ -78,7 +85,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 }
 
                 if (autoLock) {
-                    if (TimeUnit.MILLISECONDS.toSeconds(timeDifference) >= 1) {
+                    if (TimeUnit.MILLISECONDS.toSeconds(timeDifference) >= timer) {
                         status = "locked"
 
                         val goToAutoLockLoginActivity = Intent(

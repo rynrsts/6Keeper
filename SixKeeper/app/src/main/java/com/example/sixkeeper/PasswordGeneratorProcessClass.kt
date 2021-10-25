@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.google.android.material.navigation.NavigationView
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -87,6 +89,25 @@ open class PasswordGeneratorProcessClass : Fragment() {
         llPassGeneratorContainer = appCompatActivity.findViewById(R.id.llPassGeneratorContainer)
 
         passwordType = "medium"
+    }
+
+    fun disableMenuItem() {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val clNavigationHeader: ConstraintLayout = headerView.findViewById(R.id.clNavigationHeader)
+
+        clNavigationHeader.isEnabled = true
+        navigationView.menu.findItem(R.id.dashboardFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.accountsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.favoritesFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.passwordGeneratorFragment).isEnabled = false
+        navigationView.menu.findItem(R.id.recycleBinFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.settingsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.aboutUsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.termsConditionsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.privacyPolicyFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.logoutFragment).isEnabled = true
     }
 
     fun closeKeyboard() {

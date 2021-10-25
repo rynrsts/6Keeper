@@ -18,8 +18,10 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,6 +51,7 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        disableMenuItem()
         closeKeyboard()
         populateAccounts("")
         setOnClick()
@@ -69,6 +72,25 @@ class FavoritesFragment : Fragment() {
 
         lvFavoritesContainer = appCompatActivity.findViewById(R.id.lvFavoritesContainer)
         etFavoritesSearchBox = appCompatActivity.findViewById(R.id.etFavoritesSearchBox)
+    }
+
+    private fun disableMenuItem() {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val clNavigationHeader: ConstraintLayout = headerView.findViewById(R.id.clNavigationHeader)
+
+        clNavigationHeader.isEnabled = true
+        navigationView.menu.findItem(R.id.dashboardFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.accountsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.favoritesFragment).isEnabled = false
+        navigationView.menu.findItem(R.id.passwordGeneratorFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.recycleBinFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.settingsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.aboutUsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.termsConditionsFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.privacyPolicyFragment).isEnabled = true
+        navigationView.menu.findItem(R.id.logoutFragment).isEnabled = true
     }
 
     private fun closeKeyboard() {
