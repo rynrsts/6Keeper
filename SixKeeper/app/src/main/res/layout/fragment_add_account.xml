@@ -160,6 +160,36 @@
                 tools:ignore="Autofill, LabelFor, RtlSymmetry" />
 
             <TextView
+                android:id="@+id/tvAddAccountApplication"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/add_account_app"
+                app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gAddAccountVertical09"
+                app:layout_constraintTop_toBottomOf="@+id/etAddAccountWebsite" />
+
+            <TextView
+                android:id="@+id/tvAddAccountAppSelection"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/layout_edit_text"
+                app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gAddAccountVertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvAddAccountApplication" />
+
+            <LinearLayout
+                android:id="@+id/llAddAccountApplication"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/tvAddAccountAppSelection"
+                app:layout_constraintEnd_toEndOf="@+id/tvAddAccountAppSelection"
+                app:layout_constraintTop_toTopOf="@+id/tvAddAccountAppSelection" />
+
+            <TextView
                 android:id="@+id/tvAddAccountDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -167,7 +197,7 @@
                 android:text="@string/add_account_desc"
                 app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
                 app:layout_constraintStart_toStartOf="@+id/gAddAccountVertical09"
-                app:layout_constraintTop_toBottomOf="@+id/etAddAccountWebsite" />
+                app:layout_constraintTop_toBottomOf="@+id/tvAddAccountAppSelection" />
 
             <EditText
                 android:id="@+id/etAddAccountDescription"

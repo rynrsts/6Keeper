@@ -1,10 +1,12 @@
 package com.example.sixkeeper
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.view.Gravity
@@ -16,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
@@ -78,9 +81,9 @@ class UserAccountFragment : Fragment() {
 
     private fun closeKeyboard() {
         val immKeyboard: InputMethodManager =
-            appCompatActivity.getSystemService(
-                    Context.INPUT_METHOD_SERVICE
-            ) as InputMethodManager
+                appCompatActivity.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
 
         if (immKeyboard.isActive) {
             immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
@@ -93,17 +96,17 @@ class UserAccountFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     private fun setOnClick() {
         val clUserAccountFirstName: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountFirstName)
+                appCompatActivity.findViewById(R.id.clUserAccountFirstName)
         val clUserAccountLastName: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountLastName)
+                appCompatActivity.findViewById(R.id.clUserAccountLastName)
         val clUserAccountBirthDate: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
+                appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
         val clUserAccountEmail: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountEmail)
+                appCompatActivity.findViewById(R.id.clUserAccountEmail)
         val clUserAccountMobileNum: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
+                appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
         val clUserAccountUsername: ConstraintLayout =
-            appCompatActivity.findViewById(R.id.clUserAccountUsername)
+                appCompatActivity.findViewById(R.id.clUserAccountUsername)
         val clUserAccountPassword: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountPassword)
         val clUserAccountMasterPIN: ConstraintLayout =
@@ -203,73 +206,84 @@ class UserAccountFragment : Fragment() {
         }
 
         clUserAccountExportData.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-            builder.setMessage("Export data to 'SixKeeper' folder in the phone storage?")
-            builder.setCancelable(false)
-
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                val packageName = context?.packageName
-
-                @Suppress("DEPRECATION")
-                val sd = Environment.getExternalStorageDirectory()
-
-                val data = Environment.getDataDirectory()
-                val source: FileChannel?
-                val destination: FileChannel?
-                val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                val backupDBPath = "SixKeeper/SixKeeperDatabase"
-                val currentDB = File(data, currentDBPath)
-                val backupDB = File(sd, backupDBPath)
-
-                try {
-                    source = FileInputStream(currentDB).channel
-                    destination = FileOutputStream(backupDB).channel
-                    destination.transferFrom(source, 0, source.size())                               // Save data to folder
-                    source.close()
-                    destination.close()
-
-                    val toast: Toast = Toast.makeText(
+            if (ActivityCompat.checkSelfPermission(                                                 // Check if permission is granted
                             appCompatActivity,
-                            R.string.user_export_data_mes,
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setMessage("Export data to 'SixKeeper' folder in the phone storage?")
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    val packageName = context?.packageName
+
+                    @Suppress("DEPRECATION")
+                    val sd = Environment.getExternalStorageDirectory()
+
+                    val data = Environment.getDataDirectory()
+                    val source: FileChannel?
+                    val destination: FileChannel?
+                    val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
+                    val backupDBPath = "SixKeeper/SixKeeperDatabase"
+                    val currentDB = File(data, currentDBPath)
+                    val backupDB = File(sd, backupDBPath)
+
+                    try {
+                        source = FileInputStream(currentDB).channel
+                        destination = FileOutputStream(backupDB).channel
+                        destination.transferFrom(source, 0, source.size())                          // Save data to folder
+                        source.close()
+                        destination.close()
+
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity,
+                                R.string.user_export_data_mes,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+
+                        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+                        val encodingClass = EncodingClass()
+
+                        var actionLogId = 1000001
+                        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                        if (lastId.isNotEmpty()) {
+                            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                        }
+
+                        val calendar: Calendar = Calendar.getInstance()
+                        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                        val date: String = dateFormat.format(calendar.time)
+
+                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
+                                UserActionLogModelClass(
+                                        encodingClass.encodeData(actionLogId.toString()),
+                                        encodingClass.encodeData("Data was exported."),
+                                        encodingClass.encodeData(date)
+                                )
+                        )
+                    } catch (e: IOException) {
+                        e.printStackTrace()
                     }
-
-                    val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-                    val encodingClass = EncodingClass()
-
-                    var actionLogId = 1000001
-                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                    if (lastId.isNotEmpty()) {
-                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                    }
-
-                    val calendar: Calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    val date: String = dateFormat.format(calendar.time)
-
-                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
-                            UserActionLogModelClass(
-                                    encodingClass.encodeData(actionLogId.toString()),
-                                    encodingClass.encodeData("Data was exported."),
-                                    encodingClass.encodeData(date)
-                            )
-                    )
-                } catch (e: IOException) {
-                    e.printStackTrace()
                 }
-            }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
 
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title_confirm)
-            alert.show()
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            } else {
+                ActivityCompat.requestPermissions(                                                  // Request permission
+                        appCompatActivity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        52420
+                )
+            }
 
             it.apply {
                 clUserAccountExportData.isClickable = false                                         // Set un-clickable for 1 second

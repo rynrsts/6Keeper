@@ -26,8 +26,9 @@ class SavedPasswordFragment : Fragment() {
     private lateinit var cbSavedPassSelectAll: CheckBox
     private lateinit var lvSavedPasswordContainer: ListView
 
-    private val modelArrayList = ArrayList<SavedPasswordModelClass>()
+    private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
+    private var listSize = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -73,6 +74,7 @@ class SavedPasswordFragment : Fragment() {
         }
 
         modelArrayList.clear()
+        listSize = 0
         lvSavedPasswordContainer.adapter = null
 
         if (userSavedPass.isNullOrEmpty()) {
@@ -105,6 +107,7 @@ class SavedPasswordFragment : Fragment() {
                 savedPasswordModelClass.setId(Integer.parseInt(uId))
                 savedPasswordModelClass.setPassword(uPassword)
                 modelArrayList.add(savedPasswordModelClass)
+                listSize++
             }
 
             val savedPasswordListAdapter = SavedPasswordListAdapter(
@@ -128,7 +131,7 @@ class SavedPasswordFragment : Fragment() {
         clSavedPassDelete.setOnClickListener {
             var itemCheck = false
 
-            for (i in 0 until modelArrayList.size) {
+            for (i in 0 until listSize) {
                 if (modelArrayList[i].getSelected()) {
                     itemCheck = true
                     break
@@ -188,7 +191,7 @@ class SavedPasswordFragment : Fragment() {
             var password = ""
             val toast: Toast?
 
-            for (i in 0 until modelArrayList.size) {
+            for (i in 0 until listSize) {
                 if (modelArrayList[i].getSelected()) {
                     numOfSelected++
                     password = modelArrayList[i].getPassword()
@@ -281,7 +284,7 @@ class SavedPasswordFragment : Fragment() {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 val container = ArrayList<String>(0)
 
-                for (i in 0 until modelArrayList.size) {
+                for (i in 0 until listSize) {
                     if (modelArrayList[i].getSelected()) {
                         container.add(
                                 encodingClass.encodeData(

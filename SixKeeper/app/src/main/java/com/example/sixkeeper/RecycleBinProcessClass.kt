@@ -27,11 +27,11 @@ open class RecycleBinProcessClass : Fragment() {
     private lateinit var llRecycleBinNoItem: LinearLayout
     private lateinit var lvRecycleBinContainer: ListView
 
-    private val modelArrayList = ArrayList<RecycleBinModelClass>()
+    private val modelArrayList = ArrayList<RecycleBinModelClass>(0)
     private lateinit var recycleBinModelClass: RecycleBinModelClass
+    private var listSize = 0
 
     private lateinit var selectedTab: String
-
     private var totalRestoreNum = 0
     private var restoreCount = 0
 
@@ -129,6 +129,7 @@ open class RecycleBinProcessClass : Fragment() {
                 recycleBinModelClass.setPlatformName(encodingClass.decodeData(u.platformName))
                 recycleBinModelClass.setCategoryName(encodingClass.decodeData(u.categoryName))
                 modelArrayList.add(recycleBinModelClass)
+                listSize++
             }
 
             val accountsListAdapter = RecycleBinListAdapter(
@@ -165,6 +166,7 @@ open class RecycleBinProcessClass : Fragment() {
                 recycleBinModelClass.setSelected(false)
                 recycleBinModelClass.setId(Integer.parseInt(uId))
                 modelArrayList.add(recycleBinModelClass)
+                listSize++
             }
 
             val accountsListAdapter = RecycleBinListAdapter(
@@ -186,6 +188,7 @@ open class RecycleBinProcessClass : Fragment() {
         }
 
         modelArrayList.clear()
+        listSize = 0
         lvRecycleBinContainer.adapter = null
     }
 
@@ -227,7 +230,7 @@ open class RecycleBinProcessClass : Fragment() {
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             val container = ArrayList<String>(0)
 
-            for (i in 0 until modelArrayList.size) {
+            for (i in 0 until listSize) {
                 if (modelArrayList[i].getSelected()) {
                     container.add(
                             encodingClass.encodeData(
@@ -307,7 +310,7 @@ open class RecycleBinProcessClass : Fragment() {
         val containerPlatformName = ArrayList<String>(0)
         val containerCategoryName = ArrayList<String>(0)
 
-        for (i in 0 until modelArrayList.size) {
+        for (i in 0 until listSize) {
             if (modelArrayList[i].getSelected()) {
                 if (selectedTab == "accounts") {
                     containerId.add(modelArrayList[i].getId().toString())

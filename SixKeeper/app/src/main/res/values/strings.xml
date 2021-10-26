@@ -15,6 +15,8 @@
 
     <!-- Add Account -->
     <string name="add_account_add">Add</string>
+    <string name="add_account_app">Application (Optional)</string>
+    <string name="add_account_application">Application</string>
     <string name="add_account_credential_1">Credential Field</string>
     <string name="add_account_desc">Description (Optional)</string>
     <string name="add_account_favorites">Appear in Favorites</string>
@@ -23,6 +25,7 @@
     <string name="add_account_new_account_alert_existing">
         Account name is already existing
     </string>
+    <string name="add_account_select_app">Select App</string>
     <string name="add_account_website">Website URL</string>
 
     <!-- Accounts -->
@@ -347,11 +350,13 @@
     </string>
 
     <!-- Specific Account -->
-    <string name="specific_account_auto_fill">Auto-fill Login</string>
+    <string name="specific_account_open_platform">Open Platform</string>
+    <string name="specific_account_copy"><u>Copy</u></string>
     <string name="specific_account_desc">Description</string>
     <string name="specific_account_remove">Remove from Favorites</string>
     <string name="specific_account_appear">Appear in Favorites</string>
     <string name="specific_account_delete">Delete account?</string>
+    <string name="specific_account_web_view">Web View inside the app</string>
 
     <!-- Specific Category -->
     <string name="specific_category_edit_platform">Edit Platform</string>

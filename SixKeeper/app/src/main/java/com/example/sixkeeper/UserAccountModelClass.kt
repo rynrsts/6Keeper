@@ -7,6 +7,8 @@ class UserAccountModelClass(
         val accountCredential: String,
         val accountPassword: String,
         val accountWebsiteURL: String,
+        val accountApplicationName: String,
+        val accountPackageName: String,
         val accountDescription: String,
         val accountIsFavorites: String,
         val accountDeleted: String,

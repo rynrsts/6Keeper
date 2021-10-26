@@ -59,7 +59,7 @@
             android:gravity="center"
             android:text="@string/auto_lock_login_mes"
             android:textColor="@color/red"
-            android:textSize="13sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
             app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
             app:layout_constraintTop_toBottomOf="@+id/ivAutoLockLoginLogo" />

@@ -71,6 +71,8 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_CREDENTIAL = "account_credential"
         private const val KEY_ACCOUNT_PASSWORD = "account_password"
         private const val KEY_ACCOUNT_WEBSITE_URL = "account_website_url"
+        private const val KEY_ACCOUNT_APPLICATION_NAME = "account_application_name"
+        private const val KEY_ACCOUNT_PACKAGE_NAME = "account_package_name"
         private const val KEY_ACCOUNT_DESCRIPTION = "account_description"
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
@@ -150,6 +152,8 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_CREDENTIAL + " TEXT," +
                         KEY_ACCOUNT_PASSWORD + " TEXT," +
                         KEY_ACCOUNT_WEBSITE_URL + " TEXT," +
+                        KEY_ACCOUNT_APPLICATION_NAME + " TEXT," +
+                        KEY_ACCOUNT_PACKAGE_NAME + " TEXT," +
                         KEY_ACCOUNT_DESCRIPTION + " TEXT," +
                         KEY_ACCOUNT_IS_FAVORITES + " TEXT," +
                         KEY_ACCOUNT_DELETED + " TEXT," +
@@ -317,6 +321,8 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_CREDENTIAL, userAccount.accountCredential)
             put(KEY_ACCOUNT_PASSWORD, userAccount.accountPassword)
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
+            put(KEY_ACCOUNT_APPLICATION_NAME, userAccount.accountApplicationName)
+            put(KEY_ACCOUNT_PACKAGE_NAME, userAccount.accountPackageName)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
             put(KEY_ACCOUNT_DELETED, userAccount.accountDeleted)
@@ -728,6 +734,8 @@ class DatabaseHandlerClass(context: Context) :
                         accountCredential = "",
                         accountPassword = "",
                         accountWebsiteURL = "",
+                        accountApplicationName = "",
+                        accountPackageName = "",
                         accountDescription = "",
                         accountIsFavorites = "",
                         accountDeleted = "",
@@ -1003,6 +1011,8 @@ class DatabaseHandlerClass(context: Context) :
         var accountCredential: String
         var accountPassword: String
         var accountWebsiteURL: String
+        var accountApplicationName: String
+        var accountPackageName: String
         var accountDescription: String
         var accountIsFavorites: String
         var accountDeleted: String
@@ -1022,6 +1032,10 @@ class DatabaseHandlerClass(context: Context) :
                 accountCredential = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_CREDENTIAL))
                 accountPassword = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_PASSWORD))
                 accountWebsiteURL = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_WEBSITE_URL))
+                accountApplicationName =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_APPLICATION_NAME))
+                accountPackageName =
+                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_PACKAGE_NAME))
                 accountDescription =
                         cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_DESCRIPTION))
                 accountIsFavorites =
@@ -1041,6 +1055,8 @@ class DatabaseHandlerClass(context: Context) :
                         accountCredential = accountCredential,
                         accountPassword = accountPassword,
                         accountWebsiteURL = accountWebsiteURL,
+                        accountApplicationName = accountApplicationName,
+                        accountPackageName = accountPackageName,
                         accountDescription = accountDescription,
                         accountIsFavorites = accountIsFavorites,
                         accountDeleted = accountDeleted,
@@ -1445,6 +1461,8 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_ACCOUNT_CREDENTIAL, userAccount.accountCredential)
             put(KEY_ACCOUNT_PASSWORD, userAccount.accountPassword)
             put(KEY_ACCOUNT_WEBSITE_URL, userAccount.accountWebsiteURL)
+            put(KEY_ACCOUNT_APPLICATION_NAME, userAccount.accountApplicationName)
+            put(KEY_ACCOUNT_PACKAGE_NAME, userAccount.accountPackageName)
             put(KEY_ACCOUNT_DESCRIPTION, userAccount.accountDescription)
             put(KEY_ACCOUNT_IS_FAVORITES, userAccount.accountIsFavorites)
             put(KEY_CREATION_DATE, userAccount.creationDate)

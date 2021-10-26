@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -40,8 +43,13 @@ class AddAccountFragment : Fragment() {
     private lateinit var etAddAccountPassword: EditText
     private lateinit var ivAddAccountTogglePass: ImageView
     private lateinit var etAddAccountWebsite: EditText
+    private lateinit var tvAddAccountAppSelection: TextView
     private lateinit var etAddAccountDescription: EditText
     private lateinit var cbAddAccountFavorites: CheckBox
+
+    private lateinit var inflatedViewIcon: View
+    private lateinit var ivAddAccountRemove: ImageView
+    private lateinit var llAddAccountApplication: LinearLayout
 
     private var accountName: String = ""
     private lateinit var name: String
@@ -50,6 +58,8 @@ class AddAccountFragment : Fragment() {
     private lateinit var password: String
     private var passwordVisibility: Int = 0
     private lateinit var websiteURL: String
+    private lateinit var applicationName: String
+    private lateinit var packageName: String
     private lateinit var description: String
     private lateinit var deleted: String
     private var isFavorites: Int = 0
@@ -131,6 +141,7 @@ class AddAccountFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("InflateParams")
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
@@ -142,9 +153,16 @@ class AddAccountFragment : Fragment() {
         etAddAccountCredential1 = appCompatActivity.findViewById(R.id.etAddAccountCredential1)
         etAddAccountPassword = appCompatActivity.findViewById(R.id.etAddAccountPassword)
         ivAddAccountTogglePass = appCompatActivity.findViewById(R.id.ivAddAccountTogglePass)
+        tvAddAccountAppSelection = appCompatActivity.findViewById(R.id.tvAddAccountAppSelection)
         etAddAccountWebsite = appCompatActivity.findViewById(R.id.etAddAccountWebsite)
         etAddAccountDescription = appCompatActivity.findViewById(R.id.etAddAccountDescription)
         cbAddAccountFavorites = appCompatActivity.findViewById(R.id.cbAddAccountFavorites)
+
+        inflatedViewIcon = layoutInflater.inflate(
+                R.layout.layout_add_account_remove, null, true
+        )
+        ivAddAccountRemove = inflatedViewIcon.findViewById(R.id.ivAddAccountRemove)
+        llAddAccountApplication = appCompatActivity.findViewById(R.id.llAddAccountApplication)
 
         deleted = encodingClass.encodeData(0.toString())
     }
@@ -153,9 +171,7 @@ class AddAccountFragment : Fragment() {
         val sAddAccountCredential1: Spinner =
                 appCompatActivity.findViewById(R.id.sAddAccountCredential1)
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                appCompatActivity,
-                android.R.layout.simple_spinner_dropdown_item,
-                items
+                appCompatActivity, android.R.layout.simple_spinner_dropdown_item, items
         )
 
         sAddAccountCredential1.adapter = arrayAdapter
@@ -163,14 +179,12 @@ class AddAccountFragment : Fragment() {
 
     private fun closeKeyboard() {
         val immKeyboard: InputMethodManager =
-                appCompatActivity.getSystemService(
-                        Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
+                appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
 
         if (immKeyboard.isActive) {
             immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
-                    appCompatActivity.currentFocus?.windowToken,
-                    0
+                    appCompatActivity.currentFocus?.windowToken, 0
             )
         }
     }
@@ -277,11 +291,18 @@ class AddAccountFragment : Fragment() {
                     setText(encodingClass.decodeData(u.accountWebsiteURL))
                     setSelection(etAddAccountWebsite.text.length)
                 }
+                val appNameTemp = encodingClass.decodeData(u.accountApplicationName)
+                tvAddAccountAppSelection.text = appNameTemp
+                packageName = encodingClass.decodeData(u.accountPackageName)
                 etAddAccountDescription.apply {
                     setText(encodingClass.decodeData(u.accountDescription))
                     setSelection(etAddAccountDescription.text.length)
                 }
                 encodedDateTemp = u.creationDate
+
+                if (appNameTemp.isNotEmpty()) {
+                    llAddAccountApplication.addView(inflatedViewIcon)
+                }
 
                 if (encodingClass.decodeData(u.accountIsFavorites) == "1") {
                     cbAddAccountFavorites.isChecked = true
@@ -290,13 +311,85 @@ class AddAccountFragment : Fragment() {
         }
     }
 
+    @SuppressLint("InflateParams", "QueryPermissionsNeeded")
     private fun setOnClick() {
         val clAddAccountButton: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clAddAccountButton)
 
+        tvAddAccountAppSelection.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+            val inflater = this.layoutInflater
+            val dialogView = inflater.inflate(R.layout.layout_add_account_list_view, null)
+
+            builder.apply {
+                setView(dialogView)
+                setCancelable(true)
+            }
+
+            val lvDashboardActionLog: ListView = dialogView.findViewById(R.id.lvDashboardActionLog)
+            val packageList = appCompatActivity.packageManager.getInstalledPackages(0)
+            val packageNameTemp = ArrayList<String>(0)
+            val packageListTemp = ArrayList<PackageInfo>(0)
+
+            for (list in packageList.indices) {
+                val packageInfo = packageList[list]
+
+                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                    val appName = packageInfo.applicationInfo.loadLabel(
+                            appCompatActivity.packageManager
+                    ).toString()
+                    val packageName = packageInfo.packageName
+
+                    packageListTemp.add(packageInfo)
+                    packageNameTemp.add(appName + "ramjcammjar" + packageName)
+                }
+            }
+
+            val addAccountAppListAdapter = AddAccountAppListAdapter(
+                    attActivity,
+                    packageNameTemp,
+                    packageListTemp
+            )
+
+            lvDashboardActionLog.adapter = addAccountAppListAdapter
+
+            val alert: AlertDialog = builder.create()
+            alert.apply {
+                window?.setBackgroundDrawable(
+                        ContextCompat.getDrawable(appCompatActivity, R.drawable.layout_alert_dialog)
+                )
+                setTitle(R.string.add_account_select_app)
+                show()
+            }
+
+            closeKeyboard()
+
+            lvDashboardActionLog.onItemClickListener = (AdapterView.OnItemClickListener { _, _, i, _ ->
+                val selectedItem = lvDashboardActionLog.getItemAtPosition(i).toString()
+                val selectedValue = selectedItem.split("ramjcammjar")
+                val selectedAppName = selectedValue[0]
+                val selectedPackageName = selectedValue[1]
+
+                tvAddAccountAppSelection.text = selectedAppName
+                packageName = selectedPackageName
+                llAddAccountApplication.apply {
+                    removeAllViews()
+                    addView(inflatedViewIcon)
+                }
+                alert.cancel()
+            })
+        }
+
+        ivAddAccountRemove.setOnClickListener {
+            tvAddAccountAppSelection.text = ""
+            llAddAccountApplication.removeAllViews()
+            packageName = ""
+        }
+
         clAddAccountButton.setOnClickListener {
             if (isNotEmpty()) {
                 credentialField = sAddAccountCredential1.selectedItem.toString()
+                applicationName = tvAddAccountAppSelection.text.toString()
                 description = etAddAccountDescription.text.toString()
 
                 if (cbAddAccountFavorites.isChecked) {
@@ -318,11 +411,7 @@ class AddAccountFragment : Fragment() {
 
             it.apply {
                 clAddAccountButton.isClickable = false                                              // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clAddAccountButton.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clAddAccountButton.isClickable = true }, 1000)
             }
         }
     }
@@ -334,11 +423,8 @@ class AddAccountFragment : Fragment() {
         password = etAddAccountPassword.text.toString()
         websiteURL = etAddAccountWebsite.text.toString()
 
-        return name.isNotEmpty() &&
-                credentialFieldPosition != 0 &&
-                credential.isNotEmpty() &&
-                password.isNotEmpty() &&
-                websiteURL.isNotEmpty()
+        return name.isNotEmpty() && credentialFieldPosition != 0 && credential.isNotEmpty() &&
+                password.isNotEmpty() && websiteURL.isNotEmpty()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -361,10 +447,7 @@ class AddAccountFragment : Fragment() {
     @SuppressLint("ShowToast")
     private fun addOrEditAccount() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
-                "platformId",
-                encodedSpecificPlatformId,
-                deleted
-
+                "platformId", encodedSpecificPlatformId, deleted
         )
         var accountId = 100001
         val lastId = databaseHandlerClass.getLastIdOfAccount()
@@ -395,6 +478,8 @@ class AddAccountFragment : Fragment() {
                                 encodingClass.encodeData(credential),
                                 encodingClass.encodeData(password),
                                 encodingClass.encodeData(websiteURL),
+                                encodingClass.encodeData(applicationName),
+                                encodingClass.encodeData(packageName),
                                 encodingClass.encodeData(description),
                                 encodingClass.encodeData(isFavorites.toString()),
                                 deleted,
@@ -434,15 +519,13 @@ class AddAccountFragment : Fragment() {
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     val goToConfirmActivity = Intent(
-                            appCompatActivity,
-                            ConfirmActionActivity::class.java
+                            appCompatActivity, ConfirmActionActivity::class.java
                     )
 
                     @Suppress("DEPRECATION")
                     startActivityForResult(goToConfirmActivity, 16914)
                     appCompatActivity.overridePendingTransition(
-                            R.anim.anim_enter_bottom_to_top_2,
-                            R.anim.anim_0
+                            R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
                     )
                 }
                 builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -613,6 +696,8 @@ class AddAccountFragment : Fragment() {
                                     encodingClass.encodeData(credential),
                                     encodingClass.encodeData(password),
                                     encodingClass.encodeData(websiteURL),
+                                    encodingClass.encodeData(applicationName),
+                                    encodingClass.encodeData(packageName),
                                     encodingClass.encodeData(description),
                                     encodingClass.encodeData(isFavorites.toString()),
                                     "",

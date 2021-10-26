@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="?dialogPreferredPadding">
+
+    <LinearLayout
+        android:id="@+id/llSpecificAccountBrowser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/ivSpecificAccountBrowser"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="6dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSpecificAccountBrowser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="21dp"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSpecificAccountWebView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/ivSpecificAccountWebView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="6dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSpecificAccountWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="21dp"
+            android:gravity="center_vertical"
+            android:text="@string/specific_account_web_view" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSpecificAccountApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/ivSpecificAccountApp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="6dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSpecificAccountApp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="21dp"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+</LinearLayout>
