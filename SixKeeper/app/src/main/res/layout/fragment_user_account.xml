@@ -524,9 +524,52 @@
             <View
                 android:id="@+id/vUserAccountDivision12"
                 android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:background="@color/lightGray"
+                app:layout_constraintTop_toBottomOf="@+id/clUserAccountDeleteAccount" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clUserAccountExportData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/vUserAccountDivision12">
+
+                <ImageView
+                    android:id="@+id/ivUserAccountExportData"
+                    android:layout_width="24dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:src="@drawable/ic_file_download_blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvUserAccountExportData"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvUserAccountExportData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:text="@string/user_export_data"
+                    android:textColor="@color/blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivUserAccountExportData"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vUserAccountDivision13"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/clUserAccountDeleteAccount" />
+                app:layout_constraintTop_toBottomOf="@+id/clUserAccountExportData" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

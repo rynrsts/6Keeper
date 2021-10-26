@@ -1,8 +1,12 @@
 package com.example.sixkeeper
 
+import android.Manifest
+import android.os.Environment
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
+import java.io.File
 
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
@@ -15,7 +19,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var username: String
     private lateinit var password: String
     private lateinit var userId: String
-
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
@@ -43,6 +46,23 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
     fun getPassword(): String {
         return password
+    }
+
+    fun requestPermission() {                                                                       // Request permission
+        ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                52420
+        )
+    }
+
+    fun createFolder() {                                                                            // Create folder
+        @Suppress("DEPRECATION")
+        val directory = File(Environment.getExternalStorageDirectory(), "SixKeeper")
+
+        if (!directory.exists()) {
+            directory.mkdir()
+        }
     }
 
     fun blockCapture() {

@@ -27,7 +27,7 @@ open class RecycleBinProcessClass : Fragment() {
     private lateinit var llRecycleBinNoItem: LinearLayout
     private lateinit var lvRecycleBinContainer: ListView
 
-    private val modelArrayList = ArrayList<RecycleBinModelClass>(0)
+    private val modelArrayList = ArrayList<RecycleBinModelClass>()
     private lateinit var recycleBinModelClass: RecycleBinModelClass
 
     private lateinit var selectedTab: String

@@ -26,7 +26,7 @@ class SavedPasswordFragment : Fragment() {
     private lateinit var cbSavedPassSelectAll: CheckBox
     private lateinit var lvSavedPasswordContainer: ListView
 
-    private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
+    private val modelArrayList = ArrayList<SavedPasswordModelClass>()
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
 
     override fun onCreateView(

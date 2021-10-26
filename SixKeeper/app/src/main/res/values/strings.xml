@@ -431,6 +431,8 @@
 
     <!-- User Account -->
     <string name="user_deactivate_account">Deactivate Account</string>
+    <string name="user_export_data">Export Data</string>
+    <string name="user_export_data_mes">Data was exported!</string>
     <string name="user_fingerprint">Fingerprint</string>
     <string name="user_change_master_pin">Change Master PIN</string>
     <string name="user_change_password">Change Password</string>

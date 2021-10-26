@@ -21,6 +21,8 @@ class LoginActivity : LoginValidationClass() {
 
         changeStatusBarColor()
         setVariables()
+        requestPermission()
+        createFolder()
         blockCapture()
         setButtonOnClick()
         setEditTextOnChange()
