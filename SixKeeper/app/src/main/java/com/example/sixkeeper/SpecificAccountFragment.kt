@@ -26,7 +26,6 @@ import androidx.navigation.fragment.navArgs
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class SpecificAccountFragment : Fragment() {
     private val args: SpecificAccountFragmentArgs by navArgs()
 
@@ -41,7 +40,6 @@ class SpecificAccountFragment : Fragment() {
     private lateinit var etSpecificAccPassword: EditText
     private lateinit var tvSpecificAccWebsiteURL: TextView
 
-    private var accountName = ""
     private var applicationName = ""
     private var packageName = ""
     private var passwordVisibility: Int = 0
@@ -122,8 +120,7 @@ class SpecificAccountFragment : Fragment() {
 
         for (u in userAccount) {
             if (args.specificAccountId == encodingClass.decodeData(u.accountId)) {
-                accountName = encodingClass.decodeData(u.accountName)
-                tvSpecificAccName.text = accountName
+                tvSpecificAccName.text = encodingClass.decodeData(u.accountName)
                 tvSpecificAccCredentialField.text =
                         encodingClass.decodeData(u.accountCredentialField)
                 tvSpecificAccCredential.text = encodingClass.decodeData(u.accountCredential)
@@ -191,8 +188,8 @@ class SpecificAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.tvSpecificAccPasswordCopy)
         val tvSpecificAccWebsiteURLCopy: TextView =
                 appCompatActivity.findViewById(R.id.tvSpecificAccWebsiteURLCopy)
-        val acbPassGeneratorGenerate: Button =
-                appCompatActivity.findViewById(R.id.acbPassGeneratorGenerate)
+        val acbSpecificAccOpenPlatform: Button =
+                appCompatActivity.findViewById(R.id.acbSpecificAccOpenPlatform)
         val clSpecificAccEdit: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clSpecificAccEdit)
         val clSpecificAccDelete: ConstraintLayout =
@@ -235,39 +232,55 @@ class SpecificAccountFragment : Fragment() {
             addActionLog("Website url")
         }
 
-        acbPassGeneratorGenerate.setOnClickListener {
+        acbSpecificAccOpenPlatform.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
             val inflater = this.layoutInflater
             val dialogView = inflater.inflate(
                     R.layout.layout_specific_account_open_platform, null
             )
 
+            val llSpecificAccountBrowser: LinearLayout =
+                    dialogView.findViewById(R.id.llSpecificAccountBrowser)
             val ivSpecificAccountBrowser: ImageView =
                     dialogView.findViewById(R.id.ivSpecificAccountBrowser)
             val tvSpecificAccountBrowser: TextView =
                     dialogView.findViewById(R.id.tvSpecificAccountBrowser)
+            val llSpecificAccountWebView: LinearLayout =
+                    dialogView.findViewById(R.id.llSpecificAccountWebView)
             val ivSpecificAccountWebView: ImageView =
                     dialogView.findViewById(R.id.ivSpecificAccountWebView)
+            val llSpecificAccountApp: LinearLayout =
+                    dialogView.findViewById(R.id.llSpecificAccountApp)
             val ivSpecificAccountApp: ImageView =
                     dialogView.findViewById(R.id.ivSpecificAccountApp)
             val tvSpecificAccountApp: TextView =
                     dialogView.findViewById(R.id.tvSpecificAccountApp)
 
-            val browserIntent = Intent(                                                             // Browser
-                    Intent.ACTION_VIEW, Uri.parse("http://")
-            )
-            val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
-                    browserIntent, PackageManager.MATCH_DEFAULT_ONLY
-            )!!
-            val browserIcon = resolveInfo.activityInfo.loadIcon(requireContext().packageManager)
-            val browserName = resolveInfo.activityInfo.loadLabel(
-                    requireContext().packageManager
-            ).toString()
-            val browserPackage = resolveInfo.activityInfo.packageName
-            val browserNameText = "$browserName (default browser)"
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))                    // Browser
+            var browserPackage = ""
 
-            ivSpecificAccountBrowser.setImageDrawable(browserIcon)
-            tvSpecificAccountBrowser.text = browserNameText
+            try {                                                                                   // Set default browser
+                val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
+                        browserIntent, PackageManager.MATCH_DEFAULT_ONLY
+                )!!
+                val browserIcon = resolveInfo.activityInfo.loadIcon(requireContext().packageManager)
+                val browserName = resolveInfo.activityInfo.loadLabel(
+                        requireContext().packageManager
+                ).toString()
+                browserPackage = resolveInfo.activityInfo.packageName
+                val browserNameText = "$browserName (default browser)"
+
+                ivSpecificAccountBrowser.setImageDrawable(browserIcon)
+                tvSpecificAccountBrowser.text = browserNameText
+            } catch (e: Exception) {                                                                // Cannot detect default browser
+                llSpecificAccountBrowser.isEnabled = false
+                ivSpecificAccountBrowser.setImageDrawable(null)
+                tvSpecificAccountBrowser.apply {
+                    val noDefaultBrowser = "Cannot detect default browser"
+                    text = noDefaultBrowser
+                    setTextColor(ContextCompat.getColor(context, R.color.gray))
+                }
+            }
 
             val sixKeeperPackageName = requireContext().packageName
 
@@ -289,11 +302,21 @@ class SpecificAccountFragment : Fragment() {
                         ivSpecificAccountWebView.setImageDrawable(icon)
                     }
 
-                    if (applicationName == aName && packageName == pName) {                         // Selected app
-                        val applicationNameText = "$applicationName (selected app)"
+                    if (applicationName.isNotEmpty()) {                                             // Selected app
+                        if (applicationName == aName && packageName == pName) {
+                            val applicationNameText = "$applicationName (selected app)"
 
-                        ivSpecificAccountApp.setImageDrawable(icon)
-                        tvSpecificAccountApp.text = applicationNameText
+                            ivSpecificAccountApp.setImageDrawable(icon)
+                            tvSpecificAccountApp.text = applicationNameText
+                        }
+                    } else {
+                        llSpecificAccountApp.isEnabled = false
+                        ivSpecificAccountApp.setImageDrawable(null)
+                        tvSpecificAccountApp.apply {
+                            val noApplication = "No app is selected"
+                            text = noApplication
+                            setTextColor(ContextCompat.getColor(context, R.color.gray))
+                        }
                     }
                 }
             }
@@ -313,18 +336,29 @@ class SpecificAccountFragment : Fragment() {
 
             closeKeyboard()
 
-            val llSpecificAccountBrowser: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountBrowser)
-            val llSpecificAccountWebView: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountWebView)
-            val llSpecificAccountApp: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountApp)
+            llSpecificAccountBrowser.setOnClickListener {
+                val browserURLIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getWebsiteURL()))
+                browserURLIntent.setPackage(browserPackage)
+                startActivity(browserURLIntent)
+
+                alert.cancel()
+            }
+
+            llSpecificAccountWebView.setOnClickListener {
+                val action = SpecificAccountFragmentDirections
+                        .actionSpecificAccountFragmentToWebViewFragment(
+                                getWebsiteURL()
+                        )
+                findNavController().navigate(action)
+
+                alert.cancel()
+            }
 
             llSpecificAccountApp.setOnClickListener {
-                val launchIntent = appCompatActivity.packageManager.getLaunchIntentForPackage(
+                val applicationIntent = appCompatActivity.packageManager.getLaunchIntentForPackage(
                         packageName
                 )
-                startActivity(launchIntent)
+                startActivity(applicationIntent)
 
                 alert.cancel()
             }
@@ -381,6 +415,8 @@ class SpecificAccountFragment : Fragment() {
     }
 
     private fun addActionLog(field: String) {
+        val accountName = tvSpecificAccName.text.toString()
+
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
                         encodingClass.encodeData(getLastActionLogId().toString()),
@@ -407,6 +443,18 @@ class SpecificAccountFragment : Fragment() {
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         return dateFormat.format(calendar.time)
+    }
+
+    private fun getWebsiteURL(): String {
+        var websiteURL = tvSpecificAccWebsiteURL.text.toString()
+
+        if (
+                !websiteURL.startsWith("http://")
+                && !websiteURL.startsWith("https://")
+        ) {
+            websiteURL = "http://$websiteURL"
+        }
+        return websiteURL
     }
 
     @SuppressLint("SimpleDateFormat")

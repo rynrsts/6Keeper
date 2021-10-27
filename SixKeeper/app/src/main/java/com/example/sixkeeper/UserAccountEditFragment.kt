@@ -7,6 +7,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 
 class UserAccountEditFragment : UserAccountEditProcessClass() {
     private var currentPassVisibility: Int = 0
@@ -27,6 +28,7 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
         setVariables()
         setSpecifiedView()
         setEditOnClick()
+        setCustomBackArrow()
     }
 
     private fun setSpecifiedView() {
@@ -225,6 +227,26 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
                     confirmPassVisibility = 1
                 }
             }
+        }
+    }
+
+    private fun setCustomBackArrow() {
+        val ivUserAccountEditBack: ImageView =
+                getAppCompatActivity().findViewById(R.id.ivUserAccountEditBack)
+
+        ivUserAccountEditBack.apply {
+            postDelayed(
+                    {
+                        ivUserAccountEditBack.apply {
+                            setBackgroundResource(R.color.blue)
+                            setImageResource(R.drawable.ic_arrow_back_white)
+                        }
+                    }, 400
+            )
+        }
+
+        ivUserAccountEditBack.setOnClickListener {
+            getAppCompatActivity().onBackPressed()
         }
     }
 }

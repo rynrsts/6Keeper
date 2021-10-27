@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserAccountEditFragment">
+    tools:context=".WebViewFragment">
 
     <ImageView
-        android:id="@+id/ivUserAccountEditBack"
+        android:id="@+id/ivInAppWebViewBack"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:paddingStart="15.5dp"
@@ -18,28 +18,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <ScrollView
+    <WebView
+        android:id="@+id/wvInAppWebView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:background="@color/white"
-        android:scrollbarThumbVertical="@null"
-        app:layout_constraintBottom_toTopOf="@+id/clUserAccountEditButton"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clUserAccountEditContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp" />
-
-    </ScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clUserAccountEditButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -97,7 +97,6 @@ class AddAccountFragment : Fragment() {
         attActivity = activity                                                                      // Attach activity
     }
 
-    //    TODO: Apply this on Action Bar back
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -234,6 +233,21 @@ class AddAccountFragment : Fragment() {
     }
 
     private fun setImageViewOnClick() {                                                             // Set action when image was clicked
+        val ivAddAccountBack: ImageView = appCompatActivity.findViewById(R.id.ivAddAccountBack)
+
+        ivAddAccountBack.apply {
+            postDelayed({
+                ivAddAccountBack.apply {
+                    setBackgroundResource(R.color.blue)
+                    setImageResource(R.drawable.ic_arrow_back_white)
+                }
+            }, 400)
+        }
+
+        ivAddAccountBack.setOnClickListener {
+            appCompatActivity.onBackPressed()
+        }
+
         ivAddAccountTogglePass.setOnClickListener {
             when (passwordVisibility) {
                 1 -> {                                                                              // Show password

@@ -462,6 +462,9 @@
         (3) Confirm the action of changing the Master PIN by entering the current or old Master PIN.
     </string>
 
+    <!-- Web View -->
+    <string name="web_view_title">In-App Web View</string>
+
     <!-- Dummy -->
     <string name="dummy_dummy">Dummy</string>
     <string name="dummy_lorem_ipsum">

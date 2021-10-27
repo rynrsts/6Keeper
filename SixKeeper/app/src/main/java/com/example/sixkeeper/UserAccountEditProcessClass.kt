@@ -95,11 +95,11 @@ open class UserAccountEditProcessClass : Fragment() {
 
         val layoutContainer = if (viewId == "mobile number") {
             layoutInflater.inflate(
-                    R.layout.layout_user_edit_4, view as ViewGroup?,  false
+                    R.layout.layout_user_edit_4, view as ViewGroup?, false
             )
         } else {
             layoutInflater.inflate(
-                    R.layout.layout_user_edit_1, view as ViewGroup?,  false
+                    R.layout.layout_user_edit_1, view as ViewGroup?, false
             )
         }
         clUserAccountEditContainer.addView(layoutContainer)
@@ -543,7 +543,6 @@ open class UserAccountEditProcessClass : Fragment() {
         }
     }
 
-//    TODO: Apply this on Action Bar back
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -215,6 +215,13 @@ class UserAccountFragment : Fragment() {
                 builder.setCancelable(false)
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    @Suppress("DEPRECATION")
+                    val directory = File(                                                           // Create folder if not existing
+                            Environment.getExternalStorageDirectory(),
+                            "SixKeeper"
+                    )
+                    directory.mkdirs()
+
                     val packageName = context?.packageName
 
                     @Suppress("DEPRECATION")

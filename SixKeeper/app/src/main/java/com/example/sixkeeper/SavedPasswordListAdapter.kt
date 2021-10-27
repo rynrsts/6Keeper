@@ -16,6 +16,14 @@ class SavedPasswordListAdapter(
         private val creationDate: ArrayList<String>,
         private val modelArrayList: ArrayList<SavedPasswordModelClass>
 ) : ArrayAdapter<String>(context, R.layout.layout_saved_password_list_adapter, id) {
+    
+    private class ViewHolder {
+        lateinit var cbSavedPassSelectAll: CheckBox
+        lateinit var llSavedPasswordListAdapter: LinearLayout
+        lateinit var cbSavedPassCheckBox: CheckBox
+        lateinit var tvSavedPassPassword: TextView
+        lateinit var tvSavedPassDate: TextView
+    }
 
     @SuppressLint("ViewHolder", "SetTextI18n", "InflateParams")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
@@ -25,37 +33,40 @@ class SavedPasswordListAdapter(
                 null,
                 true
         )
+        val viewHolder = ViewHolder()
+        val savedPasswordModelClass: SavedPasswordModelClass = modelArrayList[position]
 
-        val cbSavedPassSelectAll = context.findViewById(R.id.cbSavedPassSelectAll) as CheckBox
-        val llSavedPasswordListAdapter =
-                rowView.findViewById(R.id.llSavedPasswordListAdapter) as LinearLayout
-        val cbSavedPassCheckBox = rowView.findViewById(R.id.cbSavedPassCheckBox) as CheckBox
-        val tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword) as TextView
-        val tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate) as TextView
+        viewHolder.cbSavedPassSelectAll = context.findViewById(R.id.cbSavedPassSelectAll)
+        viewHolder.llSavedPasswordListAdapter =
+                rowView.findViewById(R.id.llSavedPasswordListAdapter)
+        viewHolder.cbSavedPassCheckBox = rowView.findViewById(R.id.cbSavedPassCheckBox)
+        viewHolder.tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword)
+        viewHolder.tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate)
 
-        llSavedPasswordListAdapter.tag = position
-        cbSavedPassCheckBox.isChecked = modelArrayList[position].getSelected()
-        tvSavedPassPassword.text = "Password: ${password[position]}"
-        tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
+        viewHolder.cbSavedPassCheckBox.isChecked = savedPasswordModelClass.getSelected()
+        viewHolder.tvSavedPassPassword.text = "Password: ${password[position]}"
+        viewHolder.tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
+        rowView.tag = position
 
-        cbSavedPassSelectAll.setOnClickListener {
+        viewHolder.cbSavedPassSelectAll.setOnClickListener {
             if (!modelArrayList.isNullOrEmpty()) {
                 for (i in 0 until modelArrayList.size) {
-                    modelArrayList[i].setSelected(cbSavedPassSelectAll.isChecked)
+                    modelArrayList[i].setSelected(viewHolder.cbSavedPassSelectAll.isChecked)
                 }
 
                 notifyDataSetChanged()
             }
         }
 
-        llSavedPasswordListAdapter.setOnClickListener { v ->
+        rowView.setOnClickListener { v ->
             val currentPos = v.tag as Int
-            val reverseSelect = !modelArrayList[currentPos].getSelected()
+            val savedPassword: SavedPasswordModelClass = modelArrayList[currentPos]
+            val reverseSelect = !savedPassword.getSelected()
 
-            modelArrayList[currentPos].setSelected(reverseSelect)
+            savedPassword.setSelected(reverseSelect)
 
-            if (!reverseSelect && cbSavedPassSelectAll.isChecked) {
-                cbSavedPassSelectAll.isChecked = false
+            if (!reverseSelect && viewHolder.cbSavedPassSelectAll.isChecked) {
+                viewHolder.cbSavedPassSelectAll.isChecked = false
             }
 
             notifyDataSetChanged()
