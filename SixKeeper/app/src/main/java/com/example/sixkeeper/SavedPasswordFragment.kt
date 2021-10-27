@@ -131,7 +131,7 @@ class SavedPasswordFragment : Fragment() {
         clSavedPassDelete.setOnClickListener {
             var itemCheck = false
 
-            for (i in 0 until listSize) {
+            for (i in 0 until modelArrayList.size) {
                 if (modelArrayList[i].getSelected()) {
                     itemCheck = true
                     break
@@ -191,7 +191,7 @@ class SavedPasswordFragment : Fragment() {
             var password = ""
             val toast: Toast?
 
-            for (i in 0 until listSize) {
+            for (i in 0 until modelArrayList.size) {
                 if (modelArrayList[i].getSelected()) {
                     numOfSelected++
                     password = modelArrayList[i].getPassword()

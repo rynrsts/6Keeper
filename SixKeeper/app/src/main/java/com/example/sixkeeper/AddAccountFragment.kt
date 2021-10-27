@@ -59,7 +59,7 @@ class AddAccountFragment : Fragment() {
     private var passwordVisibility: Int = 0
     private lateinit var websiteURL: String
     private lateinit var applicationName: String
-    private lateinit var packageName: String
+    private var packageName = ""
     private lateinit var description: String
     private lateinit var deleted: String
     private var isFavorites: Int = 0

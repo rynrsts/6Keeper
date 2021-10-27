@@ -303,7 +303,7 @@ open class AccountsProcessClass : Fragment() {
                         UserCategoryModelClass(
                                 encodingClass.encodeData(selectedCategoryId),
                                 encodingClass.encodeData(categoryName)
-                        )
+                        ), encodingClass.encodeData(selectedCategoryName)
                 )
 
                 if (status > -1) {

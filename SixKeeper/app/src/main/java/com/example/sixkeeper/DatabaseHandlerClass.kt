@@ -1317,7 +1317,7 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
-    fun updateCategory(userCategory: UserCategoryModelClass): Int {                                 // Update Specific Category
+    fun updateCategory(userCategory: UserCategoryModelClass, oldCategoryName: String): Int {        // Update Specific Category
         val db = this.writableDatabase
         val contentValues = ContentValues()
         val categoryId = userCategory.categoryId
@@ -1336,6 +1336,12 @@ class DatabaseHandlerClass(context: Context) :
                 TABLE_PLATFORMS,
                 contentValues,
                 "$KEY_CATEGORY_ID='$categoryId'",
+                null
+        )
+        db.update(
+                TABLE_ACCOUNTS,
+                contentValues,
+                "$KEY_CATEGORY_NAME='$oldCategoryName'",
                 null
         )
 

@@ -59,10 +59,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     fun createFolder() {                                                                            // Create folder
         @Suppress("DEPRECATION")
         val directory = File(Environment.getExternalStorageDirectory(), "SixKeeper")
-
-        if (!directory.exists()) {
-            directory.mkdir()
-        }
+        directory.mkdirs()
     }
 
     fun blockCapture() {

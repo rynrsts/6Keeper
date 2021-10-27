@@ -254,7 +254,7 @@ class SpecificAccountFragment : Fragment() {
                     dialogView.findViewById(R.id.tvSpecificAccountApp)
 
             val browserIntent = Intent(                                                             // Browser
-                    "android.intent.action.VIEW", Uri.parse("http://")
+                    Intent.ACTION_VIEW, Uri.parse("http://")
             )
             val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
                     browserIntent, PackageManager.MATCH_DEFAULT_ONLY
