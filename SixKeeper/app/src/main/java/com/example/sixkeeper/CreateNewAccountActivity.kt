@@ -155,12 +155,17 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encodingClass.encodeData("10 sec")
                 )
         )
+        val userProfileStatus = databaseHandlerClass.addProfilePhoto(
+                encodingClass.encodeData(userId.toString()),
+                "".toByteArray(),
+        )
 
         if (
                 tableStatus > -1 &&
                 userInfoStatus > -1 &&
                 userAccStatus > -1 &&
-                userSettingsStatus > -1
+                userSettingsStatus > -1 &&
+                userProfileStatus > -1
         ) {
             val toast: Toast = Toast.makeText(
                     applicationContext,

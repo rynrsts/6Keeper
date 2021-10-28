@@ -2,7 +2,12 @@ package com.example.sixkeeper
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,12 +28,15 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class IndexActivity : AppCompatActivity(), LifecycleObserver {
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var navigationView: NavigationView
+    private lateinit var headerView: View
     private lateinit var clNavigationHeader: ConstraintLayout
-    private lateinit var tvNavigationHeaderUsername: TextView
 
     @SuppressLint("SimpleDateFormat")
     private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
@@ -42,8 +50,10 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         setContentView(R.layout.activity_index)
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        setVariables()
         populate()
         setUsername()
+        setProfilePhoto()
         setOnClick()
     }
 
@@ -115,12 +125,17 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         backgroundDate = ""
     }
 
+    private fun setVariables() {
+        databaseHandlerClass = DatabaseHandlerClass(this)
+        encodingClass = EncodingClass()
+    }
+
     private fun populate() {                                                                        // Populate menu and fragments
         val toolbar: Toolbar = findViewById(R.id.tAppBarToolbar)
         setSupportActionBar(toolbar)
 
         drawerLayout = findViewById(R.id.dlIndexDrawerLayout)
-        val navigationView: NavigationView = findViewById(R.id.nvIndexNavigationView)
+        navigationView = findViewById(R.id.nvIndexNavigationView)
         val navigationController = findNavController(R.id.fIndexNavigationHost)
 
         appBarConfiguration = AppBarConfiguration(
@@ -149,8 +164,6 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     }
 
     private fun setUsername() {                                                                     // Show username in the navigation header
-        val databaseHandlerClass = DatabaseHandlerClass(this)
-        val encodingClass = EncodingClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var username = ""
 
@@ -158,12 +171,33 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
             username = encodingClass.decodeData(u.username)
         }
 
-        navigationView = findViewById(R.id.nvIndexNavigationView)
-        val headerView = navigationView.getHeaderView(0)
+        headerView = navigationView.getHeaderView(0)
         clNavigationHeader = headerView.findViewById(R.id.clNavigationHeader)
-        tvNavigationHeaderUsername = headerView.findViewById(R.id.tvNavigationHeaderUsername)
+        val tvNavigationHeaderUsername: TextView =
+                headerView.findViewById(R.id.tvNavigationHeaderUsername)
 
         tvNavigationHeaderUsername.text = username
+    }
+
+    private fun setProfilePhoto() {
+        val ivNavigationHeaderPhoto: ImageView =
+                headerView.findViewById(R.id.ivNavigationHeaderPhoto)
+        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+
+        if (profilePhoto.toString().isNotEmpty()) {
+            val imageDrawable: Drawable = BitmapDrawable(
+                    resources,
+                    BitmapFactory.decodeByteArray(
+                            profilePhoto,
+                            0,
+                            profilePhoto.size
+                    )
+            )
+
+            ivNavigationHeaderPhoto.setImageDrawable(imageDrawable)
+        } else {
+            ivNavigationHeaderPhoto.setImageDrawable(null)
+        }
     }
 
     private fun setOnClick() {

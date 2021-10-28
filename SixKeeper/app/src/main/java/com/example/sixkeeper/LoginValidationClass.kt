@@ -51,7 +51,10 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     fun requestPermission() {                                                                       // Request permission
         ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
                 52420
         )
     }

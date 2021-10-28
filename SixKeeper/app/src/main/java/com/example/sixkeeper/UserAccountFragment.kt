@@ -7,13 +7,19 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +41,11 @@ class UserAccountFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
 
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
+
+    private lateinit var ivUserAccountPhoto: ImageView
+
     private var field = ""
 
     override fun onCreateView(
@@ -48,9 +59,10 @@ class UserAccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appCompatActivity = activity as AppCompatActivity
+        setVariables()
         disableHeaderItem()
         closeKeyboard()
+        setProfilePhoto()
         setOnClick()
     }
 
@@ -58,6 +70,14 @@ class UserAccountFragment : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    private fun setVariables() {
+        appCompatActivity = activity as AppCompatActivity
+        ivUserAccountPhoto = appCompatActivity.findViewById(R.id.ivUserAccountPhoto)
+
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
     }
 
     private fun disableHeaderItem() {
@@ -93,6 +113,25 @@ class UserAccountFragment : Fragment() {
         }
     }
 
+    private fun setProfilePhoto() {
+        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+
+        if (profilePhoto.toString().isNotEmpty()) {
+            val imageDrawable: Drawable = BitmapDrawable(
+                    resources,
+                    BitmapFactory.decodeByteArray(
+                            profilePhoto,
+                            0,
+                            profilePhoto.size
+                    )
+            )
+
+            ivUserAccountPhoto.setImageDrawable(imageDrawable)
+        } else {
+            ivUserAccountPhoto.setImageDrawable(null)
+        }
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun setOnClick() {
         val clUserAccountFirstName: ConstraintLayout =
@@ -113,6 +152,34 @@ class UserAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clUserAccountMasterPIN)
         val clUserAccountExportData: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountExportData)
+
+        ivUserAccountPhoto.setOnClickListener {
+            if (                                                                                    // Check if permission is granted
+                    ActivityCompat.checkSelfPermission(
+                            appCompatActivity,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(
+                            appCompatActivity,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val mediaStorage =
+                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(mediaStorage, 135491)
+            } else {
+                ActivityCompat.requestPermissions(
+                        appCompatActivity,
+                        arrayOf(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        52420
+                )
+            }
+        }
 
         clUserAccountFirstName.setOnClickListener {
             field = "first name"
@@ -209,7 +276,8 @@ class UserAccountFragment : Fragment() {
             if (ActivityCompat.checkSelfPermission(                                                 // Check if permission is granted
                             appCompatActivity,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED) {
+                    ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                 builder.setMessage("Export data to 'SixKeeper' folder in the phone storage?")
                 builder.setCancelable(false)
@@ -252,25 +320,11 @@ class UserAccountFragment : Fragment() {
                             show()
                         }
 
-                        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-                        val encodingClass = EncodingClass()
-
-                        var actionLogId = 1000001
-                        val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                        if (lastId.isNotEmpty()) {
-                            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                        }
-
-                        val calendar: Calendar = Calendar.getInstance()
-                        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                        val date: String = dateFormat.format(calendar.time)
-
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
-                                        encodingClass.encodeData(actionLogId.toString()),
+                                        encodingClass.encodeData(getLastActionLogId().toString()),
                                         encodingClass.encodeData("Data was exported."),
-                                        encodingClass.encodeData(date)
+                                        encodingClass.encodeData(getCurrentDate())
                                 )
                         )
                     } catch (e: IOException) {
@@ -317,11 +371,55 @@ class UserAccountFragment : Fragment() {
         )
     }
 
+    @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
         when {
+            requestCode == 135491 && resultCode == Activity.RESULT_OK -> {                          // If image was selected
+                val selectedImage: Uri? = data?.data
+                val imageByArray = appCompatActivity.contentResolver.openInputStream(
+                        selectedImage!!
+                )?.readBytes()
+                val imageDrawable: Drawable = BitmapDrawable(
+                        resources,
+                        BitmapFactory.decodeByteArray(imageByArray, 0, imageByArray!!.size)
+                )
+
+                ivUserAccountPhoto.setImageDrawable(imageDrawable)
+
+                val profileStatus = databaseHandlerClass.updateProfilePhoto(                        // Update Profile Photo
+                        imageByArray
+                )
+
+                if (profileStatus > -1) {
+                    val toast: Toast = Toast.makeText(
+                            appCompatActivity,
+                            R.string.user_profile_photo_mes, Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
+
+                val navigationView: NavigationView =
+                        appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+                val headerView = navigationView.getHeaderView(0)
+                val ivNavigationHeaderPhoto: ImageView =
+                        headerView.findViewById(R.id.ivNavigationHeaderPhoto)
+
+                ivNavigationHeaderPhoto.setImageDrawable(imageDrawable)                             // Set Profile Photo in menu
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                encodingClass.encodeData("Profile Photo was changed."),
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+                )
+            }
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 view?.apply {
                     postDelayed(
@@ -334,5 +432,23 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
     }
 }

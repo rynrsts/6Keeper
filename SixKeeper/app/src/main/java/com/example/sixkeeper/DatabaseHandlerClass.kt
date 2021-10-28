@@ -19,6 +19,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
         private const val TABLE_SETTINGS = "SettingsTable"
+        private const val TABLE_PROFILE = "ProfileTable"
         private const val TABLE_ACTION_LOG = "ActionLogTable"
         private const val TABLE_CATEGORIES = "CategoriesTable"
         private const val TABLE_PLATFORMS = "PlatformsTable"
@@ -48,6 +49,10 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_AUTO_LOCK = "auto_lock"
         private const val KEY_AUTO_LOCK_TIMER = "auto_lock_timer"
+
+        // TABLE_PROFILE
+//        private const val KEY_USER_ID = "user_id"
+        private const val KEY_PROFILE_PHOTO = "profile_photo"
 
         // TABLE_ACTION_LOG
         private const val KEY_ACTION_LOG_ID = "action_log_id"
@@ -123,6 +128,12 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_AUTO_LOCK_TIMER + " TEXT" +
                         ")"
                 )
+        val createProfileTable = (
+                "CREATE TABLE " + TABLE_PROFILE + "(" +
+                        KEY_USER_ID + " TEXT," +
+                        KEY_PROFILE_PHOTO + " BLOB" +
+                        ")"
+                )
         val createActionLogTable = (
                 "CREATE TABLE " + TABLE_ACTION_LOG + "(" +
                         KEY_ACTION_LOG_ID + " TEXT," +
@@ -178,6 +189,7 @@ class DatabaseHandlerClass(context: Context) :
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
         db?.execSQL(createSettingsTable)
+        db?.execSQL(createProfileTable)
         db?.execSQL(createActionLogTable)
         db?.execSQL(createCategoriesTable)
         db?.execSQL(createPlatformsTable)
@@ -189,6 +201,7 @@ class DatabaseHandlerClass(context: Context) :
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_PROFILE")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACTION_LOG")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
@@ -257,6 +270,21 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_SETTINGS, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addProfilePhoto(userId: String, userPhoto: ByteArray): Long {                               // Add blank Profile Photo
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_USER_ID, userId)
+            put(KEY_PROFILE_PHOTO, userPhoto)
+        }
+
+        val success = db.insert(TABLE_PROFILE, null, contentValues)
 
         db.close()
         return success
@@ -557,6 +585,31 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return correct
+    }
+
+    fun viewProfilePhoto(): ByteArray {                                                             // View Profile Photo
+        val selectQuery = "SELECT * FROM $TABLE_PROFILE"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return "".toByteArray()
+        }
+
+        var profilePhoto: ByteArray = "".toByteArray()
+
+        if (cursor.moveToFirst()) {
+            do {
+                profilePhoto = cursor.getBlob(cursor.getColumnIndex(KEY_PROFILE_PHOTO))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return profilePhoto
     }
 
     fun getLastIdOfActionLog(): String {                                                            // Get last Id of of Platforms
@@ -1303,6 +1356,20 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun updateProfilePhoto(value: ByteArray): Int {                                                 // Update Profile Photo
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_PROFILE_PHOTO, value)
+        }
+
+        val success = db.update(TABLE_PROFILE, contentValues, null, null)
+
+        db.close()
+        return success
+    }
+
     fun updateSettings(field: String, value: String): Int {                                         // Update Settings
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -1537,6 +1604,7 @@ class DatabaseHandlerClass(context: Context) :
         val success = db.delete(TABLE_USER_ACC, "", null)
         db.delete(TABLE_USER_INFO, "", null)
         db.delete(TABLE_SAVED_PASS, "", null)
+        db.delete(TABLE_PROFILE, "", null)
         db.delete(TABLE_ACTION_LOG, "", null)
         db.delete(TABLE_CATEGORIES, "", null)
         db.delete(TABLE_PLATFORMS, "", null)

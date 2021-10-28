@@ -129,16 +129,16 @@ class SavedPasswordFragment : Fragment() {
         val clSavedPassCopy: ConstraintLayout = appCompatActivity.findViewById(R.id.clSavedPassCopy)
 
         clSavedPassDelete.setOnClickListener {
-            var itemCheck = false
-
-            for (i in 0 until modelArrayList.size) {
-                if (modelArrayList[i].getSelected()) {
-                    itemCheck = true
-                    break
-                }
-            }
-
-            if (itemCheck) {
+//            var itemCheck = false
+//
+//            for (i in 0 until modelArrayList.size) {
+//                if (modelArrayList[i].getSelected()) {
+//                    itemCheck = true
+//                    break
+//                }
+//            }
+//
+//            if (itemCheck) {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                 builder.setMessage(R.string.saved_password_delete_alert)
                 builder.setCancelable(false)
@@ -163,17 +163,17 @@ class SavedPasswordFragment : Fragment() {
                 val alert: AlertDialog = builder.create()
                 alert.setTitle(R.string.many_alert_title_confirm)
                 alert.show()
-            } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_nothing_to_delete,
-                        Toast.LENGTH_SHORT
-                )
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
-            }
+//            } else {
+//                val toast = Toast.makeText(
+//                        appCompatActivity.applicationContext,
+//                        R.string.many_nothing_to_delete,
+//                        Toast.LENGTH_SHORT
+//                )
+//                toast?.apply {
+//                    setGravity(Gravity.CENTER, 0, 0)
+//                    show()
+//                }
+//            }
 
             it.apply {
                 clSavedPassDelete.isClickable = false                                             // Set un-clickable for 1 second
