@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
@@ -11,6 +12,11 @@ import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.channels.FileChannel
 
 class LoginActivity : LoginValidationClass() {
     private var passwordVisibility: Int = 0
@@ -30,9 +36,31 @@ class LoginActivity : LoginValidationClass() {
     }
 
     private fun setButtonOnClick() {
-        val acbLoginLogin: Button = findViewById(R.id.acbLoginLogin)
         val tvLoginForgotPass: TextView = findViewById(R.id.tvLoginForgotPass)
+        val acbLoginLogin: Button = findViewById(R.id.acbLoginLogin)
+        val tvLoginImportData: TextView = findViewById(R.id.tvLoginImportData)
         val acbLoginCreateNewAccount: Button = findViewById(R.id.acbLoginCreateNewAccount)
+
+        tvLoginForgotPass.setOnClickListener {
+            val goToForgotCredentialsActivity =
+                    Intent(this, ForgotCredentialsActivity::class.java)
+            goToForgotCredentialsActivity.putExtra("credential", "password")
+
+            startActivity(goToForgotCredentialsActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_right_to_left_2,
+                    R.anim.anim_exit_right_to_left_2
+            )
+
+            it.apply {
+                tvLoginForgotPass.isClickable = false                                               // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            tvLoginForgotPass.isClickable = true
+                        }, 1000
+                )
+            }
+        }
 
         acbLoginLogin.setOnClickListener {
             if (isNotEmpty()) {
@@ -88,22 +116,59 @@ class LoginActivity : LoginValidationClass() {
             }
         }
 
-        tvLoginForgotPass.setOnClickListener {
-            val goToForgotCredentialsActivity =
-                    Intent(this, ForgotCredentialsActivity::class.java)
-            goToForgotCredentialsActivity.putExtra("credential", "password")
+        tvLoginImportData.setOnClickListener {
+            createFolder()
 
-            startActivity(goToForgotCredentialsActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setMessage("Make sure there is an exported file named 'SixKeeperDatabase' in " +
+                    "the 'SixKeeper' folder in the internal storage. Continue?")
+            builder.setCancelable(false)
+
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                @Suppress("DEPRECATION")
+                val sd = Environment.getExternalStorageDirectory()
+                val data = Environment.getDataDirectory()
+                val source: FileChannel?
+                val destination: FileChannel?
+                val packageName = this.packageName
+                val currentDBPath = "SixKeeper/SixKeeperDatabase"
+                val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
+                val currentDB = File(sd, currentDBPath)
+                val backupDB = File(data, backupDBPath)
+
+                try {
+                    source = FileInputStream(currentDB).channel
+                    destination = FileOutputStream(backupDB).channel
+                    destination.transferFrom(source, 0, source.size())                              // Save data to folder
+                    source.close()
+                    destination.close()
+
+                    val toast: Toast = Toast.makeText(
+                            this,
+                            "Data was imported! Please enter your credentials",
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setTitle(R.string.login_import_data_title)
+            alert.show()
 
             it.apply {
-                tvLoginForgotPass.isClickable = false                                               // Set button un-clickable for 1 second
+                tvLoginImportData.isClickable = false                                               // Set button un-clickable for 1 second
                 postDelayed(
                         {
-                            tvLoginForgotPass.isClickable = true
+                            tvLoginImportData.isClickable = true
                         }, 1000
                 )
             }

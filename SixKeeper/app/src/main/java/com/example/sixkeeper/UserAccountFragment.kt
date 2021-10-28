@@ -20,11 +20,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
@@ -101,14 +104,12 @@ class UserAccountFragment : Fragment() {
 
     private fun closeKeyboard() {
         val immKeyboard: InputMethodManager =
-                appCompatActivity.getSystemService(
-                        Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
+                appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
 
         if (immKeyboard.isActive) {
             immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
-                    appCompatActivity.currentFocus?.windowToken,
-                    0
+                    appCompatActivity.currentFocus?.windowToken, 0
             )
         }
     }
@@ -116,19 +117,17 @@ class UserAccountFragment : Fragment() {
     private fun setProfilePhoto() {
         val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
-        if (profilePhoto.toString().isNotEmpty()) {
+        if (profilePhoto.contentEquals("".toByteArray())) {
+            ivUserAccountPhoto.setImageDrawable(null)
+        } else {
             val imageDrawable: Drawable = BitmapDrawable(
                     resources,
                     BitmapFactory.decodeByteArray(
-                            profilePhoto,
-                            0,
-                            profilePhoto.size
+                            profilePhoto, 0, profilePhoto.size
                     )
             )
 
             ivUserAccountPhoto.setImageDrawable(imageDrawable)
-        } else {
-            ivUserAccountPhoto.setImageDrawable(null)
         }
     }
 
@@ -156,27 +155,65 @@ class UserAccountFragment : Fragment() {
         ivUserAccountPhoto.setOnClickListener {
             if (                                                                                    // Check if permission is granted
                     ActivityCompat.checkSelfPermission(
-                            appCompatActivity,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
+                            appCompatActivity, Manifest.permission.READ_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(
-                            appCompatActivity,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            appCompatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val mediaStorage =
-                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                val inflater = this.layoutInflater
+                val dialogView = inflater.inflate(
+                        R.layout.layout_user_account_profile_photo, null
+                )
+                val tvProfilePhotoAdd: TextView = dialogView.findViewById(R.id.tvProfilePhotoAdd)
+                val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(mediaStorage, 135491)
+                if (profilePhoto.contentEquals("".toByteArray())) {
+                    tvProfilePhotoAdd.setText(R.string.user_change_profile_photo)
+                } else {
+                    tvProfilePhotoAdd.setText(R.string.user_add_profile_photo)
+                }
+
+                builder.setView(dialogView)
+
+                val alert: AlertDialog = builder.create()
+                alert.apply {
+                    window?.setBackgroundDrawable(
+                            ContextCompat.getDrawable(context, R.drawable.layout_alert_dialog)
+                    )
+                    setTitle(R.string.user_profile_photo)
+                    show()
+                }
+
+                val llProfilePhotoAdd: LinearLayout =
+                        dialogView.findViewById(R.id.llProfilePhotoAdd)
+                val llProfilePhotoRemove: LinearLayout =
+                        dialogView.findViewById(R.id.llProfilePhotoRemove)
+
+                llProfilePhotoAdd.setOnClickListener {
+                    val mediaStorage =
+                            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(mediaStorage, 135491)
+                    alert.cancel()
+                }
+
+                llProfilePhotoRemove.setOnClickListener {
+                    ivUserAccountPhoto.setImageDrawable(null)
+                    updateProfilePhoto("removed!", "".toByteArray())
+                    addEventToActionLog("removed")
+                    setProfilePhotoInMenu(null)
+                    alert.cancel()
+                }
             } else {
                 ActivityCompat.requestPermissions(
                         appCompatActivity,
                         arrayOf(
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        52420
+                        ), 52420
                 )
             }
         }
@@ -187,11 +224,7 @@ class UserAccountFragment : Fragment() {
 
             it.apply {
                 clUserAccountFirstName.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountFirstName.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clUserAccountFirstName.isClickable = true }, 1000)
             }
         }
 
@@ -201,11 +234,7 @@ class UserAccountFragment : Fragment() {
 
             it.apply {
                 clUserAccountLastName.isClickable = false                                           // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountLastName.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clUserAccountLastName.isClickable = true }, 1000)
             }
         }
 
@@ -215,11 +244,7 @@ class UserAccountFragment : Fragment() {
 
             it.apply {
                 clUserAccountBirthDate.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountBirthDate.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clUserAccountBirthDate.isClickable = true }, 1000)
             }
         }
 
@@ -229,11 +254,7 @@ class UserAccountFragment : Fragment() {
 
             it.apply {
                 clUserAccountEmail.isClickable = false                                              // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountEmail.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clUserAccountEmail.isClickable = true }, 1000)
             }
         }
 
@@ -243,11 +264,7 @@ class UserAccountFragment : Fragment() {
 
             it.apply {
                 clUserAccountMobileNum.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountMobileNum.isClickable = true
-                        }, 1000
-                )
+                postDelayed({ clUserAccountMobileNum.isClickable = true }, 1000)
             }
         }
 
@@ -274,8 +291,7 @@ class UserAccountFragment : Fragment() {
 
         clUserAccountExportData.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(                                                 // Check if permission is granted
-                            appCompatActivity,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            appCompatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
@@ -284,20 +300,16 @@ class UserAccountFragment : Fragment() {
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     @Suppress("DEPRECATION")
-                    val directory = File(                                                           // Create folder if not existing
-                            Environment.getExternalStorageDirectory(),
-                            "SixKeeper"
-                    )
+                    val directory =
+                            File(Environment.getExternalStorageDirectory(), "SixKeeper")      // Create folder if not existing
                     directory.mkdirs()
-
-                    val packageName = context?.packageName
 
                     @Suppress("DEPRECATION")
                     val sd = Environment.getExternalStorageDirectory()
-
                     val data = Environment.getDataDirectory()
                     val source: FileChannel?
                     val destination: FileChannel?
+                    val packageName = context?.packageName
                     val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
                     val backupDBPath = "SixKeeper/SixKeeperDatabase"
                     val currentDB = File(data, currentDBPath)
@@ -312,7 +324,8 @@ class UserAccountFragment : Fragment() {
 
                         val toast: Toast = Toast.makeText(
                                 appCompatActivity,
-                                R.string.user_export_data_mes,
+                                "Data was exported to the 'SixKeeper' folder in the " +
+                                        "internal storage!",
                                 Toast.LENGTH_SHORT
                         )
                         toast.apply {
@@ -323,7 +336,8 @@ class UserAccountFragment : Fragment() {
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
                                         encodingClass.encodeData(getLastActionLogId().toString()),
-                                        encodingClass.encodeData("Data was exported."),
+                                        encodingClass.encodeData("Data was exported to the " +
+                                                "'SixKeeper' folder in the internal storage."),
                                         encodingClass.encodeData(getCurrentDate())
                                 )
                         )
@@ -340,34 +354,25 @@ class UserAccountFragment : Fragment() {
                 alert.show()
             } else {
                 ActivityCompat.requestPermissions(                                                  // Request permission
-                        appCompatActivity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        appCompatActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         52420
                 )
             }
 
             it.apply {
                 clUserAccountExportData.isClickable = false                                         // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            clUserAccountExportData.isClickable = true
-                        }, 500
-                )
+                postDelayed({ clUserAccountExportData.isClickable = true }, 500)
             }
         }
     }
 
     private fun openConfirmActionActivity() {
-        val goToConfirmActivity = Intent(
-                appCompatActivity,
-                ConfirmActionActivity::class.java
-        )
+        val goToConfirmActivity = Intent(appCompatActivity, ConfirmActionActivity::class.java)
 
         @Suppress("DEPRECATION")
         startActivityForResult(goToConfirmActivity, 16914)
         appCompatActivity.overridePendingTransition(
-                R.anim.anim_enter_bottom_to_top_2,
-                R.anim.anim_0
+                R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
         )
     }
 
@@ -386,39 +391,19 @@ class UserAccountFragment : Fragment() {
                         resources,
                         BitmapFactory.decodeByteArray(imageByArray, 0, imageByArray!!.size)
                 )
+                val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
                 ivUserAccountPhoto.setImageDrawable(imageDrawable)
 
-                val profileStatus = databaseHandlerClass.updateProfilePhoto(                        // Update Profile Photo
-                        imageByArray
-                )
-
-                if (profileStatus > -1) {
-                    val toast: Toast = Toast.makeText(
-                            appCompatActivity,
-                            R.string.user_profile_photo_mes, Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
+                if (profilePhoto.contentEquals("".toByteArray())) {
+                    updateProfilePhoto("added", imageByArray)
+                    addEventToActionLog("added")
+                } else {
+                    updateProfilePhoto("updated", imageByArray)
+                    addEventToActionLog("updated")
                 }
 
-                val navigationView: NavigationView =
-                        appCompatActivity.findViewById(R.id.nvIndexNavigationView)
-                val headerView = navigationView.getHeaderView(0)
-                val ivNavigationHeaderPhoto: ImageView =
-                        headerView.findViewById(R.id.ivNavigationHeaderPhoto)
-
-                ivNavigationHeaderPhoto.setImageDrawable(imageDrawable)                             // Set Profile Photo in menu
-
-                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
-                        UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData("Profile Photo was changed."),
-                                encodingClass.encodeData(getCurrentDate())
-                        )
-                )
+                setProfilePhotoInMenu(imageDrawable)
             }
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 view?.apply {
@@ -432,6 +417,33 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateProfilePhoto(action: String, image: ByteArray) {
+        val profileStatus = databaseHandlerClass.updateProfilePhoto(                                // Update Profile Photo
+                image
+        )
+        val message = "Profile Photo was $action!"
+
+        if (profileStatus > -1) {
+            val toast: Toast = Toast.makeText(
+                    appCompatActivity, message, Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+    }
+
+    private fun addEventToActionLog(action: String) {
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("Profile Photo was $action."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
     }
 
     private fun getLastActionLogId(): Int {
@@ -450,5 +462,15 @@ class UserAccountFragment : Fragment() {
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         return dateFormat.format(calendar.time)
+    }
+
+    private fun setProfilePhotoInMenu(image: Drawable?) {
+        val navigationView: NavigationView =
+                appCompatActivity.findViewById(R.id.nvIndexNavigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val ivNavigationHeaderPhoto: ImageView =
+                headerView.findViewById(R.id.ivNavigationHeaderPhoto)
+
+        ivNavigationHeaderPhoto.setImageDrawable(image)                                             // Set Profile Photo in menu
     }
 }

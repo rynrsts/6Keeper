@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class SavedPasswordFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
@@ -28,7 +29,7 @@ class SavedPasswordFragment : Fragment() {
 
     private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
-    private var listSize = 0
+    private lateinit var savedPasswordListAdapter: SavedPasswordListAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -74,7 +75,6 @@ class SavedPasswordFragment : Fragment() {
         }
 
         modelArrayList.clear()
-        listSize = 0
         lvSavedPasswordContainer.adapter = null
 
         if (userSavedPass.isNullOrEmpty()) {
@@ -107,10 +107,9 @@ class SavedPasswordFragment : Fragment() {
                 savedPasswordModelClass.setId(Integer.parseInt(uId))
                 savedPasswordModelClass.setPassword(uPassword)
                 modelArrayList.add(savedPasswordModelClass)
-                listSize++
             }
 
-            val savedPasswordListAdapter = SavedPasswordListAdapter(
+            savedPasswordListAdapter = SavedPasswordListAdapter(
                     attActivity,
                     userSavedPassId,
                     userSavedPassPassword,
@@ -129,16 +128,18 @@ class SavedPasswordFragment : Fragment() {
         val clSavedPassCopy: ConstraintLayout = appCompatActivity.findViewById(R.id.clSavedPassCopy)
 
         clSavedPassDelete.setOnClickListener {
-//            var itemCheck = false
-//
-//            for (i in 0 until modelArrayList.size) {
-//                if (modelArrayList[i].getSelected()) {
-//                    itemCheck = true
-//                    break
-//                }
-//            }
-//
-//            if (itemCheck) {
+            savedPasswordListAdapter.notifyDataSetChanged()
+
+            var itemCheck = false
+
+            for (i in 0 until modelArrayList.size) {
+                if (modelArrayList[i].getSelected()) {
+                    itemCheck = true
+                    break
+                }
+            }
+
+            if (itemCheck) {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                 builder.setMessage(R.string.saved_password_delete_alert)
                 builder.setCancelable(false)
@@ -163,20 +164,20 @@ class SavedPasswordFragment : Fragment() {
                 val alert: AlertDialog = builder.create()
                 alert.setTitle(R.string.many_alert_title_confirm)
                 alert.show()
-//            } else {
-//                val toast = Toast.makeText(
-//                        appCompatActivity.applicationContext,
-//                        R.string.many_nothing_to_delete,
-//                        Toast.LENGTH_SHORT
-//                )
-//                toast?.apply {
-//                    setGravity(Gravity.CENTER, 0, 0)
-//                    show()
-//                }
-//            }
+            } else {
+                val toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.many_nothing_to_delete,
+                        Toast.LENGTH_SHORT
+                )
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
 
             it.apply {
-                clSavedPassDelete.isClickable = false                                             // Set un-clickable for 1 second
+                clSavedPassDelete.isClickable = false                                               // Set un-clickable for 1 second
                 postDelayed(
                         {
                             clSavedPassDelete.isClickable = true
@@ -186,8 +187,9 @@ class SavedPasswordFragment : Fragment() {
         }
 
         clSavedPassCopy.setOnClickListener {
+            savedPasswordListAdapter.notifyDataSetChanged()
+
             var numOfSelected = 0
-            var onlyOneIsSelected =  true
             var password = ""
             val toast: Toast?
 
@@ -197,14 +199,13 @@ class SavedPasswordFragment : Fragment() {
                     password = modelArrayList[i].getPassword()
 
                     if (numOfSelected == 2) {
-                        onlyOneIsSelected = false
                         break
                     }
                 }
             }
 
             if (numOfSelected > 0) {
-                if (onlyOneIsSelected) {
+                if (numOfSelected == 1) {
                     val clipboard: ClipboardManager =
                             appCompatActivity.getSystemService(
                                     Context.CLIPBOARD_SERVICE
@@ -284,7 +285,7 @@ class SavedPasswordFragment : Fragment() {
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 val container = ArrayList<String>(0)
 
-                for (i in 0 until listSize) {
+                for (i in 0 until modelArrayList.size) {
                     if (modelArrayList[i].getSelected()) {
                         container.add(
                                 encodingClass.encodeData(

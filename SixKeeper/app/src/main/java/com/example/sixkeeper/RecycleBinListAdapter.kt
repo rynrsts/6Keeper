@@ -42,7 +42,7 @@ class RecycleBinListAdapter(
 
         cbRecycleBinSelectAll.setOnClickListener {
             if (!modelArrayList.isNullOrEmpty()) {
-                for (i in 0 until name.size) {
+                for (i in 0 until modelArrayList.size) {
                     modelArrayList[i].setSelected(cbRecycleBinSelectAll.isChecked)
                 }
 

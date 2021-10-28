@@ -117,9 +117,9 @@
     <!-- Login -->
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>
+    <string name="login_import_data_title">Import Data</string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials</string>
-
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
@@ -435,13 +435,15 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!-- User Account -->
-    <string name="user_deactivate_account">Deactivate Account</string>
-    <string name="user_export_data">Export Data</string>
-    <string name="user_export_data_mes">Data was exported!</string>
-    <string name="user_fingerprint">Fingerprint</string>
+    <string name="user_add_profile_photo">Change Profile Photo</string>
     <string name="user_change_master_pin">Change Master PIN</string>
     <string name="user_change_password">Change Password</string>
-    <string name="user_profile_photo_mes">Profile Photo was changed!</string>
+    <string name="user_change_profile_photo">Add Profile Photo</string>
+    <string name="user_deactivate_account">Deactivate Account</string>
+    <string name="user_export_data">Export Data</string>
+    <string name="user_fingerprint">Fingerprint</string>
+    <string name="user_profile_photo">Profile Photo</string>
+    <string name="user_remove_profile_photo">Remove Profile Photo</string>
 
     <!-- User Account -->
     <string name="user_edit_cancel_alert_mes">Canceling will discard changes. Continue?</string>

@@ -149,10 +149,12 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
+                android:paddingStart="9dp"
                 android:text="@string/login_forgot_pass"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
-                app:layout_constraintTop_toBottomOf="@+id/etLoginPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/etLoginPassword"
+                tools:ignore="RtlSymmetry" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/acbLoginLogin"
@@ -171,10 +173,13 @@
             <TextView
                 android:id="@+id/tvLoginImportData"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="3dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
                 android:text="@string/login_import_data"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/gLoginVertical91"
@@ -185,7 +190,7 @@
                 android:id="@+id/acbLoginCreateNewAccount"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/layout_button_green_border"
                 android:stateListAnimator="@null"
                 android:text="@string/many_create_new_account"
