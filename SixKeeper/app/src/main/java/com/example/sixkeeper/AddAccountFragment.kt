@@ -325,7 +325,7 @@ class AddAccountFragment : Fragment() {
         }
     }
 
-    @SuppressLint("InflateParams", "QueryPermissionsNeeded")
+    @SuppressLint("InflateParams")
     private fun setOnClick() {
         val clAddAccountButton: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clAddAccountButton)
@@ -340,32 +340,12 @@ class AddAccountFragment : Fragment() {
                 setCancelable(true)
             }
 
-            val lvDashboardActionLog: ListView = dialogView.findViewById(R.id.lvDashboardActionLog)
-            val packageList = appCompatActivity.packageManager.getInstalledPackages(0)
-            val packageNameTemp = ArrayList<String>(0)
-            val packageListTemp = ArrayList<PackageInfo>(0)
+            val tvAddAccountInclude: TextView = dialogView.findViewById(R.id.tvAddAccountInclude)
+            val lvAddAccountInstalledApps: ListView =
+                    dialogView.findViewById(R.id.lvAddAccountInstalledApps)
+            var include = false
 
-            for (list in packageList.indices) {
-                val packageInfo = packageList[list]
-
-                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
-                    val appName = packageInfo.applicationInfo.loadLabel(
-                            appCompatActivity.packageManager
-                    ).toString()
-                    val packageName = packageInfo.packageName
-
-                    packageListTemp.add(packageInfo)
-                    packageNameTemp.add(appName + "ramjcammjar" + packageName)
-                }
-            }
-
-            val addAccountAppListAdapter = AddAccountAppListAdapter(
-                    attActivity,
-                    packageNameTemp,
-                    packageListTemp
-            )
-
-            lvDashboardActionLog.adapter = addAccountAppListAdapter
+            lvAddAccountInstalledApps.adapter = addAccountListAdapter(include)
 
             val alert: AlertDialog = builder.create()
             alert.apply {
@@ -378,8 +358,19 @@ class AddAccountFragment : Fragment() {
 
             closeKeyboard()
 
-            lvDashboardActionLog.onItemClickListener = (AdapterView.OnItemClickListener { _, _, i, _ ->
-                val selectedItem = lvDashboardActionLog.getItemAtPosition(i).toString()
+            tvAddAccountInclude.setOnClickListener {
+                if (include) {
+                    tvAddAccountInclude.setText(R.string.add_account_include_system_apps)
+                } else {
+                    tvAddAccountInclude.setText(R.string.add_account_exclude_system_apps)
+                }
+
+                include = !include
+                lvAddAccountInstalledApps.adapter = addAccountListAdapter(include)
+            }
+
+            lvAddAccountInstalledApps.onItemClickListener = (AdapterView.OnItemClickListener { _, _, i, _ ->
+                val selectedItem = lvAddAccountInstalledApps.getItemAtPosition(i).toString()
                 val selectedValue = selectedItem.split("ramjcammjar")
                 val selectedAppName = selectedValue[0]
                 val selectedPackageName = selectedValue[1]
@@ -430,6 +421,53 @@ class AddAccountFragment : Fragment() {
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun addAccountListAdapter(include: Boolean): AddAccountAppListAdapter {
+        val packageList = appCompatActivity.packageManager.getInstalledPackages(0)
+        val packageNameTemp = ArrayList<String>(0)
+        val packageListTemp = ArrayList<PackageInfo>(0)
+
+        for (list in packageList.indices) {
+            val packageInfo = packageList[list]
+
+            if (include) {
+                val appName = packageInfo.applicationInfo.loadLabel(
+                        appCompatActivity.packageManager
+                ).toString()
+                val packageName = packageInfo.packageName
+
+                packageListTemp.add(packageInfo)
+                packageNameTemp.add(appName + "ramjcammjar" + packageName)
+            } else {
+                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                    val appName = packageInfo.applicationInfo.loadLabel(
+                            appCompatActivity.packageManager
+                    ).toString()
+                    val packageName = packageInfo.packageName
+
+                    packageListTemp.add(packageInfo)
+                    packageNameTemp.add(appName + "ramjcammjar" + packageName)
+                }
+            }
+        }
+
+        packageNameTemp.sortWith { o1, o2 ->
+            o1.toString().compareTo(o2.toString())
+        }
+
+        packageListTemp.sortWith { o1, o2 ->
+            val p1 = o1.applicationInfo.loadLabel(appCompatActivity.packageManager).toString()
+            val p2 = o2.applicationInfo.loadLabel(appCompatActivity.packageManager).toString()
+            p1.compareTo(p2)
+        }
+
+        return AddAccountAppListAdapter(
+                attActivity,
+                packageNameTemp,
+                packageListTemp
+        )
+    }
+
     private fun isNotEmpty(): Boolean {                                                             // Validate fields not empty
         name = etAddAccountName.text.toString()
         val credentialFieldPosition = sAddAccountCredential1.selectedItemPosition
@@ -474,7 +512,7 @@ class AddAccountFragment : Fragment() {
 
         for (u in userAccount) {
             if (
-                    name.equals(encodingClass.decodeData(u.accountName),ignoreCase = true) &&
+                    name.equals(encodingClass.decodeData(u.accountName), ignoreCase = true) &&
                     !name.equals(accountName, ignoreCase = true)
             ) {
                 existing = true

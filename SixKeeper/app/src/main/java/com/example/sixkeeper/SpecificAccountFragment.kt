@@ -3,7 +3,6 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
@@ -25,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class SpecificAccountFragment : Fragment() {
     private val args: SpecificAccountFragmentArgs by navArgs()
@@ -282,42 +282,34 @@ class SpecificAccountFragment : Fragment() {
                 }
             }
 
-            val sixKeeperPackageName = requireContext().packageName
+            val packageManager: PackageManager = appCompatActivity.packageManager
 
-            val packageList = appCompatActivity.packageManager.getInstalledPackages(0)
-
-            for (list in packageList.indices) {
-                val packageInfo = packageList[list]
-
-                if (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
-                    val aName = packageInfo.applicationInfo.loadLabel(
-                            appCompatActivity.packageManager
-                    ).toString()
-                    val pName = packageInfo.packageName
-                    val icon = packageInfo.applicationInfo.loadIcon(
-                            requireContext().packageManager
+            val sixKeeperPackageName = requireContext().packageName                                 // 6Keeper app
+            val sixKeeperIcon = packageManager.getApplicationIcon(
+                    packageManager.getApplicationInfo(
+                            sixKeeperPackageName, PackageManager.GET_META_DATA
                     )
+            )
 
-                    if (sixKeeperPackageName == pName) {                                            // 6Keeper app
-                        ivSpecificAccountWebView.setImageDrawable(icon)
-                    }
+            ivSpecificAccountWebView.setImageDrawable(sixKeeperIcon)
 
-                    if (applicationName.isNotEmpty()) {                                             // Selected app
-                        if (applicationName == aName && packageName == pName) {
-                            val applicationNameText = "$applicationName (selected app)"
+            if (applicationName.isNotEmpty()) {                                                     // Selected app
+                val applicationNameText = "$applicationName (selected app)"
+                val applicationIcon = packageManager.getApplicationIcon(
+                        packageManager.getApplicationInfo(
+                                packageName, PackageManager.GET_META_DATA
+                        )
+                )
 
-                            ivSpecificAccountApp.setImageDrawable(icon)
-                            tvSpecificAccountApp.text = applicationNameText
-                        }
-                    } else {
-                        llSpecificAccountApp.isEnabled = false
-                        ivSpecificAccountApp.setImageDrawable(null)
-                        tvSpecificAccountApp.apply {
-                            val noApplication = "No app is selected"
-                            text = noApplication
-                            setTextColor(ContextCompat.getColor(context, R.color.gray))
-                        }
-                    }
+                ivSpecificAccountApp.setImageDrawable(applicationIcon)
+                tvSpecificAccountApp.text = applicationNameText
+            } else {
+                llSpecificAccountApp.isEnabled = false
+                ivSpecificAccountApp.setImageDrawable(null)
+                tvSpecificAccountApp.apply {
+                    val noApplication = "No app is selected"
+                    text = noApplication
+                    setTextColor(ContextCompat.getColor(context, R.color.gray))
                 }
             }
 
@@ -355,12 +347,16 @@ class SpecificAccountFragment : Fragment() {
             }
 
             llSpecificAccountApp.setOnClickListener {
-                val applicationIntent = appCompatActivity.packageManager.getLaunchIntentForPackage(
-                        packageName
-                )
-                startActivity(applicationIntent)
-
-                alert.cancel()
+                try {
+                    val applicationIntent =
+                            appCompatActivity.packageManager.getLaunchIntentForPackage(
+                                    packageName
+                            )
+                    startActivity(applicationIntent)
+                } catch (e: Exception) {
+                } finally {
+                    alert.cancel()
+                }
             }
         }
 

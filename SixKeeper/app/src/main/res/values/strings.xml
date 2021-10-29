@@ -19,7 +19,9 @@
     <string name="add_account_application">Application</string>
     <string name="add_account_credential_1">Credential Field</string>
     <string name="add_account_desc">Description (Optional)</string>
+    <string name="add_account_exclude_system_apps"><u>Exclude system apps</u></string>
     <string name="add_account_favorites">Appear in Favorites</string>
+    <string name="add_account_include_system_apps"><u>Include system apps</u></string>
     <string name="add_account_title">Add New Account</string>
     <string name="add_account_name">Name</string>
     <string name="add_account_new_account_alert_existing">
