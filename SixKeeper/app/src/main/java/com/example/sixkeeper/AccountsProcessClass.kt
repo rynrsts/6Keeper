@@ -309,7 +309,7 @@ open class AccountsProcessClass : Fragment() {
                 if (status > -1) {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            "Category '$selectedCategoryName' changed to '$categoryName'",
+                            "Category '$selectedCategoryName' modified to '$categoryName'",
                             Toast.LENGTH_SHORT
                     )
                 }
@@ -318,7 +318,7 @@ open class AccountsProcessClass : Fragment() {
                         UserActionLogModelClass(
                                 encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Category '$selectedCategoryName'" +
-                                        " was changed to '$categoryName'."),
+                                        " was modified to '$categoryName'."),
                                 encodingClass.encodeData(getCurrentDate())
                         )
                 )

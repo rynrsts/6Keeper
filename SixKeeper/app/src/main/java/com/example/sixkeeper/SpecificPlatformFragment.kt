@@ -178,24 +178,34 @@ class SpecificPlatformFragment : Fragment() {
         }
 
         lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
-            val selectedAccountValue = selectedAccount.split("ramjcammjar")
-            selectedAccountId = selectedAccountValue[0]
-            selectedAccountName = selectedAccountValue[1]
-            selectedAccountIsFavorites = selectedAccountValue[2]
-            clickAction = "View Account"
+            lvSpecificPlatContainer.apply {
+                lvSpecificPlatContainer.isEnabled = false                                           // Set un-clickable for 1 second
 
-            val goToConfirmActivity = Intent(
-                    appCompatActivity,
-                    ConfirmActionActivity::class.java
-            )
+                val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
+                val selectedAccountValue = selectedAccount.split("ramjcammjar")
+                selectedAccountId = selectedAccountValue[0]
+                selectedAccountName = selectedAccountValue[1]
+                selectedAccountIsFavorites = selectedAccountValue[2]
+                clickAction = "View Account"
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+
+                postDelayed(
+                        {
+                            lvSpecificPlatContainer.isEnabled = true
+                        }, 1000
+                )
+            }
         })
     }
 

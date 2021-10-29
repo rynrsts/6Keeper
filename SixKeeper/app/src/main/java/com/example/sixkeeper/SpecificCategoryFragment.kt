@@ -55,20 +55,33 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
         }
 
         getLvSpecificCatContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
-            val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
-            val selectedPlatformId = selectedPlatformValue[0]
-            val selectedPlatformName = selectedPlatformValue[1]
+            getLvSpecificCatContainer().apply {
+                getLvSpecificCatContainer().isEnabled = false                                       // Set un-clickable for 1 second
 
-            val action = SpecificCategoryFragmentDirections
-                    .actionSpecificCategoryFragmentToSpecificPlatformFragment(
-                            selectedPlatformId,
-                            selectedPlatformName,
-                            getArgsSpecificCategoryName()
-                    )
-            findNavController().navigate(action)
+                val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
+                val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
+                val selectedPlatformId = selectedPlatformValue[0]
+                val selectedPlatformName = selectedPlatformValue[1]
+                val action = SpecificCategoryFragmentDirections
+                        .actionSpecificCategoryFragmentToSpecificPlatformFragment(
+                                selectedPlatformId,
+                                selectedPlatformName,
+                                getArgsSpecificCategoryName()
+                        )
 
-            getEtSpecificCatSearchBox().setText("")
+                try {
+                    findNavController().navigate(action)
+                } catch (e: IllegalArgumentException) {
+                }
+
+                getEtSpecificCatSearchBox().setText("")
+
+                postDelayed(
+                        {
+                            getLvSpecificCatContainer().isEnabled = true
+                        }, 1000
+                )
+            }
         })
     }
 

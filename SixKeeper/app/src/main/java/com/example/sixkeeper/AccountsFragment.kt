@@ -52,19 +52,32 @@ class AccountsFragment : AccountsProcessClass() {
         }
 
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
-            val selectedCategoryValue = selectedCategory.split("ramjcammjar")
-            val selectedCategoryId = selectedCategoryValue[0]
-            val selectedCategoryName = selectedCategoryValue[1]
+            getLvAccountsContainer().apply {
+                getLvAccountsContainer().isEnabled = false                                          // Set un-clickable for 1 second
 
-            val action = AccountsFragmentDirections
-                    .actionAccountsFragmentToSpecificCategoryFragment(
-                            selectedCategoryId,
-                            selectedCategoryName
-                    )
-            findNavController().navigate(action)
+                val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
+                val selectedCategoryValue = selectedCategory.split("ramjcammjar")
+                val selectedCategoryId = selectedCategoryValue[0]
+                val selectedCategoryName = selectedCategoryValue[1]
+                val action = AccountsFragmentDirections
+                        .actionAccountsFragmentToSpecificCategoryFragment(
+                                selectedCategoryId,
+                                selectedCategoryName
+                        )
 
-            getEtAccountsSearchBox().setText("")
+                try {
+                    findNavController().navigate(action)
+                } catch (e: IllegalArgumentException) {
+                }
+
+                getEtAccountsSearchBox().setText("")
+
+                postDelayed(
+                        {
+                            getLvAccountsContainer().isEnabled = true
+                        }, 1000
+                )
+            }
         })
     }
 
@@ -105,7 +118,7 @@ class AccountsFragment : AccountsProcessClass() {
             val llCategoryPlatformEdit: LinearLayout =
                     dialogView.findViewById(R.id.llCategoryPlatformEdit)
             val llCategoryPlatformDelete: LinearLayout =
-                dialogView.findViewById(R.id.llCategoryPlatformDelete)
+                    dialogView.findViewById(R.id.llCategoryPlatformDelete)
 
             llCategoryPlatformEdit.setOnClickListener {
                 alert.cancel()

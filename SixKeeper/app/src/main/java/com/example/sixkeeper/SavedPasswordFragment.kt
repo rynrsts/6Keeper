@@ -2,7 +2,6 @@ package com.example.sixkeeper
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.*
 import android.os.Bundle
 import android.view.Gravity
@@ -10,13 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 class SavedPasswordFragment : Fragment() {
     private lateinit var attActivity: Activity
@@ -29,7 +28,6 @@ class SavedPasswordFragment : Fragment() {
 
     private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
-    private lateinit var savedPasswordListAdapter: SavedPasswordListAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -109,7 +107,7 @@ class SavedPasswordFragment : Fragment() {
                 modelArrayList.add(savedPasswordModelClass)
             }
 
-            savedPasswordListAdapter = SavedPasswordListAdapter(
+            val savedPasswordListAdapter = SavedPasswordListAdapter(
                     attActivity,
                     userSavedPassId,
                     userSavedPassPassword,
@@ -128,8 +126,6 @@ class SavedPasswordFragment : Fragment() {
         val clSavedPassCopy: ConstraintLayout = appCompatActivity.findViewById(R.id.clSavedPassCopy)
 
         clSavedPassDelete.setOnClickListener {
-            savedPasswordListAdapter.notifyDataSetChanged()
-
             var itemCheck = false
 
             for (i in 0 until modelArrayList.size) {
@@ -187,8 +183,6 @@ class SavedPasswordFragment : Fragment() {
         }
 
         clSavedPassCopy.setOnClickListener {
-            savedPasswordListAdapter.notifyDataSetChanged()
-
             var numOfSelected = 0
             var password = ""
             val toast: Toast?

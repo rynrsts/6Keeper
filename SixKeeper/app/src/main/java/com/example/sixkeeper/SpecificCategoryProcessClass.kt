@@ -295,9 +295,8 @@ open class SpecificCategoryProcessClass : Fragment() {
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
                                 encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData(
-                                        "Platform '$platformName' was added."
-                                ),
+                                encodingClass.encodeData("Platform '$platformName' was " +
+                                        "added to '${args.specificCategoryName}'."),
                                 encodingClass.encodeData(getCurrentDate())
                         )
                 )
@@ -314,7 +313,7 @@ open class SpecificCategoryProcessClass : Fragment() {
                 if (status > -1) {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            "Platform changed to '$platformName'",
+                            "Platform modified to '$platformName'",
                             Toast.LENGTH_SHORT
                     )
                 }
@@ -323,7 +322,7 @@ open class SpecificCategoryProcessClass : Fragment() {
                         UserActionLogModelClass(
                                 encodingClass.encodeData(getLastActionLogId().toString()),
                                 encodingClass.encodeData("Platform '$selectedPlatformName'" +
-                                        " was changed to '$platformName'."),
+                                        " was modified to '$platformName'."),
                                 encodingClass.encodeData(getCurrentDate())
                         )
                 )

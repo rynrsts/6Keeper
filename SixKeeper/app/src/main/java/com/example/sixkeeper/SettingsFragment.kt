@@ -301,7 +301,7 @@ class SettingsFragment : Fragment() {
                             UserActionLogModelClass(
                                     encodingClass.encodeData(getLastActionLogId().toString()),
                                     encodingClass.encodeData(
-                                            "Auto Lock Timer was updated to $timer."
+                                            "Auto Lock Timer was modified to $timer."
                                     ),
                                     encodingClass.encodeData(getCurrentDate())
                             )

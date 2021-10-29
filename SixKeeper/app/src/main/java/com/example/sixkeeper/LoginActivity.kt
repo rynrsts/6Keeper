@@ -153,7 +153,15 @@ class LoginActivity : LoginValidationClass() {
                         show()
                     }
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    val toast: Toast = Toast.makeText(
+                            this,
+                            "Cannot find folder and/or file",
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
             }
             builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->

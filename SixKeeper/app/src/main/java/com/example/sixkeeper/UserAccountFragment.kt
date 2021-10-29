@@ -131,7 +131,7 @@ class UserAccountFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "InflateParams")
     private fun setOnClick() {
         val clUserAccountFirstName: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountFirstName)
@@ -166,12 +166,20 @@ class UserAccountFragment : Fragment() {
                 val dialogView = inflater.inflate(
                         R.layout.layout_user_account_profile_photo, null
                 )
+                val removeProfilePhoto = inflater.inflate(
+                        R.layout.layout_user_account_remove_photo, null
+                )
+                val llProfilePhotoAdd: LinearLayout =
+                        dialogView.findViewById(R.id.llProfilePhotoAdd)
                 val tvProfilePhotoAdd: TextView = dialogView.findViewById(R.id.tvProfilePhotoAdd)
+                val llProfilePhotoRemove: LinearLayout =
+                        dialogView.findViewById(R.id.llProfilePhotoRemove)
                 val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
                 if (profilePhoto.contentEquals("".toByteArray())) {
                     tvProfilePhotoAdd.setText(R.string.user_change_profile_photo)
                 } else {
+                    llProfilePhotoRemove.addView(removeProfilePhoto)
                     tvProfilePhotoAdd.setText(R.string.user_add_profile_photo)
                 }
 
@@ -185,11 +193,6 @@ class UserAccountFragment : Fragment() {
                     setTitle(R.string.user_profile_photo)
                     show()
                 }
-
-                val llProfilePhotoAdd: LinearLayout =
-                        dialogView.findViewById(R.id.llProfilePhotoAdd)
-                val llProfilePhotoRemove: LinearLayout =
-                        dialogView.findViewById(R.id.llProfilePhotoRemove)
 
                 llProfilePhotoAdd.setOnClickListener {
                     val mediaStorage =
@@ -322,16 +325,8 @@ class UserAccountFragment : Fragment() {
                         source.close()
                         destination.close()
 
-                        val toast: Toast = Toast.makeText(
-                                appCompatActivity,
-                                "Data was exported to the 'SixKeeper' folder in the " +
-                                        "internal storage!",
-                                Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
+                        showToast("Data was exported to the 'SixKeeper' folder in the " +
+                                        "internal storage!")
 
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
@@ -342,7 +337,7 @@ class UserAccountFragment : Fragment() {
                                 )
                         )
                     } catch (e: IOException) {
-                        e.printStackTrace()
+                        showToast("Cannot find folder")
                     }
                 }
                 builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -399,8 +394,8 @@ class UserAccountFragment : Fragment() {
                     updateProfilePhoto("added", imageByArray)
                     addEventToActionLog("added")
                 } else {
-                    updateProfilePhoto("updated", imageByArray)
-                    addEventToActionLog("updated")
+                    updateProfilePhoto("modified", imageByArray)
+                    addEventToActionLog("modified")
                 }
 
                 setProfilePhotoInMenu(imageDrawable)
@@ -472,5 +467,13 @@ class UserAccountFragment : Fragment() {
                 headerView.findViewById(R.id.ivNavigationHeaderPhoto)
 
         ivNavigationHeaderPhoto.setImageDrawable(image)                                             // Set Profile Photo in menu
+    }
+
+    private fun showToast(message: String) {
+        val toast: Toast = Toast.makeText(appCompatActivity, message, Toast.LENGTH_SHORT)
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 }

@@ -697,9 +697,9 @@ class AddAccountFragment : Fragment() {
                     }
 
                     val actionMessage = if (name != nameTemp) {
-                        "Account '$nameTemp' was changed to '$name'."
+                        "Account '$nameTemp' was modified to '$name'."
                     } else {
-                        "Account '$name' was changed."
+                        "Account '$name' was modified."
                     }
 
                     val status = databaseHandlerClass.updateAccount(
@@ -727,7 +727,7 @@ class AddAccountFragment : Fragment() {
                     if (status > -1) {
                         val toast = Toast.makeText(
                                 appCompatActivity.applicationContext,
-                                "Account '$name' changed!",
+                                "Account '$name' modified!",
                                 Toast.LENGTH_SHORT
                         )
                         toast?.apply {

@@ -18,20 +18,20 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvNavigationHeaderPhoto"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="25dp"
+            app:cardCornerRadius="27dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="47.5dp"
-                android:layout_height="47.5dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_gravity="center"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="24dp">
+                app:cardCornerRadius="26dp">
 
                 <ImageView
                     android:id="@+id/ivNavigationHeaderPhoto"
@@ -48,13 +48,26 @@
             android:id="@+id/tvNavigationHeaderUsername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivNavigationHeaderArrow"
             app:layout_constraintStart_toEndOf="@+id/cvNavigationHeaderPhoto"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivNavigationHeaderArrow"
+            android:layout_width="24dp"
+            android:layout_height="48dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:src="@drawable/ic_navigate_next_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

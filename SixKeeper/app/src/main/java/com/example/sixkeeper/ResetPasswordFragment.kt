@@ -110,7 +110,7 @@ class ResetPasswordFragment : Fragment() {
                                 UserActionLogModelClass(
                                         encodingClass.encodeData(actionLogId.toString()),
                                         encodingClass.encodeData(
-                                                "App account password was changed."
+                                                "App account password was modified."
                                         ),
                                         encodingClass.encodeData(date)
                                 )

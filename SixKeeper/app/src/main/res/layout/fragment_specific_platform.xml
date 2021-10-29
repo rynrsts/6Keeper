@@ -80,9 +80,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSpecificPlatHierarchy"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf="@+id/vSpecificPlatHierarchy">
 
         <LinearLayout
             android:id="@+id/llSpecificPlatNoItem"
@@ -97,17 +97,25 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivSpecificPlatAddAccounts"
+    <androidx.cardview.widget.CardView
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="18dp"
-        android:background="@drawable/layout_green_border_circle"
-        android:padding="6dp"
-        android:src="@drawable/ic_add_circle_green"
+        android:elevation="2dp"
+        app:cardCornerRadius="27dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivSpecificPlatAddAccounts"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@drawable/layout_green_border_circle"
+            android:padding="6dp"
+            android:src="@drawable/ic_add_circle_blue"
+            tools:ignore="ContentDescription" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

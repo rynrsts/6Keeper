@@ -36,25 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/ivProfilePhotoRemove"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:src="@drawable/ic_cancel_red"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/tvProfilePhotoRemove"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="9dp"
-            android:gravity="center_vertical"
-            android:text="@string/user_remove_profile_photo"
-            android:textColor="@color/red" />
-
-    </LinearLayout>
+        tools:ignore="UseCompoundDrawables" />
 
 </LinearLayout>

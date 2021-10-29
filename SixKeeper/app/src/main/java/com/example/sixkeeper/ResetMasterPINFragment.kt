@@ -130,7 +130,7 @@ class ResetMasterPINFragment : Fragment() {
                             UserActionLogModelClass(
                                     encodingClass.encodeData(actionLogId.toString()),
                                     encodingClass.encodeData(
-                                            "App account master pin was changed."
+                                            "App account master pin was modified."
                                     ),
                                     encodingClass.encodeData(date)
                             )

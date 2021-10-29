@@ -61,7 +61,6 @@ class SavedPasswordListAdapter(
             notifyDataSetChanged()
         }
 
-        notifyDataSetChanged()
         return rowView
     }
 }

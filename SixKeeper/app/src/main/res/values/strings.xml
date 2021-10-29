@@ -41,7 +41,7 @@
 
     <!-- Auto Lock Login -->
     <string name="auto_lock_login_mes">
-        You are inactive for set amount of time based on the Auto Lock Timer.
+        You are inactive for set amount of time based on the Auto Lock Timer
     </string>
 
     <!-- Confirm Action -->
@@ -444,8 +444,9 @@
     <string name="user_fingerprint">Fingerprint</string>
     <string name="user_profile_photo">Profile Photo</string>
     <string name="user_remove_profile_photo">Remove Profile Photo</string>
+    <string name="user_add_change_photo">Add/change photo</string>
 
-    <!-- User Account -->
+    <!-- User Account Edit -->
     <string name="user_edit_cancel_alert_mes">Canceling will discard changes. Continue?</string>
     <string name="user_edit_confirm_pass">Confirm Password</string>
     <string name="user_edit_current_pass">Current Password</string>

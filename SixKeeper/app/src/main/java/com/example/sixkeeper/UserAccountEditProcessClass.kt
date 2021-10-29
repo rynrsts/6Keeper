@@ -612,7 +612,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
                         encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account $viewId was changed."),
+                        encodingClass.encodeData("App account $viewId was modified."),
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
@@ -641,7 +641,7 @@ open class UserAccountEditProcessClass : Fragment() {
                     UserActionLogModelClass(
                             encodingClass.encodeData(getLastActionLogId().toString()),
                             encodingClass.encodeData("App account username '$previousData'" +
-                                    " was changed to '$input'."),
+                                    " was modified to '$input'."),
                             encodingClass.encodeData(getCurrentDate())
                     )
             )
@@ -659,7 +659,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
                         encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account password was changed."),
+                        encodingClass.encodeData("App account password was modified."),
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
@@ -675,7 +675,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
                         encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account master pin was changed."),
+                        encodingClass.encodeData("App account master pin was modified."),
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
