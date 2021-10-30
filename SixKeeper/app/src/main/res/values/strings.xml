@@ -196,7 +196,6 @@
     <string name="many_search">Search</string>
     <string name="many_settings">Settings</string>
     <string name="many_setup_complete">Setup Complete!</string>
-    <string name="many_setup_fingerprint">Setup Fingerprint</string>
     <string name="many_setup_master_pin">Setup Master PIN</string>
     <string name="many_seven">7</string>
     <string name="many_six">6</string>
@@ -342,7 +341,10 @@
     <string name="settings_block_screen_capture">Block Screenshot and Screen Record</string>
     <string name="settings_copy">Copy</string>
     <string name="settings_disable_auto_lock">Disable Auto Lock</string>
+    <string name="settings_disable_fingerprint">Disable Fingerprint Authentication</string>
     <string name="settings_enable_auto_lock">Enable Auto Lock</string>
+    <string name="settings_enable_fingerprint">Enable Fingerprint Authentication</string>
+    <string name="settings_fingerprint">Fingerprint</string>
     <string name="settings_note">Note: Changes will be applied at the next launch.</string>
     <string name="settings_screen_capture">Screen Capture</string>
     <string name="settings_security">Security</string>

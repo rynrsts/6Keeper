@@ -152,7 +152,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encodingClass.encodeData(userId.toString()),
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(1.toString()),
-                        encodingClass.encodeData("10 sec")
+                        encodingClass.encodeData("10 sec"),
+                        encodingClass.encodeData(0.toString()),
                 )
         )
         val userProfileStatus = databaseHandlerClass.addProfilePhoto(

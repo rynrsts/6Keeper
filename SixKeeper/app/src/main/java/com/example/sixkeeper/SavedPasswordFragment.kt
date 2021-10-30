@@ -86,7 +86,6 @@ class SavedPasswordFragment : Fragment() {
             val tvSavedPassNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
             tvSavedPassNoItem.setText(R.string.saved_password_no_item)
-            lvSavedPasswordContainer.adapter = null
             llSavedPasswordNoItem.apply {
                 removeAllViews()
                 addView(inflatedView)

@@ -200,13 +200,69 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clSettingsFingerprint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="9dp"
+                android:layout_marginTop="6dp"
+                android:paddingBottom="9dp"
+                app:layout_constraintEnd_toStartOf="@+id/gSettingsVertical93"
+                app:layout_constraintStart_toStartOf="@+id/gSettingsVertical07"
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLockTimer">
+
+                <ImageView
+                    android:id="@+id/ivSettingsFingerprint"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/layout_orange_circle"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_fingerprint_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSettingsFingerprint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/settings_fingerprint"
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsFingerprint"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsFingerprint"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSettingsFingerprintDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@+id/scSettingsFingerprint"
+                    app:layout_constraintStart_toEndOf="@+id/ivSettingsFingerprint"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSettingsFingerprint" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/scSettingsFingerprint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:thumbTint="@drawable/style_switch_thumb"
+                    app:trackTint="@drawable/style_switch_track" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <View
                 android:id="@+id/vSettingsDivision2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/clSettingsAutoLockTimer" />
+                app:layout_constraintTop_toBottomOf="@+id/clSettingsFingerprint" />
 
             <TextView
                 android:id="@+id/tvSettingsNote"

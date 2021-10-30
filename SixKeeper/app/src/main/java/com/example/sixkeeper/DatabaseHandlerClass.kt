@@ -49,6 +49,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_SCREEN_CAPTURE = "screen_capture"
         private const val KEY_AUTO_LOCK = "auto_lock"
         private const val KEY_AUTO_LOCK_TIMER = "auto_lock_timer"
+        private const val KEY_FINGERPRINT = "fingerprint"
 
         // TABLE_PROFILE
 //        private const val KEY_USER_ID = "user_id"
@@ -125,7 +126,8 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_USER_ID + " TEXT," +
                         KEY_SCREEN_CAPTURE + " TEXT," +
                         KEY_AUTO_LOCK + " TEXT," +
-                        KEY_AUTO_LOCK_TIMER + " TEXT" +
+                        KEY_AUTO_LOCK_TIMER + " TEXT," +
+                        KEY_FINGERPRINT + " TEXT" +
                         ")"
                 )
         val createProfileTable = (
@@ -267,6 +269,7 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_SCREEN_CAPTURE, userSettings.screenCapture)
             put(KEY_AUTO_LOCK, userSettings.autoLock)
             put(KEY_AUTO_LOCK_TIMER, userSettings.autoLockTimer)
+            put(KEY_FINGERPRINT, userSettings.fingerprint)
         }
 
         val success = db.insert(TABLE_SETTINGS, null, contentValues)
@@ -1234,6 +1237,7 @@ class DatabaseHandlerClass(context: Context) :
         var screenCapture: String
         var autoLock: String
         var autoLockTimer: String
+        var fingerprint: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -1241,12 +1245,14 @@ class DatabaseHandlerClass(context: Context) :
                 screenCapture = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_CAPTURE))
                 autoLock = cursor.getString(cursor.getColumnIndex(KEY_AUTO_LOCK))
                 autoLockTimer = cursor.getString(cursor.getColumnIndex(KEY_AUTO_LOCK_TIMER))
+                fingerprint = cursor.getString(cursor.getColumnIndex(KEY_FINGERPRINT))
 
                 val user = UserSettingsModelClass(
                         userId = accountId,
                         screenCapture = screenCapture,
                         autoLock = autoLock,
-                        autoLockTimer = autoLockTimer
+                        autoLockTimer = autoLockTimer,
+                        fingerprint = fingerprint
                 )
                 userSettingsList.add(user)
             } while (cursor.moveToNext())

@@ -28,11 +28,13 @@ class SettingsFragment : Fragment() {
 
     private lateinit var scSettingsScreenCapture: SwitchCompat
     private lateinit var scSettingsAutoLock: SwitchCompat
+    private lateinit var scSettingsFingerprint: SwitchCompat
 
     private lateinit var tvSettingsScreenCaptureDesc: TextView
     private lateinit var tvSettingsAutoLockDesc: TextView
     private lateinit var tvSettingsAutoLockTimer: TextView
     private lateinit var tvSettingsAutoLockTimerSeconds: TextView
+    private lateinit var tvSettingsFingerprintDesc: TextView
 
     private lateinit var ivSettingsAutoLockTimer: ImageView
 
@@ -69,6 +71,7 @@ class SettingsFragment : Fragment() {
 
         scSettingsScreenCapture = appCompatActivity.findViewById(R.id.scSettingsScreenCapture)
         scSettingsAutoLock = appCompatActivity.findViewById(R.id.scSettingsAutoLock)
+        scSettingsFingerprint = appCompatActivity.findViewById(R.id.scSettingsFingerprint)
 
         tvSettingsScreenCaptureDesc =
                 appCompatActivity.findViewById(R.id.tvSettingsScreenCaptureDesc)
@@ -76,6 +79,7 @@ class SettingsFragment : Fragment() {
         tvSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.tvSettingsAutoLockTimer)
         tvSettingsAutoLockTimerSeconds =
                 appCompatActivity.findViewById(R.id.tvSettingsAutoLockTimerSeconds)
+        tvSettingsFingerprintDesc = appCompatActivity.findViewById(R.id.tvSettingsFingerprintDesc)
 
         ivSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.ivSettingsAutoLockTimer)
 
@@ -152,6 +156,22 @@ class SettingsFragment : Fragment() {
             }
 
             tvSettingsAutoLockTimerSeconds.text = encodingClass.decodeData(u.autoLockTimer)
+
+            if (encodingClass.decodeData(u.fingerprint) == "1") {                                   // Fingerprint
+                scSettingsFingerprint.apply {
+                    tag = "fingerprint"
+                    isChecked = true
+                }
+
+                tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
+            } else if (encodingClass.decodeData(u.fingerprint) == "0") {
+                scSettingsFingerprint.apply {
+                    tag = "fingerprint"
+                    isChecked = false
+                }
+
+                tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+            }
         }
     }
 
@@ -340,6 +360,36 @@ class SettingsFragment : Fragment() {
                     show()
                 }
             }
+        }
+
+        scSettingsFingerprint.setOnClickListener {
+            val message: String
+
+            if (scSettingsFingerprint.isChecked) {
+                databaseHandlerClass.updateSettings(                                                // Update Fingerprint to 1
+                        "fingerprint",
+                        encodingClass.encodeData(1.toString())
+                )
+
+                tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
+                message = "Fingerprint authentication was enabled."
+            } else {
+                databaseHandlerClass.updateSettings(                                                // Update Fingerprint to 0
+                        "fingerprint",
+                        encodingClass.encodeData(0.toString())
+                )
+
+                tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+                message = "Fingerprint authentication was disabled."
+            }
+
+            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
+                    UserActionLogModelClass(
+                            encodingClass.encodeData(getLastActionLogId().toString()),
+                            encodingClass.encodeData(message),
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+            )
         }
     }
 

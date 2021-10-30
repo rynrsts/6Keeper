@@ -198,7 +198,6 @@ open class RecycleBinProcessClass : Fragment() {
         val tvAccountsNoItem: TextView = inflatedView.findViewById(R.id.tvAccountsNoItem)
 
         tvAccountsNoItem.setText(R.string.recycle_bin_no_item)
-        lvRecycleBinContainer.adapter = null
         llRecycleBinNoItem.apply {
             removeAllViews()
             addView(inflatedView)

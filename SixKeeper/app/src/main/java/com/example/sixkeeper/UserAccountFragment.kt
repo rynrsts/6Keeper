@@ -200,6 +200,7 @@ class UserAccountFragment : Fragment() {
 
                     @Suppress("DEPRECATION")
                     startActivityForResult(mediaStorage, 135491)
+
                     alert.cancel()
                 }
 
@@ -308,7 +309,7 @@ class UserAccountFragment : Fragment() {
                     directory.mkdirs()
 
                     @Suppress("DEPRECATION")
-                    val sd = Environment.getExternalStorageDirectory()
+                    val sd = Environment.getRootDirectory()
                     val data = Environment.getDataDirectory()
                     val source: FileChannel?
                     val destination: FileChannel?
