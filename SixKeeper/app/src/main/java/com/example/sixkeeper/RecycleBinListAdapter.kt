@@ -30,7 +30,7 @@ class RecycleBinListAdapter(
         val tvRecycleBinName = rowView.findViewById(R.id.tvRecycleBinName) as TextView
         val ivRecycleBinIcon = rowView.findViewById(R.id.ivRecycleBinIcon) as ImageView
 
-        llRecycleBinListAdapter.tag = position
+        rowView.tag = position
         cbRecycleBinCheckBox.isChecked = modelArrayList[position].getSelected()
         tvRecycleBinName.text = name[position]
 
@@ -50,7 +50,7 @@ class RecycleBinListAdapter(
             }
         }
 
-        llRecycleBinListAdapter.setOnClickListener { v ->
+        rowView.setOnClickListener { v ->
             val currentPos = v.tag as Int
             val reverseSelect = !modelArrayList[currentPos].getSelected()
 

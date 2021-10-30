@@ -121,6 +121,17 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         acbConfirmActionButtonCancel = findViewById(R.id.acbConfirmActionButtonCancel)
     }
 
+    fun getFingerprintStatus(): Int {
+        val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
+        var fingerprintStatus = 0
+
+        for (u in userSettings) {
+            fingerprintStatus = Integer.parseInt(encodingClass.decodeData(u.fingerprint))
+        }
+
+        return fingerprintStatus
+    }
+
     fun blockCapture() {
         window.setFlags(                                                                            // Block capture
                 WindowManager.LayoutParams.FLAG_SECURE,

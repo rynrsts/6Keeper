@@ -98,6 +98,20 @@
     <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
 
+    <!-- Fingerprint -->
+    <string name="fingerprint_authentication_failed">Authentication failed</string>
+    <string name="fingerprint_enable_lock_screen">
+        Please enable lock screen security in the settings of your device
+    </string>
+    <string name="fingerprint_enable_permission">Please enable the fingerprint permission</string>
+    <string name="fingerprint_not_configured">
+        No fingerprint configured. Please register at least one fingerprint in the settings of your
+        device
+    </string>
+    <string name="fingerprint_not_supported">
+        Your device does not support fingerprint authentication
+    </string>
+
     <!-- Forgot Credentials -->
     <string name="forgot_credentials_mes">Cancel reset?</string>
 
@@ -446,6 +460,8 @@
     <string name="user_deactivate_account">Deactivate Account</string>
     <string name="user_export_data">Export Data</string>
     <string name="user_fingerprint">Fingerprint</string>
+    <string name="user_image_size">Image size should be less than 2 MB</string>
+    <string name="user_not_image">Selected media is not an image!</string>
     <string name="user_profile_photo">Profile Photo</string>
     <string name="user_remove_profile_photo">Remove Profile Photo</string>
     <string name="user_add_change_photo">Add/change photo</string>

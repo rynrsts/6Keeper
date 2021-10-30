@@ -1,18 +1,18 @@
 
 Additional
-    Create New Account: Add Fingerprint
-    User Account: Make Fingerprint changeable
     User Account: Add deactivate
 
 
 Enhancement
     Create New Account: Add progress
     Create New Account: Automate '/' in Birth Date
+    User Account: Make  First name, Last name and Birth date editable once
     User Account: Confirm Email and Mobile Number
 
 
 Bug
     Create New Account: Add loading in register
     User Account: Adding video in profile photo
+    User Account: Remove auto lock in media select
     Import/Export: Cannot find folder
     Add Account: Add loading in selecting include system apps

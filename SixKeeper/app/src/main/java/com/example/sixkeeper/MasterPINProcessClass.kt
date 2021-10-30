@@ -125,6 +125,24 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         acbMasterPINButtonCancel = findViewById(R.id.acbMasterPINButtonCancel)
     }
 
+    fun setFingerprintOff() {
+        databaseHandlerClass.updateSettings(
+                "fingerprint",
+                encodingClass.encodeData(0.toString())
+        )
+    }
+
+    fun getFingerprintStatus(): Int {
+        val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
+        var fingerprintStatus = 0
+
+        for (u in userSettings) {
+            fingerprintStatus = Integer.parseInt(encodingClass.decodeData(u.fingerprint))
+        }
+
+        return fingerprintStatus
+    }
+
     fun blockCapture() {
         window.setFlags(                                                                            // Block capture
                 WindowManager.LayoutParams.FLAG_SECURE,

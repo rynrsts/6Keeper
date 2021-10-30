@@ -55,40 +55,46 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
 
     private fun fingerprint() {                                                                     // Fingerprint code start
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-            fingerprintManager = getSystemService(FINGERPRINT_SERVICE) as FingerprintManager
+            try {
+                keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
+                fingerprintManager = getSystemService(FINGERPRINT_SERVICE) as FingerprintManager
 
-            if (!fingerprintManager.isHardwareDetected) {
-//                textView.text = "Your device doesn't support fingerprint authentication"
-            }
-
-            if (
-                    ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.USE_FINGERPRINT
-                    ) != PackageManager.PERMISSION_GRANTED
-            ) {
-//                textView.text = "Please enable the fingerprint permission"
-            }
-
-            if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                textView.text = "No fingerprint configured. Please register at least one fingerprint in your device's Settings"
-            }
-
-            if (!keyguardManager.isKeyguardSecure) {
-//                textView.text = "Please enable lockscreen security in your device's Settings"
-            } else {
-                try {
-                    generateKey()
-                } catch (e: FingerprintException) {
-                    e.printStackTrace()
+                if (!fingerprintManager.isHardwareDetected) {
+                    return
                 }
 
-                if (initCipher()) {
-                    cryptoObject = FingerprintManager.CryptoObject(cipher)
-                    val helper = FingerprintHandler(this, "confirm action")
-                    helper.startAuth(fingerprintManager, cryptoObject)
+                if (
+                        ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.USE_FINGERPRINT
+                        ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
                 }
+
+                if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    return
+                }
+
+                if (!keyguardManager.isKeyguardSecure) {
+                    return
+                } else {
+                    if (getFingerprintStatus() == 1) {
+                        try {
+                            generateKey()
+                        } catch (e: FingerprintException) {
+                            e.printStackTrace()
+                        }
+
+                        if (initCipher()) {
+                            cryptoObject = FingerprintManager.CryptoObject(cipher)
+                            val helper = FingerprintHandlerClass(this, "confirm action")
+                            helper.startAuth(fingerprintManager, cryptoObject)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                return
             }
         }
     }

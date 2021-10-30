@@ -122,6 +122,17 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
         acbAutoLockLoginButtonCancel = findViewById(R.id.acbAutoLockLoginButtonCancel)
     }
 
+    fun getFingerprintStatus(): Int {
+        val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
+        var fingerprintStatus = 0
+
+        for (u in userSettings) {
+            fingerprintStatus = Integer.parseInt(encodingClass.decodeData(u.fingerprint))
+        }
+
+        return fingerprintStatus
+    }
+
     fun blockCapture() {
         window.setFlags(                                                                            // Block capture
             WindowManager.LayoutParams.FLAG_SECURE,

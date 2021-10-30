@@ -195,6 +195,8 @@ class UserAccountFragment : Fragment() {
                 }
 
                 llProfilePhotoAdd.setOnClickListener {
+                    (activity as IndexActivity).setMark()
+
                     val mediaStorage =
                             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
@@ -305,17 +307,17 @@ class UserAccountFragment : Fragment() {
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     @Suppress("DEPRECATION")
                     val directory =
-                            File(Environment.getExternalStorageDirectory(), "SixKeeper")      // Create folder if not existing
+                            File(Environment.getExternalStorageDirectory(), "/SixKeeper")      // Create folder if not existing
                     directory.mkdirs()
 
                     @Suppress("DEPRECATION")
-                    val sd = Environment.getRootDirectory()
+                    val sd = Environment.getExternalStorageDirectory()
                     val data = Environment.getDataDirectory()
                     val source: FileChannel?
                     val destination: FileChannel?
                     val packageName = context?.packageName
                     val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                    val backupDBPath = "SixKeeper/SixKeeperDatabase"
+                    val backupDBPath = "/SixKeeper/SixKeeperDatabase"
                     val currentDB = File(data, currentDBPath)
                     val backupDB = File(sd, backupDBPath)
 
@@ -327,7 +329,7 @@ class UserAccountFragment : Fragment() {
                         destination.close()
 
                         showToast("Data was exported to the 'SixKeeper' folder in the " +
-                                        "internal storage!")
+                                "internal storage!")
 
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
@@ -380,26 +382,53 @@ class UserAccountFragment : Fragment() {
         when {
             requestCode == 135491 && resultCode == Activity.RESULT_OK -> {                          // If image was selected
                 val selectedImage: Uri? = data?.data
-                val imageByArray = appCompatActivity.contentResolver.openInputStream(
-                        selectedImage!!
-                )?.readBytes()
-                val imageDrawable: Drawable = BitmapDrawable(
-                        resources,
-                        BitmapFactory.decodeByteArray(imageByArray, 0, imageByArray!!.size)
-                )
-                val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
-                ivUserAccountPhoto.setImageDrawable(imageDrawable)
+                val contentResolver = appCompatActivity.contentResolver
+                val type = contentResolver.getType(selectedImage!!)
 
-                if (profilePhoto.contentEquals("".toByteArray())) {
-                    updateProfilePhoto("added", imageByArray)
-                    addEventToActionLog("added")
+                if (type!!.startsWith("image")) {                                                   // If selected is image
+                    val imageByteArray = appCompatActivity.contentResolver.openInputStream(
+                            selectedImage
+                    )?.readBytes()
+
+                    if (imageByteArray!!.size <= 1992294) {                                         // If image is less than 2 MB
+                        val imageDrawable: Drawable = BitmapDrawable(
+                                resources,
+                                BitmapFactory.decodeByteArray(
+                                        imageByteArray, 0, imageByteArray.size
+                                )
+                        )
+                        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+
+                        ivUserAccountPhoto.setImageDrawable(imageDrawable)
+
+                        if (profilePhoto.contentEquals("".toByteArray())) {
+                            updateProfilePhoto("added", imageByteArray)
+                            addEventToActionLog("added")
+                        } else {
+                            updateProfilePhoto("modified", imageByteArray)
+                            addEventToActionLog("modified")
+                        }
+
+                        setProfilePhotoInMenu(imageDrawable)
+                    } else {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity, R.string.user_image_size, Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
                 } else {
-                    updateProfilePhoto("modified", imageByArray)
-                    addEventToActionLog("modified")
+                    val toast: Toast = Toast.makeText(
+                            appCompatActivity, R.string.user_not_image, Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
-
-                setProfilePhotoInMenu(imageDrawable)
             }
             requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
                 view?.apply {

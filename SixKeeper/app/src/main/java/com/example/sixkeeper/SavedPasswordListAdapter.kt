@@ -33,7 +33,7 @@ class SavedPasswordListAdapter(
         val tvSavedPassPassword = rowView.findViewById(R.id.tvSavedPassPassword) as TextView
         val tvSavedPassDate = rowView.findViewById(R.id.tvSavedPassDate) as TextView
 
-        llSavedPasswordListAdapter.tag = position
+        rowView.tag = position
         cbSavedPassCheckBox.isChecked = modelArrayList[position].getSelected()
         tvSavedPassPassword.text = "Password: ${password[position]}"
         tvSavedPassDate.text = "Creation Date: ${creationDate[position]}"
@@ -48,7 +48,7 @@ class SavedPasswordListAdapter(
             }
         }
 
-        llSavedPasswordListAdapter.setOnClickListener { v ->
+        rowView.setOnClickListener { v ->
             val currentPos = v.tag as Int
             val reverseSelect = !modelArrayList[currentPos].getSelected()
 

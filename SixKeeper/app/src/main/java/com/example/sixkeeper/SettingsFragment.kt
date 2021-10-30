@@ -1,10 +1,18 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.sixkeeper
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.hardware.fingerprint.FingerprintManager
+import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +23,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.navigation.NavigationView
+import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,9 +44,11 @@ class SettingsFragment : Fragment() {
     private lateinit var tvSettingsAutoLockDesc: TextView
     private lateinit var tvSettingsAutoLockTimer: TextView
     private lateinit var tvSettingsAutoLockTimerSeconds: TextView
+    private lateinit var tvSettingsFingerprint: TextView
     private lateinit var tvSettingsFingerprintDesc: TextView
 
     private lateinit var ivSettingsAutoLockTimer: ImageView
+    private lateinit var ivSettingsFingerprint: ImageView
 
     private lateinit var clSettingsAutoLockTimer: ConstraintLayout
 
@@ -58,7 +70,6 @@ class SettingsFragment : Fragment() {
         setSwitchOnOff()
     }
 
-    @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
@@ -79,9 +90,11 @@ class SettingsFragment : Fragment() {
         tvSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.tvSettingsAutoLockTimer)
         tvSettingsAutoLockTimerSeconds =
                 appCompatActivity.findViewById(R.id.tvSettingsAutoLockTimerSeconds)
+        tvSettingsFingerprint = appCompatActivity.findViewById(R.id.tvSettingsFingerprint)
         tvSettingsFingerprintDesc = appCompatActivity.findViewById(R.id.tvSettingsFingerprintDesc)
 
         ivSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.ivSettingsAutoLockTimer)
+        ivSettingsFingerprint = appCompatActivity.findViewById(R.id.ivSettingsFingerprint)
 
         clSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.clSettingsAutoLockTimer)
     }
@@ -155,29 +168,79 @@ class SettingsFragment : Fragment() {
                 disableAutoLock()
             }
 
-            tvSettingsAutoLockTimerSeconds.text = encodingClass.decodeData(u.autoLockTimer)
+            tvSettingsAutoLockTimerSeconds.text = encodingClass.decodeData(u.autoLockTimer)         // Auto lock timer
 
-            if (encodingClass.decodeData(u.fingerprint) == "1") {                                   // Fingerprint
-                scSettingsFingerprint.apply {
-                    tag = "fingerprint"
-                    isChecked = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {                                   // Fingerprint
+                try {
+                    val keyguardManager =
+                            appCompatActivity.getSystemService(AppCompatActivity.KEYGUARD_SERVICE)
+                                    as KeyguardManager
+                    val fingerprintManager =
+                            appCompatActivity.getSystemService(
+                                    AppCompatActivity.FINGERPRINT_SERVICE
+                            ) as FingerprintManager
+
+                    if (!fingerprintManager.isHardwareDetected) {                                   // If there is no fingerprint hardware
+                        disableFingerprint()
+                        return
+                    }
+
+                    if (                                                                            // If there is no fingerprint permission
+                            ActivityCompat.checkSelfPermission(
+                                    appCompatActivity,
+                                    Manifest.permission.USE_FINGERPRINT
+                            ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        disableFingerprint()
+                        return
+                    }
+
+                    if (!fingerprintManager.hasEnrolledFingerprints()) {                            // If there is no enrolled fingerprint
+                        disableFingerprint()
+                        return
+                    }
+
+                    if (!keyguardManager.isKeyguardSecure) {                                        // If lock screen is not enabled
+                        disableFingerprint()
+                    } else {
+                        ivSettingsFingerprint.apply {
+                            setBackgroundResource(R.drawable.layout_orange_circle)
+                            setImageResource(R.drawable.ic_fingerprint_white)
+                        }
+                        tvSettingsFingerprint.setTextColor(
+                                ContextCompat.getColor(appCompatActivity, R.color.lightBlack)
+                        )
+                        tvSettingsFingerprintDesc.setTextColor(
+                                ContextCompat.getColor(appCompatActivity, R.color.lightBlack)
+                        )
+                        scSettingsFingerprint.isEnabled = true
+
+                        if (encodingClass.decodeData(u.fingerprint) == "1") {
+                            scSettingsFingerprint.apply {
+                                tag = "fingerprint"
+                                isChecked = true
+                            }
+
+                            tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
+                        } else if (encodingClass.decodeData(u.fingerprint) == "0") {
+                            scSettingsFingerprint.apply {
+                                tag = "fingerprint"
+                                isChecked = false
+                            }
+
+                            tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+                        }
+                    }
+                } catch (e: NullPointerException) {
+                    disableFingerprint()
                 }
-
-                tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
-            } else if (encodingClass.decodeData(u.fingerprint) == "0") {
-                scSettingsFingerprint.apply {
-                    tag = "fingerprint"
-                    isChecked = false
-                }
-
-                tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+            } else {
+                disableFingerprint()
             }
         }
     }
 
     private fun enableAutoLock() {
-        tvSettingsAutoLockDesc.setText(R.string.settings_enable_auto_lock)
-
         ivSettingsAutoLockTimer.apply {
             setBackgroundResource(R.drawable.layout_blue_magenta_circle)
             setImageResource(R.drawable.ic_timer_white)
@@ -185,14 +248,13 @@ class SettingsFragment : Fragment() {
         tvSettingsAutoLockTimer.setTextColor(
                 ContextCompat.getColor(appCompatActivity, R.color.lightBlack)
         )
+        tvSettingsAutoLockDesc.setText(R.string.settings_enable_auto_lock)
         tvSettingsAutoLockTimerSeconds.setTextColor(
                 ContextCompat.getColor(appCompatActivity, R.color.lightBlack)
         )
     }
 
     private fun disableAutoLock() {
-        tvSettingsAutoLockDesc.setText(R.string.settings_disable_auto_lock)
-
         ivSettingsAutoLockTimer.apply {
             setBackgroundResource(0)
             setImageResource(R.drawable.ic_timer_gray)
@@ -200,8 +262,29 @@ class SettingsFragment : Fragment() {
         tvSettingsAutoLockTimer.setTextColor(
                 ContextCompat.getColor(appCompatActivity, R.color.gray)
         )
+        tvSettingsAutoLockDesc.setText(R.string.settings_disable_auto_lock)
         tvSettingsAutoLockTimerSeconds.setTextColor(
                 ContextCompat.getColor(appCompatActivity, R.color.gray)
+        )
+    }
+
+    private fun disableFingerprint() {
+        ivSettingsFingerprint.apply {
+            setBackgroundResource(0)
+            setImageResource(R.drawable.ic_fingerprint_gray)
+        }
+        tvSettingsFingerprint.setTextColor(
+                ContextCompat.getColor(appCompatActivity, R.color.gray)
+        )
+        tvSettingsFingerprintDesc.apply {
+            setText(R.string.settings_disable_fingerprint)
+            setTextColor(ContextCompat.getColor(appCompatActivity, R.color.gray))
+        }
+        scSettingsFingerprint.isChecked = false
+
+        databaseHandlerClass.updateSettings(
+                "fingerprint",
+                encodingClass.encodeData(0.toString())
         )
     }
 
@@ -363,33 +446,119 @@ class SettingsFragment : Fragment() {
         }
 
         scSettingsFingerprint.setOnClickListener {
-            val message: String
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                try {
+                    val keyguardManager =
+                            appCompatActivity.getSystemService(AppCompatActivity.KEYGUARD_SERVICE)
+                                    as KeyguardManager
+                    val fingerprintManager =
+                            appCompatActivity.getSystemService(
+                                    AppCompatActivity.FINGERPRINT_SERVICE
+                            ) as FingerprintManager
 
-            if (scSettingsFingerprint.isChecked) {
-                databaseHandlerClass.updateSettings(                                                // Update Fingerprint to 1
-                        "fingerprint",
-                        encodingClass.encodeData(1.toString())
-                )
+                    if (!fingerprintManager.isHardwareDetected) {                                   // If there is no fingerprint hardware
+                        disableFingerprintWithToast()
+                        return@setOnClickListener
+                    }
 
-                tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
-                message = "Fingerprint authentication was enabled."
+                    if (                                                                            // If there is no fingerprint permission
+                            ActivityCompat.checkSelfPermission(
+                                    appCompatActivity,
+                                    Manifest.permission.USE_FINGERPRINT
+                            ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        disableFingerprint()
+
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity,
+                                R.string.fingerprint_enable_permission,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+
+                        return@setOnClickListener
+                    }
+
+                    if (!fingerprintManager.hasEnrolledFingerprints()) {                            // If there is no enrolled fingerprint
+                        disableFingerprint()
+
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity,
+                                R.string.fingerprint_not_configured,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+
+                        return@setOnClickListener
+                    }
+
+                    if (!keyguardManager.isKeyguardSecure) {                                        // If lock screen is not enabled
+                        disableFingerprint()
+
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity,
+                                R.string.fingerprint_enable_lock_screen,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    } else {
+                        val message: String
+
+                        if (scSettingsFingerprint.isChecked) {
+                            databaseHandlerClass.updateSettings(                                    // Update Fingerprint to 1
+                                    "fingerprint",
+                                    encodingClass.encodeData(1.toString())
+                            )
+
+                            tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
+                            message = "Fingerprint authentication was enabled."
+                        } else {
+                            databaseHandlerClass.updateSettings(                                    // Update Fingerprint to 0
+                                    "fingerprint",
+                                    encodingClass.encodeData(0.toString())
+                            )
+
+                            tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+                            message = "Fingerprint authentication was disabled."
+                        }
+
+                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
+                                UserActionLogModelClass(
+                                        encodingClass.encodeData(getLastActionLogId().toString()),
+                                        encodingClass.encodeData(message),
+                                        encodingClass.encodeData(getCurrentDate())
+                                )
+                        )
+                    }
+                } catch (e: NullPointerException) {
+                    disableFingerprintWithToast()
+                }
             } else {
-                databaseHandlerClass.updateSettings(                                                // Update Fingerprint to 0
-                        "fingerprint",
-                        encodingClass.encodeData(0.toString())
-                )
-
-                tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
-                message = "Fingerprint authentication was disabled."
+                disableFingerprintWithToast()
             }
+        }
+    }
 
-            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
-                    UserActionLogModelClass(
-                            encodingClass.encodeData(getLastActionLogId().toString()),
-                            encodingClass.encodeData(message),
-                            encodingClass.encodeData(getCurrentDate())
-                    )
-            )
+    private fun disableFingerprintWithToast() {
+        disableFingerprint()
+
+        val toast: Toast = Toast.makeText(
+                appCompatActivity,
+                R.string.fingerprint_not_supported,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

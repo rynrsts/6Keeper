@@ -44,6 +44,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private var backgroundDate = ""
     private var status = "unlocked"
     private var start = true
+    private var mark = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,12 +61,18 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     override fun onStart() {
         super.onStart()
         start = false
+        mark = 0
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)                                                      // Stop
     fun onAppBackgrounded() {
-        backgroundDate = getCurrentDate()
+        if (mark == 0) {
+            backgroundDate = getCurrentDate()
+        } else if (mark == 1) {
+            backgroundDate = ""
+        }
         start = true
+        mark = 1
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -123,6 +130,9 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
 
     fun setBackgroundDate() {
         backgroundDate = ""
+    }
+    fun setMark() {
+        mark = 1
     }
 
     private fun setVariables() {
