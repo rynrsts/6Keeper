@@ -44,7 +44,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private var backgroundDate = ""
     private var status = "unlocked"
     private var start = true
-    private var mark = 0
+    private var timer = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,18 +61,12 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     override fun onStart() {
         super.onStart()
         start = false
-        mark = 0
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)                                                      // Stop
     fun onAppBackgrounded() {
-        if (mark == 0) {
-            backgroundDate = getCurrentDate()
-        } else if (mark == 1) {
-            backgroundDate = ""
-        }
+        backgroundDate = getCurrentDate()
         start = true
-        mark = 1
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -88,16 +82,17 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 val encodingClass = EncodingClass()
                 val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
                 var autoLock = false
-                var timer = 0
 
                 for (u in userSettings) {
                     if (encodingClass.decodeData(u.autoLock) == "1") {                              // If Auto Lock is 1
                         autoLock = true
 
-                        val autoLockTimer = encodingClass.decodeData(u.autoLockTimer)
-                        timer = Integer.parseInt(
-                            autoLockTimer.replace(" sec", "")
-                        )
+                        if (timer == 0) {
+                            val autoLockTimer = encodingClass.decodeData(u.autoLockTimer)
+                            timer = Integer.parseInt(
+                                    autoLockTimer.replace(" sec", "")
+                            )
+                        }
                     }
                 }
 
@@ -131,8 +126,8 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     fun setBackgroundDate() {
         backgroundDate = ""
     }
-    fun setMark() {
-        mark = 1
+    fun setTimer() {
+        timer = 30
     }
 
     private fun setVariables() {
@@ -227,6 +222,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         when {
             requestCode == 1215311 && resultCode == 1215311 -> {                                    // If Master PIN is correct
                 status = "unlocked"
+                timer = 0
             }
             requestCode == 1215311 && resultCode == 31143512 -> {                                   // If canceled
                 val homeClick = Intent(Intent.ACTION_MAIN)

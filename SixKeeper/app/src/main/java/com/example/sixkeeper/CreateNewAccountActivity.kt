@@ -133,7 +133,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encodingClass.encodeData(birthDate),
                         encodingClass.encodeData(email),
                         encodingClass.encodeData(mobileNumber.toString()),
-                        ""
+                        "",
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString())
                 )
         )
         val userAccStatus = databaseHandlerClass.addUserAcc(
@@ -144,6 +147,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encryptionClass.hashData(encodedMasterPIN),
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(date),
+                        ""
+                )
+        )
+        val userAccountStatus = databaseHandlerClass.addAccountStatus(
+                UserAccountStatusModelClass(
+                        "",
+                        "",
+                        "",
+                        "",
                         ""
                 )
         )
@@ -165,6 +177,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 tableStatus > -1 &&
                 userInfoStatus > -1 &&
                 userAccStatus > -1 &&
+                userAccountStatus > -1 &&
                 userSettingsStatus > -1 &&
                 userProfileStatus > -1
         ) {

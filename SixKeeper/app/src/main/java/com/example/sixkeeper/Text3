@@ -1,13 +1,20 @@
 
 Additional
+    Create New Account: 15 years and above
     User Account: Add deactivate
+    Password and Master PIN reset: OTP in Mobile Number and Email
+    Settings: Auto lock when shaken
+    General: Disable application for wrong attempts
 
 
 Enhancement
     Create New Account: Add progress
     Create New Account: Automate '/' in Birth Date
-    User Account: Make  First name, Last name and Birth date editable once
     User Account: Confirm Email and Mobile Number
+    User Account: Make profile photo be able to crop
+    Import-Export: Select file
+    Reset Password: Make not same with username and old password
+    Reset Master PIN: Make not same with old master pin
 
 
 Bug
@@ -16,3 +23,4 @@ Bug
     User Account: Remove auto lock in media select
     Import/Export: Cannot find folder
     Add Account: Add loading in selecting include system apps
+    Specific Account: Web view bug

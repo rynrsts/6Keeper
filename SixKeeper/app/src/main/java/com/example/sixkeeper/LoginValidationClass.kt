@@ -1,12 +1,16 @@
 package com.example.sixkeeper
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Environment
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
@@ -16,9 +20,13 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var etLoginPassword: EditText
     private lateinit var ivLoginTogglePass: ImageView
 
+    @SuppressLint("SimpleDateFormat")
+    private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+
     private lateinit var username: String
     private lateinit var password: String
     private lateinit var userId: String
+
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
@@ -94,6 +102,50 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         }
 
         return bool
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    fun waitingTime(): Long {
+        val userStatusList: List<UserAccountStatusModelClass> =
+                databaseHandlerClass.viewAccountStatus()
+        var waitingTime: Long = 0
+
+        for (u in userStatusList) {
+            val pwWrongAttempt = encodingClass.decodeData(u.pwWrongAttempt)
+
+            if (pwWrongAttempt.isNotEmpty()) {
+                val wrongAttempts = Integer.parseInt(pwWrongAttempt)
+
+                if (wrongAttempts % 3 == 0) {
+                    val pwLockDate = encodingClass.decodeData(u.pwLockTime)
+
+                    if (pwLockDate.isNotEmpty()) {
+                        val dateToday: Date = dateFormat.parse(getCurrentDate())
+                        val lockeDate: Date = dateFormat.parse(pwLockDate)
+                        val timeDifference: Long = dateToday.time - lockeDate.time
+                        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
+                        val loop = wrongAttempts / 3
+                        var timer = 30
+
+                        for (i in 1 until loop) {
+                            timer *= 2
+                        }
+
+                        if (seconds < timer) {
+                            waitingTime = timer - seconds
+                        }
+                    }
+                }
+            }
+        }
+
+        return waitingTime
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
     }
 
     fun updateUserStatus() {                                                                        // Update account status to 1

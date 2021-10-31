@@ -65,21 +65,43 @@ class LoginActivity : LoginValidationClass() {
         acbLoginLogin.setOnClickListener {
             if (isNotEmpty()) {
                 if (validateUserCredential()) {
-                    updateUserStatus()
+                    val waitingTime = waitingTime()
 
-                    closeKeyboard()
+                    if (waitingTime == 0.toLong()) {
+                        updateUserStatus()
 
-                    val goToMasterPINActivity = Intent(
-                            this,
-                            MasterPINActivity::class.java
-                    )
-                    startActivity(goToMasterPINActivity)
-                    overridePendingTransition(
-                            R.anim.anim_enter_bottom_to_top_2,
-                            R.anim.anim_0
-                    )
+                        closeKeyboard()
 
-                    this.finish()
+                        val goToMasterPINActivity = Intent(
+                                this,
+                                MasterPINActivity::class.java
+                        )
+                        startActivity(goToMasterPINActivity)
+                        overridePendingTransition(
+                                R.anim.anim_enter_bottom_to_top_2,
+                                R.anim.anim_0
+                        )
+
+                        this.finish()
+                    } else {
+                        var sec = ""
+
+                        if (waitingTime == 1.toLong()) {
+                            sec = "second"
+                        } else if (waitingTime > 1.toLong()) {
+                            sec = "seconds"
+                        }
+
+                        val toast: Toast = Toast.makeText(
+                                applicationContext,
+                                "Account is locked. Please wait for $waitingTime $sec",
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
                 } else {
                     val toast: Toast = Toast.makeText(
                             applicationContext,

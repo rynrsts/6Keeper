@@ -18,6 +18,7 @@ class DatabaseHandlerClass(context: Context) :
 
         private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
+        private const val TABLE_ACCOUNT_STATUS = "AccountStatusTable"
         private const val TABLE_SETTINGS = "SettingsTable"
         private const val TABLE_PROFILE = "ProfileTable"
         private const val TABLE_ACTION_LOG = "ActionLogTable"
@@ -34,6 +35,9 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_EMAIL = "email"
         private const val KEY_MOBILE_NUMBER = "mobile_number"
         private const val KEY_LAST_UPDATE = "last_update"
+        private const val KEY_FN_EDIT_COUNT = "fn_edit_count"
+        private const val KEY_LN_EDIT_COUNT = "ln_edit_count"
+        private const val KEY_BD_EDIT_COUNT = "bd_edit_count"
 
         // TABLE_USER_ACC
 //        private const val KEY_USER_ID = "user_id"
@@ -43,6 +47,13 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_STATUS = "account_status"
         private const val KEY_CREATION_DATE = "creation_date"
         private const val KEY_LAST_LOGIN = "last_login"
+
+        // TABLE_ACCOUNT_STATUS
+        private const val KEY_PW_WRONG_ATTEMPT = "pw_wrong_attempt"
+        private const val KEY_PW_LOCK_TIME = "pw_lock_time"
+        private const val KEY_M_PIN_WRONG_ATTEMPT = "m_pin_wrong_attempt"
+        private const val KEY_F_WRONG_ATTEMPT = "f_wrong_attempt"
+        private const val KEY_M_PIN_LOCK_TIME = "m_pin_lock_time"
 
         // TABLE_SETTINGS
 //        private const val KEY_USER_ID = "user_id"
@@ -107,7 +118,10 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_BIRTH_DATE + " TEXT," +
                         KEY_EMAIL + " TEXT," +
                         KEY_MOBILE_NUMBER + " TEXT," +
-                        KEY_LAST_UPDATE + " TEXT" +
+                        KEY_LAST_UPDATE + " TEXT," +
+                        KEY_FN_EDIT_COUNT + " TEXT," +
+                        KEY_LN_EDIT_COUNT + " TEXT," +
+                        KEY_BD_EDIT_COUNT + " TEXT" +
                         ")"
                 )
         val createUserAccTable = (
@@ -119,6 +133,15 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_ACCOUNT_STATUS + " TEXT," +
                         KEY_CREATION_DATE + " TEXT," +
                         KEY_LAST_LOGIN + " TEXT" +
+                        ")"
+                )
+        val createAccountStatusTable = (
+                "CREATE TABLE " + TABLE_ACCOUNT_STATUS + "(" +
+                        KEY_PW_WRONG_ATTEMPT + " TEXT," +
+                        KEY_PW_LOCK_TIME + " TEXT," +
+                        KEY_M_PIN_WRONG_ATTEMPT + " BLOB," +
+                        KEY_F_WRONG_ATTEMPT + " BLOB," +
+                        KEY_M_PIN_LOCK_TIME + " TEXT" +
                         ")"
                 )
         val createSettingsTable = (
@@ -190,6 +213,7 @@ class DatabaseHandlerClass(context: Context) :
 
         db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
+        db?.execSQL(createAccountStatusTable)
         db?.execSQL(createSettingsTable)
         db?.execSQL(createProfileTable)
         db?.execSQL(createActionLogTable)
@@ -202,6 +226,7 @@ class DatabaseHandlerClass(context: Context) :
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNT_STATUS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PROFILE")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACTION_LOG")
@@ -232,6 +257,9 @@ class DatabaseHandlerClass(context: Context) :
             put(KEY_EMAIL, userInfo.email)
             put(KEY_MOBILE_NUMBER, userInfo.mobileNumber)
             put(KEY_LAST_UPDATE, userInfo.lastUpdate)
+            put(KEY_FN_EDIT_COUNT, userInfo.fnEditCount)
+            put(KEY_LN_EDIT_COUNT, userInfo.lnEditCount)
+            put(KEY_BD_EDIT_COUNT, userInfo.bdEditCount)
         }
 
         val success = db.insert(TABLE_USER_INFO, null, contentValues)
@@ -255,6 +283,24 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_USER_ACC, null, contentValues)
+
+        db.close()
+        return success
+    }
+
+    fun addAccountStatus(userAccountStatus: UserAccountStatusModelClass): Long {                    // Add Account Status
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(KEY_PW_WRONG_ATTEMPT, userAccountStatus.pwWrongAttempt)
+            put(KEY_PW_LOCK_TIME, userAccountStatus.pwLockTime)
+            put(KEY_M_PIN_WRONG_ATTEMPT, userAccountStatus.mPinWrongAttempt)
+            put(KEY_F_WRONG_ATTEMPT, userAccountStatus.fWrongAttempt)
+            put(KEY_M_PIN_LOCK_TIME, userAccountStatus.mPinLockTime)
+        }
+
+        val success = db.insert(TABLE_ACCOUNT_STATUS, null, contentValues)
 
         db.close()
         return success
@@ -497,6 +543,9 @@ class DatabaseHandlerClass(context: Context) :
         var userEmail: String
         var userMobileNumber: String
         var userLastUpdate: String
+        var userFnEditCount: String
+        var userLnEditCount: String
+        var userBdEditCount: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -507,6 +556,10 @@ class DatabaseHandlerClass(context: Context) :
                 userEmail = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
                 userMobileNumber = cursor.getString(cursor.getColumnIndex(KEY_MOBILE_NUMBER))
                 userLastUpdate = cursor.getString(cursor.getColumnIndex(KEY_LAST_UPDATE))
+                userFnEditCount = cursor.getString(cursor.getColumnIndex(KEY_FN_EDIT_COUNT))
+                userLnEditCount = cursor.getString(cursor.getColumnIndex(KEY_LN_EDIT_COUNT))
+                userBdEditCount = cursor.getString(cursor.getColumnIndex(KEY_BD_EDIT_COUNT))
+
 
                 val user = UserInfoModelClass(
                         userId = userId,
@@ -515,7 +568,10 @@ class DatabaseHandlerClass(context: Context) :
                         birthDate = userBirthDate,
                         email = userEmail,
                         mobileNumber = userMobileNumber,
-                        lastUpdate = userLastUpdate
+                        lastUpdate = userLastUpdate,
+                        fnEditCount = userFnEditCount,
+                        lnEditCount = userLnEditCount,
+                        bdEditCount = userBdEditCount
                 )
                 userInfoList.add(user)
             } while (cursor.moveToNext())
@@ -552,7 +608,51 @@ class DatabaseHandlerClass(context: Context) :
         return userUsername
     }
 
-    fun verifyInformation(                                                                          // Verify Infomratoin for Reset
+    fun viewAccountStatus(): List<UserAccountStatusModelClass> {                                    // View Account Status
+        val userAccStatusList: ArrayList<UserAccountStatusModelClass> = ArrayList()
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNT_STATUS"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var userPwWrongAttempt: String
+        var userPwLockTime: String
+        var userMPinWrongAttempt: String
+        var userFWrongAttempt: String
+        var userMPinLockTime: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                userPwWrongAttempt = cursor.getString(cursor.getColumnIndex(KEY_PW_WRONG_ATTEMPT))
+                userPwLockTime = cursor.getString(cursor.getColumnIndex(KEY_PW_LOCK_TIME))
+                userMPinWrongAttempt =
+                        cursor.getString(cursor.getColumnIndex(KEY_M_PIN_WRONG_ATTEMPT))
+                userFWrongAttempt = cursor.getString(cursor.getColumnIndex(KEY_F_WRONG_ATTEMPT))
+                userMPinLockTime = cursor.getString(cursor.getColumnIndex(KEY_M_PIN_LOCK_TIME))
+
+                val user = UserAccountStatusModelClass(
+                        pwWrongAttempt = userPwWrongAttempt,
+                        pwLockTime = userPwLockTime,
+                        mPinWrongAttempt = userMPinWrongAttempt,
+                        fWrongAttempt = userFWrongAttempt,
+                        mPinLockTime = userMPinLockTime
+                )
+                userAccStatusList.add(user)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return userAccStatusList
+    }
+
+    fun verifyInformation(                                                                          // Verify Information for Reset
             firstName: String,
             lastName: String,
             birthDate: String,
@@ -1324,6 +1424,20 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun updateEditCountUserInfo(field: String, updatedData: String): Int {                          // Update Edit Count in User Information
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(field, updatedData)
+        }
+
+        val success = db.update(TABLE_USER_INFO, contentValues, null, null)
+
+        db.close()
+        return success
+    }
+
     fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                          // Update Username
         val db = this.writableDatabase
         val contentValues1 = ContentValues()
@@ -1609,6 +1723,7 @@ class DatabaseHandlerClass(context: Context) :
 
         val success = db.delete(TABLE_USER_ACC, "", null)
         db.delete(TABLE_USER_INFO, "", null)
+        db.delete(TABLE_ACCOUNT_STATUS, "", null)
         db.delete(TABLE_SAVED_PASS, "", null)
         db.delete(TABLE_PROFILE, "", null)
         db.delete(TABLE_ACTION_LOG, "", null)

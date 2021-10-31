@@ -35,15 +35,28 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
         when {
             isFirstNameToUsername() -> {
                 setView1()
+                setInfoContent()
 
                 when (getViewId()) {
                     "first name" -> {
+                        if (getEditCount() == 0) {
+                            setViewButton()
+                        }
+
                         setFirstName()
                     }
                     "last name" -> {
+                        if (getEditCount() == 0) {
+                            setViewButton()
+                        }
+
                         setLastName()
                     }
                     "birth date" -> {
+                        if (getEditCount() == 0) {
+                            setViewButton()
+                        }
+
                         setBirthDate()
                     }
                     "email" -> {
@@ -59,8 +72,6 @@ class UserAccountEditFragment : UserAccountEditProcessClass() {
                         setUsername()
                     }
                 }
-
-                setInfoContent()
             }
             getViewId() == "password" -> {
                 setView2()

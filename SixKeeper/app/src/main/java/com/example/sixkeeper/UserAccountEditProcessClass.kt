@@ -54,6 +54,7 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private var previousData: String = ""
     private var editMode: Boolean = false
+    private var editCount: Int = 0
 
     private var masterPin: Int = 0
 
@@ -80,9 +81,17 @@ open class UserAccountEditProcessClass : Fragment() {
         return appCompatActivity
     }
 
+    fun getEditCount(): Int {
+        return editCount
+    }
+
     fun isFirstNameToUsername(): Boolean {
         return viewId == "first name" || viewId == "last name" || viewId == "birth date" ||
                 viewId == "email" || viewId == "mobile number" || viewId == "username"
+    }
+
+    private fun isFirstNameToBirthDate(): Boolean {
+        return viewId == "first name" || viewId == "last name" || viewId == "birth date"
     }
 
     private fun isEmailToUsername(): Boolean {
@@ -187,6 +196,9 @@ open class UserAccountEditProcessClass : Fragment() {
         var email = ""
         var mobileNumber = ""
         val username = encodingClass.decodeData(userUsername)
+        var fnEditCount = ""
+        var lnEditCount = ""
+        var bdEditCount = ""
 
         for (u in userInfoList) {
             firstName = encodingClass.decodeData(u.firstName)
@@ -194,21 +206,33 @@ open class UserAccountEditProcessClass : Fragment() {
             birthDate = encodingClass.decodeData(u.birthDate)
             email = encodingClass.decodeData(u.email)
             mobileNumber = encodingClass.decodeData(u.mobileNumber)
+            fnEditCount = encodingClass.decodeData(u.fnEditCount)
+            lnEditCount = encodingClass.decodeData(u.lnEditCount)
+            bdEditCount = encodingClass.decodeData(u.bdEditCount)
         }
 
         when (viewId) {
-            "first name" ->
+            "first name" -> {
                 returnValue = firstName
-            "last name" ->
+                editCount = Integer.parseInt(fnEditCount)
+            }
+            "last name" -> {
                 returnValue = lastName
-            "birth date" ->
+                editCount = Integer.parseInt(lnEditCount)
+            }
+            "birth date" -> {
                 returnValue = birthDate
-            "email" ->
+                editCount = Integer.parseInt(bdEditCount)
+            }
+            "email" -> {
                 returnValue = email
-            "mobile number" ->
+            }
+            "mobile number" -> {
                 returnValue = mobileNumber
-            "username" ->
+            }
+            "username" -> {
                 returnValue = username
+            }
         }
 
         return returnValue
@@ -276,7 +300,11 @@ open class UserAccountEditProcessClass : Fragment() {
 
     fun setEditOnClick() {
         when {
-            isEmailToUsername() -> {
+            isFirstNameToUsername() -> {
+                if (isFirstNameToBirthDate() && editCount > 0) {
+                    return
+                }
+
                 val clUserEditEdit: ConstraintLayout =
                         getAppCompatActivity().findViewById(R.id.clUserEditEdit)
 
@@ -284,6 +312,18 @@ open class UserAccountEditProcessClass : Fragment() {
                     previousData = etUserEditTextBox.text.toString()
 
                     when (viewId) {
+                        "first name" -> {
+                            tvUserEditNote.setText(R.string.many_letters_only_message)
+                            enterEditMode()
+                        }
+                        "last name" -> {
+                            tvUserEditNote.setText(R.string.many_letters_only_message)
+                            enterEditMode()
+                        }
+                        "birth date" -> {
+                            tvUserEditNote.setText(R.string.many_birth_date_format_message)
+                            enterEditMode()
+                        }
                         "email" -> {
                             tvUserEditNote.setText(R.string.many_validate_email)
                             enterEditMode()
@@ -365,7 +405,7 @@ open class UserAccountEditProcessClass : Fragment() {
             builder.setCancelable(false)
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                if (isEmailToUsername()) {
+                if (isFirstNameToUsername()) {
                     etUserEditTextBox.setText(previousData)
                     goBackToViewMode()
                 } else if (viewId == "password") {
@@ -391,10 +431,13 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         clUserEditSave.setOnClickListener {
-            if (isEmailToUsername()) {
+            if (isFirstNameToUsername()) {
                 val text = etUserEditTextBox.text.toString()
 
                 if (
+                        (viewId == "first name" && isNameValid(text)) ||
+                        (viewId == "last name" && isNameValid(text)) ||
+                        (viewId == "birth date" && isBirthDateValid(text)) ||
                         (viewId == "email" && isEmailValid(text)) ||
                         (viewId == "mobile number" && text.length == 10) ||
                         (viewId == "username" && isUsernameValid(text))
@@ -457,7 +500,13 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private fun showSaveAlertDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-        builder.setMessage(R.string.user_edit_save_alert_mes)
+
+        if (isFirstNameToBirthDate()) {
+            builder.setMessage(R.string.user_edit_save_alert_mes_2)
+        } else if (isEmailToUsername()) {
+            builder.setMessage(R.string.user_edit_save_alert_mes)
+        }
+
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
@@ -493,6 +542,24 @@ open class UserAccountEditProcessClass : Fragment() {
 
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             when (viewId) {
+                "first name" -> {
+                    updateInfo("first_name")
+                    updateEditCount("fn_edit_count")
+                    setInfoContent()
+                    goBackToViewMode()
+                }
+                "last name" -> {
+                    updateInfo("last_name")
+                    updateEditCount("ln_edit_count")
+                    setInfoContent()
+                    goBackToViewMode()
+                }
+                "birth date" -> {
+                    updateInfo("birth_date")
+                    updateEditCount("bd_edit_count")
+                    setInfoContent()
+                    goBackToViewMode()
+                }
                 "email" -> {
                     updateInfo("email")
                     setInfoContent()
@@ -573,6 +640,18 @@ open class UserAccountEditProcessClass : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    private fun isNameValid(s: String): Boolean {                                                   // Accept letters, (.) and (-) only
+        val exp = "[a-zA-Z .-]+"
+        val pattern: Pattern = Pattern.compile(exp)
+        return pattern.matcher(s).matches()
+    }
+
+    private fun isBirthDateValid(s: String): Boolean {                                              // Accept MM//DD/YYYY format only
+        val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9][0-9][0-9])?$"
+        val pattern: Pattern = Pattern.compile(exp)
+        return pattern.matcher(s).matches()
+    }
+
     private fun isEmailValid(s: String): Boolean {                                                  // Accept valid email
         return Patterns.EMAIL_ADDRESS.matcher(s).matches()
     }
@@ -615,6 +694,13 @@ open class UserAccountEditProcessClass : Fragment() {
                         encodingClass.encodeData("App account $viewId was modified."),
                         encodingClass.encodeData(getCurrentDate())
                 )
+        )
+    }
+
+    private fun updateEditCount(field: String) {                                                    // Update edit count
+        editCount += 1
+        databaseHandlerClass.updateEditCountUserInfo(
+                field, encodingClass.encodeData(editCount.toString())
         )
     }
 
@@ -696,12 +782,18 @@ open class UserAccountEditProcessClass : Fragment() {
         }
         tvUserEditNote.text = null
 
-        val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_1, view as ViewGroup?, false
-        )
-        clUserAccountEditButton.apply {
-            removeAllViews()
-            addView(layoutButton)
+        if (editCount == 0) {
+            val layoutButton = layoutInflater.inflate(
+                    R.layout.layout_user_edit_button_1, view as ViewGroup?, false
+            )
+            clUserAccountEditButton.apply {
+                removeAllViews()
+                addView(layoutButton)
+            }
+
+            setEditOnClick()
+        } else {
+            clUserAccountEditButton.removeAllViews()
         }
 
         val immKeyboard: InputMethodManager =
@@ -716,7 +808,6 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         editMode = false
-        setEditOnClick()
     }
 
     private fun setUsernameInMenu() {                                                               // Set update username in menu

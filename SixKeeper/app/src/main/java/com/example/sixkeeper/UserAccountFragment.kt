@@ -195,7 +195,7 @@ class UserAccountFragment : Fragment() {
                 }
 
                 llProfilePhotoAdd.setOnClickListener {
-                    (activity as IndexActivity).setMark()
+                    (activity as IndexActivity).setTimer()
 
                     val mediaStorage =
                             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -226,52 +226,37 @@ class UserAccountFragment : Fragment() {
 
         clUserAccountFirstName.setOnClickListener {
             field = "first name"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountFirstName.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed({ clUserAccountFirstName.isClickable = true }, 1000)
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountLastName.setOnClickListener {
             field = "last name"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountLastName.isClickable = false                                           // Set un-clickable for 1 second
-                postDelayed({ clUserAccountLastName.isClickable = true }, 1000)
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountBirthDate.setOnClickListener {
             field = "birth date"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountBirthDate.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed({ clUserAccountBirthDate.isClickable = true }, 1000)
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountEmail.setOnClickListener {
             field = "email"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountEmail.isClickable = false                                              // Set un-clickable for 1 second
-                postDelayed({ clUserAccountEmail.isClickable = true }, 1000)
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountMobileNum.setOnClickListener {
             field = "mobile number"
-            openConfirmActionActivity()
-
-            it.apply {
-                clUserAccountMobileNum.isClickable = false                                          // Set un-clickable for 1 second
-                postDelayed({ clUserAccountMobileNum.isClickable = true }, 1000)
-            }
+            val action = UserAccountFragmentDirections
+                    .actionUserAccountFragmentToUserAccountEditFragment(field)
+            findNavController().navigate(action)
         }
 
         clUserAccountUsername.setOnClickListener {
@@ -364,16 +349,6 @@ class UserAccountFragment : Fragment() {
         }
     }
 
-    private fun openConfirmActionActivity() {
-        val goToConfirmActivity = Intent(appCompatActivity, ConfirmActionActivity::class.java)
-
-        @Suppress("DEPRECATION")
-        startActivityForResult(goToConfirmActivity, 16914)
-        appCompatActivity.overridePendingTransition(
-                R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
-        )
-    }
-
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
@@ -428,17 +403,6 @@ class UserAccountFragment : Fragment() {
                         setGravity(Gravity.CENTER, 0, 0)
                         show()
                     }
-                }
-            }
-            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
-                view?.apply {
-                    postDelayed(
-                            {
-                                val action = UserAccountFragmentDirections
-                                        .actionUserAccountFragmentToUserAccountEditFragment(field)
-                                findNavController().navigate(action)
-                            }, 250
-                    )
                 }
             }
         }

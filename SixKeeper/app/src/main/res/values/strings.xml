@@ -66,7 +66,7 @@
     </string>
     <string name="create_new_acc_p1_note">
         Note: Please make sure that the First Name, Last Name and Birth Date fields are correct.
-        These cannot be changed once registered.
+        These can only be changed once.
     </string>
     <string name="create_new_acc_p4_agree_to_terms">
         I agree to the Terms and Conditions, and Privacy Policy.
@@ -136,6 +136,7 @@
     <string name="login_import_data_title">Import Data</string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials</string>
+
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
@@ -460,7 +461,7 @@
     <string name="user_deactivate_account">Deactivate Account</string>
     <string name="user_export_data">Export Data</string>
     <string name="user_fingerprint">Fingerprint</string>
-    <string name="user_image_size">Image size should be less than 2 MB</string>
+    <string name="user_image_size">Image size should be more than 2 MB</string>
     <string name="user_not_image">Selected media is not an image!</string>
     <string name="user_profile_photo">Profile Photo</string>
     <string name="user_remove_profile_photo">Remove Profile Photo</string>
@@ -473,6 +474,9 @@
     <string name="user_edit_new_pass">New Password</string>
     <string name="user_edit_pass_mes">Wrong Current Password!</string>
     <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
+    <string name="user_edit_save_alert_mes_2">
+        This field can only be modified once. Do you want to save the changes?
+    </string>
     <string name="user_edit_master_pin_note">
         Changing the Master PIN will require you to:
     </string>
