@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "425646823641",
+    "project_id": "keeper-650a1",
+    "storage_bucket": "keeper-650a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425646823641:android:e42b696a44f3140f9486c8",
+        "android_client_info": {
+          "package_name": "com.example.sixkeeper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425646823641-35id43rrinnngdmdrf3o0d7sjscbh3iu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1U_LwK-LLMjTFbVagpVxpKLoozfIJdOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425646823641-35id43rrinnngdmdrf3o0d7sjscbh3iu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

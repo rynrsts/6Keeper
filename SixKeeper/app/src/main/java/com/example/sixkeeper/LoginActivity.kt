@@ -42,23 +42,27 @@ class LoginActivity : LoginValidationClass() {
         val acbLoginCreateNewAccount: Button = findViewById(R.id.acbLoginCreateNewAccount)
 
         tvLoginForgotPass.setOnClickListener {
-            val goToForgotCredentialsActivity =
-                    Intent(this, ForgotCredentialsActivity::class.java)
-            goToForgotCredentialsActivity.putExtra("credential", "password")
+            if (InternetConnectionClass().isConnected()) {
+                val goToForgotCredentialsActivity =
+                        Intent(this, ForgotCredentialsActivity::class.java)
+                goToForgotCredentialsActivity.putExtra("credential", "password")
 
-            startActivity(goToForgotCredentialsActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
-
-            it.apply {
-                tvLoginForgotPass.isClickable = false                                               // Set button un-clickable for 1 second
-                postDelayed(
-                        {
-                            tvLoginForgotPass.isClickable = true
-                        }, 1000
+                startActivity(goToForgotCredentialsActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_right_to_left_2,
+                        R.anim.anim_exit_right_to_left_2
                 )
+
+                it.apply {
+                    tvLoginForgotPass.isClickable = false                                               // Set button un-clickable for 1 second
+                    postDelayed(
+                            {
+                                tvLoginForgotPass.isClickable = true
+                            }, 1000
+                    )
+                }
+            } else {
+                internetToast()
             }
         }
 
@@ -300,5 +304,17 @@ class LoginActivity : LoginValidationClass() {
         val alert: AlertDialog = builder.create()
         alert.setTitle(R.string.many_alert_title_confirm)
         alert.show()
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+            applicationContext,
+            R.string.many_internet_connection,
+            Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 }

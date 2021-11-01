@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?android:attr/actionBarSize"
+    tools:context=".ResetSelectionFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gResetSelectionVertical09"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".09" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gResetSelectionVertical91"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbResetSelectionEnterInfo"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_button_green_border"
+                android:stateListAnimator="@null"
+                android:text="@string/reset_selection_enter_information"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/gResetSelectionVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbResetSelectionMobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/layout_button_green_border"
+                android:stateListAnimator="@null"
+                android:text="@string/reset_selection_mobile_number"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/gResetSelectionVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"
+                app:layout_constraintTop_toBottomOf="@+id/acbResetSelectionEnterInfo" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbResetSelectionEmail"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/layout_button_green_border"
+                android:stateListAnimator="@null"
+                android:text="@string/reset_selection_email"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toStartOf="@+id/gResetSelectionVertical91"
+                app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"
+                app:layout_constraintTop_toBottomOf="@+id/acbResetSelectionMobileNumber" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -184,6 +184,7 @@
     <string name="many_four">4</string>
     <string name="many_help">FAQS</string>
     <string name="many_incorrect_master_pin">Incorrect Master PIN!</string>
+    <string name="many_internet_connection">Waiting for Internet connection</string>
     <string name="many_last_name">Last Name</string>
     <string name="many_letters_only_message">
         *Can only contain letters, and special characters: period (.) and hyphen (-).
@@ -251,8 +252,13 @@
     <!-- Master PIN -->
     <string name="master_pin_forgot">Forgot Master PIN?</string>
 
-    <!-- Password Generator -->
+    <!-- Mobile Number Validation -->
+    <string name="mobile_number_enter_otp">Enter OTP</string>
+    <string name="mobile_number_enter_otp_mes">Please enter OTP</string>
+    <string name="mobile_number_get_otp">Get OTP</string>
+    <string name="mobile_number_verify_otp">Verify OTP</string>
 
+    <!-- Password Generator -->
     <string name="pass_generator_copy"><u>Copy to Clipboard</u></string>
     <string name="pass_generator_custom">Custom</string>
     <string name="pass_generator_generate">Generate</string>
@@ -346,6 +352,11 @@
     <string name="recycle_bin_select_all">Select All</string>
     <string name="recycle_bin_selected_items_delete_mes">Selected items deleted!</string>
     <string name="recycle_bin_selected_items_restore_mes">Selected items restored!</string>
+
+    <!-- Reset Selection -->
+    <string name="reset_selection_email">Email Verification</string>
+    <string name="reset_selection_enter_information">Enter Information</string>
+    <string name="reset_selection_mobile_number">Mobile Number Verification</string>
 
     <!-- Saved Password -->
     <string name="saved_password_delete_alert">Delete Saved Password/s?</string>

@@ -19,12 +19,17 @@ import androidx.lifecycle.ProcessLifecycleOwner
 class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
     private val fragmentManager: FragmentManager = supportFragmentManager
 
+    private val resetSelectionFragment: Fragment = ResetSelectionFragment()
     private val securityQuestionFragment: Fragment = SecurityQuestionFragment()
+    private val mobileNumberValidationFragment: Fragment = MobileNumberValidationFragment()
     private val resetPasswordFragment: Fragment = ResetPasswordFragment()
     private val resetMasterPINFragment: Fragment = ResetMasterPINFragment()
 
     private var credential = ""
+    private val selection = "selection"
     private val securityQuestion = "securityQuestion"
+    private val mobileNumberValidation = "mobileNumberValidation"
+    private val emailValidation = "emailValidation"
     private val resetPassword = "resetPassword"
     private val resetMasterPIN = "resetMasterPIN"
     private var fragmentNum = 0
@@ -36,7 +41,7 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         getExtra()
         changeActionBarTitle()
-        manageForgotFragments(securityQuestion)
+        manageForgotFragments(selection)
         setOnClick()
     }
 
@@ -85,23 +90,59 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
         }
 
         when (selectedFragment) {
-            securityQuestion -> {                                                                   // Security Question fragment
+            selection -> {                                                                          // Selection
                 fragmentManager.beginTransaction().apply {
-                    if (fragmentNum == 2) {
+                    if (fragmentNum == 1) {
                         setCustomAnimations(
                                 R.anim.anim_enter_left_to_right_1,
                                 R.anim.anim_exit_left_to_right_1
                         )
                     }
 
-                    replace(R.id.clForgotCredentialsContainer, securityQuestionFragment)
+                    replace(R.id.clForgotCredentialsContainer, resetSelectionFragment)
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    commit()
+                }
+
+                fragmentNum = 0
+            }
+            securityQuestion, mobileNumberValidation, emailValidation
+            -> {
+                fragmentManager.beginTransaction().apply {
+                    if (fragmentNum == 0) {
+                        setCustomAnimations(
+                                R.anim.anim_enter_right_to_left_1,
+                                R.anim.anim_exit_right_to_left_1
+                        )
+                    } else if (fragmentNum == 2) {
+                        setCustomAnimations(
+                                R.anim.anim_enter_left_to_right_1,
+                                R.anim.anim_exit_left_to_right_1
+                        )
+                    }
+
+                    when (selectedFragment) {
+                        securityQuestion -> {                                                       // Enter Information
+                            replace(R.id.clForgotCredentialsContainer, securityQuestionFragment)
+                        }
+                        mobileNumberValidation -> {                                                 // Mobile Number Validation
+                            replace(
+                                    R.id.clForgotCredentialsContainer,
+                                    mobileNumberValidationFragment
+                            )
+                        }
+                        emailValidation -> {                                                        // Email Validation
+                            //
+                        }
+                    }
+
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     commit()
                 }
 
                 fragmentNum = 1
             }
-            forgot -> {                                                                             // Forgot fragment (Password / Master PIN)
+            forgot -> {                                                                             // Forgot fragment
                 fragmentManager.beginTransaction().apply {
                     if (fragmentNum == 1) {
                         setCustomAnimations(
@@ -110,9 +151,9 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
                         )
                     }
 
-                    if (forgot == resetPassword) {
+                    if (forgot == resetPassword) {                                                  // Password
                         replace(R.id.clForgotCredentialsContainer, resetPasswordFragment)
-                    } else if (forgot == resetMasterPIN) {
+                    } else if (forgot == resetMasterPIN) {                                          // Master PIN
                         replace(R.id.clForgotCredentialsContainer, resetMasterPINFragment)
                     }
 
@@ -143,7 +184,7 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
         }
 
         when (fragmentNum) {
-            1 -> {
+            0 -> {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(this)
                 builder.setMessage(R.string.forgot_credentials_mes)
                 builder.setCancelable(false)
@@ -162,6 +203,9 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
                 val alert: AlertDialog = builder.create()
                 alert.setTitle(R.string.many_alert_title)
                 alert.show()
+            }
+            1 -> {
+                manageForgotFragments(selection)
             }
             2 -> {
                 manageForgotFragments(securityQuestion)
