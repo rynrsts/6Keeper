@@ -64,10 +64,11 @@ class LoginActivity : LoginValidationClass() {
 
         acbLoginLogin.setOnClickListener {
             if (isNotEmpty()) {
-                if (validateUserCredential()) {
-                    val waitingTime = waitingTime()
+                val waitingTime = waitingTime()
 
+                if (validateUserCredential()) {
                     if (waitingTime == 0.toLong()) {
+                        restartAttemptAndTime()
                         updateUserStatus()
 
                         closeKeyboard()
@@ -84,24 +85,17 @@ class LoginActivity : LoginValidationClass() {
 
                         this.finish()
                     } else {
-                        var sec = ""
-
-                        if (waitingTime == 1.toLong()) {
-                            sec = "second"
-                        } else if (waitingTime > 1.toLong()) {
-                            sec = "seconds"
-                        }
-
-                        val toast: Toast = Toast.makeText(
-                                applicationContext,
-                                "Account is locked. Please wait for $waitingTime $sec",
-                                Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
+                        lockToast(waitingTime)
                     }
+                } else if (validateUsername()) {
+                    if (waitingTime == 0.toLong()) {
+                        updateAccountStatus()
+                    } else {
+                        lockToast(waitingTime)
+                    }
+
+                    setEtLoginPassword("")
+                    getEtLoginPassword().requestFocus()
                 } else {
                     val toast: Toast = Toast.makeText(
                             applicationContext,

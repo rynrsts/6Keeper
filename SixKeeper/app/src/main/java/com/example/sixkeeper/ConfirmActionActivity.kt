@@ -182,49 +182,71 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         val tvConfirmActionForgotPass: TextView = findViewById(R.id.tvConfirmActionForgotPass)
 
         getAcbConfirmActionButton1().setOnClickListener {
-            pushNumber(1)
+            if (!locked("")) {
+                pushNumber(1)
+            }
         }
 
         getAcbConfirmActionButton2().setOnClickListener {
-            pushNumber(2)
+            if (!locked("")) {
+                pushNumber(2)
+            }
         }
 
         getAcbConfirmActionButton3().setOnClickListener {
-            pushNumber(3)
+            if (!locked("")) {
+                pushNumber(3)
+            }
         }
 
         getAcbConfirmActionButton4().setOnClickListener {
-            pushNumber(4)
+            if (!locked("")) {
+                pushNumber(4)
+            }
         }
 
         getAcbConfirmActionButton5().setOnClickListener {
-            pushNumber(5)
+            if (!locked("")) {
+                pushNumber(5)
+            }
         }
 
         getAcbConfirmActionButton6().setOnClickListener {
-            pushNumber(6)
+            if (!locked("")) {
+                pushNumber(6)
+            }
         }
 
         getAcbConfirmActionButton7().setOnClickListener {
-            pushNumber(7)
+            if (!locked("")) {
+                pushNumber(7)
+            }
         }
 
         getAcbConfirmActionButton8().setOnClickListener {
-            pushNumber(8)
+            if (!locked("")) {
+                pushNumber(8)
+            }
         }
 
         getAcbConfirmActionButton9().setOnClickListener {
-            pushNumber(9)
+            if (!locked("")) {
+                pushNumber(9)
+            }
         }
 
         getAcbConfirmActionButton0().setOnClickListener {
-            pushNumber(0)
+            if (!locked("")) {
+                pushNumber(0)
+            }
         }
 
         getAcbConfirmActionButtonDelete().setOnClickListener {
-            if (getPin().size > 0) {
-                unShadePin()
-                getPin().pop()
+            if (!locked("")) {
+                if (getPin().size > 0) {
+                    unShadePin()
+                    getPin().pop()
+                }
             }
         }
 
@@ -238,7 +260,11 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                 )
             }
 
-            onBackPressed()
+            if (locked("cancel")) {
+                finishAffinity()
+            } else {
+                onBackPressed()
+            }
         }
 
         tvConfirmActionForgotPass.setOnClickListener {

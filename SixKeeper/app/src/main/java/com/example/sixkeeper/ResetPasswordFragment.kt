@@ -116,6 +116,16 @@ class ResetPasswordFragment : Fragment() {
                                 )
                         )
 
+                        databaseHandlerClass.updateAccountStatus(
+                                "pw_wrong_attempt",
+                                ""
+                        )
+
+                        databaseHandlerClass.updateAccountStatus(
+                                "pw_lock_time",
+                                ""
+                        )
+
                         view?.apply {
                             postDelayed(
                                     {

@@ -136,6 +136,21 @@ class ResetMasterPINFragment : Fragment() {
                             )
                     )
 
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            ""
+                    )
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "f_wrong_attempt",
+                            ""
+                    )
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_lock_time",
+                            ""
+                    )
+
                     it.apply {
                         postDelayed(
                                 {

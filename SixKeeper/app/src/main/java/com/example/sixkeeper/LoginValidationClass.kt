@@ -3,9 +3,11 @@ package com.example.sixkeeper
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Environment
+import android.view.Gravity
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import java.io.File
 import java.text.SimpleDateFormat
@@ -104,6 +106,18 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return bool
     }
 
+    fun restartAttemptAndTime() {
+        databaseHandlerClass.updateAccountStatus(
+                "pw_wrong_attempt",
+                ""
+        )
+
+        databaseHandlerClass.updateAccountStatus(
+                "pw_lock_time",
+                ""
+        )
+    }
+
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     fun waitingTime(): Long {
         val userStatusList: List<UserAccountStatusModelClass> =
@@ -153,5 +167,91 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 userId,
                 encodingClass.encodeData(1.toString())
         )
+    }
+
+    fun validateUsername(): Boolean {                                                         // Validate username
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var bool = false
+
+        val encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
+
+        for (u in userAccList) {
+            userId = u.userId
+            bool = encodedUsername == u.username
+        }
+
+        return bool
+    }
+
+    fun updateAccountStatus() {                                                                     // Update password wrong attempt
+        val userStatusList: List<UserAccountStatusModelClass> =
+                databaseHandlerClass.viewAccountStatus()
+        var wrongAttempt = 0
+        var timer = 30
+
+        for (u in userStatusList) {
+            val pwWrongAttempt = encodingClass.decodeData(u.pwWrongAttempt)
+
+            if (pwWrongAttempt.isNotEmpty()) {
+                wrongAttempt = Integer.parseInt(pwWrongAttempt)
+            }
+        }
+        wrongAttempt++
+
+        databaseHandlerClass.updateAccountStatus(
+                "pw_wrong_attempt",
+                encodingClass.encodeData(wrongAttempt.toString())
+        )
+
+        if (wrongAttempt % 3 == 0) {
+            for (i in 1 until (wrongAttempt / 3)) {
+                timer *= 2
+            }
+
+            databaseHandlerClass.updateAccountStatus(
+                    "pw_lock_time",
+                    encodingClass.encodeData(getCurrentDate())
+            )
+
+            val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    "Account is locked. Please wait for $timer seconds",
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        } else {
+            val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    R.string.login_invalid_credentials,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+    }
+
+    fun lockToast(waitingTime: Long) {
+        var sec = ""
+
+        if (waitingTime == 1.toLong()) {
+            sec = "second"
+        } else if (waitingTime > 1.toLong()) {
+            sec = "seconds"
+        }
+
+        val toast: Toast = Toast.makeText(
+                applicationContext,
+                "Account is locked. Please wait for $waitingTime $sec",
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 }

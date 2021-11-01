@@ -3,6 +3,7 @@
 package com.example.sixkeeper
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
@@ -16,6 +17,9 @@ import android.os.Vibrator
 import android.view.Gravity
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintHandlerClass(
@@ -24,6 +28,9 @@ class FingerprintHandlerClass(
 ) : FingerprintManager.AuthenticationCallback() {
 
     private var cancellationSignal: CancellationSignal? = null
+
+    @SuppressLint("SimpleDateFormat")
+    private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
     fun startAuth(manager: FingerprintManager, cryptoObject: FingerprintManager.CryptoObject?) {    // Authentication start
         cancellationSignal = CancellationSignal()
@@ -36,6 +43,7 @@ class FingerprintHandlerClass(
         ) {
             return
         }
+
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null)
     }
 
@@ -89,8 +97,8 @@ class FingerprintHandlerClass(
                 val goToIndexActivity = Intent(context, IndexActivity::class.java)
                 context.startActivity(goToIndexActivity)
                 context.overridePendingTransition(
-                    R.anim.anim_enter_top_to_bottom_2,
-                    R.anim.anim_exit_top_to_bottom_2
+                        R.anim.anim_enter_top_to_bottom_2,
+                        R.anim.anim_exit_top_to_bottom_2
                 )
 
                 context.finish()
@@ -103,8 +111,8 @@ class FingerprintHandlerClass(
                 context.setResult(1215311)
                 context.finish()
                 context.overridePendingTransition(
-                    R.anim.anim_0,
-                    R.anim.anim_exit_top_to_bottom_2
+                        R.anim.anim_0,
+                        R.anim.anim_exit_top_to_bottom_2
                 )
             }
         }
@@ -123,5 +131,80 @@ class FingerprintHandlerClass(
         } else {
             vibrator.vibrate(350)
         }
+    }
+
+    private fun locked(): Boolean {
+        val waitingTime = waitingTime()
+        var locked = false
+
+        if (waitingTime > 0.toLong()) {
+            var sec = ""
+
+            if (waitingTime == 1.toLong()) {
+                sec = "second"
+            } else if (waitingTime > 1.toLong()) {
+                sec = "seconds"
+            }
+
+            val toast: Toast = Toast.makeText(
+                    context,
+                    "Account is locked. Please wait for $waitingTime $sec",
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+
+            locked = true
+        }
+
+        return locked
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    fun waitingTime(): Long {
+        val databaseHandlerClass = DatabaseHandlerClass(context)
+        val encodingClass = EncodingClass()
+        val userStatusList: List<UserAccountStatusModelClass> =
+                databaseHandlerClass.viewAccountStatus()
+        var waitingTime: Long = 0
+
+        for (u in userStatusList) {
+            val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+            if (mPinWrongAttempt.isNotEmpty()) {
+                val wrongAttempts = Integer.parseInt(mPinWrongAttempt)
+
+                if (wrongAttempts % 3 == 0) {
+                    val mPinLockDate = encodingClass.decodeData(u.mPinLockTime)
+
+                    if (mPinLockDate.isNotEmpty()) {
+                        val dateToday: Date = dateFormat.parse(getCurrentDate())
+                        val lockeDate: Date = dateFormat.parse(mPinLockDate)
+                        val timeDifference: Long = dateToday.time - lockeDate.time
+                        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
+                        val loop = wrongAttempts / 3
+                        var timer = 30
+
+                        for (i in 1 until loop) {
+                            timer *= 2
+                        }
+
+                        if (seconds < timer) {
+                            waitingTime = timer - seconds
+                        }
+                    }
+                }
+            }
+        }
+
+        return waitingTime
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
     }
 }

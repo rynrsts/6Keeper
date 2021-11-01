@@ -1,5 +1,6 @@
 package com.example.sixkeeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
@@ -9,7 +10,9 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
 open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
@@ -36,6 +39,9 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var acbConfirmActionButton0: Button
     private lateinit var acbConfirmActionButtonDelete: Button
     private lateinit var acbConfirmActionButtonCancel: Button
+
+    @SuppressLint("SimpleDateFormat")
+    private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
     private val pinSize = 6
     private val pin: Stack<Int> = Stack()
@@ -146,6 +152,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
+    @SuppressLint("ShowToast")
     private fun shadePin() {
         when (pin.size) {
             1 ->
@@ -171,14 +178,65 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
             val pinI: Int = tempS.toInt()
 
             if (validateUserMasterPin(pinI)) {
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_wrong_attempt",
+                        ""
+                )
+
+                databaseHandlerClass.updateAccountStatus(
+                        "f_wrong_attempt",
+                        ""
+                )
+
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_lock_time",
+                        ""
+                )
+
                 setResult(16914)
                 onBackPressed()
             } else {
-                val toast: Toast = Toast.makeText(
+                val userStatusList: List<UserAccountStatusModelClass> =
+                        databaseHandlerClass.viewAccountStatus()
+                var wrongAttempt = 0
+                var timer = 30
+
+                for (u in userStatusList) {
+                    val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+                    if (mPinWrongAttempt.isNotEmpty()) {
+                        wrongAttempt = Integer.parseInt(mPinWrongAttempt)
+                    }
+                }
+                wrongAttempt++
+
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_wrong_attempt",
+                        encodingClass.encodeData(wrongAttempt.toString())
+                )
+
+                var toast: Toast = Toast.makeText(
                     applicationContext,
                     R.string.many_incorrect_master_pin,
                     Toast.LENGTH_SHORT
                 )
+
+                if (wrongAttempt % 3 == 0) {
+                    for (i in 1 until (wrongAttempt / 3)) {
+                        timer *= 2
+                    }
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_lock_time",
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+
+                    toast = Toast.makeText(
+                            applicationContext,
+                            "Account is locked. Please wait for $timer seconds",
+                            Toast.LENGTH_SHORT
+                    )
+                }
 
                 acbConfirmActionButton1.isClickable = false
                 acbConfirmActionButton2.isClickable = false
@@ -233,6 +291,74 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
+    fun locked(button: String): Boolean {
+        val waitingTime = waitingTime()
+        var locked = false
+
+        if (waitingTime > 0.toLong()) {
+            if (button.isEmpty()) {
+                var sec = ""
+
+                if (waitingTime == 1.toLong()) {
+                    sec = "second"
+                } else if (waitingTime > 1.toLong()) {
+                    sec = "seconds"
+                }
+                val toast: Toast = Toast.makeText(
+                        applicationContext,
+                        "Account is locked. Please wait for $waitingTime $sec",
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
+
+            locked = true
+        }
+
+        return locked
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    fun waitingTime(): Long {
+        val userStatusList: List<UserAccountStatusModelClass> =
+                databaseHandlerClass.viewAccountStatus()
+        var waitingTime: Long = 0
+
+        for (u in userStatusList) {
+            val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+            if (mPinWrongAttempt.isNotEmpty()) {
+                val wrongAttempts = Integer.parseInt(mPinWrongAttempt)
+
+                if (wrongAttempts % 3 == 0) {
+                    val mPinLockDate = encodingClass.decodeData(u.mPinLockTime)
+
+                    if (mPinLockDate.isNotEmpty()) {
+                        val dateToday: Date = dateFormat.parse(getCurrentDate())
+                        val lockeDate: Date = dateFormat.parse(mPinLockDate)
+                        val timeDifference: Long = dateToday.time - lockeDate.time
+                        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
+                        val loop = wrongAttempts / 3
+                        var timer = 30
+
+                        for (i in 1 until loop) {
+                            timer *= 2
+                        }
+
+                        if (seconds < timer) {
+                            waitingTime = timer - seconds
+                        }
+                    }
+                }
+            }
+        }
+
+        return waitingTime
+    }
+
     fun unShadePin() {
         when (pin.size) {
             1 ->
@@ -274,8 +400,14 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         return bool
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
+    }
+
     override fun onBackPressed() {                                                                  // Override back button function
-        super.onBackPressed()
+        finish()
         overridePendingTransition(
             R.anim.anim_0,
             R.anim.anim_exit_top_to_bottom_2

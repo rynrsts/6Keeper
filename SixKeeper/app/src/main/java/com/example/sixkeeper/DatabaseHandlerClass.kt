@@ -1476,6 +1476,25 @@ class DatabaseHandlerClass(context: Context) :
         return success
     }
 
+    fun updateAccountStatus(field: String, updatedValue: String): Int {                             // Update Account Status
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.apply {
+            put(field, updatedValue)
+        }
+
+        val success = db.update(
+                TABLE_ACCOUNT_STATUS,
+                contentValues,
+                null,
+                null
+        )
+
+        db.close()
+        return success
+    }
+
     fun updateProfilePhoto(value: ByteArray): Int {                                                 // Update Profile Photo
         val db = this.writableDatabase
         val contentValues = ContentValues()

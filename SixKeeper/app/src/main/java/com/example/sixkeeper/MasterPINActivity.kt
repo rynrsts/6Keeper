@@ -186,49 +186,71 @@ class MasterPINActivity : MasterPINProcessClass() {
         val tvMasterPINForgotPass: TextView = findViewById(R.id.tvMasterPINForgotPass)
 
         getAcbMasterPINButton1().setOnClickListener {
-            pushNumber(1, it)
+            if (!locked()) {
+                pushNumber(1, it)
+            }
         }
 
         getAcbMasterPINButton2().setOnClickListener {
-            pushNumber(2, it)
+            if (!locked()) {
+                pushNumber(2, it)
+            }
         }
 
         getAcbMasterPINButton3().setOnClickListener {
-            pushNumber(3, it)
+            if (!locked()) {
+                pushNumber(3, it)
+            }
         }
 
         getAcbMasterPINButton4().setOnClickListener {
-            pushNumber(4, it)
+            if (!locked()) {
+                pushNumber(4, it)
+            }
         }
 
         getAcbMasterPINButton5().setOnClickListener {
-            pushNumber(5, it)
+            if (!locked()) {
+                pushNumber(5, it)
+            }
         }
 
         getAcbMasterPINButton6().setOnClickListener {
-            pushNumber(6, it)
+            if (!locked()) {
+                pushNumber(6, it)
+            }
         }
 
         getAcbMasterPINButton7().setOnClickListener {
-            pushNumber(7, it)
+            if (!locked()) {
+                pushNumber(7, it)
+            }
         }
 
         getAcbMasterPINButton8().setOnClickListener {
-            pushNumber(8, it)
+            if (!locked()) {
+                pushNumber(8, it)
+            }
         }
 
         getAcbMasterPINButton9().setOnClickListener {
-            pushNumber(9, it)
+            if (!locked()) {
+                pushNumber(9, it)
+            }
         }
 
         getAcbMasterPINButton0().setOnClickListener {
-            pushNumber(0, it)
+            if (!locked()) {
+                pushNumber(0, it)
+            }
         }
 
         getAcbMasterPINButtonDelete().setOnClickListener {
-            if (getPin().size > 0) {
-                unShadePin()
-                getPin().pop()
+            if (!locked()) {
+                if (getPin().size > 0) {
+                    unShadePin()
+                    getPin().pop()
+                }
             }
         }
 
