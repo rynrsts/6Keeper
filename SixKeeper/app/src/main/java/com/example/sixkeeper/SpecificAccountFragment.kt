@@ -337,13 +337,24 @@ class SpecificAccountFragment : Fragment() {
             }
 
             llSpecificAccountWebView.setOnClickListener {
-                val action = SpecificAccountFragmentDirections
-                        .actionSpecificAccountFragmentToWebViewFragment(
-                                getWebsiteURL()
-                        )
-                findNavController().navigate(action)
+                if (DetectInternetConnectionClass().checkInternetConnection(attActivity)) {
+                    val action = SpecificAccountFragmentDirections
+                            .actionSpecificAccountFragmentToWebViewFragment(
+                                    getWebsiteURL()
+                            )
+                    findNavController().navigate(action)
 
-                alert.cancel()
+                    alert.cancel()
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.specific_account_check_connection, Toast.LENGTH_SHORT
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
             }
 
             llSpecificAccountApp.setOnClickListener {

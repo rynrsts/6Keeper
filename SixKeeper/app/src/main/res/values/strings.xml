@@ -42,6 +42,7 @@
     </string>
 
     <!-- Auto Lock Login -->
+    <string name="auto_lock_enter_master_pin">Welcome Back\nEnter Your Master PIN</string>
     <string name="auto_lock_login_mes">
         You are inactive for set amount of time based on the Auto Lock Timer
     </string>
@@ -174,6 +175,10 @@
     <string name="many_fill_email_field">Please fill the Email field first.</string>
     <string name="many_fill_missing_fields">Please fill the missing fields.</string>
     <string name="many_fill_mobile_num_field">Please fill the Mobile Number field first.</string>
+    <string name="many_fingerprint_available">
+        Fingerprint Authentication is available. You may use your registered fingerprint in the
+        device
+    </string>
     <string name="many_first_name">First Name</string>
     <string name="many_five">5</string>
     <string name="many_four">4</string>
@@ -370,6 +375,7 @@
 
     <!-- Specific Account -->
     <string name="specific_account_open_platform">Open Platform</string>
+    <string name="specific_account_check_connection">Please check your internet connection</string>
     <string name="specific_account_copy"><u>Copy</u></string>
     <string name="specific_account_desc">Description</string>
     <string name="specific_account_remove">Remove from Favorites</string>

@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".AutoLockLoginActivity">
 
+    <ImageView
+        android:id="@+id/ivAutoLockFingerprintIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:padding="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,36 +63,23 @@
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/tvAutoLockLoginDesc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="@string/auto_lock_login_mes"
-            android:textColor="@color/red"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
-            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
-            app:layout_constraintTop_toBottomOf="@+id/ivAutoLockLoginLogo" />
-
-        <TextView
             android:id="@+id/tvAutoLockLoginHeading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="21dp"
             android:gravity="center"
-            android:text="@string/many_enter_master_pin"
+            android:text="@string/auto_lock_enter_master_pin"
             android:textColor="@color/blue"
             android:textSize="17sp"
             app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
             app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
-            app:layout_constraintTop_toBottomOf="@+id/tvAutoLockLoginDesc" />
+            app:layout_constraintTop_toBottomOf="@+id/ivAutoLockLoginLogo" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clAutoLockLoginCircle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="15dp"
             app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
             app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
             app:layout_constraintTop_toBottomOf="@+id/tvAutoLockLoginHeading">
@@ -219,7 +217,7 @@
             android:id="@+id/constraintLayout2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="21dp"
             app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
             app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
             app:layout_constraintTop_toBottomOf="@+id/clAutoLockLoginCircle">
@@ -392,7 +390,7 @@
             android:id="@+id/tvAutoLockLoginForgotPass"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="21dp"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"

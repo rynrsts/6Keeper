@@ -12,7 +12,10 @@ import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
+import android.view.Gravity
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import java.io.IOException
 import java.lang.NullPointerException
@@ -74,7 +77,24 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
                 if (!keyguardManager.isKeyguardSecure) {
                     return
                 } else {
+                    val ivConfirmActionFingerprintIcon: ImageView =
+                            findViewById(R.id.ivConfirmActionFingerprintIcon)
+
                     if (getFingerprintStatus() == 1) {
+                        ivConfirmActionFingerprintIcon.setImageResource(R.drawable.ic_fingerprint_green)
+
+                        ivConfirmActionFingerprintIcon.setOnClickListener {
+                            val toast: Toast = Toast.makeText(
+                                    applicationContext,
+                                    R.string.many_fingerprint_available,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
+
                         try {
                             generateKey()
                         } catch (e: FingerprintException) {
@@ -86,6 +106,8 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
                             val helper = FingerprintHandlerClass(this, "auto lock")
                             helper.startAuth(fingerprintManager, cryptoObject)
                         }
+                    } else {
+                        ivConfirmActionFingerprintIcon.isEnabled = false
                     }
                 }
             } catch (e: NullPointerException) {
