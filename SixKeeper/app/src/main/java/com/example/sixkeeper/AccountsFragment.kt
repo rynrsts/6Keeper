@@ -39,44 +39,52 @@ class AccountsFragment : AccountsProcessClass() {
                 getAppCompatActivity().findViewById(R.id.ivAccountsAddCategories)
 
         ivAccountsAddCategories.setOnClickListener {
-            showAddUpdateCategory("add", "", "")
+            if (InternetConnectionClass().isConnected()) {
+                showAddUpdateCategory("add", "", "")
 
-            it.apply {
-                ivAccountsAddCategories.isClickable = false                                         // Set un-clickable for 1 second
-                postDelayed(
-                        {
-                            ivAccountsAddCategories.isClickable = true
-                        }, 1000
-                )
+                it.apply {
+                    ivAccountsAddCategories.isClickable = false                                     // Set un-clickable for 1 second
+                    postDelayed(
+                            {
+                                ivAccountsAddCategories.isClickable = true
+                            }, 1000
+                    )
+                }
+            } else {
+                internetToast()
             }
         }
 
         getLvAccountsContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            getLvAccountsContainer().apply {
-                getLvAccountsContainer().isEnabled = false                                          // Set un-clickable for 1 second
+            if (InternetConnectionClass().isConnected()) {
+                getLvAccountsContainer().apply {
+                    getLvAccountsContainer().isEnabled = false                                      // Set un-clickable for 1 second
 
-                val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
-                val selectedCategoryValue = selectedCategory.split("ramjcammjar")
-                val selectedCategoryId = selectedCategoryValue[0]
-                val selectedCategoryName = selectedCategoryValue[1]
-                val action = AccountsFragmentDirections
-                        .actionAccountsFragmentToSpecificCategoryFragment(
-                                selectedCategoryId,
-                                selectedCategoryName
-                        )
+                    val selectedCategory = getLvAccountsContainer().getItemAtPosition(i).toString()
+                    val selectedCategoryValue = selectedCategory.split("ramjcammjar")
+                    val selectedCategoryId = selectedCategoryValue[0]
+                    val selectedCategoryName = selectedCategoryValue[1]
+                    val action = AccountsFragmentDirections
+                            .actionAccountsFragmentToSpecificCategoryFragment(
+                                    selectedCategoryId,
+                                    selectedCategoryName
+                            )
 
-                try {
-                    findNavController().navigate(action)
-                } catch (e: IllegalArgumentException) {
+                    try {
+                        findNavController().navigate(action)
+                    } catch (e: IllegalArgumentException) {
+                    }
+
+                    getEtAccountsSearchBox().setText("")
+
+                    postDelayed(
+                            {
+                                getLvAccountsContainer().isEnabled = true
+                            }, 1000
+                    )
                 }
-
-                getEtAccountsSearchBox().setText("")
-
-                postDelayed(
-                        {
-                            getLvAccountsContainer().isEnabled = true
-                        }, 1000
-                )
+            } else {
+                internetToast()
             }
         })
     }
@@ -121,17 +129,29 @@ class AccountsFragment : AccountsProcessClass() {
                     dialogView.findViewById(R.id.llCategoryPlatformDelete)
 
             llCategoryPlatformEdit.setOnClickListener {
-                alert.cancel()
-                showAddUpdateCategory(
-                        "update",
-                        selectedCategoryName,
-                        selectedCategoryId
-                )
+                if (InternetConnectionClass().isConnected()) {
+                    alert.cancel()
+                    showAddUpdateCategory(
+                            "update",
+                            selectedCategoryName,
+                            selectedCategoryId
+                    )
+                } else {
+                    internetToast()
+                }
             }
 
             llCategoryPlatformDelete.setOnClickListener {
-                alert.cancel()
-                showDeleteCategory(selectedCategoryId, selectedCategoryName, selectedCategoryNum)
+                if (InternetConnectionClass().isConnected()) {
+                    alert.cancel()
+                    showDeleteCategory(
+                            selectedCategoryId,
+                            selectedCategoryName,
+                            selectedCategoryNum
+                    )
+                } else {
+                    internetToast()
+                }
             }
 
             true
@@ -141,8 +161,12 @@ class AccountsFragment : AccountsProcessClass() {
     private fun setEditTextOnChange() {                                                             // Search real-time
         getEtAccountsSearchBox().addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                val search = getEtAccountsSearchBox().text.toString()
-                populateCategories(search)
+                if (InternetConnectionClass().isConnected()) {
+                    val search = getEtAccountsSearchBox().text.toString()
+                    populateCategories(search)
+                } else {
+                    internetToast()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

@@ -117,6 +117,12 @@ class FingerprintHandlerClass(
         }
     }
 
+    fun stopFingerAuth() {
+        if (cancellationSignal != null && !cancellationSignal!!.isCanceled) {
+            cancellationSignal!!.cancel()
+        }
+    }
+
     private fun vibrator() {
         val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 

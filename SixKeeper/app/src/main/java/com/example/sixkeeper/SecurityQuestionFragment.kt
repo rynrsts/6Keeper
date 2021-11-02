@@ -58,11 +58,11 @@ class SecurityQuestionFragment : Fragment() {
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
 
-        etSecurityQuestionFirstName = 
+        etSecurityQuestionFirstName =
                 appCompatActivity.findViewById(R.id.etSecurityQuestionFirstName)
-        etSecurityQuestionLastName = 
+        etSecurityQuestionLastName =
                 appCompatActivity.findViewById(R.id.etSecurityQuestionLastName)
-        etSecurityQuestionBirthDate = 
+        etSecurityQuestionBirthDate =
                 appCompatActivity.findViewById(R.id.etSecurityQuestionBirthDate)
         etSecurityQuestionEmail = appCompatActivity.findViewById(R.id.etSecurityQuestionEmail)
         etSecurityQuestionMobileNumber =
@@ -74,51 +74,63 @@ class SecurityQuestionFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbSecurityQuestionConfirm)
 
         acbSecurityQuestionConfirm.setOnClickListener {
-            if (isNotEmpty()) {
-                val encodedFirstName = encodingClass.encodeData(firstName)
-                val encodedLastName = encodingClass.encodeData(lastName)
-                val encodedBirthDate = encodingClass.encodeData(birthDate)
-                val encodedEmail = encodingClass.encodeData(email)
-                val encodedMobileNumber = encodingClass.encodeData(mobileNumber)
+            if (InternetConnectionClass().isConnected()) {
+                if (isNotEmpty()) {
+                    val encodedFirstName = encodingClass.encodeData(firstName)
+                    val encodedLastName = encodingClass.encodeData(lastName)
+                    val encodedBirthDate = encodingClass.encodeData(birthDate)
+                    val encodedEmail = encodingClass.encodeData(email)
+                    val encodedMobileNumber = encodingClass.encodeData(mobileNumber)
 
-                val immKeyboard: InputMethodManager =
-                        appCompatActivity.getSystemService(
-                                Context.INPUT_METHOD_SERVICE
-                        ) as InputMethodManager
+                    val immKeyboard: InputMethodManager =
+                            appCompatActivity.getSystemService(
+                                    Context.INPUT_METHOD_SERVICE
+                            ) as InputMethodManager
 
-                if (
-                        databaseHandlerClass.verifyInformation(
-                                encodedFirstName,
-                                encodedLastName,
-                                encodedBirthDate,
-                                encodedEmail,
-                                encodedMobileNumber
+                    if (
+                            databaseHandlerClass.verifyInformation(
+                                    encodedFirstName,
+                                    encodedLastName,
+                                    encodedBirthDate,
+                                    encodedEmail,
+                                    encodedMobileNumber
+                            )
+                    ) {
+                        val forgotCredentialsActivity: ForgotCredentialsActivity =
+                                activity as ForgotCredentialsActivity
+
+                        if (immKeyboard.isActive) {
+                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                                    appCompatActivity.currentFocus?.windowToken,
+                                    0
+                            )
+                        }
+
+                        forgotCredentialsActivity.manageForgotFragments(
+                                forgotCredentialsActivity.getCredential()
                         )
-                ) {
-                    val forgotCredentialsActivity: ForgotCredentialsActivity =
-                            activity as ForgotCredentialsActivity
+                    } else {
+                        if (immKeyboard.isActive) {
+                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                                    appCompatActivity.currentFocus?.windowToken,
+                                    0
+                            )
+                        }
 
-                    if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
-                                appCompatActivity.currentFocus?.windowToken,
-                                0
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.security_question_invalid,
+                                Toast.LENGTH_SHORT
                         )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
                     }
-
-                    forgotCredentialsActivity.manageForgotFragments(
-                            forgotCredentialsActivity.getCredential()
-                    )
                 } else {
-                    if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
-                                appCompatActivity.currentFocus?.windowToken,
-                                0
-                        )
-                    }
-
                     val toast: Toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            R.string.security_question_invalid,
+                            R.string.many_fill_missing_fields,
                             Toast.LENGTH_SHORT
                     )
                     toast.apply {
@@ -127,16 +139,20 @@ class SecurityQuestionFragment : Fragment() {
                     }
                 }
             } else {
-                val toast: Toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_fill_missing_fields,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

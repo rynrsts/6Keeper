@@ -38,6 +38,8 @@ class MasterPINActivity : MasterPINProcessClass() {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
+    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_p_i_n)
@@ -109,8 +111,10 @@ class MasterPINActivity : MasterPINProcessClass() {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            val helper = FingerprintHandlerClass(this, "login")
-                            helper.startAuth(fingerprintManager, cryptoObject)
+                            fingerprintHandlerClass = FingerprintHandlerClass(
+                                    this, "login"
+                            )
+                            fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {
                         ivMasterPINFingerprintIcon.isEnabled = false
@@ -129,19 +133,19 @@ class MasterPINActivity : MasterPINProcessClass() {
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore")
             keyGenerator = KeyGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES,
-                "AndroidKeyStore"
+                    KeyProperties.KEY_ALGORITHM_AES,
+                    "AndroidKeyStore"
             )
             keyStore.load(null)
             keyGenerator.init(
-                KeyGenParameterSpec.Builder(
-                    keyName,
-                    KeyProperties.PURPOSE_ENCRYPT or  KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build()
+                    KeyGenParameterSpec.Builder(
+                            keyName,
+                            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                    )
+                            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                            .setUserAuthenticationRequired(true)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                            .build()
             )
             keyGenerator.generateKey()
         } catch (e: KeyStoreException) {
@@ -168,9 +172,9 @@ class MasterPINActivity : MasterPINProcessClass() {
     private fun initCipher(): Boolean {
         try {
             cipher = Cipher.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES + "/" +
-                        KeyProperties.BLOCK_MODE_CBC + "/" +
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7
+                    KeyProperties.KEY_ALGORITHM_AES + "/" +
+                            KeyProperties.BLOCK_MODE_CBC + "/" +
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7
             )
         } catch (e: NoSuchAlgorithmException) {
             throw RuntimeException("Failed to get Cipher", e)
@@ -299,34 +303,48 @@ class MasterPINActivity : MasterPINProcessClass() {
                 )
             }
 
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setMessage(R.string.many_logout_mes)
-            builder.setCancelable(false)
+            if (InternetConnectionClass().isConnected()) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setMessage(R.string.many_logout_mes)
+                builder.setCancelable(false)
 
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                updateUserStatus()
-                updateLastLogin()
-                goToLoginActivity()
-            }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    if (InternetConnectionClass().isConnected()) {
+                        updateUserStatus()
+                        updateLastLogin()
+                        goToLoginActivity()
+                    } else {
+                        internetToast()
+                    }
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
 
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title_confirm)
-            alert.show()
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            } else {
+                internetToast()
+                fingerprintHandlerClass.stopFingerAuth()
+            }
         }
 
         tvMasterPINForgotPass.setOnClickListener {
-            val goToForgotCredentialsActivity =
-                    Intent(this, ForgotCredentialsActivity::class.java)
-            goToForgotCredentialsActivity.putExtra("credential", "master pin")
+            if (InternetConnectionClass().isConnected()) {
+                val goToForgotCredentialsActivity =
+                        Intent(this, ForgotCredentialsActivity::class.java)
+                goToForgotCredentialsActivity.putExtra("credential", "master pin")
 
-            startActivity(goToForgotCredentialsActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
+                startActivity(goToForgotCredentialsActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_right_to_left_2,
+                        R.anim.anim_exit_right_to_left_2
+                )
+            } else {
+                internetToast()
+                fingerprintHandlerClass.stopFingerAuth()
+            }
 
             it.apply {
                 tvMasterPINForgotPass.isClickable = false                                           // Set button un-clickable for 1 second

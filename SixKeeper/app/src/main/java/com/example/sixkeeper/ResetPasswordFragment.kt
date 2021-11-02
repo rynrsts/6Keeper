@@ -75,111 +75,133 @@ class ResetPasswordFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbResetPasswordReset)
 
         acbResetPasswordReset.setOnClickListener {
-            val tvResetPasswordConfirmPassNote: TextView =
-                    appCompatActivity.findViewById(R.id.tvResetPasswordConfirmPassNote)
+            if (InternetConnectionClass().isConnected()) {
+                val tvResetPasswordConfirmPassNote: TextView =
+                        appCompatActivity.findViewById(R.id.tvResetPasswordConfirmPassNote)
 
-            newPass = etResetPasswordNewPass.text.toString()
-            val confirmPass = etResetPasswordConfirmPass.text.toString()
+                newPass = etResetPasswordNewPass.text.toString()
+                val confirmPass = etResetPasswordConfirmPass.text.toString()
 
-            if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                if (isPasswordValid(newPass) && confirmPass == newPass) {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                    builder.setMessage(R.string.reset_password_alert)
-                    builder.setCancelable(false)
+                if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
+                    if (isPasswordValid(newPass) && confirmPass == newPass) {
+                        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                        builder.setMessage(R.string.reset_password_alert)
+                        builder.setCancelable(false)
 
-                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        val encryptionClass = EncryptionClass()
-                        val encodedInput = encodingClass.encodeData(newPass)
+                        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                            if (InternetConnectionClass().isConnected()) {
+                                val encryptionClass = EncryptionClass()
+                                val encodedInput = encodingClass.encodeData(newPass)
 
-                        var actionLogId = 1000001
-                        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+                                var actionLogId = 1000001
+                                val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
-                        val calendar: Calendar = Calendar.getInstance()
-                        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                        val date = dateFormat.format(calendar.time)
+                                val calendar: Calendar = Calendar.getInstance()
+                                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                                val date = dateFormat.format(calendar.time)
 
-                        if (lastId.isNotEmpty()) {
-                            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                                if (lastId.isNotEmpty()) {
+                                    actionLogId =
+                                            Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                                }
+
+                                databaseHandlerClass.updateUserAcc(                                 // Reset password
+                                        "password", encryptionClass.hashData(encodedInput),
+                                        date
+                                )
+
+                                databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
+                                        UserActionLogModelClass(
+                                                encodingClass.encodeData(actionLogId.toString()),
+                                                encodingClass.encodeData(
+                                                        "App account password was modified."
+                                                ),
+                                                encodingClass.encodeData(date)
+                                        )
+                                )
+
+                                databaseHandlerClass.updateAccountStatus(
+                                        "pw_wrong_attempt",
+                                        ""
+                                )
+
+                                databaseHandlerClass.updateAccountStatus(
+                                        "pw_lock_time",
+                                        ""
+                                )
+
+                                view?.apply {
+                                    postDelayed(
+                                            {
+                                                appCompatActivity.finish()
+                                                appCompatActivity.overridePendingTransition(
+                                                        R.anim.anim_enter_left_to_right_2,
+                                                        R.anim.anim_exit_left_to_right_2
+                                                )
+                                            }, 250
+                                    )
+                                }
+
+                                val toast: Toast = Toast.makeText(
+                                        appCompatActivity.applicationContext,
+                                        R.string.reset_password_mes,
+                                        Toast.LENGTH_SHORT
+                                )
+                                toast.apply {
+                                    setGravity(Gravity.CENTER, 0, 0)
+                                    show()
+                                }
+                            } else {
+                                internetToast()
+                            }
+                        }
+                        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                            dialog.cancel()
                         }
 
-                        databaseHandlerClass.updateUserAcc(                                             // Reset password
-                                "password", encryptionClass.hashData(encodedInput), date
-                        )
+                        val alert: AlertDialog = builder.create()
+                        alert.setTitle(R.string.many_alert_title_confirm)
+                        alert.show()
 
-                        databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
-                                UserActionLogModelClass(
-                                        encodingClass.encodeData(actionLogId.toString()),
-                                        encodingClass.encodeData(
-                                                "App account password was modified."
-                                        ),
-                                        encodingClass.encodeData(date)
-                                )
-                        )
-
-                        databaseHandlerClass.updateAccountStatus(
-                                "pw_wrong_attempt",
-                                ""
-                        )
-
-                        databaseHandlerClass.updateAccountStatus(
-                                "pw_lock_time",
-                                ""
-                        )
-
-                        view?.apply {
+                        it.apply {
+                            acbResetPasswordReset.isClickable = false                               // Set un-clickable for 1 second
                             postDelayed(
                                     {
-                                        appCompatActivity.finish()
-                                        appCompatActivity.overridePendingTransition(
-                                                R.anim.anim_enter_left_to_right_2,
-                                                R.anim.anim_exit_left_to_right_2
-                                        )
-                                    }, 250
+                                        acbResetPasswordReset.isClickable = true
+                                    }, 1000
                             )
                         }
-
-                        val toast: Toast = Toast.makeText(
-                                appCompatActivity.applicationContext,
-                                R.string.reset_password_mes,
-                                Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
+                    } else if (confirmPass == newPass) {
+                        tvResetPasswordConfirmPassNote.text = ""
+                    } else if (confirmPass != newPass) {
+                        tvResetPasswordConfirmPassNote.setText(R.string.many_validate_confirm_pass)
                     }
-                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                        dialog.cancel()
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.many_fill_missing_fields,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
                     }
-
-                    val alert: AlertDialog = builder.create()
-                    alert.setTitle(R.string.many_alert_title_confirm)
-                    alert.show()
-
-                    it.apply {
-                        acbResetPasswordReset.isClickable = false                                   // Set un-clickable for 1 second
-                        postDelayed(
-                                {
-                                    acbResetPasswordReset.isClickable = true
-                                }, 1000
-                        )
-                    }
-                } else if (confirmPass == newPass) {
-                    tvResetPasswordConfirmPassNote.text = ""
-                } else if (confirmPass != newPass) {
-                    tvResetPasswordConfirmPassNote.setText(R.string.many_validate_confirm_pass)
                 }
             } else {
-                val toast: Toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_fill_missing_fields,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

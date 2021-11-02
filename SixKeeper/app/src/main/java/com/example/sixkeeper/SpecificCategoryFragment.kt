@@ -42,7 +42,11 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
                 getAppCompatActivity().findViewById(R.id.ivSpecificCatAddPlatforms)
 
         ivSpecificCatAddPlatforms.setOnClickListener {
-            showAddUpdatePlatform("add", "", "")
+            if (InternetConnectionClass().isConnected()) {
+                showAddUpdatePlatform("add", "", "")
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 ivSpecificCatAddPlatforms.isClickable = false                                       // Set un-clickable for 1 second
@@ -55,32 +59,37 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
         }
 
         getLvSpecificCatContainer().onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            getLvSpecificCatContainer().apply {
-                getLvSpecificCatContainer().isEnabled = false                                       // Set un-clickable for 1 second
+            if (InternetConnectionClass().isConnected()) {
+                getLvSpecificCatContainer().apply {
+                    getLvSpecificCatContainer().isEnabled = false                                   // Set un-clickable for 1 second
 
-                val selectedPlatform = getLvSpecificCatContainer().getItemAtPosition(i).toString()
-                val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
-                val selectedPlatformId = selectedPlatformValue[0]
-                val selectedPlatformName = selectedPlatformValue[1]
-                val action = SpecificCategoryFragmentDirections
-                        .actionSpecificCategoryFragmentToSpecificPlatformFragment(
-                                selectedPlatformId,
-                                selectedPlatformName,
-                                getArgsSpecificCategoryName()
-                        )
+                    val selectedPlatform =
+                            getLvSpecificCatContainer().getItemAtPosition(i).toString()
+                    val selectedPlatformValue = selectedPlatform.split("ramjcammjar")
+                    val selectedPlatformId = selectedPlatformValue[0]
+                    val selectedPlatformName = selectedPlatformValue[1]
+                    val action = SpecificCategoryFragmentDirections
+                            .actionSpecificCategoryFragmentToSpecificPlatformFragment(
+                                    selectedPlatformId,
+                                    selectedPlatformName,
+                                    getArgsSpecificCategoryName()
+                            )
 
-                try {
-                    findNavController().navigate(action)
-                } catch (e: IllegalArgumentException) {
+                    try {
+                        findNavController().navigate(action)
+                    } catch (e: IllegalArgumentException) {
+                    }
+
+                    getEtSpecificCatSearchBox().setText("")
+
+                    postDelayed(
+                            {
+                                getLvSpecificCatContainer().isEnabled = true
+                            }, 1000
+                    )
                 }
-
-                getEtSpecificCatSearchBox().setText("")
-
-                postDelayed(
-                        {
-                            getLvSpecificCatContainer().isEnabled = true
-                        }, 1000
-                )
+            } else {
+                internetToast()
             }
         })
     }
@@ -125,17 +134,29 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
                     dialogView.findViewById(R.id.llCategoryPlatformDelete)
 
             llCategoryPlatformEdit.setOnClickListener {
-                alert.cancel()
-                showAddUpdatePlatform(
-                        "update",
-                        selectedPlatformName,
-                        selectedPlatformId
-                )
+                if (InternetConnectionClass().isConnected()) {
+                    alert.cancel()
+                    showAddUpdatePlatform(
+                            "update",
+                            selectedPlatformName,
+                            selectedPlatformId
+                    )
+                } else {
+                    internetToast()
+                }
             }
 
             llCategoryPlatformDelete.setOnClickListener {
-                alert.cancel()
-                showDeletePlatform(selectedPlatformId, selectedPlatformName, selectedPlatformNum)
+                if (InternetConnectionClass().isConnected()) {
+                    alert.cancel()
+                    showDeletePlatform(
+                            selectedPlatformId,
+                            selectedPlatformName,
+                            selectedPlatformNum
+                    )
+                } else {
+                    internetToast()
+                }
             }
 
             true
@@ -145,8 +166,12 @@ class SpecificCategoryFragment : SpecificCategoryProcessClass() {
     private fun setEditTextOnChange() {                                                             // Search real-time
         getEtSpecificCatSearchBox().addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                val search = getEtSpecificCatSearchBox().text.toString()
-                populatePlatforms(search)
+                if (InternetConnectionClass().isConnected()) {
+                    val search = getEtSpecificCatSearchBox().text.toString()
+                    populatePlatforms(search)
+                } else {
+                    internetToast()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

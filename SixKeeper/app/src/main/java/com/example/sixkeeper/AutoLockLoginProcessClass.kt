@@ -141,8 +141,8 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
 
     fun blockCapture() {
         window.setFlags(                                                                            // Block capture
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
         )
     }
 
@@ -178,123 +178,153 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
                 tempS = tempS + "" + temp.pop()
             val pinI: Int = tempS.toInt()
 
-            if (validateUserMasterPin(pinI)) {
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        ""
-                )
 
-                databaseHandlerClass.updateAccountStatus(
-                        "f_wrong_attempt",
-                        ""
-                )
+            if (InternetConnectionClass().isConnected()) {
+                if (validateUserMasterPin(pinI)) {
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            ""
+                    )
 
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_lock_time",
-                        ""
-                )
-
-                setResult(1215311)
-
-                this.finish()
-                overridePendingTransition(
-                    R.anim.anim_0,
-                    R.anim.anim_exit_top_to_bottom_2
-                )
-            } else {
-                val userStatusList: List<UserAccountStatusModelClass> =
-                        databaseHandlerClass.viewAccountStatus()
-                var wrongAttempt = 0
-                var timer = 30
-
-                for (u in userStatusList) {
-                    val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
-
-                    if (mPinWrongAttempt.isNotEmpty()) {
-                        wrongAttempt = Integer.parseInt(mPinWrongAttempt)
-                    }
-                }
-                wrongAttempt++
-
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        encodingClass.encodeData(wrongAttempt.toString())
-                )
-
-                var toast: Toast = Toast.makeText(
-                    applicationContext,
-                    R.string.many_incorrect_master_pin,
-                    Toast.LENGTH_SHORT
-                )
-
-                if (wrongAttempt % 3 == 0) {
-                    for (i in 1 until (wrongAttempt / 3)) {
-                        timer *= 2
-                    }
+                    databaseHandlerClass.updateAccountStatus(
+                            "f_wrong_attempt",
+                            ""
+                    )
 
                     databaseHandlerClass.updateAccountStatus(
                             "m_pin_lock_time",
-                            encodingClass.encodeData(getCurrentDate())
+                            ""
                     )
 
-                    toast = Toast.makeText(
+                    setResult(1215311)
+
+                    this.finish()
+                    overridePendingTransition(
+                            R.anim.anim_0,
+                            R.anim.anim_exit_top_to_bottom_2
+                    )
+                } else {
+                    val userStatusList: List<UserAccountStatusModelClass> =
+                            databaseHandlerClass.viewAccountStatus()
+                    var wrongAttempt = 0
+                    var timer = 30
+
+                    for (u in userStatusList) {
+                        val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+                        if (mPinWrongAttempt.isNotEmpty()) {
+                            wrongAttempt = Integer.parseInt(mPinWrongAttempt)
+                        }
+                    }
+                    wrongAttempt++
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            encodingClass.encodeData(wrongAttempt.toString())
+                    )
+
+                    var toast: Toast = Toast.makeText(
                             applicationContext,
-                            "Account is locked. Please wait for $timer seconds",
+                            R.string.many_incorrect_master_pin,
                             Toast.LENGTH_SHORT
                     )
-                }
 
-                acbAutoLockLoginButton1.isClickable = false
-                acbAutoLockLoginButton2.isClickable = false
-                acbAutoLockLoginButton3.isClickable = false
-                acbAutoLockLoginButton4.isClickable = false
-                acbAutoLockLoginButton5.isClickable = false
-                acbAutoLockLoginButton6.isClickable = false
-                acbAutoLockLoginButton7.isClickable = false
-                acbAutoLockLoginButton8.isClickable = false
-                acbAutoLockLoginButton9.isClickable = false
-                acbAutoLockLoginButton0.isClickable = false
-                acbAutoLockLoginButtonDelete.isClickable = false
-                acbAutoLockLoginButtonCancel.isClickable = false
+                    if (wrongAttempt % 3 == 0) {
+                        for (i in 1 until (wrongAttempt / 3)) {
+                            timer *= 2
+                        }
+
+                        databaseHandlerClass.updateAccountStatus(
+                                "m_pin_lock_time",
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+
+                        toast = Toast.makeText(
+                                applicationContext,
+                                "Account is locked. Please wait for $timer seconds",
+                                Toast.LENGTH_SHORT
+                        )
+                    }
+
+                    disableButtons()
+
+                    Timer().schedule(200) {
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+
+                        val vibrator: Vibrator =
+                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                        @Suppress("DEPRECATION")
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                       // If android version is Oreo and above
+                            vibrator.vibrate(                                                       // Vibrate for wrong confirmation
+                                    VibrationEffect.createOneShot(
+                                            350,
+                                            VibrationEffect.DEFAULT_AMPLITUDE
+                                    )
+                            )
+                        } else {
+                            vibrator.vibrate(350)
+                        }
+
+                        enableButtons()
+                    }
+                }
+            } else {
+                disableButtons()
+                internetToast()
 
                 Timer().schedule(200) {
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-
-                    val vibrator: Vibrator =
-                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-                    @Suppress("DEPRECATION")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
-                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
-                            VibrationEffect.createOneShot(
-                                350,
-                                VibrationEffect.DEFAULT_AMPLITUDE
-                            )
-                        )
-                    } else {
-                        vibrator.vibrate(350)
-                    }
-
-                    acbAutoLockLoginButton1.isClickable = true
-                    acbAutoLockLoginButton2.isClickable = true
-                    acbAutoLockLoginButton3.isClickable = true
-                    acbAutoLockLoginButton4.isClickable = true
-                    acbAutoLockLoginButton5.isClickable = true
-                    acbAutoLockLoginButton6.isClickable = true
-                    acbAutoLockLoginButton7.isClickable = true
-                    acbAutoLockLoginButton8.isClickable = true
-                    acbAutoLockLoginButton9.isClickable = true
-                    acbAutoLockLoginButton0.isClickable = true
-                    acbAutoLockLoginButtonDelete.isClickable = true
-                    acbAutoLockLoginButtonCancel.isClickable = true
-
-                    unShadeAllPin()
+                    enableButtons()
                 }
             }
         }
+    }
+
+    fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
+    private fun disableButtons() {
+        acbAutoLockLoginButton1.isClickable = false
+        acbAutoLockLoginButton2.isClickable = false
+        acbAutoLockLoginButton3.isClickable = false
+        acbAutoLockLoginButton4.isClickable = false
+        acbAutoLockLoginButton5.isClickable = false
+        acbAutoLockLoginButton6.isClickable = false
+        acbAutoLockLoginButton7.isClickable = false
+        acbAutoLockLoginButton8.isClickable = false
+        acbAutoLockLoginButton9.isClickable = false
+        acbAutoLockLoginButton0.isClickable = false
+        acbAutoLockLoginButtonDelete.isClickable = false
+        acbAutoLockLoginButtonCancel.isClickable = false
+    }
+
+    private fun enableButtons() {
+        acbAutoLockLoginButton1.isClickable = true
+        acbAutoLockLoginButton2.isClickable = true
+        acbAutoLockLoginButton3.isClickable = true
+        acbAutoLockLoginButton4.isClickable = true
+        acbAutoLockLoginButton5.isClickable = true
+        acbAutoLockLoginButton6.isClickable = true
+        acbAutoLockLoginButton7.isClickable = true
+        acbAutoLockLoginButton8.isClickable = true
+        acbAutoLockLoginButton9.isClickable = true
+        acbAutoLockLoginButton0.isClickable = true
+        acbAutoLockLoginButtonDelete.isClickable = true
+        acbAutoLockLoginButtonCancel.isClickable = true
+
+        unShadeAllPin()
     }
 
     fun locked(): Boolean {

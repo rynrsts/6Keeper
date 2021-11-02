@@ -186,129 +186,162 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 tempS = tempS + "" + temp.pop()
             val pinI: Int = tempS.toInt()
 
-            if (validateUserMasterPIN(pinI)) {
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        ""
-                )
+            if (InternetConnectionClass().isConnected()) {
+                if (validateUserMasterPIN(pinI)) {
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            ""
+                    )
 
-                databaseHandlerClass.updateAccountStatus(
-                        "f_wrong_attempt",
-                        ""
-                )
-
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_lock_time",
-                        ""
-                )
-
-                val goToIndexActivity = Intent(this, IndexActivity::class.java)
-                startActivity(goToIndexActivity)
-                overridePendingTransition(
-                        R.anim.anim_enter_top_to_bottom_2,
-                        R.anim.anim_exit_top_to_bottom_2
-                )
-
-                this.finish()
-            } else {
-                val userStatusList: List<UserAccountStatusModelClass> =
-                        databaseHandlerClass.viewAccountStatus()
-                var wrongAttempt = 0
-                var timer = 30
-
-                for (u in userStatusList) {
-                    val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
-
-                    if (mPinWrongAttempt.isNotEmpty()) {
-                        wrongAttempt = Integer.parseInt(mPinWrongAttempt)
-                    }
-                }
-                wrongAttempt++
-
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        encodingClass.encodeData(wrongAttempt.toString())
-                )
-
-                var toast: Toast = Toast.makeText(
-                        applicationContext,
-                        R.string.many_incorrect_master_pin,
-                        Toast.LENGTH_SHORT
-                )
-
-                if (wrongAttempt % 3 == 0) {
-                    for (i in 1 until (wrongAttempt / 3)) {
-                        timer *= 2
-                    }
+                    databaseHandlerClass.updateAccountStatus(
+                            "f_wrong_attempt",
+                            ""
+                    )
 
                     databaseHandlerClass.updateAccountStatus(
                             "m_pin_lock_time",
-                            encodingClass.encodeData(getCurrentDate())
+                            ""
                     )
 
-                    toast = Toast.makeText(
+                    val goToIndexActivity = Intent(this, IndexActivity::class.java)
+                    startActivity(goToIndexActivity)
+                    overridePendingTransition(
+                            R.anim.anim_enter_top_to_bottom_2,
+                            R.anim.anim_exit_top_to_bottom_2
+                    )
+
+                    this.finish()
+                } else {
+                    val userStatusList: List<UserAccountStatusModelClass> =
+                            databaseHandlerClass.viewAccountStatus()
+                    var wrongAttempt = 0
+                    var timer = 30
+
+                    for (u in userStatusList) {
+                        val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+                        if (mPinWrongAttempt.isNotEmpty()) {
+                            wrongAttempt = Integer.parseInt(mPinWrongAttempt)
+                        }
+                    }
+                    wrongAttempt++
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            encodingClass.encodeData(wrongAttempt.toString())
+                    )
+
+                    var toast: Toast = Toast.makeText(
                             applicationContext,
-                            "Account is locked. Please wait for $timer seconds",
+                            R.string.many_incorrect_master_pin,
                             Toast.LENGTH_SHORT
                     )
-                }
 
-                acbMasterPINButton1.isClickable = false
-                acbMasterPINButton2.isClickable = false
-                acbMasterPINButton3.isClickable = false
-                acbMasterPINButton4.isClickable = false
-                acbMasterPINButton5.isClickable = false
-                acbMasterPINButton6.isClickable = false
-                acbMasterPINButton7.isClickable = false
-                acbMasterPINButton8.isClickable = false
-                acbMasterPINButton9.isClickable = false
-                acbMasterPINButton0.isClickable = false
-                acbMasterPINButtonDelete.isClickable = false
-                acbMasterPINButtonCancel.isClickable = false
+                    if (wrongAttempt % 3 == 0) {
+                        for (i in 1 until (wrongAttempt / 3)) {
+                            timer *= 2
+                        }
+
+                        databaseHandlerClass.updateAccountStatus(
+                                "m_pin_lock_time",
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+
+                        toast = Toast.makeText(
+                                applicationContext,
+                                "Account is locked. Please wait for $timer seconds",
+                                Toast.LENGTH_SHORT
+                        )
+                    }
+
+                    disableButtons()
+
+                    view.apply {
+                        postDelayed(
+                                {
+                                    toast.apply {
+                                        setGravity(Gravity.CENTER, 0, 0)
+                                        show()
+                                    }
+
+                                    val vibrator: Vibrator =
+                                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                                    @Suppress("DEPRECATION")
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {           // If android version is Oreo and above
+                                        vibrator.vibrate(                                           // Vibrate for wrong confirmation
+                                                VibrationEffect.createOneShot(
+                                                        350,
+                                                        VibrationEffect.DEFAULT_AMPLITUDE
+                                                )
+                                        )
+                                    } else {
+                                        vibrator.vibrate(350)
+                                    }
+
+                                    enableButtons()
+                                }, 200
+                        )
+                    }
+                }
+            } else {
+                disableButtons()
 
                 view.apply {
                     postDelayed(
                             {
-                                toast.apply {
-                                    setGravity(Gravity.CENTER, 0, 0)
-                                    show()
-                                }
-
-                                val vibrator: Vibrator =
-                                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-                                @Suppress("DEPRECATION")
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {               // If android version is Oreo and above
-                                    vibrator.vibrate(                                               // Vibrate for wrong confirmation
-                                            VibrationEffect.createOneShot(
-                                                    350,
-                                                    VibrationEffect.DEFAULT_AMPLITUDE
-                                            )
-                                    )
-                                } else {
-                                    vibrator.vibrate(350)
-                                }
-
-                                acbMasterPINButton1.isClickable = true
-                                acbMasterPINButton2.isClickable = true
-                                acbMasterPINButton3.isClickable = true
-                                acbMasterPINButton4.isClickable = true
-                                acbMasterPINButton5.isClickable = true
-                                acbMasterPINButton6.isClickable = true
-                                acbMasterPINButton7.isClickable = true
-                                acbMasterPINButton8.isClickable = true
-                                acbMasterPINButton9.isClickable = true
-                                acbMasterPINButton0.isClickable = true
-                                acbMasterPINButtonDelete.isClickable = true
-                                acbMasterPINButtonCancel.isClickable = true
-
-                                unShadeAllPin()
+                                internetToast()
+                                enableButtons()
                             }, 200
                     )
                 }
             }
         }
     }
+
+    fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
+    private fun disableButtons() {
+        acbMasterPINButton1.isClickable = false
+        acbMasterPINButton2.isClickable = false
+        acbMasterPINButton3.isClickable = false
+        acbMasterPINButton4.isClickable = false
+        acbMasterPINButton5.isClickable = false
+        acbMasterPINButton6.isClickable = false
+        acbMasterPINButton7.isClickable = false
+        acbMasterPINButton8.isClickable = false
+        acbMasterPINButton9.isClickable = false
+        acbMasterPINButton0.isClickable = false
+        acbMasterPINButtonDelete.isClickable = false
+        acbMasterPINButtonCancel.isClickable = false
+    }
+
+     private fun enableButtons() {
+         acbMasterPINButton1.isClickable = true
+         acbMasterPINButton2.isClickable = true
+         acbMasterPINButton3.isClickable = true
+         acbMasterPINButton4.isClickable = true
+         acbMasterPINButton5.isClickable = true
+         acbMasterPINButton6.isClickable = true
+         acbMasterPINButton7.isClickable = true
+         acbMasterPINButton8.isClickable = true
+         acbMasterPINButton9.isClickable = true
+         acbMasterPINButton0.isClickable = true
+         acbMasterPINButtonDelete.isClickable = true
+         acbMasterPINButtonCancel.isClickable = true
+
+         unShadeAllPin()
+     }
 
     fun locked(): Boolean {
         val waitingTime = waitingTime()

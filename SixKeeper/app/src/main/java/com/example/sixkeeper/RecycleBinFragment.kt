@@ -45,60 +45,76 @@ class RecycleBinFragment : RecycleBinProcessClass() {
                 getAppCompatActivity().findViewById(R.id.vRecycleBinDivisionB)
 
         clRecycleBinAccounts.setOnClickListener {
-            if (getSelectedTab() == "password generator") {
-                vRecycleBinDivisionB.setBackgroundResource(R.color.white)
-                vRecycleBinDivisionA.setBackgroundResource(R.color.blue)
-                setSelectedTab("accounts")
+            if (InternetConnectionClass().isConnected()) {
+                if (getSelectedTab() == "password generator") {
+                    vRecycleBinDivisionB.setBackgroundResource(R.color.white)
+                    vRecycleBinDivisionA.setBackgroundResource(R.color.blue)
+                    setSelectedTab("accounts")
 
-                populateDeletedAccounts()
+                    populateDeletedAccounts()
+                }
+            } else {
+                internetToast()
             }
         }
 
         clRecycleBinPassword.setOnClickListener {
-            if (getSelectedTab() == "accounts") {
-                vRecycleBinDivisionA.setBackgroundResource(R.color.white)
-                vRecycleBinDivisionB.setBackgroundResource(R.color.blue)
-                setSelectedTab("password generator")
+            if (InternetConnectionClass().isConnected()) {
+                if (getSelectedTab() == "accounts") {
+                    vRecycleBinDivisionA.setBackgroundResource(R.color.white)
+                    vRecycleBinDivisionB.setBackgroundResource(R.color.blue)
+                    setSelectedTab("password generator")
 
-                populateDeletedPasswords()
+                    populateDeletedPasswords()
+                }
+            } else {
+                internetToast()
             }
         }
 
         clRecycleBinDelete.setOnClickListener {
-            var itemCheck = false
+            if (InternetConnectionClass().isConnected()) {
+                var itemCheck = false
 
-            for (i in 0 until getModelArrayList().size) {
-                if (getModelArrayList()[i].getSelected()) {
-                    itemCheck = true
-                    break
-                }
-            }
-
-            if (itemCheck) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-                builder.setMessage(R.string.recycle_bin_delete_mes)
-                builder.setCancelable(false)
-
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    confirmMasterPIN()
-                }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
+                for (i in 0 until getModelArrayList().size) {
+                    if (getModelArrayList()[i].getSelected()) {
+                        itemCheck = true
+                        break
+                    }
                 }
 
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title_confirm)
-                alert.show()
+                if (itemCheck) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                    builder.setMessage(R.string.recycle_bin_delete_mes)
+                    builder.setCancelable(false)
+
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            confirmMasterPIN()
+                        } else {
+                            internetToast()
+                        }
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title_confirm)
+                    alert.show()
+                } else {
+                    val toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.many_nothing_to_delete,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
             } else {
-                val toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.many_nothing_to_delete,
-                        Toast.LENGTH_SHORT
-                )
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
 
             it.apply {
@@ -112,41 +128,61 @@ class RecycleBinFragment : RecycleBinProcessClass() {
         }
 
         clRecycleBinRestore.setOnClickListener {
-            var itemCheck = false
+            if (InternetConnectionClass().isConnected()) {
+                var itemCheck = false
 
-            for (i in 0 until getModelArrayList().size) {
-                if (getModelArrayList()[i].getSelected()) {
-                    itemCheck = true
-                    break
-                }
-            }
-
-            if (itemCheck) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-                builder.setMessage(R.string.recycle_bin_restore_item)
-                builder.setCancelable(false)
-
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    restoreSelectedItems()
-                }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
+                for (i in 0 until getModelArrayList().size) {
+                    if (getModelArrayList()[i].getSelected()) {
+                        itemCheck = true
+                        break
+                    }
                 }
 
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title_confirm)
-                alert.show()
+                if (itemCheck) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                    builder.setMessage(R.string.recycle_bin_restore_item)
+                    builder.setCancelable(false)
+
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            restoreSelectedItems()
+                        } else {
+                            internetToast()
+                        }
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title_confirm)
+                    alert.show()
+                } else {
+                    val toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.recycle_bin_nothing_to_restore,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
             } else {
-                val toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.recycle_bin_nothing_to_restore,
-                        Toast.LENGTH_SHORT
-                )
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                getAppCompatActivity().applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 }

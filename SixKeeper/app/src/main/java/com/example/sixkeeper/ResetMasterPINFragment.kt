@@ -78,18 +78,22 @@ class ResetMasterPINFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbResetPasswordReset)
 
         acbResetMasterPIN.setOnClickListener {
-            val goToCreateMasterPINActivity = Intent(
-                    activity,
-                    CreateMasterPINActivity::class.java
-            )
+            if (InternetConnectionClass().isConnected()) {
+                val goToCreateMasterPINActivity = Intent(
+                        activity,
+                        CreateMasterPINActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToCreateMasterPINActivity, 14523)
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToCreateMasterPINActivity, 14523)
 
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 acbResetMasterPIN.isClickable = false                                               // Set button un-clickable for 1 second
@@ -102,70 +106,102 @@ class ResetMasterPINFragment : Fragment() {
         }
 
         acbResetPasswordReset.setOnClickListener {
-            if (masterPin != 0) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                builder.setMessage(R.string.reset_master_pin_alert)
-                builder.setCancelable(false)
+            if (InternetConnectionClass().isConnected()) {
+                if (masterPin != 0) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    builder.setMessage(R.string.reset_master_pin_alert)
+                    builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    val encryptionClass = EncryptionClass()
-                    val encodedInput = encodingClass.encodeData(masterPin.toString())
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            val encryptionClass = EncryptionClass()
+                            val encodedInput = encodingClass.encodeData(masterPin.toString())
 
-                    var actionLogId = 1000001
-                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
+                            var actionLogId = 1000001
+                            val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
-                    val calendar: Calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    val date = dateFormat.format(calendar.time)
+                            val calendar: Calendar = Calendar.getInstance()
+                            val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                            val date = dateFormat.format(calendar.time)
 
-                    if (lastId.isNotEmpty()) {
-                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                            if (lastId.isNotEmpty()) {
+                                actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                            }
+
+                            databaseHandlerClass.updateUserAcc(                                     // Reset Master PIN
+                                    "master_pin", encryptionClass.hashData(encodedInput), date
+                            )
+
+                            databaseHandlerClass.addEventToActionLog(                               // Add event to Action Log
+                                    UserActionLogModelClass(
+                                            encodingClass.encodeData(actionLogId.toString()),
+                                            encodingClass.encodeData(
+                                                    "App account master pin was modified."
+                                            ),
+                                            encodingClass.encodeData(date)
+                                    )
+                            )
+
+                            databaseHandlerClass.updateAccountStatus(
+                                    "m_pin_wrong_attempt",
+                                    ""
+                            )
+
+                            databaseHandlerClass.updateAccountStatus(
+                                    "f_wrong_attempt",
+                                    ""
+                            )
+
+                            databaseHandlerClass.updateAccountStatus(
+                                    "m_pin_lock_time",
+                                    ""
+                            )
+
+                            it.apply {
+                                postDelayed(
+                                        {
+                                            appCompatActivity.finish()
+                                            appCompatActivity.overridePendingTransition(
+                                                    R.anim.anim_enter_left_to_right_2,
+                                                    R.anim.anim_exit_left_to_right_2
+                                            )
+                                        }, 250
+                                )
+                            }
+
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.reset_master_pin_mes,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        } else {
+                            internetToast()
+                        }
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
                     }
 
-                    databaseHandlerClass.updateUserAcc(                                             // Reset Master PIN
-                            "master_pin", encryptionClass.hashData(encodedInput), date
-                    )
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title_confirm)
+                    alert.show()
 
-                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
-                            UserActionLogModelClass(
-                                    encodingClass.encodeData(actionLogId.toString()),
-                                    encodingClass.encodeData(
-                                            "App account master pin was modified."
-                                    ),
-                                    encodingClass.encodeData(date)
-                            )
-                    )
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "m_pin_wrong_attempt",
-                            ""
-                    )
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "f_wrong_attempt",
-                            ""
-                    )
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "m_pin_lock_time",
-                            ""
-                    )
-
-                    it.apply {
+                    acbResetPasswordReset.apply {
+                        acbResetPasswordReset.isClickable = false                                   // Set button un-clickable for 1 second
                         postDelayed(
                                 {
-                                    appCompatActivity.finish()
-                                    appCompatActivity.overridePendingTransition(
-                                            R.anim.anim_enter_left_to_right_2,
-                                            R.anim.anim_exit_left_to_right_2
-                                    )
-                                }, 250
+                                    acbResetPasswordReset.isClickable = true
+                                }, 1000
                         )
                     }
-
+                } else {
                     val toast: Toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            R.string.reset_master_pin_mes,
+                            R.string.create_new_acc_p4_master_pin_mes,
                             Toast.LENGTH_SHORT
                     )
                     toast.apply {
@@ -173,33 +209,21 @@ class ResetMasterPINFragment : Fragment() {
                         show()
                     }
                 }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
-
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title_confirm)
-                alert.show()
-
-                acbResetPasswordReset.apply {
-                    acbResetPasswordReset.isClickable = false                                       // Set button un-clickable for 1 second
-                    postDelayed(
-                            {
-                                acbResetPasswordReset.isClickable = true
-                            }, 1000
-                    )
-                }
             } else {
-                val toast: Toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.create_new_acc_p4_master_pin_mes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

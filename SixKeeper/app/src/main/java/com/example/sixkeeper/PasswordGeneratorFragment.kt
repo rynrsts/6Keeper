@@ -52,165 +52,189 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                 getAppCompatActivity().findViewById(R.id.clPassGeneratorSave)
 
         acbPassGeneratorGenerate.setOnClickListener {
-            if (getPasswordType() == "medium" || getPasswordType() == "strong") {
-                setTvPassGeneratorGeneratedPass(generatePassword(0))
-            } else if (getPasswordType() == "custom") {
-                val etPassGeneratorLength: EditText =
-                        getCustomInflatedLayout().findViewById(R.id.etPassGeneratorLength)
-                val passGeneratorLength = etPassGeneratorLength.text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                if (getPasswordType() == "medium" || getPasswordType() == "strong") {
+                    setTvPassGeneratorGeneratedPass(generatePassword(0))
+                } else if (getPasswordType() == "custom") {
+                    val etPassGeneratorLength: EditText =
+                            getCustomInflatedLayout().findViewById(R.id.etPassGeneratorLength)
+                    val passGeneratorLength = etPassGeneratorLength.text.toString()
 
-                if (passGeneratorLength.isNotEmpty()) {
-                    val length = Integer.parseInt(passGeneratorLength)
+                    if (passGeneratorLength.isNotEmpty()) {
+                        val length = Integer.parseInt(passGeneratorLength)
 
-                    if (length in 4..99) {
-                        if (
-                                getCbPassGeneratorLowercase().isChecked ||
-                                getCbPassGeneratorUppercase().isChecked ||
-                                getCbPassGeneratorSpecialChar().isChecked ||
-                                getCbPassGeneratorNumber().isChecked
-                        ) {
-                            setTvPassGeneratorGeneratedPass(generatePassword(length))
-                        } else {
-                            val toast: Toast = Toast.makeText(
-                                    getAppCompatActivity().applicationContext,
-                                    R.string.pass_generator_select_char,
-                                    Toast.LENGTH_SHORT
-                            )
-                            toast.apply {
-                                setGravity(Gravity.CENTER, 0, 0)
-                                show()
+                        if (length in 4..99) {
+                            if (
+                                    getCbPassGeneratorLowercase().isChecked ||
+                                    getCbPassGeneratorUppercase().isChecked ||
+                                    getCbPassGeneratorSpecialChar().isChecked ||
+                                    getCbPassGeneratorNumber().isChecked
+                            ) {
+                                setTvPassGeneratorGeneratedPass(generatePassword(length))
+                            } else {
+                                val toast: Toast = Toast.makeText(
+                                        getAppCompatActivity().applicationContext,
+                                        R.string.pass_generator_select_char,
+                                        Toast.LENGTH_SHORT
+                                )
+                                toast.apply {
+                                    setGravity(Gravity.CENTER, 0, 0)
+                                    show()
+                                }
                             }
+                        } else {
+                            toastMinimumOf4(etPassGeneratorLength)
+                            etPassGeneratorLength.clearFocus()
+                            closeKeyboard()
                         }
                     } else {
                         toastMinimumOf4(etPassGeneratorLength)
                         etPassGeneratorLength.clearFocus()
                         closeKeyboard()
                     }
-                } else {
-                    toastMinimumOf4(etPassGeneratorLength)
-                    etPassGeneratorLength.clearFocus()
-                    closeKeyboard()
                 }
+            } else {
+                internetToast()
             }
         }
 
         tvPassGeneratorCopy.setOnClickListener {
-            val generatedPass = getTvPassGeneratorGeneratedPass().text.toString()
-            val toast: Toast?
+            if (InternetConnectionClass().isConnected()) {
+                val generatedPass = getTvPassGeneratorGeneratedPass().text.toString()
+                val toast: Toast?
 
-            if (generatedPass.isNotEmpty()) {
-                val clipboard: ClipboardManager =
-                        getAppCompatActivity().getSystemService(
-                                Context.CLIPBOARD_SERVICE
-                        ) as ClipboardManager
-                val clip = ClipData.newPlainText("pw", generatedPass)
-                clipboard.setPrimaryClip(clip)
+                if (generatedPass.isNotEmpty()) {
+                    val clipboard: ClipboardManager =
+                            getAppCompatActivity().getSystemService(
+                                    Context.CLIPBOARD_SERVICE
+                            ) as ClipboardManager
+                    val clip = ClipData.newPlainText("pw", generatedPass)
+                    clipboard.setPrimaryClip(clip)
 
-                toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.pass_generator_pass_copy,
-                        Toast.LENGTH_SHORT
-                )
+                    toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.pass_generator_pass_copy,
+                            Toast.LENGTH_SHORT
+                    )
+                } else {
+                    toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.pass_generator_nothing_to_copy,
+                            Toast.LENGTH_SHORT
+                    )
+                }
+
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
             } else {
-                toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.pass_generator_nothing_to_copy,
-                        Toast.LENGTH_SHORT
-                )
-            }
-
-            toast?.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
+                internetToast()
             }
         }
 
         tvPassGeneratorMedium.setOnClickListener {
-            if (getPasswordType() != "medium") {
-                tvPassGeneratorMedium.apply {
-                    setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_active)
-                    setTextColor(ContextCompat.getColor(context, R.color.white))
-                }
-
-                if (getPasswordType() == "strong") {
-                    tvPassGeneratorStrong.apply {
-                        setBackgroundResource(0)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+            if (InternetConnectionClass().isConnected()) {
+                if (getPasswordType() != "medium") {
+                    tvPassGeneratorMedium.apply {
+                        setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_active)
+                        setTextColor(ContextCompat.getColor(context, R.color.white))
                     }
-                } else if (getPasswordType() == "custom") {
-                    tvPassGeneratorCustom.apply {
-                        setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_passive)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
-                    }
-                }
 
-                setPasswordType("medium")
-                populateMediumStrong("medium")
+                    if (getPasswordType() == "strong") {
+                        tvPassGeneratorStrong.apply {
+                            setBackgroundResource(0)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    } else if (getPasswordType() == "custom") {
+                        tvPassGeneratorCustom.apply {
+                            setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_passive)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    }
+
+                    setPasswordType("medium")
+                    populateMediumStrong("medium")
+                }
+            } else {
+                internetToast()
             }
         }
 
         tvPassGeneratorStrong.setOnClickListener {
-            if (getPasswordType() != "strong") {
-                tvPassGeneratorStrong.apply {
-                    setBackgroundResource(R.drawable.layout_pass_gen_tab_strong_active)
-                    setTextColor(ContextCompat.getColor(context, R.color.white))
-                }
-
-                if (getPasswordType() == "medium") {
-                    tvPassGeneratorMedium.apply {
-                        setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_passive)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+            if (InternetConnectionClass().isConnected()) {
+                if (getPasswordType() != "strong") {
+                    tvPassGeneratorStrong.apply {
+                        setBackgroundResource(R.drawable.layout_pass_gen_tab_strong_active)
+                        setTextColor(ContextCompat.getColor(context, R.color.white))
                     }
-                } else if (getPasswordType() == "custom") {
-                    tvPassGeneratorCustom.apply {
-                        setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_passive)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
-                    }
-                }
 
-                setPasswordType("strong")
-                populateMediumStrong("strong")
+                    if (getPasswordType() == "medium") {
+                        tvPassGeneratorMedium.apply {
+                            setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_passive)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    } else if (getPasswordType() == "custom") {
+                        tvPassGeneratorCustom.apply {
+                            setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_passive)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    }
+
+                    setPasswordType("strong")
+                    populateMediumStrong("strong")
+                }
+            } else {
+                internetToast()
             }
         }
 
         tvPassGeneratorCustom.setOnClickListener {
-            if (getPasswordType() != "custom") {
-                tvPassGeneratorCustom.apply {
-                    setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_active)
-                    setTextColor(ContextCompat.getColor(context, R.color.white))
-                }
-
-                if (getPasswordType() == "medium") {
-                    tvPassGeneratorMedium.apply {
-                        setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_passive)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+            if (InternetConnectionClass().isConnected()) {
+                if (getPasswordType() != "custom") {
+                    tvPassGeneratorCustom.apply {
+                        setBackgroundResource(R.drawable.layout_pass_gen_tab_custom_active)
+                        setTextColor(ContextCompat.getColor(context, R.color.white))
                     }
-                } else if (getPasswordType() == "strong") {
-                    tvPassGeneratorStrong.apply {
-                        setBackgroundResource(0)
-                        setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
-                    }
-                }
 
-                setPasswordType("custom")
-                populateCustom()
+                    if (getPasswordType() == "medium") {
+                        tvPassGeneratorMedium.apply {
+                            setBackgroundResource(R.drawable.layout_pass_gen_tab_medium_passive)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    } else if (getPasswordType() == "strong") {
+                        tvPassGeneratorStrong.apply {
+                            setBackgroundResource(0)
+                            setTextColor(ContextCompat.getColor(context, R.color.lightBlack))
+                        }
+                    }
+
+                    setPasswordType("custom")
+                    populateCustom()
+                }
+            } else {
+                internetToast()
             }
         }
 
         clPassGeneratorView.setOnClickListener {
-            closeKeyboard()
+            if (InternetConnectionClass().isConnected()) {
+                closeKeyboard()
 
-            val goToConfirmActivity = Intent(
-                    getAppCompatActivity(),
-                    ConfirmActionActivity::class.java
-            )
+                val goToConfirmActivity = Intent(
+                        getAppCompatActivity(),
+                        ConfirmActionActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            getAppCompatActivity().overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                getAppCompatActivity().overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 clPassGeneratorView.isClickable = false                                             // Set un-clickable for 1 second
@@ -223,21 +247,37 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
         }
 
         clPassGeneratorSave.setOnClickListener {
-            val generatedPass = getTvPassGeneratorGeneratedPass().text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                val generatedPass = getTvPassGeneratorGeneratedPass().text.toString()
 
-            if (generatedPass.isNotEmpty()) {
-                saveGeneratedPass(generatedPass)
-            } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.pass_generator_generate_pass,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+                if (generatedPass.isNotEmpty()) {
+                    saveGeneratedPass(generatedPass)
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.pass_generator_generate_pass,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                getAppCompatActivity().applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

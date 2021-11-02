@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.Toast
 
 class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
-//    private var typing: Boolean = false
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -30,7 +29,6 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
 
         setVariables()
         setEditTextFocusChange()
-//        setEditTextOnChange()
         setButtonOnClick()
     }
 
@@ -117,50 +115,68 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP1Next)
 
         acbCreateNewAccP1Next.setOnClickListener {
-            if (isNotEmpty()) {
-                validateFirstName()
-                validateLastName()
-                validateBirthDate()
-                validateEmail()
-                validateMobileNumber()
+            if (InternetConnectionClass().isConnected()) {
+                if (isNotEmpty()) {
+                    validateFirstName()
+                    validateLastName()
+                    validateBirthDate()
+                    validateEmail()
+                    validateMobileNumber()
 
-                if (isValid()) {
-                    val immKeyboard: InputMethodManager =
-                            getAppCompatActivity().getSystemService(
-                                    Context.INPUT_METHOD_SERVICE
-                            ) as InputMethodManager
-                    val createNewAccountActivity: CreateNewAccountActivity =
-                            activity as CreateNewAccountActivity
+                    if (isValid()) {
+                        val immKeyboard: InputMethodManager =
+                                getAppCompatActivity().getSystemService(
+                                        Context.INPUT_METHOD_SERVICE
+                                ) as InputMethodManager
+                        val createNewAccountActivity: CreateNewAccountActivity =
+                                activity as CreateNewAccountActivity
 
-                    if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
-                                getAppCompatActivity().currentFocus?.windowToken,
-                                0
-                        )
+                        if (immKeyboard.isActive) {
+                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                                    getAppCompatActivity().currentFocus?.windowToken,
+                                    0
+                            )
+                        }
+
+                        createNewAccountActivity.apply {
+                            manageCreateNewAccFragments(
+                                    createNewAccountActivity.getCreateNewAccP3()
+                            )
+                            setCreateNewAccountP1Data(
+                                    getFirstName(),
+                                    getLastName(),
+                                    getBirthDate(),
+                                    getEmail(),
+                                    getMobileNumber().toLong()
+                            )
+                        }
                     }
-
-                    createNewAccountActivity.apply {
-                        manageCreateNewAccFragments(createNewAccountActivity.getCreateNewAccP3())
-                        setCreateNewAccountP1Data(
-                                getFirstName(),
-                                getLastName(),
-                                getBirthDate(),
-                                getEmail(),
-                                getMobileNumber().toLong()
-                        )
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.many_fill_missing_fields,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
                     }
                 }
             } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.many_fill_missing_fields,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                getAppCompatActivity().applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 }

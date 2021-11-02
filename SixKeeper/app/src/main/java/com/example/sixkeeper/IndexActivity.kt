@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -78,7 +80,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 val dateBackground: Date = dateFormat.parse(backgroundDate)
                 val timeDifference: Long = dateToday.time - dateBackground.time
 
-                val databaseHandlerClass =  DatabaseHandlerClass(this)
+                val databaseHandlerClass = DatabaseHandlerClass(this)
                 val encodingClass = EncodingClass()
                 val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
                 var autoLock = false
@@ -101,15 +103,15 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                         status = "locked"
 
                         val goToAutoLockLoginActivity = Intent(
-                            this,
-                            AutoLockLoginActivity::class.java
+                                this,
+                                AutoLockLoginActivity::class.java
                         )
 
                         @Suppress("DEPRECATION")
                         startActivityForResult(goToAutoLockLoginActivity, 1215311)
                         overridePendingTransition(
-                            R.anim.anim_enter_bottom_to_top_2,
-                            R.anim.anim_0
+                                R.anim.anim_enter_bottom_to_top_2,
+                                R.anim.anim_0
                         )
                     }
                 }
@@ -126,8 +128,9 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     fun setBackgroundDate() {
         backgroundDate = ""
     }
-    fun setTimer() {
-        timer = 30
+
+    fun setTimer(i: Int) {
+        timer = i
     }
 
     private fun setVariables() {
@@ -144,20 +147,20 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         val navigationController = findNavController(R.id.fIndexNavigationHost)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.userAccountFragment,
-                R.id.dashboardFragment,
-                R.id.accountsFragment,
-                R.id.favoritesFragment,
-                R.id.passwordGeneratorFragment,
-                R.id.recycleBinFragment,
-                R.id.settingsFragment,
-                R.id.aboutUsFragment,
+                setOf(
+                        R.id.userAccountFragment,
+                        R.id.dashboardFragment,
+                        R.id.accountsFragment,
+                        R.id.favoritesFragment,
+                        R.id.passwordGeneratorFragment,
+                        R.id.recycleBinFragment,
+                        R.id.settingsFragment,
+                        R.id.aboutUsFragment,
 //                        R.id.helpFragment,
-                R.id.termsConditionsFragment,
-                R.id.privacyPolicyFragment,
+                        R.id.termsConditionsFragment,
+                        R.id.privacyPolicyFragment,
 //                        R.id.contactUsFragment
-            ), drawerLayout
+                ), drawerLayout
         )
         setupActionBarWithNavController(navigationController, appBarConfiguration)
         navigationView.setupWithNavController(navigationController)
@@ -207,11 +210,23 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
 
     private fun setOnClick() {
         clNavigationHeader.setOnClickListener {
-            drawerLayout.closeDrawers()
+            if (InternetConnectionClass().isConnected()) {
+                drawerLayout.closeDrawers()
 
-            findNavController(R.id.fIndexNavigationHost).navigate(                                  // Go to User Account
-                R.id.action_fragments_to_userAccountFragment
-            )
+                findNavController(R.id.fIndexNavigationHost).navigate(                              // Go to User Account
+                        R.id.action_fragments_to_userAccountFragment
+                )
+            } else {
+                val toast: Toast = Toast.makeText(
+                        applicationContext,
+                        R.string.many_internet_connection,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         }
     }
 

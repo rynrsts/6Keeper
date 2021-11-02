@@ -92,18 +92,22 @@ class CreateNewAccountP4Fragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbCreateNewAccP4Register)
 
         acbCreateNewAccP4MasterPIN.setOnClickListener {
-            val goToCreateMasterPINActivity = Intent(
-                    activity,
-                    CreateMasterPINActivity::class.java
-            )
+            if (InternetConnectionClass().isConnected()) {
+                val goToCreateMasterPINActivity = Intent(
+                        activity,
+                        CreateMasterPINActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToCreateMasterPINActivity, 14523)
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToCreateMasterPINActivity, 14523)
 
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 acbCreateNewAccP4MasterPIN.isClickable = false                                      // Set button un-clickable for 1 second
@@ -144,61 +148,81 @@ class CreateNewAccountP4Fragment : Fragment() {
         }
 
         acbCreateNewAccP4Register.setOnClickListener {
-            when {
-                masterPin != 0 && cbCreateNewAccP4AgreeToTerms.isChecked -> {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                    builder.setMessage(R.string.create_new_acc_message)
-                    builder.setCancelable(false)
+            if (InternetConnectionClass().isConnected()) {
+                when {
+                    masterPin != 0 && cbCreateNewAccP4AgreeToTerms.isChecked -> {
+                        val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                        builder.setMessage(R.string.create_new_acc_message)
+                        builder.setCancelable(false)
 
-                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        createNewAccountActivity.saveAccount()
+                        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                            if (InternetConnectionClass().isConnected()) {
+                                createNewAccountActivity.saveAccount()
 
-                        appCompatActivity.finish()
-                        appCompatActivity.overridePendingTransition(
-                                R.anim.anim_enter_left_to_right_2,
-                                R.anim.anim_exit_left_to_right_2
+                                appCompatActivity.finish()
+                                appCompatActivity.overridePendingTransition(
+                                        R.anim.anim_enter_left_to_right_2,
+                                        R.anim.anim_exit_left_to_right_2
+                                )
+                            } else {
+                                internetToast()
+                            }
+                        }
+                        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                            dialog.cancel()
+                        }
+
+                        val alert: AlertDialog = builder.create()
+                        alert.setTitle(R.string.many_alert_title_confirm)
+                        alert.show()
+
+                        it.apply {
+                            acbCreateNewAccP4Register.isClickable = false                           // Set button un-clickable for 1 second
+                            postDelayed(
+                                    {
+                                        acbCreateNewAccP4Register.isClickable = true
+                                    }, 1000
+                            )
+                        }
+                    }
+                    masterPin == 0 -> {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.create_new_acc_p4_master_pin_mes,
+                                Toast.LENGTH_SHORT
                         )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
                     }
-                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                        dialog.cancel()
-                    }
-
-                    val alert: AlertDialog = builder.create()
-                    alert.setTitle(R.string.many_alert_title_confirm)
-                    alert.show()
-
-                    it.apply {
-                        acbCreateNewAccP4Register.isClickable = false                               // Set button un-clickable for 1 second
-                        postDelayed(
-                                {
-                                    acbCreateNewAccP4Register.isClickable = true
-                                }, 1000
+                    masterPin != 0 && !cbCreateNewAccP4AgreeToTerms.isChecked -> {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.create_new_acc_p4_agree_to_terms_mes,
+                                Toast.LENGTH_SHORT
                         )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
                     }
                 }
-                masterPin == 0 -> {
-                    val toast: Toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.create_new_acc_p4_master_pin_mes,
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
-                masterPin != 0 && !cbCreateNewAccP4AgreeToTerms.isChecked -> {
-                    val toast: Toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.create_new_acc_p4_agree_to_terms_mes,
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
+            } else {
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

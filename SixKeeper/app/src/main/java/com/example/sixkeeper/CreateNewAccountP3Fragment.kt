@@ -130,45 +130,63 @@ class CreateNewAccountP3Fragment : CreateNewAccountP3ValidationClass() {
                 getAppCompatActivity().findViewById(R.id.acbCreateNewAccP3Next)
 
         acbCreateNewAccP3Next.setOnClickListener {
-            if (isNotEmpty()) {
-                validateUsername()
-                validatePassword()
-                validateConfirmPassword()
+            if (InternetConnectionClass().isConnected()) {
+                if (isNotEmpty()) {
+                    validateUsername()
+                    validatePassword()
+                    validateConfirmPassword()
 
-                if (isValid()) {
-                    val immKeyboard: InputMethodManager =
-                            getAppCompatActivity().getSystemService(
-                                    Context.INPUT_METHOD_SERVICE
-                            ) as InputMethodManager
+                    if (isValid()) {
+                        val immKeyboard: InputMethodManager =
+                                getAppCompatActivity().getSystemService(
+                                        Context.INPUT_METHOD_SERVICE
+                                ) as InputMethodManager
 
-                    if (immKeyboard.isActive) {
-                        immKeyboard.hideSoftInputFromWindow(                                        // Close keyboard
-                                getAppCompatActivity().currentFocus?.windowToken,
-                                0
+                        if (immKeyboard.isActive) {
+                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                                    getAppCompatActivity().currentFocus?.windowToken,
+                                    0
+                            )
+                        }
+
+                        val createNewAccountActivity: CreateNewAccountActivity =
+                                activity as CreateNewAccountActivity
+                        createNewAccountActivity.manageCreateNewAccFragments(
+                                createNewAccountActivity.getCreateNewAccP4()
                         )
+                        createNewAccountActivity.apply {
+                            manageCreateNewAccFragments(
+                                    createNewAccountActivity.getCreateNewAccP4()
+                            )
+                            setCreateNewAccountP3Data(getUsername(), getPassword())
+                        }
                     }
-
-                    val createNewAccountActivity: CreateNewAccountActivity =
-                            activity as CreateNewAccountActivity
-                    createNewAccountActivity.manageCreateNewAccFragments(
-                            createNewAccountActivity.getCreateNewAccP4()
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            R.string.many_fill_missing_fields,
+                            Toast.LENGTH_SHORT
                     )
-                    createNewAccountActivity.apply {
-                        manageCreateNewAccFragments(createNewAccountActivity.getCreateNewAccP4())
-                        setCreateNewAccountP3Data(getUsername(), getPassword())
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
                     }
                 }
             } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        R.string.many_fill_missing_fields,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                getAppCompatActivity(),
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

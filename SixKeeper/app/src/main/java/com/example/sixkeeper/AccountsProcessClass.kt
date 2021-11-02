@@ -191,25 +191,29 @@ open class AccountsProcessClass : Fragment() {
         }
 
         builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
-            val categoryName = etAccountsAddNew.text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                val categoryName = etAccountsAddNew.text.toString()
 
-            if (categoryName.isNotEmpty()) {
-                addOrUpdateCategory(
-                        addOrUpdate,
-                        categoryName,
-                        selectedCategoryId,
-                        selectedCategoryName
-                )
-            } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        toastMes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+                if (categoryName.isNotEmpty()) {
+                    addOrUpdateCategory(
+                            addOrUpdate,
+                            categoryName,
+                            selectedCategoryId,
+                            selectedCategoryName
+                    )
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            toastMes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
 
             view?.apply {
@@ -341,6 +345,18 @@ open class AccountsProcessClass : Fragment() {
         closeKeyboard()
     }
 
+    fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
     private fun getLastActionLogId(): Int {
         var actionLogId = 1000001
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -378,23 +394,27 @@ open class AccountsProcessClass : Fragment() {
         }
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            categoryIdTemp = selectedCategoryId
-            categoryNameTemp = selectedCategoryName
+            if (InternetConnectionClass().isConnected()) {
+                categoryIdTemp = selectedCategoryId
+                categoryNameTemp = selectedCategoryName
 
-            if (selectedCategoryNum == "0") {
-                deleteCategory()
+                if (selectedCategoryNum == "0") {
+                    deleteCategory()
+                } else {
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+                }
             } else {
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
-
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
+                internetToast()
             }
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -414,7 +434,7 @@ open class AccountsProcessClass : Fragment() {
                 encodingClass.encodeData(categoryIdTemp)
         )
 
-        if (deleteCategoryStatus > -1 ) {
+        if (deleteCategoryStatus > -1) {
             val toast = Toast.makeText(
                     appCompatActivity.applicationContext,
                     "Category '$categoryNameTemp' deleted!",

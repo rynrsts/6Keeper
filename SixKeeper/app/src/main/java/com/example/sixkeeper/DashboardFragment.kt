@@ -226,39 +226,63 @@ class DashboardFragment : Fragment() {
         val vDashboardDivision3: View = appCompatActivity.findViewById(R.id.vDashboardDivision3)
 
         clDashboardSummary.setOnClickListener {
-            if (selectedTab == "analytics") {
-                vDashboardDivision2.setBackgroundResource(R.color.white)
-            } else if (selectedTab == "action log") {
-                vDashboardDivision3.setBackgroundResource(R.color.white)
-            }
+            if (InternetConnectionClass().isConnected()) {
+                if (selectedTab == "analytics") {
+                    vDashboardDivision2.setBackgroundResource(R.color.white)
+                } else if (selectedTab == "action log") {
+                    vDashboardDivision3.setBackgroundResource(R.color.white)
+                }
 
-            vDashboardDivision1.setBackgroundResource(R.color.blue)
-            populateSummary()
-            selectedTab = "summary"
+                vDashboardDivision1.setBackgroundResource(R.color.blue)
+                populateSummary()
+                selectedTab = "summary"
+            } else {
+                internetToast()
+            }
         }
 
         clDashboardAnalytics.setOnClickListener {
-            if (selectedTab == "summary") {
-                vDashboardDivision1.setBackgroundResource(R.color.white)
-            } else if (selectedTab == "action log") {
-                vDashboardDivision3.setBackgroundResource(R.color.white)
-            }
+            if (InternetConnectionClass().isConnected()) {
+                if (selectedTab == "summary") {
+                    vDashboardDivision1.setBackgroundResource(R.color.white)
+                } else if (selectedTab == "action log") {
+                    vDashboardDivision3.setBackgroundResource(R.color.white)
+                }
 
-            vDashboardDivision2.setBackgroundResource(R.color.blue)
-            populateAnalytics()
-            selectedTab = "analytics"
+                vDashboardDivision2.setBackgroundResource(R.color.blue)
+                populateAnalytics()
+                selectedTab = "analytics"
+            } else {
+                internetToast()
+            }
         }
 
         clDashboardActionLog.setOnClickListener {
-            if (selectedTab == "summary") {
-                vDashboardDivision1.setBackgroundResource(R.color.white)
-            } else if (selectedTab == "analytics") {
-                vDashboardDivision2.setBackgroundResource(R.color.white)
-            }
+            if (InternetConnectionClass().isConnected()) {
+                if (selectedTab == "summary") {
+                    vDashboardDivision1.setBackgroundResource(R.color.white)
+                } else if (selectedTab == "analytics") {
+                    vDashboardDivision2.setBackgroundResource(R.color.white)
+                }
 
-            vDashboardDivision3.setBackgroundResource(R.color.blue)
-            populateActionLog()
-            selectedTab = "action log"
+                vDashboardDivision3.setBackgroundResource(R.color.blue)
+                populateActionLog()
+                selectedTab = "action log"
+            } else {
+                internetToast()
+            }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 
@@ -384,58 +408,74 @@ class DashboardFragment : Fragment() {
         }
 
         clDashboardWeakPasswords.setOnClickListener {
-            if (weakPasswords > 0) {
-                val action = DashboardFragmentDirections
-                        .actionDashboardFragmentToAnalyticsPasswordsFragment("weak")
-                findNavController().navigate(action)
-            } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.dashboard_weak_passwords_mes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+            if (InternetConnectionClass().isConnected()) {
+                if (weakPasswords > 0) {
+                    val action = DashboardFragmentDirections
+                            .actionDashboardFragmentToAnalyticsPasswordsFragment(
+                                    "weak"
+                            )
+                    findNavController().navigate(action)
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.dashboard_weak_passwords_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
         }
 
         clDashboardOldPasswords.setOnClickListener {
-            if (oldPasswords > 0) {
-                val action = DashboardFragmentDirections
-                        .actionDashboardFragmentToAnalyticsPasswordsFragment("old")
-                findNavController().navigate(action)
-            } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.dashboard_old_passwords_mes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+            if (InternetConnectionClass().isConnected()) {
+                if (oldPasswords > 0) {
+                    val action = DashboardFragmentDirections
+                            .actionDashboardFragmentToAnalyticsPasswordsFragment(
+                                    "old"
+                            )
+                    findNavController().navigate(action)
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.dashboard_old_passwords_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
         }
 
         clDashboardDuplicatePasswords.setOnClickListener {
-            if (numOfDuplicates > 0) {
-                val action = DashboardFragmentDirections
-                        .actionDashboardFragmentToAnalyticsPasswordsFragment(
-                                "duplicate"
-                        )
-                findNavController().navigate(action)
-            } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.dashboard_duplicate_passwords_mes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+            if (InternetConnectionClass().isConnected()) {
+                if (numOfDuplicates > 0) {
+                    val action = DashboardFragmentDirections
+                            .actionDashboardFragmentToAnalyticsPasswordsFragment(
+                                    "duplicate"
+                            )
+                    findNavController().navigate(action)
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.dashboard_duplicate_passwords_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
         }
     }

@@ -177,118 +177,148 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 tempS = tempS + "" + temp.pop()
             val pinI: Int = tempS.toInt()
 
-            if (validateUserMasterPin(pinI)) {
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        ""
-                )
 
-                databaseHandlerClass.updateAccountStatus(
-                        "f_wrong_attempt",
-                        ""
-                )
+            if (InternetConnectionClass().isConnected()) {
+                if (validateUserMasterPin(pinI)) {
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            ""
+                    )
 
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_lock_time",
-                        ""
-                )
-
-                setResult(16914)
-                onBackPressed()
-            } else {
-                val userStatusList: List<UserAccountStatusModelClass> =
-                        databaseHandlerClass.viewAccountStatus()
-                var wrongAttempt = 0
-                var timer = 30
-
-                for (u in userStatusList) {
-                    val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
-
-                    if (mPinWrongAttempt.isNotEmpty()) {
-                        wrongAttempt = Integer.parseInt(mPinWrongAttempt)
-                    }
-                }
-                wrongAttempt++
-
-                databaseHandlerClass.updateAccountStatus(
-                        "m_pin_wrong_attempt",
-                        encodingClass.encodeData(wrongAttempt.toString())
-                )
-
-                var toast: Toast = Toast.makeText(
-                    applicationContext,
-                    R.string.many_incorrect_master_pin,
-                    Toast.LENGTH_SHORT
-                )
-
-                if (wrongAttempt % 3 == 0) {
-                    for (i in 1 until (wrongAttempt / 3)) {
-                        timer *= 2
-                    }
+                    databaseHandlerClass.updateAccountStatus(
+                            "f_wrong_attempt",
+                            ""
+                    )
 
                     databaseHandlerClass.updateAccountStatus(
                             "m_pin_lock_time",
-                            encodingClass.encodeData(getCurrentDate())
+                            ""
                     )
 
-                    toast = Toast.makeText(
+                    setResult(16914)
+                    onBackPressed()
+                } else {
+                    val userStatusList: List<UserAccountStatusModelClass> =
+                            databaseHandlerClass.viewAccountStatus()
+                    var wrongAttempt = 0
+                    var timer = 30
+
+                    for (u in userStatusList) {
+                        val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+                        if (mPinWrongAttempt.isNotEmpty()) {
+                            wrongAttempt = Integer.parseInt(mPinWrongAttempt)
+                        }
+                    }
+                    wrongAttempt++
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_wrong_attempt",
+                            encodingClass.encodeData(wrongAttempt.toString())
+                    )
+
+                    var toast: Toast = Toast.makeText(
                             applicationContext,
-                            "Account is locked. Please wait for $timer seconds",
+                            R.string.many_incorrect_master_pin,
                             Toast.LENGTH_SHORT
                     )
-                }
 
-                acbConfirmActionButton1.isClickable = false
-                acbConfirmActionButton2.isClickable = false
-                acbConfirmActionButton3.isClickable = false
-                acbConfirmActionButton4.isClickable = false
-                acbConfirmActionButton5.isClickable = false
-                acbConfirmActionButton6.isClickable = false
-                acbConfirmActionButton7.isClickable = false
-                acbConfirmActionButton8.isClickable = false
-                acbConfirmActionButton9.isClickable = false
-                acbConfirmActionButton0.isClickable = false
-                acbConfirmActionButtonDelete.isClickable = false
-                acbConfirmActionButtonCancel.isClickable = false
+                    if (wrongAttempt % 3 == 0) {
+                        for (i in 1 until (wrongAttempt / 3)) {
+                            timer *= 2
+                        }
+
+                        databaseHandlerClass.updateAccountStatus(
+                                "m_pin_lock_time",
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+
+                        toast = Toast.makeText(
+                                applicationContext,
+                                "Account is locked. Please wait for $timer seconds",
+                                Toast.LENGTH_SHORT
+                        )
+                    }
+
+                    disableButtons()
+
+                    Timer().schedule(200) {
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+
+                        val vibrator: Vibrator =
+                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                        @Suppress("DEPRECATION")
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                       // If android version is Oreo and above
+                            vibrator.vibrate(                                                       // Vibrate for wrong confirmation
+                                    VibrationEffect.createOneShot(
+                                            350,
+                                            VibrationEffect.DEFAULT_AMPLITUDE
+                                    )
+                            )
+                        } else {
+                            vibrator.vibrate(350)
+                        }
+
+                        enableButtons()
+                    }
+                }
+            } else {
+                disableButtons()
+                internetToast()
 
                 Timer().schedule(200) {
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-
-                    val vibrator: Vibrator =
-                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-                    @Suppress("DEPRECATION")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
-                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
-                            VibrationEffect.createOneShot(
-                                350,
-                                VibrationEffect.DEFAULT_AMPLITUDE
-                            )
-                        )
-                    } else {
-                        vibrator.vibrate(350)
-                    }
-
-                    acbConfirmActionButton1.isClickable = true
-                    acbConfirmActionButton2.isClickable = true
-                    acbConfirmActionButton3.isClickable = true
-                    acbConfirmActionButton4.isClickable = true
-                    acbConfirmActionButton5.isClickable = true
-                    acbConfirmActionButton6.isClickable = true
-                    acbConfirmActionButton7.isClickable = true
-                    acbConfirmActionButton8.isClickable = true
-                    acbConfirmActionButton9.isClickable = true
-                    acbConfirmActionButton0.isClickable = true
-                    acbConfirmActionButtonDelete.isClickable = true
-                    acbConfirmActionButtonCancel.isClickable = true
-
-                    unShadeAllPin()
+                    enableButtons()
                 }
             }
         }
+    }
+
+    fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
+    private fun disableButtons() {
+        acbConfirmActionButton1.isClickable = false
+        acbConfirmActionButton2.isClickable = false
+        acbConfirmActionButton3.isClickable = false
+        acbConfirmActionButton4.isClickable = false
+        acbConfirmActionButton5.isClickable = false
+        acbConfirmActionButton6.isClickable = false
+        acbConfirmActionButton7.isClickable = false
+        acbConfirmActionButton8.isClickable = false
+        acbConfirmActionButton9.isClickable = false
+        acbConfirmActionButton0.isClickable = false
+        acbConfirmActionButtonDelete.isClickable = false
+        acbConfirmActionButtonCancel.isClickable = false
+    }
+
+    private fun enableButtons() {
+        acbConfirmActionButton1.isClickable = true
+        acbConfirmActionButton2.isClickable = true
+        acbConfirmActionButton3.isClickable = true
+        acbConfirmActionButton4.isClickable = true
+        acbConfirmActionButton5.isClickable = true
+        acbConfirmActionButton6.isClickable = true
+        acbConfirmActionButton7.isClickable = true
+        acbConfirmActionButton8.isClickable = true
+        acbConfirmActionButton9.isClickable = true
+        acbConfirmActionButton0.isClickable = true
+        acbConfirmActionButtonDelete.isClickable = true
+        acbConfirmActionButtonCancel.isClickable = true
+
+        unShadeAllPin()
     }
 
     fun locked(button: String): Boolean {
@@ -409,8 +439,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     override fun onBackPressed() {                                                                  // Override back button function
         finish()
         overridePendingTransition(
-            R.anim.anim_0,
-            R.anim.anim_exit_top_to_bottom_2
+                R.anim.anim_0,
+                R.anim.anim_exit_top_to_bottom_2
         )
     }
 }

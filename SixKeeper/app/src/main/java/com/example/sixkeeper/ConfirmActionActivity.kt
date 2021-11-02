@@ -38,6 +38,8 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
+    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirm_action)
@@ -108,8 +110,10 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            val helper = FingerprintHandlerClass(this, "confirm action")
-                            helper.startAuth(fingerprintManager, cryptoObject)
+                            fingerprintHandlerClass = FingerprintHandlerClass(
+                                    this, "confirm action"
+                            )
+                            fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {
                         ivConfirmActionFingerprintIcon.isEnabled = false
@@ -133,12 +137,12 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             keyGenerator.init(
                     KeyGenParameterSpec.Builder(
                             keyName,
-                            KeyProperties.PURPOSE_ENCRYPT or  KeyProperties.PURPOSE_DECRYPT
+                            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                     )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build()
+                            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                            .setUserAuthenticationRequired(true)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                            .build()
             )
             keyGenerator.generateKey()
         } catch (e: KeyStoreException) {
@@ -276,9 +280,9 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             it.apply {
                 getAcbConfirmActionButtonCancel().isClickable = false                               // Set button un-clickable for 1 second
                 postDelayed(
-                    {
-                        getAcbConfirmActionButtonCancel().isClickable = true
-                    }, 1000
+                        {
+                            getAcbConfirmActionButtonCancel().isClickable = true
+                        }, 1000
                 )
             }
 
@@ -286,19 +290,24 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                 finishAffinity()
             } else {
                 onBackPressed()
+                fingerprintHandlerClass.stopFingerAuth()
             }
         }
 
         tvConfirmActionForgotPass.setOnClickListener {
-            val goToForgotCredentialsActivity =
-                    Intent(this, ForgotCredentialsActivity::class.java)
-            goToForgotCredentialsActivity.putExtra("credential", "master pin")
+            if (InternetConnectionClass().isConnected()) {
+                val goToForgotCredentialsActivity =
+                        Intent(this, ForgotCredentialsActivity::class.java)
+                goToForgotCredentialsActivity.putExtra("credential", "master pin")
 
-            startActivity(goToForgotCredentialsActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
+                startActivity(goToForgotCredentialsActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_right_to_left_2,
+                        R.anim.anim_exit_right_to_left_2
+                )
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 tvConfirmActionForgotPass.isClickable = false                                       // Set button un-clickable for 1 second

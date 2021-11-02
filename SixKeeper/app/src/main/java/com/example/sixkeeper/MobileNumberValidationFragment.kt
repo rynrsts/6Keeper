@@ -83,26 +83,48 @@ class MobileNumberValidationFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbMobileNumberEnterOTP)
 
         acbMobileNumberGetOTP.setOnClickListener {
-            val phone = "+63" + etMobileNumberGetOTP.text.toString()
-            sendVerificationCode(phone)
+            if (InternetConnectionClass().isConnected()) {
+                (activity as IndexActivity).setTimer(120)
+
+                val phone = "+63" + etMobileNumberGetOTP.text.toString()
+                sendVerificationCode(phone)
+            } else {
+                internetToast()
+            }
         }
 
         acbMobileNumberEnterOTP.setOnClickListener {
-            val otp = etMobileNumberEnterOTP.text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                val otp = etMobileNumberEnterOTP.text.toString()
 
-            if (otp.isNotEmpty()) {
-                verifyCode(otp)
-            } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.mobile_number_enter_otp_mes,
-                        Toast.LENGTH_SHORT
-                )
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+                if (otp.isNotEmpty()) {
+                    verifyCode(otp)
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.mobile_number_enter_otp_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 
@@ -141,32 +163,32 @@ class MobileNumberValidationFragment : Fragment() {
 
     private val firebaseCallBack: OnVerificationStateChangedCallbacks =
             object : OnVerificationStateChangedCallbacks() {
-        override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
-            super.onCodeSent(s, forceResendingToken)
-            verificationId = s
-        }
+                override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
+                    super.onCodeSent(s, forceResendingToken)
+                    verificationId = s
+                }
 
-        override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-            val code = phoneAuthCredential.smsCode
+                override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
+                    val code = phoneAuthCredential.smsCode
 
-            if (code != null) {
-                etMobileNumberEnterOTP.setText(code)
-                verifyCode(code)
+                    if (code != null) {
+                        etMobileNumberEnterOTP.setText(code)
+                        verifyCode(code)
+                    }
+                }
+
+                override fun onVerificationFailed(e: FirebaseException) {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            e.message,
+                            Toast.LENGTH_LONG
+                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+                }
             }
-        }
-
-        override fun onVerificationFailed(e: FirebaseException) {
-            val toast = Toast.makeText(
-                    appCompatActivity.applicationContext,
-                    e.message,
-                    Toast.LENGTH_LONG
-            )
-            toast?.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
-            }
-        }
-    }
 
     private fun verifyCode(code: String) {
         val credential = PhoneAuthProvider.getCredential(verificationId, code)

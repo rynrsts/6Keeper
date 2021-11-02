@@ -165,32 +165,36 @@ class FavoritesFragment : Fragment() {
 
     private fun setOnClick() {
         lvFavoritesContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            lvFavoritesContainer.apply {
-                lvFavoritesContainer.isEnabled = false                                              // Set un-clickable for 1 second
+            if (InternetConnectionClass().isConnected()) {
+                lvFavoritesContainer.apply {
+                    lvFavoritesContainer.isEnabled = false                                          // Set un-clickable for 1 second
 
-                val selectedAccount = lvFavoritesContainer.getItemAtPosition(i).toString()
-                val selectedAccountValue = selectedAccount.split("ramjcammjar")
-                selectedAccountId = selectedAccountValue[0]
-                selectedAccountName = selectedAccountValue[1]
-                selectedPlatformId = selectedAccountValue[2]
+                    val selectedAccount = lvFavoritesContainer.getItemAtPosition(i).toString()
+                    val selectedAccountValue = selectedAccount.split("ramjcammjar")
+                    selectedAccountId = selectedAccountValue[0]
+                    selectedAccountName = selectedAccountValue[1]
+                    selectedPlatformId = selectedAccountValue[2]
 
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
 
-                postDelayed(
-                        {
-                            lvFavoritesContainer.isEnabled = true
-                        }, 1000
-                )
+                    postDelayed(
+                            {
+                                lvFavoritesContainer.isEnabled = true
+                            }, 1000
+                    )
+                }
+            } else {
+                internetToast()
             }
         })
     }
@@ -230,47 +234,51 @@ class FavoritesFragment : Fragment() {
             }
 
             closeKeyboard()
-                                                                                                    // Appear in or remove from Favorites
-            llAccountsFavorites.setOnClickListener {
-                val status = databaseHandlerClass.updateIsFavorites(
-                        encodingClass.encodeData(selectedAccountId),
-                        encodingClass.encodeData(0.toString())
-                )
 
-                if (status > -1) {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            "Account '$selectedAccountName' removed from favorites!",
-                            Toast.LENGTH_SHORT
+            llAccountsFavorites.setOnClickListener {                                                // Remove from Favorites
+                if (InternetConnectionClass().isConnected()) {
+                    val status = databaseHandlerClass.updateIsFavorites(
+                            encodingClass.encodeData(selectedAccountId),
+                            encodingClass.encodeData(0.toString())
                     )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
 
-                var actionLogId = 1000001
-                val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-                val calendar: Calendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                val date: String = dateFormat.format(calendar.time)
-
-                if (lastId.isNotEmpty()) {
-                    actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-                }
-
-                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
-                        UserActionLogModelClass(
-                                encodingClass.encodeData(actionLogId.toString()),
-                                encodingClass.encodeData("Account '$selectedAccountName' " +
-                                        "was removed from Favorites."),
-                                encodingClass.encodeData(date)
+                    if (status > -1) {
+                        val toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                "Account '$selectedAccountName' removed from favorites!",
+                                Toast.LENGTH_SHORT
                         )
-                )
+                        toast?.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
 
-                alert.cancel()
-                populateAccounts("")
+                    var actionLogId = 1000001
+                    val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+                    val calendar: Calendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                    val date: String = dateFormat.format(calendar.time)
+
+                    if (lastId.isNotEmpty()) {
+                        actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                    }
+
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(actionLogId.toString()),
+                                    encodingClass.encodeData("Account " +
+                                            "'$selectedAccountName' was removed from Favorites."),
+                                    encodingClass.encodeData(date)
+                            )
+                    )
+
+                    alert.cancel()
+                    populateAccounts("")
+                } else {
+                    internetToast()
+                }
             }
 
             true
@@ -280,13 +288,29 @@ class FavoritesFragment : Fragment() {
     private fun setEditTextOnChange() {                                                             // Search real-time
         etFavoritesSearchBox.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                val search = etFavoritesSearchBox.text.toString()
-                populateAccounts(search)
+                if (InternetConnectionClass().isConnected()) {
+                    val search = etFavoritesSearchBox.text.toString()
+                    populateAccounts(search)
+                } else {
+                    internetToast()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

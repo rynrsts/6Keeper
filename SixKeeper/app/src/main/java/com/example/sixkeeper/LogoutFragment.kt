@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -81,8 +83,21 @@ class LogoutFragment : Fragment() {
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            updateUserStatus()
-            goToLoginActivity()
+            if (InternetConnectionClass().isConnected()) {
+                updateUserStatus()
+                goToLoginActivity()
+            } else {
+                val toast: Toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.many_internet_connection,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+                activity?.onBackPressed()
+            }
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
             dialog.cancel()

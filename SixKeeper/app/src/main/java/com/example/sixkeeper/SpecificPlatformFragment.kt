@@ -166,45 +166,53 @@ class SpecificPlatformFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.ivSpecificPlatAddAccounts)
 
         ivSpecificPlatAddAccounts.setOnClickListener {
-            val action = SpecificPlatformFragmentDirections
-                    .actionSpecificPlatformFragmentToAddAccountFragment(
-                            args.specificPlatformId,
-                            args.specificPlatformName,
-                            args.specificCategoryName,
-                            "add",
-                            ""
-                    )
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                val action = SpecificPlatformFragmentDirections
+                        .actionSpecificPlatformFragmentToAddAccountFragment(
+                                args.specificPlatformId,
+                                args.specificPlatformName,
+                                args.specificCategoryName,
+                                "add",
+                                ""
+                        )
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         lvSpecificPlatContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            lvSpecificPlatContainer.apply {
-                lvSpecificPlatContainer.isEnabled = false                                           // Set un-clickable for 1 second
+            if (InternetConnectionClass().isConnected()) {
+                lvSpecificPlatContainer.apply {
+                    lvSpecificPlatContainer.isEnabled = false                                       // Set un-clickable for 1 second
 
-                val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
-                val selectedAccountValue = selectedAccount.split("ramjcammjar")
-                selectedAccountId = selectedAccountValue[0]
-                selectedAccountName = selectedAccountValue[1]
-                selectedAccountIsFavorites = selectedAccountValue[2]
-                clickAction = "View Account"
+                    val selectedAccount = lvSpecificPlatContainer.getItemAtPosition(i).toString()
+                    val selectedAccountValue = selectedAccount.split("ramjcammjar")
+                    selectedAccountId = selectedAccountValue[0]
+                    selectedAccountName = selectedAccountValue[1]
+                    selectedAccountIsFavorites = selectedAccountValue[2]
+                    clickAction = "View Account"
 
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
 
-                postDelayed(
-                        {
-                            lvSpecificPlatContainer.isEnabled = true
-                        }, 1000
-                )
+                    postDelayed(
+                            {
+                                lvSpecificPlatContainer.isEnabled = true
+                            }, 1000
+                    )
+                }
+            } else {
+                internetToast()
             }
         })
     }
@@ -263,38 +271,46 @@ class SpecificPlatformFragment : Fragment() {
                     dialogView.findViewById(R.id.llAccountsDelete)
                                                                                                     // Appear in or remove from Favorites
             llAccountsFavorites.setOnClickListener {
-                val status = databaseHandlerClass.updateIsFavorites(
-                        encodingClass.encodeData(selectedAccountId),
-                        encodingClass.encodeData(setIsFavorites.toString())
-                )
-
-                if (status > -1) {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            message,
-                            Toast.LENGTH_SHORT
+                if (InternetConnectionClass().isConnected()) {
+                    val status = databaseHandlerClass.updateIsFavorites(
+                            encodingClass.encodeData(selectedAccountId),
+                            encodingClass.encodeData(setIsFavorites.toString())
                     )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
 
-                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
-                        UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData(actionMessage),
-                                encodingClass.encodeData(getCurrentDate())
+                    if (status > -1) {
+                        val toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                message,
+                                Toast.LENGTH_SHORT
                         )
-                )
+                        toast?.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
 
-                alert.cancel()
-                populateAccounts("")
+                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
+                            UserActionLogModelClass(
+                                    encodingClass.encodeData(getLastActionLogId().toString()),
+                                    encodingClass.encodeData(actionMessage),
+                                    encodingClass.encodeData(getCurrentDate())
+                            )
+                    )
+
+                    alert.cancel()
+                    populateAccounts("")
+                } else {
+                    internetToast()
+                }
             }
-                                                                                                    // Delete Account
+
             llAccountsDelete.setOnClickListener {
-                alert.cancel()
-                showDelete()
+                if (InternetConnectionClass().isConnected()) {
+                    alert.cancel()
+                    showDelete()
+                } else {
+                    internetToast()
+                }
             }
 
             true
@@ -325,19 +341,23 @@ class SpecificPlatformFragment : Fragment() {
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            val goToConfirmActivity = Intent(
-                    appCompatActivity,
-                    ConfirmActionActivity::class.java
-            )
+            if (InternetConnectionClass().isConnected()) {
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
 
-            clickAction = "Delete Account"
+                clickAction = "Delete Account"
+            } else {
+                internetToast()
+            }
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
             dialog.cancel()
@@ -412,12 +432,28 @@ class SpecificPlatformFragment : Fragment() {
     private fun setEditTextOnChange() {                                                             // Search real-time
         etSpecificPlatSearchBox.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                val search = etSpecificPlatSearchBox.text.toString()
-                populateAccounts(search)
+                if (InternetConnectionClass().isConnected()) {
+                    val search = etSpecificPlatSearchBox.text.toString()
+                    populateAccounts(search)
+                } else {
+                    internetToast()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 }

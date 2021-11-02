@@ -392,32 +392,48 @@ class AddAccountFragment : Fragment() {
         }
 
         clAddAccountButton.setOnClickListener {
-            if (isNotEmpty()) {
-                credentialField = sAddAccountCredential1.selectedItem.toString()
-                applicationName = tvAddAccountAppSelection.text.toString()
-                description = etAddAccountDescription.text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                if (isNotEmpty()) {
+                    credentialField = sAddAccountCredential1.selectedItem.toString()
+                    applicationName = tvAddAccountAppSelection.text.toString()
+                    description = etAddAccountDescription.text.toString()
 
-                if (cbAddAccountFavorites.isChecked) {
-                    isFavorites = 1
+                    if (cbAddAccountFavorites.isChecked) {
+                        isFavorites = 1
+                    }
+
+                    addOrEditAccount()
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.many_fill_missing_fields,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
-
-                addOrEditAccount()
             } else {
-                val toast: Toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_fill_missing_fields,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
 
             it.apply {
                 clAddAccountButton.isClickable = false                                              // Set un-clickable for 1 second
                 postDelayed({ clAddAccountButton.isClickable = true }, 1000)
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

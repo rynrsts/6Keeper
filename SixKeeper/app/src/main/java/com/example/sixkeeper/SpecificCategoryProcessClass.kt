@@ -187,25 +187,29 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
 
         builder.setPositiveButton(buttonName) { _: DialogInterface, _: Int ->
-            val platformName = etAccountsAddNew.text.toString()
+            if (InternetConnectionClass().isConnected()) {
+                val platformName = etAccountsAddNew.text.toString()
 
-            if (platformName.isNotEmpty()) {
-                addOrUpdatePlatform(
-                        addOrUpdate,
-                        platformName,
-                        selectedPlatformId,
-                        selectedPlatformName
-                )
-            } else {
-                val toast: Toast = Toast.makeText(
-                        getAppCompatActivity().applicationContext,
-                        toastMes,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
+                if (platformName.isNotEmpty()) {
+                    addOrUpdatePlatform(
+                            addOrUpdate,
+                            platformName,
+                            selectedPlatformId,
+                            selectedPlatformName
+                    )
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            getAppCompatActivity().applicationContext,
+                            toastMes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
+            } else {
+                internetToast()
             }
 
             view?.apply {
@@ -382,23 +386,27 @@ open class SpecificCategoryProcessClass : Fragment() {
         }
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            platformIdTemp = selectedPlatformId
-            platformNameTemp = selectedPlatformName
+            if (InternetConnectionClass().isConnected()) {
+                platformIdTemp = selectedPlatformId
+                platformNameTemp = selectedPlatformName
 
-            if (selectedPlatformNum == "0") {
-                deletePlatform()
+                if (selectedPlatformNum == "0") {
+                    deletePlatform()
+                } else {
+                    val goToConfirmActivity = Intent(
+                            appCompatActivity,
+                            ConfirmActionActivity::class.java
+                    )
+
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(goToConfirmActivity, 16914)
+                    appCompatActivity.overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+                }
             } else {
-                val goToConfirmActivity = Intent(
-                        appCompatActivity,
-                        ConfirmActionActivity::class.java
-                )
-
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2,
-                        R.anim.anim_0
-                )
+                internetToast()
             }
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -438,6 +446,18 @@ open class SpecificCategoryProcessClass : Fragment() {
         )
 
         populatePlatforms("")
+    }
+
+    fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -161,57 +161,71 @@ class UserAccountFragment : Fragment() {
                             appCompatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                val inflater = this.layoutInflater
-                val dialogView = inflater.inflate(
-                        R.layout.layout_user_account_profile_photo, null
-                )
-                val removeProfilePhoto = inflater.inflate(
-                        R.layout.layout_user_account_remove_photo, null
-                )
-                val llProfilePhotoAdd: LinearLayout =
-                        dialogView.findViewById(R.id.llProfilePhotoAdd)
-                val tvProfilePhotoAdd: TextView = dialogView.findViewById(R.id.tvProfilePhotoAdd)
-                val llProfilePhotoRemove: LinearLayout =
-                        dialogView.findViewById(R.id.llProfilePhotoRemove)
-                val profilePhoto = databaseHandlerClass.viewProfilePhoto()
-
-                if (profilePhoto.contentEquals("".toByteArray())) {
-                    tvProfilePhotoAdd.setText(R.string.user_change_profile_photo)
-                } else {
-                    llProfilePhotoRemove.addView(removeProfilePhoto)
-                    tvProfilePhotoAdd.setText(R.string.user_add_profile_photo)
-                }
-
-                builder.setView(dialogView)
-
-                val alert: AlertDialog = builder.create()
-                alert.apply {
-                    window?.setBackgroundDrawable(
-                            ContextCompat.getDrawable(context, R.drawable.layout_alert_dialog)
+                if (InternetConnectionClass().isConnected()) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    val inflater = this.layoutInflater
+                    val dialogView = inflater.inflate(
+                            R.layout.layout_user_account_profile_photo, null
                     )
-                    setTitle(R.string.user_profile_photo)
-                    show()
-                }
+                    val removeProfilePhoto = inflater.inflate(
+                            R.layout.layout_user_account_remove_photo, null
+                    )
+                    val llProfilePhotoAdd: LinearLayout =
+                            dialogView.findViewById(R.id.llProfilePhotoAdd)
+                    val tvProfilePhotoAdd: TextView = dialogView.findViewById(R.id.tvProfilePhotoAdd)
+                    val llProfilePhotoRemove: LinearLayout =
+                            dialogView.findViewById(R.id.llProfilePhotoRemove)
+                    val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
-                llProfilePhotoAdd.setOnClickListener {
-                    (activity as IndexActivity).setTimer()
+                    if (profilePhoto.contentEquals("".toByteArray())) {
+                        tvProfilePhotoAdd.setText(R.string.user_change_profile_photo)
+                    } else {
+                        llProfilePhotoRemove.addView(removeProfilePhoto)
+                        tvProfilePhotoAdd.setText(R.string.user_add_profile_photo)
+                    }
 
-                    val mediaStorage =
-                            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    builder.setView(dialogView)
 
-                    @Suppress("DEPRECATION")
-                    startActivityForResult(mediaStorage, 135491)
+                    val alert: AlertDialog = builder.create()
+                    alert.apply {
+                        window?.setBackgroundDrawable(
+                                ContextCompat.getDrawable(context, R.drawable.layout_alert_dialog)
+                        )
+                        setTitle(R.string.user_profile_photo)
+                        show()
+                    }
 
-                    alert.cancel()
-                }
+                    llProfilePhotoAdd.setOnClickListener {
+                        if (InternetConnectionClass().isConnected()) {
+                            (activity as IndexActivity).setTimer(30)
 
-                llProfilePhotoRemove.setOnClickListener {
-                    ivUserAccountPhoto.setImageDrawable(null)
-                    updateProfilePhoto("removed!", "".toByteArray())
-                    addEventToActionLog("removed")
-                    setProfilePhotoInMenu(null)
-                    alert.cancel()
+                            val mediaStorage = Intent(
+                                    Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                            )
+
+                            @Suppress("DEPRECATION")
+                            startActivityForResult(mediaStorage, 135491)
+                        } else {
+                            internetToast()
+                        }
+
+                        alert.cancel()
+                    }
+
+                    llProfilePhotoRemove.setOnClickListener {
+                        if (InternetConnectionClass().isConnected()) {
+                            ivUserAccountPhoto.setImageDrawable(null)
+                            updateProfilePhoto("removed!", "".toByteArray())
+                            addEventToActionLog("removed")
+                            setProfilePhotoInMenu(null)
+                        } else {
+                            internetToast()
+                        }
+
+                        alert.cancel()
+                    }
+                } else {
+                    internetToast()
                 }
             } else {
                 ActivityCompat.requestPermissions(
@@ -225,59 +239,91 @@ class UserAccountFragment : Fragment() {
         }
 
         clUserAccountFirstName.setOnClickListener {
-            field = "first name"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "first name"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountLastName.setOnClickListener {
-            field = "last name"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "last name"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountBirthDate.setOnClickListener {
-            field = "birth date"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "birth date"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountEmail.setOnClickListener {
-            field = "email"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "email"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountMobileNum.setOnClickListener {
-            field = "mobile number"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "mobile number"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountUsername.setOnClickListener {
-            field = "username"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "username"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountPassword.setOnClickListener {
-            field = "password"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "password"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountMasterPIN.setOnClickListener {
-            field = "master pin"
-            val action = UserAccountFragmentDirections
-                    .actionUserAccountFragmentToUserAccountEditFragment(field)
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                field = "master pin"
+                val action = UserAccountFragmentDirections
+                        .actionUserAccountFragmentToUserAccountEditFragment(field)
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clUserAccountExportData.setOnClickListener {
@@ -285,56 +331,65 @@ class UserAccountFragment : Fragment() {
                             appCompatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                builder.setMessage("Export data to 'SixKeeper' folder in the phone storage?")
-                builder.setCancelable(false)
+                if (InternetConnectionClass().isConnected()) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    builder.setMessage("Export data to 'SixKeeper' folder in the phone storage?")
+                    builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    @Suppress("DEPRECATION")
-                    val directory =
-                            File(Environment.getExternalStorageDirectory(), "/SixKeeper")      // Create folder if not existing
-                    directory.mkdirs()
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            @Suppress("DEPRECATION")
+                            val directory = File(                                                   // Create folder if not existing
+                                    Environment.getExternalStorageDirectory(), "/SixKeeper"
+                            )
+                            directory.mkdirs()
 
-                    @Suppress("DEPRECATION")
-                    val sd = Environment.getExternalStorageDirectory()
-                    val data = Environment.getDataDirectory()
-                    val source: FileChannel?
-                    val destination: FileChannel?
-                    val packageName = context?.packageName
-                    val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                    val backupDBPath = "/SixKeeper/SixKeeperDatabase"
-                    val currentDB = File(data, currentDBPath)
-                    val backupDB = File(sd, backupDBPath)
+                            @Suppress("DEPRECATION")
+                            val sd = Environment.getExternalStorageDirectory()
+                            val data = Environment.getDataDirectory()
+                            val source: FileChannel?
+                            val destination: FileChannel?
+                            val packageName = context?.packageName
+                            val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
+                            val backupDBPath = "/SixKeeper/SixKeeperDatabase"
+                            val currentDB = File(data, currentDBPath)
+                            val backupDB = File(sd, backupDBPath)
 
-                    try {
-                        source = FileInputStream(currentDB).channel
-                        destination = FileOutputStream(backupDB).channel
-                        destination.transferFrom(source, 0, source.size())                          // Save data to folder
-                        source.close()
-                        destination.close()
+                            try {
+                                source = FileInputStream(currentDB).channel
+                                destination = FileOutputStream(backupDB).channel
+                                destination.transferFrom(source, 0, source.size())          // Save data to folder
+                                source.close()
+                                destination.close()
 
-                        showToast("Data was exported to the 'SixKeeper' folder in the " +
-                                "internal storage!")
+                                showToast("Data was exported to the 'SixKeeper' folder in the " +
+                                        "internal storage!")
 
-                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
-                                UserActionLogModelClass(
-                                        encodingClass.encodeData(getLastActionLogId().toString()),
-                                        encodingClass.encodeData("Data was exported to the " +
-                                                "'SixKeeper' folder in the internal storage."),
-                                        encodingClass.encodeData(getCurrentDate())
+                                databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
+                                        UserActionLogModelClass(
+                                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                                encodingClass.encodeData("Data was exported to the " +
+                                                        "'SixKeeper' folder in the internal storage."),
+                                                encodingClass.encodeData(getCurrentDate())
+                                        )
                                 )
-                        )
-                    } catch (e: IOException) {
-                        showToast("Cannot find folder")
+                            } catch (e: IOException) {
+                                showToast("Cannot find folder")
+                            }
+                        } else {
+                            internetToast()
+                        }
                     }
-                }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
 
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title_confirm)
-                alert.show()
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title_confirm)
+                    alert.show()
+                } else {
+                    internetToast()
+                }
             } else {
                 ActivityCompat.requestPermissions(                                                  // Request permission
                         appCompatActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -346,6 +401,18 @@ class UserAccountFragment : Fragment() {
                 clUserAccountExportData.isClickable = false                                         // Set un-clickable for 1 second
                 postDelayed({ clUserAccountExportData.isClickable = true }, 500)
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

@@ -1,11 +1,13 @@
 package com.example.sixkeeper
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class ResetSelectionFragment : Fragment() {
@@ -42,11 +44,33 @@ class ResetSelectionFragment : Fragment() {
                 activity as ForgotCredentialsActivity
 
         acbResetSelectionEnterInfo.setOnClickListener {
-            forgotCredentialsActivity.manageForgotFragments("securityQuestion")
+            if (InternetConnectionClass().isConnected()) {
+                forgotCredentialsActivity.manageForgotFragments("securityQuestion")
+            } else {
+                internetToast()
+            }
         }
 
         acbResetSelectionMobileNumber.setOnClickListener {
-            forgotCredentialsActivity.manageForgotFragments("mobileNumberValidation")
+            if (InternetConnectionClass().isConnected()) {
+                forgotCredentialsActivity.manageForgotFragments(
+                        "mobileNumberValidation"
+                )
+            } else {
+                internetToast()
+            }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 }

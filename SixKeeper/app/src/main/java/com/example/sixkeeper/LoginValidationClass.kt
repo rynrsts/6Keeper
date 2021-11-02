@@ -169,7 +169,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         )
     }
 
-    fun validateUsername(): Boolean {                                                         // Validate username
+    fun validateUsername(): Boolean {                                                               // Validate username
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 

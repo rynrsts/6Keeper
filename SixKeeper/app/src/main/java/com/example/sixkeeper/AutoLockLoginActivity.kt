@@ -35,6 +35,8 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
+    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auto_lock_login)
@@ -77,13 +79,13 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
                 if (!keyguardManager.isKeyguardSecure) {
                     return
                 } else {
-                    val ivConfirmActionFingerprintIcon: ImageView =
-                            findViewById(R.id.ivConfirmActionFingerprintIcon)
+                    val ivAutoLockFingerprintIcon: ImageView =
+                            findViewById(R.id.ivAutoLockFingerprintIcon)
 
                     if (getFingerprintStatus() == 1) {
-                        ivConfirmActionFingerprintIcon.setImageResource(R.drawable.ic_fingerprint_green)
+                        ivAutoLockFingerprintIcon.setImageResource(R.drawable.ic_fingerprint_green)
 
-                        ivConfirmActionFingerprintIcon.setOnClickListener {
+                        ivAutoLockFingerprintIcon.setOnClickListener {
                             val toast: Toast = Toast.makeText(
                                     applicationContext,
                                     R.string.many_fingerprint_available,
@@ -103,11 +105,13 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            val helper = FingerprintHandlerClass(this, "auto lock")
-                            helper.startAuth(fingerprintManager, cryptoObject)
+                            fingerprintHandlerClass = FingerprintHandlerClass(
+                                    this, "auto lock"
+                            )
+                            fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {
-                        ivConfirmActionFingerprintIcon.isEnabled = false
+                        ivAutoLockFingerprintIcon.isEnabled = false
                     }
                 }
             } catch (e: NullPointerException) {
@@ -121,19 +125,19 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore")
             keyGenerator = KeyGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES,
-                "AndroidKeyStore"
+                    KeyProperties.KEY_ALGORITHM_AES,
+                    "AndroidKeyStore"
             )
             keyStore.load(null)
             keyGenerator.init(
-                KeyGenParameterSpec.Builder(
-                    keyName,
-                    KeyProperties.PURPOSE_ENCRYPT or  KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build()
+                    KeyGenParameterSpec.Builder(
+                            keyName,
+                            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                    )
+                            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                            .setUserAuthenticationRequired(true)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                            .build()
             )
             keyGenerator.generateKey()
         } catch (e: KeyStoreException) {
@@ -160,9 +164,9 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
     private fun initCipher(): Boolean {
         try {
             cipher = Cipher.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES + "/" +
-                        KeyProperties.BLOCK_MODE_CBC + "/" +
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7
+                    KeyProperties.KEY_ALGORITHM_AES + "/" +
+                            KeyProperties.BLOCK_MODE_CBC + "/" +
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7
             )
         } catch (e: NoSuchAlgorithmException) {
             throw RuntimeException("Failed to get Cipher", e)
@@ -271,32 +275,37 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
             it.apply {
                 getAcbAutoLockLoginButtonCancel().isClickable = false                               // Set button un-clickable for 1 second
                 postDelayed(
-                    {
-                        getAcbAutoLockLoginButtonCancel().isClickable = true
-                    }, 1000
+                        {
+                            getAcbAutoLockLoginButtonCancel().isClickable = true
+                        }, 1000
                 )
             }
 
             onBackPressed()
+            fingerprintHandlerClass.stopFingerAuth()
         }
 
         tvAutoLockLoginForgotPass.setOnClickListener {
-            val goToForgotCredentialsActivity =
-                Intent(this, ForgotCredentialsActivity::class.java)
-            goToForgotCredentialsActivity.putExtra("credential", "master pin")
+            if (InternetConnectionClass().isConnected()) {
+                val goToForgotCredentialsActivity =
+                        Intent(this, ForgotCredentialsActivity::class.java)
+                goToForgotCredentialsActivity.putExtra("credential", "master pin")
 
-            startActivity(goToForgotCredentialsActivity)
-            overridePendingTransition(
-                R.anim.anim_enter_right_to_left_2,
-                R.anim.anim_exit_right_to_left_2
-            )
+                startActivity(goToForgotCredentialsActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_right_to_left_2,
+                        R.anim.anim_exit_right_to_left_2
+                )
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 tvAutoLockLoginForgotPass.isClickable = false                                       // Set button un-clickable for 1 second
                 postDelayed(
-                    {
-                        tvAutoLockLoginForgotPass.isClickable = true
-                    }, 1000
+                        {
+                            tvAutoLockLoginForgotPass.isClickable = true
+                        }, 1000
                 )
             }
         }

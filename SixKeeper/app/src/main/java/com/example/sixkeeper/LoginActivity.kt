@@ -67,63 +67,67 @@ class LoginActivity : LoginValidationClass() {
         }
 
         acbLoginLogin.setOnClickListener {
-            if (isNotEmpty()) {
-                val waitingTime = waitingTime()
+            if (InternetConnectionClass().isConnected()) {
+                if (isNotEmpty()) {
+                    val waitingTime = waitingTime()
 
-                if (validateUserCredential()) {
-                    if (waitingTime == 0.toLong()) {
-                        restartAttemptAndTime()
-                        updateUserStatus()
+                    if (validateUserCredential()) {
+                        if (waitingTime == 0.toLong()) {
+                            restartAttemptAndTime()
+                            updateUserStatus()
 
-                        closeKeyboard()
+                            closeKeyboard()
 
-                        val goToMasterPINActivity = Intent(
-                                this,
-                                MasterPINActivity::class.java
-                        )
-                        startActivity(goToMasterPINActivity)
-                        overridePendingTransition(
-                                R.anim.anim_enter_bottom_to_top_2,
-                                R.anim.anim_0
-                        )
+                            val goToMasterPINActivity = Intent(
+                                    this,
+                                    MasterPINActivity::class.java
+                            )
+                            startActivity(goToMasterPINActivity)
+                            overridePendingTransition(
+                                    R.anim.anim_enter_bottom_to_top_2,
+                                    R.anim.anim_0
+                            )
 
-                        this.finish()
+                            this.finish()
+                        } else {
+                            lockToast(waitingTime)
+                        }
+                    } else if (validateUsername()) {
+                        if (waitingTime == 0.toLong()) {
+                            updateAccountStatus()
+                        } else {
+                            lockToast(waitingTime)
+                        }
+
+                        setEtLoginPassword("")
+                        getEtLoginPassword().requestFocus()
                     } else {
-                        lockToast(waitingTime)
-                    }
-                } else if (validateUsername()) {
-                    if (waitingTime == 0.toLong()) {
-                        updateAccountStatus()
-                    } else {
-                        lockToast(waitingTime)
-                    }
+                        val toast: Toast = Toast.makeText(
+                                applicationContext,
+                                R.string.login_invalid_credentials,
+                                Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
 
-                    setEtLoginPassword("")
-                    getEtLoginPassword().requestFocus()
+                        setEtLoginPassword("")
+                        getEtLoginPassword().requestFocus()
+                    }
                 } else {
                     val toast: Toast = Toast.makeText(
                             applicationContext,
-                            R.string.login_invalid_credentials,
+                            R.string.login_enter_credentials,
                             Toast.LENGTH_SHORT
                     )
                     toast.apply {
                         setGravity(Gravity.CENTER, 0, 0)
                         show()
                     }
-
-                    setEtLoginPassword("")
-                    getEtLoginPassword().requestFocus()
                 }
             } else {
-                val toast: Toast = Toast.makeText(
-                        applicationContext,
-                        R.string.login_enter_credentials,
-                        Toast.LENGTH_SHORT
-                )
-                toast.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
 
             it.apply {
@@ -137,60 +141,68 @@ class LoginActivity : LoginValidationClass() {
         }
 
         tvLoginImportData.setOnClickListener {
-            createFolder()
+            if (InternetConnectionClass().isConnected()) {
+                createFolder()
 
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setMessage("Make sure there is an exported file named 'SixKeeperDatabase' in " +
-                    "the 'SixKeeper' folder in the internal storage. Continue?")
-            builder.setCancelable(false)
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setMessage("Make sure there is an exported file named 'SixKeeperDatabase' " +
+                        "in the 'SixKeeper' folder in the internal storage. Continue?")
+                builder.setCancelable(false)
 
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                @Suppress("DEPRECATION")
-                val sd = Environment.getExternalStorageDirectory()
-                val data = Environment.getDataDirectory()
-                val source: FileChannel?
-                val destination: FileChannel?
-                val packageName = this.packageName
-                val currentDBPath = "SixKeeper/SixKeeperDatabase"
-                val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                val currentDB = File(sd, currentDBPath)
-                val backupDB = File(data, backupDBPath)
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    if (InternetConnectionClass().isConnected()) {
+                        @Suppress("DEPRECATION")
+                        val sd = Environment.getExternalStorageDirectory()
+                        val data = Environment.getDataDirectory()
+                        val source: FileChannel?
+                        val destination: FileChannel?
+                        val packageName = this.packageName
+                        val currentDBPath = "SixKeeper/SixKeeperDatabase"
+                        val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
+                        val currentDB = File(sd, currentDBPath)
+                        val backupDB = File(data, backupDBPath)
 
-                try {
-                    source = FileInputStream(currentDB).channel
-                    destination = FileOutputStream(backupDB).channel
-                    destination.transferFrom(source, 0, source.size())                              // Save data to folder
-                    source.close()
-                    destination.close()
+                        try {
+                            source = FileInputStream(currentDB).channel
+                            destination = FileOutputStream(backupDB).channel
+                            destination.transferFrom(source, 0, source.size())                              // Save data to folder
+                            source.close()
+                            destination.close()
 
-                    val toast: Toast = Toast.makeText(
-                            this,
-                            "Data was imported! Please enter your credentials",
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                } catch (e: IOException) {
-                    val toast: Toast = Toast.makeText(
-                            this,
-                            "Cannot find folder and/or file",
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
+                            val toast: Toast = Toast.makeText(
+                                    this,
+                                    "Data was imported! Please enter your credentials",
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        } catch (e: IOException) {
+                            val toast: Toast = Toast.makeText(
+                                    this,
+                                    "Cannot find folder and/or file",
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
+                    } else {
+                        internetToast()
                     }
                 }
-            }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
 
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.login_import_data_title)
-            alert.show()
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.login_import_data_title)
+                alert.show()
+            } else {
+                internetToast()
+            }
 
             it.apply {
                 tvLoginImportData.isClickable = false                                               // Set button un-clickable for 1 second
@@ -203,22 +215,26 @@ class LoginActivity : LoginValidationClass() {
         }
 
         acbLoginCreateNewAccount.setOnClickListener {
-            val goToCreateNewAccountActivity =
-                    Intent(this, CreateNewAccountActivity::class.java)
+            if (InternetConnectionClass().isConnected()) {
+                val goToCreateNewAccountActivity =
+                        Intent(this, CreateNewAccountActivity::class.java)
 
-            startActivity(goToCreateNewAccountActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
-
-            it.apply {
-                acbLoginCreateNewAccount.isClickable = false                                        // Set button un-clickable for 1 second
-                postDelayed(
-                        {
-                            acbLoginCreateNewAccount.isClickable = true
-                        }, 1000
+                startActivity(goToCreateNewAccountActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_right_to_left_2,
+                        R.anim.anim_exit_right_to_left_2
                 )
+
+                it.apply {
+                    acbLoginCreateNewAccount.isClickable = false                                        // Set button un-clickable for 1 second
+                    postDelayed(
+                            {
+                                acbLoginCreateNewAccount.isClickable = true
+                            }, 1000
+                    )
+                }
+            } else {
+                internetToast()
             }
         }
     }
@@ -308,9 +324,9 @@ class LoginActivity : LoginValidationClass() {
 
     private fun internetToast() {
         val toast: Toast = Toast.makeText(
-            applicationContext,
-            R.string.many_internet_connection,
-            Toast.LENGTH_SHORT
+                applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
         )
         toast.apply {
             setGravity(Gravity.CENTER, 0, 0)

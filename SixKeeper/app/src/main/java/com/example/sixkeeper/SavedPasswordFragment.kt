@@ -125,6 +125,7 @@ class SavedPasswordFragment : Fragment() {
         val clSavedPassCopy: ConstraintLayout = appCompatActivity.findViewById(R.id.clSavedPassCopy)
 
         clSavedPassDelete.setOnClickListener {
+            if (InternetConnectionClass().isConnected()) {
 //            var s = ""
 //
 //            for (i in 0 until modelArrayList.size) {
@@ -133,50 +134,57 @@ class SavedPasswordFragment : Fragment() {
 //
 //            Toast.makeText(appCompatActivity, s, Toast.LENGTH_LONG).show()
 
-            var itemCheck = false
+                var itemCheck = false
 
-            for (i in 0 until modelArrayList.size) {
-                if (modelArrayList[i].getSelected()) {
-                    itemCheck = true
-                    break
+                for (i in 0 until modelArrayList.size) {
+                    if (modelArrayList[i].getSelected()) {
+                        itemCheck = true
+                        break
+                    }
                 }
-            }
 
-            if (itemCheck) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                builder.setMessage(R.string.saved_password_delete_alert)
-                builder.setCancelable(false)
+                if (itemCheck) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    builder.setMessage(R.string.saved_password_delete_alert)
+                    builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    val goToConfirmActivity = Intent(
-                            appCompatActivity,
-                            ConfirmActionActivity::class.java
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            val goToConfirmActivity = Intent(
+                                    appCompatActivity,
+                                    ConfirmActionActivity::class.java
+                            )
+
+                            @Suppress("DEPRECATION")
+                            startActivityForResult(goToConfirmActivity, 16914)
+                            appCompatActivity.overridePendingTransition(
+                                    R.anim.anim_enter_bottom_to_top_2,
+                                    R.anim.anim_0
+                            )
+                        } else {
+                            internetToast()
+                        }
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title_confirm)
+                    alert.show()
+                } else {
+                    val toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.many_nothing_to_delete,
+                            Toast.LENGTH_SHORT
                     )
-
-                    @Suppress("DEPRECATION")
-                    startActivityForResult(goToConfirmActivity, 16914)
-                    appCompatActivity.overridePendingTransition(
-                            R.anim.anim_enter_bottom_to_top_2,
-                            R.anim.anim_0
-                    )
+                    toast?.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
-
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.many_alert_title_confirm)
-                alert.show()
             } else {
-                val toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.many_nothing_to_delete,
-                        Toast.LENGTH_SHORT
-                )
-                toast?.apply {
-                    setGravity(Gravity.CENTER, 0, 0)
-                    show()
-                }
+                internetToast()
             }
 
             it.apply {
@@ -190,63 +198,67 @@ class SavedPasswordFragment : Fragment() {
         }
 
         clSavedPassCopy.setOnClickListener {
-            var numOfSelected = 0
-            var password = ""
-            val toast: Toast?
+            if (InternetConnectionClass().isConnected()) {
+                var numOfSelected = 0
+                var password = ""
+                val toast: Toast?
 
-            for (i in 0 until modelArrayList.size) {
-                if (modelArrayList[i].getSelected()) {
-                    numOfSelected++
-                    password = modelArrayList[i].getPassword()
+                for (i in 0 until modelArrayList.size) {
+                    if (modelArrayList[i].getSelected()) {
+                        numOfSelected++
+                        password = modelArrayList[i].getPassword()
 
-                    if (numOfSelected == 2) {
-                        break
+                        if (numOfSelected == 2) {
+                            break
+                        }
                     }
                 }
-            }
 
-            if (numOfSelected > 0) {
-                if (numOfSelected == 1) {
-                    val clipboard: ClipboardManager =
-                            appCompatActivity.getSystemService(
-                                    Context.CLIPBOARD_SERVICE
-                            ) as ClipboardManager
-                    val clip = ClipData.newPlainText("pw", password)
-                    clipboard.setPrimaryClip(clip)
+                if (numOfSelected > 0) {
+                    if (numOfSelected == 1) {
+                        val clipboard: ClipboardManager =
+                                appCompatActivity.getSystemService(
+                                        Context.CLIPBOARD_SERVICE
+                                ) as ClipboardManager
+                        val clip = ClipData.newPlainText("pw", password)
+                        clipboard.setPrimaryClip(clip)
 
-                    toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.saved_password_pass_copy,
-                            Toast.LENGTH_SHORT
-                    )
+                        toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.saved_password_pass_copy,
+                                Toast.LENGTH_SHORT
+                        )
 
-                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
-                            UserActionLogModelClass(
-                                    encodingClass.encodeData(getLastActionLogId().toString()),
-                                    encodingClass.encodeData(
-                                            "Selected saved password was copied."
-                                    ),
-                                    encodingClass.encodeData(getCurrentDate())
-                            )
-                    )
+                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
+                                UserActionLogModelClass(
+                                        encodingClass.encodeData(getLastActionLogId().toString()),
+                                        encodingClass.encodeData(
+                                                "Selected saved password was copied."
+                                        ),
+                                        encodingClass.encodeData(getCurrentDate())
+                                )
+                        )
+                    } else {
+                        toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.saved_password_one_pass,
+                                Toast.LENGTH_SHORT
+                        )
+                    }
                 } else {
                     toast = Toast.makeText(
                             appCompatActivity.applicationContext,
-                            R.string.saved_password_one_pass,
+                            R.string.pass_generator_nothing_to_copy,
                             Toast.LENGTH_SHORT
                     )
                 }
-            } else {
-                toast = Toast.makeText(
-                        appCompatActivity.applicationContext,
-                        R.string.pass_generator_nothing_to_copy,
-                        Toast.LENGTH_SHORT
-                )
-            }
 
-            toast?.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
+                toast?.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            } else {
+                internetToast()
             }
 
             it.apply {
@@ -257,6 +269,18 @@ class SavedPasswordFragment : Fragment() {
                         }, 100
                 )
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

@@ -291,156 +291,166 @@ class SettingsFragment : Fragment() {
     @SuppressLint("InflateParams")
     private fun setSwitchOnOff() {
         scSettingsScreenCapture.setOnClickListener {
-            val message: String
+            if (InternetConnectionClass().isConnected()) {
+                val message: String
 
-            if (scSettingsScreenCapture.isChecked) {
-                databaseHandlerClass.updateSettings(                                                // Update Screen Capture to 1
-                        "screen_capture",
-                        encodingClass.encodeData(1.toString())
-                )
-
-                tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
-                message = "Screen Capture was allowed."
-            } else {
-                databaseHandlerClass.updateSettings(                                                // Update Screen Capture to 0
-                        "screen_capture",
-                        encodingClass.encodeData(0.toString())
-                )
-
-                tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
-                message = "Screen Capture was blocked."
-            }
-
-            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
-                    UserActionLogModelClass(
-                            encodingClass.encodeData(getLastActionLogId().toString()),
-                            encodingClass.encodeData(message),
-                            encodingClass.encodeData(getCurrentDate())
+                if (scSettingsScreenCapture.isChecked) {
+                    databaseHandlerClass.updateSettings(                                            // Update Screen Capture to 1
+                            "screen_capture",
+                            encodingClass.encodeData(1.toString())
                     )
-            )
+
+                    tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
+                    message = "Screen Capture was allowed."
+                } else {
+                    databaseHandlerClass.updateSettings(                                            // Update Screen Capture to 0
+                            "screen_capture",
+                            encodingClass.encodeData(0.toString())
+                    )
+
+                    tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
+                    message = "Screen Capture was blocked."
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                encodingClass.encodeData(message),
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+                )
+            } else {
+                internetToast()
+            }
         }
 
         scSettingsAutoLock.setOnClickListener {
-            val message: String
+            if (InternetConnectionClass().isConnected()) {
+                val message: String
 
-            if (scSettingsAutoLock.isChecked) {
-                databaseHandlerClass.updateSettings(                                                // Update Auto Lock to 1
-                        "auto_lock",
-                        encodingClass.encodeData(1.toString())
-                )
-
-                enableAutoLock()
-                message = "Auto Lock was enabled."
-            } else {
-                databaseHandlerClass.updateSettings(                                                // Update Auto Lock to 0
-                        "auto_lock",
-                        encodingClass.encodeData(0.toString())
-                )
-
-                disableAutoLock()
-                message = "Auto Lock was disabled."
-            }
-
-            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
-                    UserActionLogModelClass(
-                            encodingClass.encodeData(getLastActionLogId().toString()),
-                            encodingClass.encodeData(message),
-                            encodingClass.encodeData(getCurrentDate())
+                if (scSettingsAutoLock.isChecked) {
+                    databaseHandlerClass.updateSettings(                                            // Update Auto Lock to 1
+                            "auto_lock",
+                            encodingClass.encodeData(1.toString())
                     )
-            )
+
+                    enableAutoLock()
+                    message = "Auto Lock was enabled."
+                } else {
+                    databaseHandlerClass.updateSettings(                                            // Update Auto Lock to 0
+                            "auto_lock",
+                            encodingClass.encodeData(0.toString())
+                    )
+
+                    disableAutoLock()
+                    message = "Auto Lock was disabled."
+                }
+
+                databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
+                        UserActionLogModelClass(
+                                encodingClass.encodeData(getLastActionLogId().toString()),
+                                encodingClass.encodeData(message),
+                                encodingClass.encodeData(getCurrentDate())
+                        )
+                )
+            } else {
+                internetToast()
+            }
         }
 
         clSettingsAutoLockTimer.setOnClickListener {
             if (scSettingsAutoLock.isChecked) {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-                val inflater = this.layoutInflater
-                val dialogView = inflater.inflate(
-                        R.layout.layout_settings_auto_lock_timer,
-                        null
-                )
-
-                builder.apply {
-                    setView(dialogView)
-                    setCancelable(false)
-                }
-
-                val tvAutoLockTimerLength: TextView =
-                        dialogView.findViewById(R.id.tvAutoLockTimerLength)
-                val acbAutoLockTimerMinus: Button =
-                        dialogView.findViewById(R.id.acbAutoLockTimerMinus)
-                val acbAutoLockTimerPlus: Button =
-                        dialogView.findViewById(R.id.acbAutoLockTimerPlus)
-
-                tvAutoLockTimerLength.text = tvSettingsAutoLockTimerSeconds.text.toString().replace(
-                        " sec",
-                        ""
-                )
-
-                acbAutoLockTimerMinus.setOnClickListener {
-                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
-
-                    if (length > 5) {
-                        tvAutoLockTimerLength.text = (length - 1).toString()
-                    }
-                }
-
-                acbAutoLockTimerPlus.setOnClickListener {
-                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
-
-                    if (length < 30) {
-                        tvAutoLockTimerLength.text = (length + 1).toString()
-                    }
-                }
-
-                builder.setPositiveButton("Save") { _: DialogInterface, _: Int ->
-                    val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
-                    val timer = "$length sec"
-
-                    databaseHandlerClass.updateSettings(                                            // Update Auto Lock Timer
-                            "auto_lock_timer",
-                            encodingClass.encodeData(timer)
+                if (InternetConnectionClass().isConnected()) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                    val inflater = this.layoutInflater
+                    val dialogView = inflater.inflate(
+                            R.layout.layout_settings_auto_lock_timer,
+                            null
                     )
-                    databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
-                            UserActionLogModelClass(
-                                    encodingClass.encodeData(getLastActionLogId().toString()),
-                                    encodingClass.encodeData(
-                                            "Auto Lock Timer was modified to $timer."
-                                    ),
-                                    encodingClass.encodeData(getCurrentDate())
-                            )
-                    )
-                    tvSettingsAutoLockTimerSeconds.text = timer
 
-                    view?.apply {
-                        postDelayed(
-                                {
-                                    closeKeyboard()
-                                }, 50
+                    builder.apply {
+                        setView(dialogView)
+                        setCancelable(false)
+                    }
+
+                    val tvAutoLockTimerLength: TextView =
+                            dialogView.findViewById(R.id.tvAutoLockTimerLength)
+                    val acbAutoLockTimerMinus: Button =
+                            dialogView.findViewById(R.id.acbAutoLockTimerMinus)
+                    val acbAutoLockTimerPlus: Button =
+                            dialogView.findViewById(R.id.acbAutoLockTimerPlus)
+
+                    tvAutoLockTimerLength.text = tvSettingsAutoLockTimerSeconds.text.toString()
+                            .replace(" sec", "")
+
+                    acbAutoLockTimerMinus.setOnClickListener {
+                        val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+
+                        if (length > 5) {
+                            tvAutoLockTimerLength.text = (length - 1).toString()
+                        }
+                    }
+
+                    acbAutoLockTimerPlus.setOnClickListener {
+                        val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+
+                        if (length < 30) {
+                            tvAutoLockTimerLength.text = (length + 1).toString()
+                        }
+                    }
+
+                    builder.setPositiveButton("Save") { _: DialogInterface, _: Int ->
+                        val length = Integer.parseInt(tvAutoLockTimerLength.text.toString())
+                        val timer = "$length sec"
+
+                        databaseHandlerClass.updateSettings(                                        // Update Auto Lock Timer
+                                "auto_lock_timer",
+                                encodingClass.encodeData(timer)
                         )
-                    }
-                }
-
-                builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-
-                    view?.apply {
-                        postDelayed(
-                                {
-                                    closeKeyboard()
-                                }, 50
+                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
+                                UserActionLogModelClass(
+                                        encodingClass.encodeData(getLastActionLogId().toString()),
+                                        encodingClass.encodeData(
+                                                "Auto Lock Timer was modified to $timer."
+                                        ),
+                                        encodingClass.encodeData(getCurrentDate())
+                                )
                         )
-                    }
-                }
+                        tvSettingsAutoLockTimerSeconds.text = timer
 
-                val alert: AlertDialog = builder.create()
-                alert.apply {
-                    window?.setBackgroundDrawable(
-                            ContextCompat.getDrawable(
-                                    appCompatActivity, R.drawable.layout_alert_dialog
+                        view?.apply {
+                            postDelayed(
+                                    {
+                                        closeKeyboard()
+                                    }, 50
                             )
-                    )
-                    setTitle(R.string.settings_auto_lock_timer)
-                    show()
+                        }
+                    }
+
+                    builder.setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+
+                        view?.apply {
+                            postDelayed(
+                                    {
+                                        closeKeyboard()
+                                    }, 50
+                            )
+                        }
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.apply {
+                        window?.setBackgroundDrawable(
+                                ContextCompat.getDrawable(
+                                        appCompatActivity, R.drawable.layout_alert_dialog
+                                )
+                        )
+                        setTitle(R.string.settings_auto_lock_timer)
+                        show()
+                    }
+                } else {
+                    internetToast()
                 }
             }
         }
@@ -511,33 +521,37 @@ class SettingsFragment : Fragment() {
                             show()
                         }
                     } else {
-                        val message: String
+                        if (InternetConnectionClass().isConnected()) {
+                            val message: String
 
-                        if (scSettingsFingerprint.isChecked) {
-                            databaseHandlerClass.updateSettings(                                    // Update Fingerprint to 1
-                                    "fingerprint",
-                                    encodingClass.encodeData(1.toString())
-                            )
-
-                            tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
-                            message = "Fingerprint authentication was enabled."
-                        } else {
-                            databaseHandlerClass.updateSettings(                                    // Update Fingerprint to 0
-                                    "fingerprint",
-                                    encodingClass.encodeData(0.toString())
-                            )
-
-                            tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
-                            message = "Fingerprint authentication was disabled."
-                        }
-
-                        databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
-                                UserActionLogModelClass(
-                                        encodingClass.encodeData(getLastActionLogId().toString()),
-                                        encodingClass.encodeData(message),
-                                        encodingClass.encodeData(getCurrentDate())
+                            if (scSettingsFingerprint.isChecked) {
+                                databaseHandlerClass.updateSettings(                                // Update Fingerprint to 1
+                                        "fingerprint",
+                                        encodingClass.encodeData(1.toString())
                                 )
-                        )
+
+                                tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
+                                message = "Fingerprint authentication was enabled."
+                            } else {
+                                databaseHandlerClass.updateSettings(                                // Update Fingerprint to 0
+                                        "fingerprint",
+                                        encodingClass.encodeData(0.toString())
+                                )
+
+                                tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
+                                message = "Fingerprint authentication was disabled."
+                            }
+
+                            databaseHandlerClass.addEventToActionLog(                               // Add event to Action Log
+                                    UserActionLogModelClass(
+                                            encodingClass.encodeData(getLastActionLogId().toString()),
+                                            encodingClass.encodeData(message),
+                                            encodingClass.encodeData(getCurrentDate())
+                                    )
+                            )
+                        } else {
+                            internetToast()
+                        }
                     }
                 } catch (e: NullPointerException) {
                     disableFingerprintWithToast()
@@ -545,6 +559,18 @@ class SettingsFragment : Fragment() {
             } else {
                 disableFingerprintWithToast()
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 

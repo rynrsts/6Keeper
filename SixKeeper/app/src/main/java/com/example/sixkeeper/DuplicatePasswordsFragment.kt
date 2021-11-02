@@ -3,12 +3,14 @@ package com.example.sixkeeper
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -94,23 +96,35 @@ class DuplicatePasswordsFragment : Fragment() {
 
     private fun setOnClick() {
         lvDuplicatePasswordsContainer.onItemClickListener = (OnItemClickListener { _, _, i, _ ->
-            val selectedAccount = lvDuplicatePasswordsContainer.getItemAtPosition(i).toString()
-            val selectedAccountValue = selectedAccount.split("ramjcammjar")
-            selectedAccountId = selectedAccountValue[0]
-            selectedAccountName = selectedAccountValue[1]
-            selectedPlatformId = selectedAccountValue[2]
+            if (InternetConnectionClass().isConnected()) {
+                val selectedAccount = lvDuplicatePasswordsContainer.getItemAtPosition(i).toString()
+                val selectedAccountValue = selectedAccount.split("ramjcammjar")
+                selectedAccountId = selectedAccountValue[0]
+                selectedAccountName = selectedAccountValue[1]
+                selectedPlatformId = selectedAccountValue[2]
 
-            val goToConfirmActivity = Intent(
-                    appCompatActivity,
-                    ConfirmActionActivity::class.java
-            )
+                val goToConfirmActivity = Intent(
+                        appCompatActivity,
+                        ConfirmActionActivity::class.java
+                )
 
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
+                )
+            } else {
+                val toast: Toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.many_internet_connection,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+            }
         })
     }
 

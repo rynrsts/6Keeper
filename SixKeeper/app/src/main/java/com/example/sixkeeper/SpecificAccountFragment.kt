@@ -196,218 +196,262 @@ class SpecificAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clSpecificAccDelete)
 
         tvSpecificAccCredentialCopy.setOnClickListener {
-            val credentialField = tvSpecificAccCredentialField.text.toString()
-            val credential = tvSpecificAccCredential.text.toString()
-            val clipboard: ClipboardManager =
-                    appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
-                            as ClipboardManager
-            val clip = ClipData.newPlainText("cred", credential)
-            clipboard.setPrimaryClip(clip)
+            if (InternetConnectionClass().isConnected()) {
+                val credentialField = tvSpecificAccCredentialField.text.toString()
+                val credential = tvSpecificAccCredential.text.toString()
+                val clipboard: ClipboardManager =
+                        appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
+                                as ClipboardManager
+                val clip = ClipData.newPlainText("cred", credential)
+                clipboard.setPrimaryClip(clip)
 
-            showToast(credentialField)
-            addActionLog(credentialField)
+                showToast(credentialField)
+                addActionLog(credentialField)
+            } else {
+                internetToast()
+            }
         }
 
         tvSpecificAccPasswordCopy.setOnClickListener {
-            val password = etSpecificAccPassword.text.toString()
-            val clipboard: ClipboardManager =
-                    appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
-                            as ClipboardManager
-            val clip = ClipData.newPlainText("pw", password)
-            clipboard.setPrimaryClip(clip)
+            if (InternetConnectionClass().isConnected()) {
+                val password = etSpecificAccPassword.text.toString()
+                val clipboard: ClipboardManager =
+                        appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
+                                as ClipboardManager
+                val clip = ClipData.newPlainText("pw", password)
+                clipboard.setPrimaryClip(clip)
 
-            showToast("Password")
-            addActionLog("Password")
+                showToast("Password")
+                addActionLog("Password")
+            } else {
+                internetToast()
+            }
         }
 
         tvSpecificAccWebsiteURLCopy.setOnClickListener {
-            val websiteURL = tvSpecificAccWebsiteURL.text.toString()
-            val clipboard: ClipboardManager =
-                    appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
-                            as ClipboardManager
-            val clip = ClipData.newPlainText("url", websiteURL)
-            clipboard.setPrimaryClip(clip)
+            if (InternetConnectionClass().isConnected()) {
+                val websiteURL = tvSpecificAccWebsiteURL.text.toString()
+                val clipboard: ClipboardManager =
+                        appCompatActivity.getSystemService(Context.CLIPBOARD_SERVICE)
+                                as ClipboardManager
+                val clip = ClipData.newPlainText("url", websiteURL)
+                clipboard.setPrimaryClip(clip)
 
-            showToast("Website url")
-            addActionLog("Website url")
+                showToast("Website url")
+                addActionLog("Website url")
+            } else {
+                internetToast()
+            }
         }
 
         acbSpecificAccOpenPlatform.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-            val inflater = this.layoutInflater
-            val dialogView = inflater.inflate(
-                    R.layout.layout_specific_account_open_platform, null
-            )
-
-            val llSpecificAccountBrowser: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountBrowser)
-            val ivSpecificAccountBrowser: ImageView =
-                    dialogView.findViewById(R.id.ivSpecificAccountBrowser)
-            val tvSpecificAccountBrowser: TextView =
-                    dialogView.findViewById(R.id.tvSpecificAccountBrowser)
-            val llSpecificAccountWebView: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountWebView)
-            val ivSpecificAccountWebView: ImageView =
-                    dialogView.findViewById(R.id.ivSpecificAccountWebView)
-            val llSpecificAccountApp: LinearLayout =
-                    dialogView.findViewById(R.id.llSpecificAccountApp)
-            val ivSpecificAccountApp: ImageView =
-                    dialogView.findViewById(R.id.ivSpecificAccountApp)
-            val tvSpecificAccountApp: TextView =
-                    dialogView.findViewById(R.id.tvSpecificAccountApp)
-
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))                    // Browser
-            var browserPackage = ""
-
-            try {                                                                                   // Set default browser
-                val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
-                        browserIntent, PackageManager.MATCH_DEFAULT_ONLY
-                )!!
-                val browserIcon = resolveInfo.activityInfo.loadIcon(requireContext().packageManager)
-                val browserName = resolveInfo.activityInfo.loadLabel(
-                        requireContext().packageManager
-                ).toString()
-                browserPackage = resolveInfo.activityInfo.packageName
-                val browserNameText = "$browserName (default browser)"
-
-                ivSpecificAccountBrowser.setImageDrawable(browserIcon)
-                tvSpecificAccountBrowser.text = browserNameText
-            } catch (e: Exception) {                                                                // Cannot detect default browser
-                llSpecificAccountBrowser.isEnabled = false
-                ivSpecificAccountBrowser.setImageDrawable(null)
-                tvSpecificAccountBrowser.apply {
-                    val noDefaultBrowser = "Cannot detect default browser"
-                    text = noDefaultBrowser
-                    setTextColor(ContextCompat.getColor(context, R.color.gray))
-                }
-            }
-
-            val packageManager: PackageManager = appCompatActivity.packageManager
-
-            val sixKeeperPackageName = requireContext().packageName                                 // 6Keeper app
-            val sixKeeperIcon = packageManager.getApplicationIcon(
-                    packageManager.getApplicationInfo(
-                            sixKeeperPackageName, PackageManager.GET_META_DATA
-                    )
-            )
-
-            ivSpecificAccountWebView.setImageDrawable(sixKeeperIcon)
-
-            if (applicationName.isNotEmpty()) {                                                     // Selected app
-                val applicationNameText = "$applicationName (selected app)"
-                val applicationIcon = packageManager.getApplicationIcon(
-                        packageManager.getApplicationInfo(
-                                packageName, PackageManager.GET_META_DATA
-                        )
+            if (InternetConnectionClass().isConnected()) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                val inflater = this.layoutInflater
+                val dialogView = inflater.inflate(
+                        R.layout.layout_specific_account_open_platform, null
                 )
 
-                ivSpecificAccountApp.setImageDrawable(applicationIcon)
-                tvSpecificAccountApp.text = applicationNameText
-            } else {
-                llSpecificAccountApp.isEnabled = false
-                ivSpecificAccountApp.setImageDrawable(null)
-                tvSpecificAccountApp.apply {
-                    val noApplication = "No app is selected"
-                    text = noApplication
-                    setTextColor(ContextCompat.getColor(context, R.color.gray))
-                }
-            }
+                val llSpecificAccountBrowser: LinearLayout =
+                        dialogView.findViewById(R.id.llSpecificAccountBrowser)
+                val ivSpecificAccountBrowser: ImageView =
+                        dialogView.findViewById(R.id.ivSpecificAccountBrowser)
+                val tvSpecificAccountBrowser: TextView =
+                        dialogView.findViewById(R.id.tvSpecificAccountBrowser)
+                val llSpecificAccountWebView: LinearLayout =
+                        dialogView.findViewById(R.id.llSpecificAccountWebView)
+                val ivSpecificAccountWebView: ImageView =
+                        dialogView.findViewById(R.id.ivSpecificAccountWebView)
+                val llSpecificAccountApp: LinearLayout =
+                        dialogView.findViewById(R.id.llSpecificAccountApp)
+                val ivSpecificAccountApp: ImageView =
+                        dialogView.findViewById(R.id.ivSpecificAccountApp)
+                val tvSpecificAccountApp: TextView =
+                        dialogView.findViewById(R.id.tvSpecificAccountApp)
 
-            builder.setView(dialogView)
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))        // Browser
+                var browserPackage = ""
 
-            val alert: AlertDialog = builder.create()
-            alert.apply {
-                window?.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
-                                context, R.drawable.layout_alert_dialog
-                        )
-                )
-                setTitle(R.string.specific_account_open_platform)
-                show()
-            }
-
-            closeKeyboard()
-
-            llSpecificAccountBrowser.setOnClickListener {
-                val browserURLIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getWebsiteURL()))
-                browserURLIntent.setPackage(browserPackage)
-                startActivity(browserURLIntent)
-
-                alert.cancel()
-            }
-
-            llSpecificAccountWebView.setOnClickListener {
-                if (DetectInternetConnectionClass().checkInternetConnection(attActivity)) {
-                    val action = SpecificAccountFragmentDirections
-                            .actionSpecificAccountFragmentToWebViewFragment(
-                                    getWebsiteURL()
-                            )
-                    findNavController().navigate(action)
-
-                    alert.cancel()
-                } else {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.specific_account_check_connection, Toast.LENGTH_SHORT
+                try {                                                                               // Set default browser
+                    val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
+                            browserIntent, PackageManager.MATCH_DEFAULT_ONLY
+                    )!!
+                    val browserIcon = resolveInfo.activityInfo.loadIcon(
+                            requireContext().packageManager
                     )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
+                    val browserName = resolveInfo.activityInfo.loadLabel(
+                            requireContext().packageManager
+                    ).toString()
+                    browserPackage = resolveInfo.activityInfo.packageName
+                    val browserNameText = "$browserName (default browser)"
+
+                    ivSpecificAccountBrowser.setImageDrawable(browserIcon)
+                    tvSpecificAccountBrowser.text = browserNameText
+                } catch (e: Exception) {                                                            // Cannot detect default browser
+                    llSpecificAccountBrowser.isEnabled = false
+                    ivSpecificAccountBrowser.setImageDrawable(null)
+                    tvSpecificAccountBrowser.apply {
+                        val noDefaultBrowser = "Cannot detect default browser"
+                        text = noDefaultBrowser
+                        setTextColor(ContextCompat.getColor(context, R.color.gray))
                     }
                 }
-            }
 
-            llSpecificAccountApp.setOnClickListener {
-                try {
-                    val applicationIntent =
-                            appCompatActivity.packageManager.getLaunchIntentForPackage(
-                                    packageName
+                val packageManager: PackageManager = appCompatActivity.packageManager
+
+                val sixKeeperPackageName = requireContext().packageName                             // 6Keeper app
+                val sixKeeperIcon = packageManager.getApplicationIcon(
+                        packageManager.getApplicationInfo(
+                                sixKeeperPackageName, PackageManager.GET_META_DATA
+                        )
+                )
+
+                ivSpecificAccountWebView.setImageDrawable(sixKeeperIcon)
+
+                if (applicationName.isNotEmpty()) {                                                 // Selected app
+                    val applicationNameText = "$applicationName (selected app)"
+                    val applicationIcon = packageManager.getApplicationIcon(
+                            packageManager.getApplicationInfo(
+                                    packageName, PackageManager.GET_META_DATA
                             )
-                    startActivity(applicationIntent)
-                } catch (e: Exception) {
-                } finally {
-                    alert.cancel()
+                    )
+
+                    ivSpecificAccountApp.setImageDrawable(applicationIcon)
+                    tvSpecificAccountApp.text = applicationNameText
+                } else {
+                    llSpecificAccountApp.isEnabled = false
+                    ivSpecificAccountApp.setImageDrawable(null)
+                    tvSpecificAccountApp.apply {
+                        val noApplication = "No app is selected"
+                        text = noApplication
+                        setTextColor(ContextCompat.getColor(context, R.color.gray))
+                    }
                 }
+
+                builder.setView(dialogView)
+
+                val alert: AlertDialog = builder.create()
+                alert.apply {
+                    window?.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                    context, R.drawable.layout_alert_dialog
+                            )
+                    )
+                    setTitle(R.string.specific_account_open_platform)
+                    show()
+                }
+
+                closeKeyboard()
+
+                llSpecificAccountBrowser.setOnClickListener {
+                    if (InternetConnectionClass().isConnected()) {
+                        val browserURLIntent = Intent(
+                                Intent.ACTION_VIEW, Uri.parse(getWebsiteURL())
+                        )
+                        browserURLIntent.setPackage(browserPackage)
+                        startActivity(browserURLIntent)
+
+                        alert.cancel()
+                    } else {
+                        internetToast()
+                    }
+                }
+
+                llSpecificAccountWebView.setOnClickListener {
+                    if (InternetConnectionClass().isConnected()) {
+                        val action = SpecificAccountFragmentDirections
+                                .actionSpecificAccountFragmentToWebViewFragment(
+                                        getWebsiteURL()
+                                )
+                        findNavController().navigate(action)
+
+                        alert.cancel()
+                    } else {
+                        internetToast()
+                    }
+                }
+
+                llSpecificAccountApp.setOnClickListener {
+                    if (InternetConnectionClass().isConnected()) {
+                        try {
+                            val applicationIntent =
+                                    appCompatActivity.packageManager.getLaunchIntentForPackage(
+                                            packageName
+                                    )
+                            startActivity(applicationIntent)
+                        } catch (e: Exception) {
+                        } finally {
+                            alert.cancel()
+                        }
+                    } else {
+                        internetToast()
+                    }
+                }
+            } else {
+                internetToast()
             }
         }
 
         clSpecificAccEdit.setOnClickListener {
-            val action = SpecificAccountFragmentDirections
-                    .actionSpecificAccountFragmentToAddAccountFragment(
-                            args.specificPlatformId, "", "",
-                            "edit", args.specificAccountId,
-                    )
-            findNavController().navigate(action)
+            if (InternetConnectionClass().isConnected()) {
+                val action = SpecificAccountFragmentDirections
+                        .actionSpecificAccountFragmentToAddAccountFragment(
+                                args.specificPlatformId, "",
+                                "", "edit", args.specificAccountId,
+                        )
+                findNavController().navigate(action)
+            } else {
+                internetToast()
+            }
         }
 
         clSpecificAccDelete.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
-            builder.setMessage(R.string.specific_account_delete)
-            builder.setCancelable(false)
+            if (InternetConnectionClass().isConnected()) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+                builder.setMessage(R.string.specific_account_delete)
+                builder.setCancelable(false)
 
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                val goToConfirmActivity = Intent(
-                        appCompatActivity, ConfirmActionActivity::class.java
-                )
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    if (InternetConnectionClass().isConnected()) {
+                        val goToConfirmActivity = Intent(
+                                appCompatActivity, ConfirmActionActivity::class.java
+                        )
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(goToConfirmActivity, 16914)
-                appCompatActivity.overridePendingTransition(
-                        R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
-                )
+                        @Suppress("DEPRECATION")
+                        startActivityForResult(goToConfirmActivity, 16914)
+                        appCompatActivity.overridePendingTransition(
+                                R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
+                        )
+                    } else {
+                        internetToast()
+                    }
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title_confirm)
+                alert.show()
+            } else {
+                internetToast()
             }
-            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                dialog.cancel()
-            }
-
-            val alert: AlertDialog = builder.create()
-            alert.setTitle(R.string.many_alert_title_confirm)
-            alert.show()
 
             it.apply {
                 clSpecificAccDelete.isClickable = false                                             // Set un-clickable for 1 second
                 postDelayed({ clSpecificAccDelete.isClickable = true }, 1000)
             }
+        }
+    }
+
+    private fun internetToast() {
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext, R.string.many_internet_connection,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
         }
     }
 
