@@ -197,7 +197,7 @@ class UserAccountFragment : Fragment() {
 
                     llProfilePhotoAdd.setOnClickListener {
                         if (InternetConnectionClass().isConnected()) {
-                            (activity as IndexActivity).setTimer(30)
+                            (activity as IndexActivity).setTimer(60)
 
                             val mediaStorage = Intent(
                                     Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI

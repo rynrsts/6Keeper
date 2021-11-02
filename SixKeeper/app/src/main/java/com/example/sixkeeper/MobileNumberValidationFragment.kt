@@ -2,6 +2,7 @@ package com.example.sixkeeper
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,12 +26,12 @@ class MobileNumberValidationFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
 
-    private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var etMobileNumberGetOTP: EditText
     private lateinit var etMobileNumberEnterOTP: EditText
 
-    private lateinit var verificationId: String
+    private var mAuth: FirebaseAuth? = null
+
+    private var verificationId: String? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -60,7 +61,7 @@ class MobileNumberValidationFragment : Fragment() {
         etMobileNumberGetOTP = appCompatActivity.findViewById(R.id.etMobileNumberGetOTP)
         etMobileNumberEnterOTP = appCompatActivity.findViewById(R.id.etMobileNumberEnterOTP)
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()
     }
 
     private fun setMobileNumber() {
@@ -84,7 +85,7 @@ class MobileNumberValidationFragment : Fragment() {
 
         acbMobileNumberGetOTP.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
-                (activity as IndexActivity).setTimer(120)
+                IndexActivity().setTimer(60)
 
                 val phone = "+63" + etMobileNumberGetOTP.text.toString()
                 sendVerificationCode(phone)
@@ -97,18 +98,8 @@ class MobileNumberValidationFragment : Fragment() {
             if (InternetConnectionClass().isConnected()) {
                 val otp = etMobileNumberEnterOTP.text.toString()
 
-                if (otp.isNotEmpty()) {
+                if (TextUtils.isEmpty(otp)) {
                     verifyCode(otp)
-                } else {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            R.string.mobile_number_enter_otp_mes,
-                            Toast.LENGTH_SHORT
-                    )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
                 }
             } else {
                 internetToast()
@@ -129,7 +120,7 @@ class MobileNumberValidationFragment : Fragment() {
     }
 
     private fun signInWithCredential(credential: PhoneAuthCredential) {
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+        mAuth!!.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val forgotCredentialsActivity: ForgotCredentialsActivity =
                         activity as ForgotCredentialsActivity
@@ -138,12 +129,12 @@ class MobileNumberValidationFragment : Fragment() {
                         forgotCredentialsActivity.getCredential()
                 )
             } else {
-                val toast = Toast.makeText(
+                val toast: Toast = Toast.makeText(
                         appCompatActivity.applicationContext,
                         task.exception!!.message,
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                 )
-                toast?.apply {
+                toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)
                     show()
                 }
@@ -152,46 +143,46 @@ class MobileNumberValidationFragment : Fragment() {
     }
 
     private fun sendVerificationCode(number: String) {
-        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+        val options = PhoneAuthOptions.newBuilder(mAuth!!)
                 .setPhoneNumber(number)
                 .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(attActivity)
-                .setCallbacks(firebaseCallBack)
+                .setActivity(appCompatActivity)
+                .setCallbacks(mCallBack)
                 .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    private val firebaseCallBack: OnVerificationStateChangedCallbacks =
-            object : OnVerificationStateChangedCallbacks() {
-                override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
-                    super.onCodeSent(s, forceResendingToken)
-                    verificationId = s
-                }
+    private val mCallBack: OnVerificationStateChangedCallbacks =
+        object : OnVerificationStateChangedCallbacks() {
+        override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
+            super.onCodeSent(s, forceResendingToken)
+            verificationId = s
+        }
 
-                override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-                    val code = phoneAuthCredential.smsCode
+        override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
+            val code = phoneAuthCredential.smsCode
 
-                    if (code != null) {
-                        etMobileNumberEnterOTP.setText(code)
-                        verifyCode(code)
-                    }
-                }
-
-                override fun onVerificationFailed(e: FirebaseException) {
-                    val toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            e.message,
-                            Toast.LENGTH_LONG
-                    )
-                    toast?.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
+            if (code != null) {
+                etMobileNumberEnterOTP.setText(code)
+                verifyCode(code)
             }
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            val toast: Toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    e.message,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+    }
 
     private fun verifyCode(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationId, code)
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
         signInWithCredential(credential)
     }
 }

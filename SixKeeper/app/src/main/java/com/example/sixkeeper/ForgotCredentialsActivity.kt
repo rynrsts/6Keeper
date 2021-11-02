@@ -208,7 +208,20 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
                 manageForgotFragments(selection)
             }
             2 -> {
-                manageForgotFragments(securityQuestion)
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setMessage(R.string.forgot_credentials_restart_mes)
+                builder.setCancelable(false)
+
+                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    manageForgotFragments(selection)
+                }
+                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    dialog.cancel()
+                }
+
+                val alert: AlertDialog = builder.create()
+                alert.setTitle(R.string.many_alert_title)
+                alert.show()
             }
         }
     }

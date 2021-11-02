@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
+    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var firebaseUserAccountModelClass: FirebaseUserAccountModelClass
@@ -27,6 +29,16 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private lateinit var password: String
     private var masterPin: Int = 0
 
+    private lateinit var encodedFirstName: String
+    private lateinit var encodedLastName: String
+    private lateinit var encodedBirthDate: String
+    private lateinit var encodedEmail: String
+    private lateinit var encodedMobileNumber: String
+    private lateinit var encodedUsername: String
+    private lateinit var encryptedPassword: ByteArray
+    private lateinit var encryptedMasterPin: ByteArray
+    private lateinit var encodedStatus: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_new_account)
@@ -37,6 +49,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     private fun setVariables() {
+        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseUserAccountModelClass = FirebaseUserAccountModelClass()
     }
@@ -49,9 +63,9 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 it.apply {
                     ivActionBarBackArrow.isClickable = false                                        // Set button un-clickable for 1 second
                     postDelayed(
-                        {
-                            ivActionBarBackArrow.isClickable = true
-                        }, 1000
+                            {
+                                ivActionBarBackArrow.isClickable = true
+                            }, 1000
                     )
                 }
             }
@@ -78,8 +92,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     super.onBackPressed()
                     overridePendingTransition(
-                        R.anim.anim_enter_left_to_right_2,
-                        R.anim.anim_exit_left_to_right_2
+                            R.anim.anim_enter_left_to_right_2,
+                            R.anim.anim_exit_left_to_right_2
                     )
                 }
                 builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
@@ -124,8 +138,6 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     @SuppressLint("SimpleDateFormat")
     internal fun saveAccount() {                                                                    // Save account data to database
         val databaseHandlerClass = DatabaseHandlerClass(this)
-        val encodingClass = EncodingClass()
-        val encryptionClass = EncryptionClass()
         val userId: Int = (1000000..9999999).random()
 
         val calendar: Calendar = Calendar.getInstance()
@@ -135,53 +147,63 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val encodedPassword = encodingClass.encodeData(password)
         val encodedMasterPIN = encodingClass.encodeData(masterPin.toString())
 
+        encodedUsername = encodingClass.encodeData(username)
+        encryptedPassword = encryptionClass.hashData(encodedPassword)
+        encryptedMasterPin = encryptionClass.hashData(encodedMasterPIN)
+        encodedStatus = encodingClass.encodeData(0.toString())
+        encodedFirstName = encodingClass.encodeData(firstName)
+        encodedLastName = encodingClass.encodeData(lastName)
+        encodedBirthDate = encodingClass.encodeData(birthDate)
+        encodedEmail = encodingClass.encodeData(email)
+        encodedMobileNumber = encodingClass.encodeData(mobileNumber.toString())
+
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userInfoStatus = databaseHandlerClass.addUserInfo(
-            UserInfoModelClass(
-                encodingClass.encodeData(userId.toString()),
-                encodingClass.encodeData(firstName),
-                encodingClass.encodeData(lastName),
-                encodingClass.encodeData(birthDate),
-                encodingClass.encodeData(email),
-                encodingClass.encodeData(mobileNumber.toString()),
-                "",
-                encodingClass.encodeData(0.toString()),
-                encodingClass.encodeData(0.toString()),
-                encodingClass.encodeData(0.toString())
-            )
+                UserInfoModelClass(
+                        encodingClass.encodeData(userId.toString()),
+                        encodedFirstName,
+                        encodedLastName,
+                        encodedBirthDate,
+                        encodedEmail,
+                        encodedBirthDate,
+                        "",
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(0.toString())
+                )
         )
         val userAccStatus = databaseHandlerClass.addUserAcc(
-            UserAccModelClass(
-                encodingClass.encodeData(userId.toString()),
-                encodingClass.encodeData(username),
-                encryptionClass.hashData(encodedPassword),
-                encryptionClass.hashData(encodedMasterPIN),
-                encodingClass.encodeData(0.toString()),
-                encodingClass.encodeData(date),
-                ""
-            )
+                UserAccModelClass(
+                        encodingClass.encodeData(userId.toString()),
+                        encodedUsername,
+                        encryptedPassword,
+                        encryptedMasterPin,
+                        encodedStatus,
+                        encodingClass.encodeData(date),
+                        ""
+                )
         )
         val userAccountStatus = databaseHandlerClass.addAccountStatus(
-            UserAccountStatusModelClass(
-                "",
-                "",
-                "",
-                "",
-                ""
-            )
+                UserAccountStatusModelClass(
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                )
         )
         val userSettingsStatus = databaseHandlerClass.addSettings(
-            UserSettingsModelClass(
-                encodingClass.encodeData(userId.toString()),
-                encodingClass.encodeData(0.toString()),
-                encodingClass.encodeData(1.toString()),
-                encodingClass.encodeData("10 sec"),
-                encodingClass.encodeData(0.toString()),
-            )
+                UserSettingsModelClass(
+                        encodingClass.encodeData(userId.toString()),
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData(1.toString()),
+                        encodingClass.encodeData("10 sec"),
+                        encodingClass.encodeData(0.toString()),
+                )
         )
         val userProfileStatus = databaseHandlerClass.addProfilePhoto(
-            encodingClass.encodeData(userId.toString()),
-            "".toByteArray(),
+                encodingClass.encodeData(userId.toString()),
+                "".toByteArray(),
         )
 
         if (
@@ -193,9 +215,9 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 userProfileStatus > -1
         ) {
             val toast: Toast = Toast.makeText(
-                applicationContext,
-                R.string.create_new_acc_success,
-                Toast.LENGTH_SHORT
+                    applicationContext,
+                    R.string.create_new_acc_success,
+                    Toast.LENGTH_SHORT
             )
             toast.apply {
                 setGravity(Gravity.CENTER, 0, 0)
@@ -211,11 +233,11 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         }
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
-            UserActionLogModelClass(
-                encodingClass.encodeData(actionLogId.toString()),
-                encodingClass.encodeData("App account was created."),
-                encodingClass.encodeData(date)
-            )
+                UserActionLogModelClass(
+                        encodingClass.encodeData(actionLogId.toString()),
+                        encodingClass.encodeData("App account was created."),
+                        encodingClass.encodeData(date)
+                )
         )
 
         databaseReference = firebaseDatabase.getReference(userId.toString())
@@ -223,14 +245,18 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     private fun sendData() {
-        firebaseUserAccountModelClass.setUsername(username)
-        firebaseUserAccountModelClass.setPassword(password)
-        firebaseUserAccountModelClass.setMasterPin(masterPin.toString())
-        firebaseUserAccountModelClass.setFirstName(firstName)
-        firebaseUserAccountModelClass.setLastName(lastName)
-        firebaseUserAccountModelClass.setBirthDate(birthDate)
-        firebaseUserAccountModelClass.setEmail(email)
-        firebaseUserAccountModelClass.setMobileNumber(mobileNumber.toString())
+        val passwordData = encodingClass.decodeSHA(encryptedPassword)
+        val masterPINData = encodingClass.decodeSHA(encryptedMasterPin)
+
+        firebaseUserAccountModelClass.setUsername(encodedUsername)
+        firebaseUserAccountModelClass.setPassword(passwordData)
+        firebaseUserAccountModelClass.setMasterPin(masterPINData)
+        firebaseUserAccountModelClass.setStatus(encodedStatus)
+        firebaseUserAccountModelClass.setFirstName(encodedFirstName)
+        firebaseUserAccountModelClass.setLastName(encodedLastName)
+        firebaseUserAccountModelClass.setBirthDate(encodedBirthDate)
+        firebaseUserAccountModelClass.setEmail(encodedEmail)
+        firebaseUserAccountModelClass.setMobileNumber(encodedMobileNumber)
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -239,9 +265,9 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
 
             override fun onCancelled(error: DatabaseError) {
                 val toast: Toast = Toast.makeText(
-                    applicationContext,
-                    "Failed to add data $error",
-                    Toast.LENGTH_SHORT
+                        applicationContext,
+                        "Failed to add data $error",
+                        Toast.LENGTH_SHORT
                 )
                 toast.apply {
                     setGravity(Gravity.CENTER, 0, 0)

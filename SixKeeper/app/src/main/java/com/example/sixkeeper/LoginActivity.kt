@@ -1,6 +1,5 @@
 package com.example.sixkeeper
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import java.io.File
@@ -69,52 +67,7 @@ class LoginActivity : LoginValidationClass() {
         acbLoginLogin.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
                 if (isNotEmpty()) {
-                    val waitingTime = waitingTime()
-
-                    if (validateUserCredential()) {
-                        if (waitingTime == 0.toLong()) {
-                            restartAttemptAndTime()
-                            updateUserStatus()
-
-                            closeKeyboard()
-
-                            val goToMasterPINActivity = Intent(
-                                    this,
-                                    MasterPINActivity::class.java
-                            )
-                            startActivity(goToMasterPINActivity)
-                            overridePendingTransition(
-                                    R.anim.anim_enter_bottom_to_top_2,
-                                    R.anim.anim_0
-                            )
-
-                            this.finish()
-                        } else {
-                            lockToast(waitingTime)
-                        }
-                    } else if (validateUsername()) {
-                        if (waitingTime == 0.toLong()) {
-                            updateAccountStatus()
-                        } else {
-                            lockToast(waitingTime)
-                        }
-
-                        setEtLoginPassword("")
-                        getEtLoginPassword().requestFocus()
-                    } else {
-                        val toast: Toast = Toast.makeText(
-                                applicationContext,
-                                R.string.login_invalid_credentials,
-                                Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
-
-                        setEtLoginPassword("")
-                        getEtLoginPassword().requestFocus()
-                    }
+                    validateUserCredential()
                 } else {
                     val toast: Toast = Toast.makeText(
                             applicationContext,
@@ -236,17 +189,6 @@ class LoginActivity : LoginValidationClass() {
             } else {
                 internetToast()
             }
-        }
-    }
-
-    private fun closeKeyboard() {
-        val immKeyboard: InputMethodManager = getSystemService(
-                Context.INPUT_METHOD_SERVICE
-        ) as InputMethodManager
-
-        when {
-            immKeyboard.isActive ->
-                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)                   // Close keyboard
         }
     }
 

@@ -57,6 +57,8 @@ class MasterPINActivity : MasterPINProcessClass() {
     }
 
     private fun fingerprint() {                                                                     // Fingerprint code start
+        fingerprintHandlerClass = FingerprintHandlerClass(this, "login")
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
@@ -111,9 +113,6 @@ class MasterPINActivity : MasterPINProcessClass() {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            fingerprintHandlerClass = FingerprintHandlerClass(
-                                    this, "login"
-                            )
                             fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {

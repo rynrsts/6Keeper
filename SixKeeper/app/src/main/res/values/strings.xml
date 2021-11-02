@@ -115,6 +115,9 @@
 
     <!-- Forgot Credentials -->
     <string name="forgot_credentials_mes">Cancel reset?</string>
+    <string name="forgot_credentials_restart_mes">
+        You will be prompted to the start again. Go back?
+    </string>
 
     <string name="reset_master_pin_alert">Do you want to reset master pin?</string>
     <string name="reset_master_pin_mes">Master PIN was reset!</string>

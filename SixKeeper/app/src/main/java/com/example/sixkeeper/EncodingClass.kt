@@ -12,4 +12,8 @@ class EncodingClass {
         val decrypt = Base64.decode(data.toByteArray(), Base64.DEFAULT)
         return String(decrypt)
     }
+
+    fun decodeSHA(data: ByteArray): String {
+        return Base64.encodeToString(data, Base64.DEFAULT)
+    }
 }

@@ -1,25 +1,17 @@
 package com.example.sixkeeper
 
 class FirebaseUserAccountModelClass {
-    private var userId: String? = null
     private var username: String? = null
     private var password: String? = null
     private var masterPin: String? = null
     private var creationDate: String? = null
     private var lastLogin: String? = null
+    private var status: String? = null
     private var firstName: String? = null
     private var lastName: String? = null
     private var birthDate: String? = null
     private var email: String? = null
     private var mobileNumber: String? = null
-
-    fun getUserId(): String? {
-        return userId
-    }
-
-    fun setUserId(s: String?) {
-        userId = s
-    }
 
     fun getUsername(): String? {
         return username
@@ -59,6 +51,14 @@ class FirebaseUserAccountModelClass {
 
     fun setLastLogin(s: String?) {
         lastLogin = s
+    }
+
+    fun getStatus(): String? {
+        return status
+    }
+
+    fun setStatus(s: String?) {
+        status = s
     }
 
     fun getFirstName(): String? {

@@ -2,21 +2,29 @@ package com.example.sixkeeper
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Environment
 import android.view.Gravity
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.firebase.database.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
 
     private lateinit var etLoginUsername: EditText
     private lateinit var etLoginPassword: EditText
@@ -29,17 +37,17 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var password: String
     private lateinit var userId: String
 
+    private lateinit var encodedUsername: String
+    private lateinit var encryptedPassword: ByteArray
+
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
 
         etLoginUsername = findViewById(R.id.etLoginUsername)
         etLoginPassword = findViewById(R.id.etLoginPassword)
         ivLoginTogglePass = findViewById(R.id.ivLoginTogglePass)
-    }
-
-    fun setEtLoginPassword(s: String) {
-        etLoginPassword.setText(s)
     }
 
     fun getEtLoginPassword(): EditText {
@@ -89,24 +97,109 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return username.isNotEmpty() && password.isNotEmpty()
     }
 
-    fun validateUserCredential(): Boolean {                                                         // Validate username and password
+    fun validateUserCredential() {                                                                  // Validate username and password
         val encryptionClass = EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var bool = false
 
-        val encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
+        encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
         val encodedPassword = encodingClass.encodeData(etLoginPassword.text.toString())
-        val encryptedPassword = encryptionClass.hashData(encodedPassword)
+        encryptedPassword = encryptionClass.hashData(encodedPassword)
+        var uUsername = ""
+        var uPassword: ByteArray? = null
+        val passwordString = encodingClass.decodeSHA(encryptedPassword)
+
+        val dataList = ArrayList<String>(0)
+        val button = Button(this)
 
         for (u in userAccList) {
             userId = u.userId
-            bool = encodedUsername == u.username && encryptedPassword.contentEquals(u.password)
+            uUsername = u.username
+            uPassword = u.password
         }
 
-        return bool
+        val decodedUserId = encodingClass.decodeData(userId)
+        databaseReference = firebaseDatabase.getReference(decodedUserId)
+
+        databaseReference.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                dataList.add(snapshot.getValue(String::class.java).toString())
+
+                if (dataList.size == 9) {
+                    button.performClick()
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            val waitingTime = waitingTime()
+
+            if (
+                    encodedUsername == uUsername && encodedUsername == dataList[8] &&
+                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6]
+            ) {
+                if (waitingTime == 0.toLong()) {
+                    restartAttemptAndTime()
+                    updateUserStatus()
+
+                    closeKeyboard()
+
+                    val goToMasterPINActivity = Intent(
+                            this,
+                            MasterPINActivity::class.java
+                    )
+                    startActivity(goToMasterPINActivity)
+                    overridePendingTransition(
+                            R.anim.anim_enter_bottom_to_top_2,
+                            R.anim.anim_0
+                    )
+
+                    this.finish()
+                } else {
+                    lockToast(waitingTime)
+                }
+            } else if (validateUsername()) {
+                if (waitingTime == 0.toLong()) {
+                    updateAccountStatus()
+                } else {
+                    lockToast(waitingTime)
+                }
+
+                etLoginPassword.setText("")
+                getEtLoginPassword().requestFocus()
+            } else {
+                val toast: Toast = Toast.makeText(
+                        applicationContext,
+                        R.string.login_invalid_credentials,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
+
+                etLoginPassword.setText("")
+                getEtLoginPassword().requestFocus()
+            }
+        }
     }
 
-    fun restartAttemptAndTime() {
+    private fun closeKeyboard() {
+        val immKeyboard: InputMethodManager = getSystemService(
+                Context.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+
+        when {
+            immKeyboard.isActive ->
+                immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)             // Close keyboard
+        }
+    }
+
+    private fun restartAttemptAndTime() {
         databaseHandlerClass.updateAccountStatus(
                 "pw_wrong_attempt",
                 ""
@@ -162,14 +255,14 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return dateFormat.format(calendar.time)
     }
 
-    fun updateUserStatus() {                                                                        // Update account status to 1
+    private fun updateUserStatus() {                                                                // Update account status to 1
         databaseHandlerClass.updateUserStatus(
                 userId,
                 encodingClass.encodeData(1.toString())
         )
     }
 
-    fun validateUsername(): Boolean {                                                               // Validate username
+    private fun validateUsername(): Boolean {                                                       // Validate username
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var bool = false
 
@@ -183,7 +276,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return bool
     }
 
-    fun updateAccountStatus() {                                                                     // Update password wrong attempt
+    private fun updateAccountStatus() {                                                             // Update password wrong attempt
         val userStatusList: List<UserAccountStatusModelClass> =
                 databaseHandlerClass.viewAccountStatus()
         var wrongAttempt = 0
@@ -235,7 +328,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
-    fun lockToast(waitingTime: Long) {
+    private fun lockToast(waitingTime: Long) {
         var sec = ""
 
         if (waitingTime == 1.toLong()) {

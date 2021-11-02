@@ -54,6 +54,8 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
     }
 
     private fun fingerprint() {                                                                     // Fingerprint code start
+        fingerprintHandlerClass = FingerprintHandlerClass(this, "auto lock")
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
@@ -105,9 +107,6 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            fingerprintHandlerClass = FingerprintHandlerClass(
-                                    this, "auto lock"
-                            )
                             fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {

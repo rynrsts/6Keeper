@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -18,6 +19,8 @@ import kotlin.concurrent.schedule
 open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
 
     private lateinit var ivConfirmActionCircle1: ImageView
@@ -104,6 +107,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
         ivConfirmActionCircle1 = findViewById(R.id.ivConfirmActionCircle1)
@@ -152,7 +156,6 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
-    @SuppressLint("ShowToast")
     private fun shadePin() {
         when (pin.size) {
             1 ->
@@ -177,95 +180,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 tempS = tempS + "" + temp.pop()
             val pinI: Int = tempS.toInt()
 
-
             if (InternetConnectionClass().isConnected()) {
-                if (validateUserMasterPin(pinI)) {
-                    databaseHandlerClass.updateAccountStatus(
-                            "m_pin_wrong_attempt",
-                            ""
-                    )
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "f_wrong_attempt",
-                            ""
-                    )
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "m_pin_lock_time",
-                            ""
-                    )
-
-                    setResult(16914)
-                    onBackPressed()
-                } else {
-                    val userStatusList: List<UserAccountStatusModelClass> =
-                            databaseHandlerClass.viewAccountStatus()
-                    var wrongAttempt = 0
-                    var timer = 30
-
-                    for (u in userStatusList) {
-                        val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
-
-                        if (mPinWrongAttempt.isNotEmpty()) {
-                            wrongAttempt = Integer.parseInt(mPinWrongAttempt)
-                        }
-                    }
-                    wrongAttempt++
-
-                    databaseHandlerClass.updateAccountStatus(
-                            "m_pin_wrong_attempt",
-                            encodingClass.encodeData(wrongAttempt.toString())
-                    )
-
-                    var toast: Toast = Toast.makeText(
-                            applicationContext,
-                            R.string.many_incorrect_master_pin,
-                            Toast.LENGTH_SHORT
-                    )
-
-                    if (wrongAttempt % 3 == 0) {
-                        for (i in 1 until (wrongAttempt / 3)) {
-                            timer *= 2
-                        }
-
-                        databaseHandlerClass.updateAccountStatus(
-                                "m_pin_lock_time",
-                                encodingClass.encodeData(getCurrentDate())
-                        )
-
-                        toast = Toast.makeText(
-                                applicationContext,
-                                "Account is locked. Please wait for $timer seconds",
-                                Toast.LENGTH_SHORT
-                        )
-                    }
-
-                    disableButtons()
-
-                    Timer().schedule(200) {
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
-                        }
-
-                        val vibrator: Vibrator =
-                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-                        @Suppress("DEPRECATION")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                       // If android version is Oreo and above
-                            vibrator.vibrate(                                                       // Vibrate for wrong confirmation
-                                    VibrationEffect.createOneShot(
-                                            350,
-                                            VibrationEffect.DEFAULT_AMPLITUDE
-                                    )
-                            )
-                        } else {
-                            vibrator.vibrate(350)
-                        }
-
-                        enableButtons()
-                    }
-                }
+                validateUserMasterPin(pinI)
             } else {
                 disableButtons()
                 internetToast()
@@ -415,19 +331,133 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         ivConfirmActionCircle6.setImageResource(R.drawable.layout_blue_border_circle)
     }
 
-    private fun validateUserMasterPin(pinI: Int): Boolean {                                         // Validate Master PIN
+    @SuppressLint("ShowToast")
+    private fun validateUserMasterPin(pinI: Int) {                                                  // Validate Master PIN
         val encryptionClass = EncryptionClass()
-        var bool = false
 
         val encodedConfirmAction = encodingClass.encodeData(pinI.toString())
         val encryptedConfirmAction = encryptionClass.hashData(encodedConfirmAction)
+        var uMasterPIN: ByteArray? = null
+        val masterPINString = encodingClass.decodeSHA(encryptedConfirmAction)
+
+        val dataList = ArrayList<String>(0)
+        val button = Button(this)
 
         for (u in userAccList) {
-            bool = encryptedConfirmAction.contentEquals(u.masterPin)
             userId = u.userId
+            uMasterPIN = u.masterPin
         }
 
-        return bool
+        val decodedUserId = encodingClass.decodeData(userId)
+        databaseReference = firebaseDatabase.getReference(decodedUserId)
+
+        databaseReference.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                dataList.add(snapshot.getValue(String::class.java).toString())
+
+                if (dataList.size == 9) {
+                    button.performClick()
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            if (
+                    encryptedConfirmAction.contentEquals(uMasterPIN) &&
+                    masterPINString == dataList[4]
+            ) {
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_wrong_attempt",
+                        ""
+                )
+
+                databaseHandlerClass.updateAccountStatus(
+                        "f_wrong_attempt",
+                        ""
+                )
+
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_lock_time",
+                        ""
+                )
+
+                setResult(16914)
+                onBackPressed()
+            } else {
+                val userStatusList: List<UserAccountStatusModelClass> =
+                        databaseHandlerClass.viewAccountStatus()
+                var wrongAttempt = 0
+                var timer = 30
+
+                for (u in userStatusList) {
+                    val mPinWrongAttempt = encodingClass.decodeData(u.mPinWrongAttempt)
+
+                    if (mPinWrongAttempt.isNotEmpty()) {
+                        wrongAttempt = Integer.parseInt(mPinWrongAttempt)
+                    }
+                }
+                wrongAttempt++
+
+                databaseHandlerClass.updateAccountStatus(
+                        "m_pin_wrong_attempt",
+                        encodingClass.encodeData(wrongAttempt.toString())
+                )
+
+                var toast: Toast = Toast.makeText(
+                        applicationContext,
+                        R.string.many_incorrect_master_pin,
+                        Toast.LENGTH_SHORT
+                )
+
+                if (wrongAttempt % 3 == 0) {
+                    for (i in 1 until (wrongAttempt / 3)) {
+                        timer *= 2
+                    }
+
+                    databaseHandlerClass.updateAccountStatus(
+                            "m_pin_lock_time",
+                            encodingClass.encodeData(getCurrentDate())
+                    )
+
+                    toast = Toast.makeText(
+                            applicationContext,
+                            "Account is locked. Please wait for $timer seconds",
+                            Toast.LENGTH_SHORT
+                    )
+                }
+
+                disableButtons()
+
+                Timer().schedule(200) {
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+
+                    val vibrator: Vibrator =
+                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                    @Suppress("DEPRECATION")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {                           // If android version is Oreo and above
+                        vibrator.vibrate(                                                           // Vibrate for wrong confirmation
+                                VibrationEffect.createOneShot(
+                                        350,
+                                        VibrationEffect.DEFAULT_AMPLITUDE
+                                )
+                        )
+                    } else {
+                        vibrator.vibrate(350)
+                    }
+
+                    enableButtons()
+                }
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

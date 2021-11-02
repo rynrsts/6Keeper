@@ -59,6 +59,8 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
     }
 
     private fun fingerprint() {                                                                     // Fingerprint code start
+        fingerprintHandlerClass = FingerprintHandlerClass(this, "confirm action")
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
@@ -110,9 +112,6 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
 
                         if (initCipher()) {
                             cryptoObject = FingerprintManager.CryptoObject(cipher)
-                            fingerprintHandlerClass = FingerprintHandlerClass(
-                                    this, "confirm action"
-                            )
                             fingerprintHandlerClass.startAuth(fingerprintManager, cryptoObject)
                         }
                     } else {
