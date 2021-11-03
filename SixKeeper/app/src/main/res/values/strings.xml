@@ -60,7 +60,9 @@
     <string name="create_new_acc_alert_message">
         Returning to previous page will discard data. Continue?
     </string>
-    <string name="create_new_acc_message">Continue creating the account?</string>
+    <string name="create_new_acc_message">
+        The app will be restarted. Continue creating the account?
+    </string>
     <string name="create_new_acc_note">
         Note: Once you click register, existing account and other saved data in the app will be
         removed.
@@ -140,6 +142,7 @@
     <string name="login_import_data_title">Import Data</string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
     <string name="login_enter_credentials">Please enter your credentials</string>
+    <string name="login_already_logged_in">The account is logged in on another device</string>
 
     <!-- Many -->
     <string name="many_about_us">About</string>

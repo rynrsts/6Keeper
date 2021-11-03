@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
@@ -101,9 +100,27 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         val encryptionClass = EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
 
+        if (userAccList.isEmpty()) {
+            val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    R.string.login_invalid_credentials,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+
+            etLoginPassword.setText("")
+            getEtLoginPassword().requestFocus()
+
+            return
+        }
+
         encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
         val encodedPassword = encodingClass.encodeData(etLoginPassword.text.toString())
         encryptedPassword = encryptionClass.hashData(encodedPassword)
+        val encodedStatus = encodingClass.encodeData(0.toString())
         var uUsername = ""
         var uPassword: ByteArray? = null
         val passwordString = encodingClass.decodeSHA(encryptedPassword)
@@ -140,7 +157,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
             if (
                     encodedUsername == uUsername && encodedUsername == dataList[8] &&
-                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6]
+                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6] &&
+                    encodedStatus == dataList[7]
             ) {
                 if (waitingTime == 0.toLong()) {
                     restartAttemptAndTime()
@@ -159,6 +177,27 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                     )
 
                     this.finish()
+                } else {
+                    lockToast(waitingTime)
+                }
+            } else if (
+                    encodedUsername == uUsername && encodedUsername == dataList[8] &&
+                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6] &&
+                    encodedStatus != dataList[7]
+            ) {
+                if (waitingTime == 0.toLong()) {
+                    val toast: Toast = Toast.makeText(
+                            applicationContext,
+                            R.string.login_already_logged_in,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+
+                    etLoginPassword.setText("")
+                    getEtLoginPassword().requestFocus()
                 } else {
                     lockToast(waitingTime)
                 }
@@ -260,6 +299,9 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 userId,
                 encodingClass.encodeData(1.toString())
         )
+
+        val encodedActiveStatus = encodingClass.encodeData(1.toString())
+        databaseReference.child("status").setValue(encodedActiveStatus)
     }
 
     private fun validateUsername(): Boolean {                                                       // Validate username

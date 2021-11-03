@@ -158,12 +158,6 @@ class CreateNewAccountP4Fragment : Fragment() {
                         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                             if (InternetConnectionClass().isConnected()) {
                                 createNewAccountActivity.saveAccount()
-
-                                appCompatActivity.finish()
-                                appCompatActivity.overridePendingTransition(
-                                        R.anim.anim_enter_left_to_right_2,
-                                        R.anim.anim_exit_left_to_right_2
-                                )
                             } else {
                                 internetToast()
                             }

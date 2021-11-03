@@ -3,15 +3,19 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.database.*
+import com.jakewharton.processphoenix.ProcessPhoenix
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private lateinit var encodingClass: EncodingClass
@@ -90,11 +94,22 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 builder.setCancelable(false)
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    super.onBackPressed()
+//                    super.onBackPressed()
+//                    overridePendingTransition(
+//                            R.anim.anim_enter_left_to_right_2,
+//                            R.anim.anim_exit_left_to_right_2
+//                    )
+
+                    val goToLoginActivity =
+                            Intent(this, LoginActivity::class.java)
+
+                    startActivity(goToLoginActivity)
                     overridePendingTransition(
                             R.anim.anim_enter_left_to_right_2,
                             R.anim.anim_exit_left_to_right_2
                     )
+
+                    finish()
                 }
                 builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
@@ -165,7 +180,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encodedLastName,
                         encodedBirthDate,
                         encodedEmail,
-                        encodedBirthDate,
+                        encodedMobileNumber,
                         "",
                         encodingClass.encodeData(0.toString()),
                         encodingClass.encodeData(0.toString()),
@@ -247,6 +262,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private fun sendData() {
         val passwordData = encodingClass.decodeSHA(encryptedPassword)
         val masterPINData = encodingClass.decodeSHA(encryptedMasterPin)
+        val button = Button(this)
+        var stack = 0
 
         firebaseUserAccountModelClass.setUsername(encodedUsername)
         firebaseUserAccountModelClass.setPassword(passwordData)
@@ -261,6 +278,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 databaseReference.setValue(firebaseUserAccountModelClass)
+                stack++
+
+                if (stack == 2) {
+                    button.performClick()
+                }
+
+                button.setOnClickListener {
+                    ProcessPhoenix.triggerRebirth(applicationContext);
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

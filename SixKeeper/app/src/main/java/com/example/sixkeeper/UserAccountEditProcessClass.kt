@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -34,6 +36,8 @@ open class UserAccountEditProcessClass : Fragment() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
     private lateinit var encryptionClass: EncryptionClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
 
     private lateinit var clUserAccountEditButton: ConstraintLayout
 
@@ -56,6 +60,7 @@ open class UserAccountEditProcessClass : Fragment() {
     private var editMode: Boolean = false
     private var editCount: Int = 0
 
+    private var userId: String = ""
     private var masterPin: Int = 0
 
     @Suppress("DEPRECATION")
@@ -71,6 +76,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
         encryptionClass = EncryptionClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
     }
 
     fun getViewId(): String {
@@ -201,6 +207,7 @@ open class UserAccountEditProcessClass : Fragment() {
         var bdEditCount = ""
 
         for (u in userInfoList) {
+            userId = encodingClass.decodeData(u.userId)
             firstName = encodingClass.decodeData(u.firstName)
             lastName = encodingClass.decodeData(u.lastName)
             birthDate = encodingClass.decodeData(u.birthDate)
@@ -503,7 +510,7 @@ open class UserAccountEditProcessClass : Fragment() {
 
         if (isFirstNameToBirthDate()) {
             builder.setMessage(R.string.user_edit_save_alert_mes_2)
-        } else if (isEmailToUsername()) {
+        } else if (isEmailToUsername() || viewId == "password" || viewId == "master pin") {
             builder.setMessage(R.string.user_edit_save_alert_mes)
         }
 
@@ -544,29 +551,34 @@ open class UserAccountEditProcessClass : Fragment() {
             when (viewId) {
                 "first name" -> {
                     updateInfo("first_name")
+                    updateDataInfo("firstName")
                     updateEditCount("fn_edit_count")
                     setInfoContent()
                     goBackToViewMode()
                 }
                 "last name" -> {
                     updateInfo("last_name")
+                    updateDataInfo("lastName")
                     updateEditCount("ln_edit_count")
                     setInfoContent()
                     goBackToViewMode()
                 }
                 "birth date" -> {
                     updateInfo("birth_date")
+                    updateDataInfo("birthDate")
                     updateEditCount("bd_edit_count")
                     setInfoContent()
                     goBackToViewMode()
                 }
                 "email" -> {
                     updateInfo("email")
+                    updateDataInfo("email")
                     setInfoContent()
                     goBackToViewMode()
                 }
                 "mobile number" -> {
                     updateInfo("mobile_number")
+                    updateDataInfo("mobileNumber")
                     setInfoContent()
                     goBackToViewMode()
                 }
@@ -670,6 +682,7 @@ open class UserAccountEditProcessClass : Fragment() {
         val encryptedPassword = encryptionClass.hashData(encodedPassword)
 
         for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
             bool = encryptedPassword.contentEquals(u.password)
         }
 
@@ -697,6 +710,14 @@ open class UserAccountEditProcessClass : Fragment() {
         )
     }
 
+    private fun updateDataInfo(field: String) {                                                     // Update information in Firebase
+        val input = etUserEditTextBox.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
+
+        databaseReference = firebaseDatabase.getReference(userId)
+        databaseReference.child(field).setValue(encodedInput)
+    }
+
     private fun updateEditCount(field: String) {                                                    // Update edit count
         editCount += 1
         databaseHandlerClass.updateEditCountUserInfo(
@@ -717,11 +738,10 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private fun updateAccUsername() {                                                               // Update Username
         val input = etUserEditTextBox.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
 
         if (viewId == "username") {
-            databaseHandlerClass.updateUserUsername(
-                    encodingClass.encodeData(input), getCurrentDate()
-            )
+            databaseHandlerClass.updateUserUsername(encodedInput, getCurrentDate())
 
             databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
                     UserActionLogModelClass(
@@ -732,15 +752,18 @@ open class UserAccountEditProcessClass : Fragment() {
                     )
             )
         }
+
+        databaseReference = firebaseDatabase.getReference(userId)
+        databaseReference.child("username").setValue(encodedInput)
     }
 
     private fun updateAccPassword() {                                                               // Update Password
         val input = etUserEditNewPass.text.toString()
         val encodedInput = encodingClass.encodeData(input)
+        val encryptedInput = encryptionClass.hashData(encodedInput)
+        val inputString = encodingClass.decodeSHA(encryptedInput)
 
-        databaseHandlerClass.updateUserAcc(
-                "password", encryptionClass.hashData(encodedInput), getCurrentDate()
-        )
+        databaseHandlerClass.updateUserAcc("password", encryptedInput, getCurrentDate())
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
@@ -749,14 +772,22 @@ open class UserAccountEditProcessClass : Fragment() {
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
+
+        databaseReference = firebaseDatabase.getReference(userId)
+        databaseReference.child("password").setValue(inputString)
     }
 
     private fun updateAccMasterPIN() {                                                              // Update Master PIN
         val encodedInput = encodingClass.encodeData(masterPin.toString())
+        val encryptedInput = encryptionClass.hashData(encodedInput)
+        val inputString = encodingClass.decodeSHA(encryptedInput)
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
 
-        databaseHandlerClass.updateUserAcc(
-                "master_pin", encryptionClass.hashData(encodedInput), getCurrentDate()
-        )
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseHandlerClass.updateUserAcc("master_pin", encryptedInput, getCurrentDate())
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
@@ -765,6 +796,9 @@ open class UserAccountEditProcessClass : Fragment() {
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
+
+        databaseReference = firebaseDatabase.getReference(userId)
+        databaseReference.child("masterPin").setValue(inputString)
     }
     
     @SuppressLint("SimpleDateFormat")

@@ -491,6 +491,12 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 userId,
                 encodingClass.encodeData(0.toString())
         )
+
+        val decodedUserId = encodingClass.decodeData(userId)
+        databaseReference = firebaseDatabase.getReference(decodedUserId)
+
+        val encodedInactiveStatus = encodingClass.encodeData(0.toString())
+        databaseReference.child("status").setValue(encodedInactiveStatus)
     }
 
     @SuppressLint("SimpleDateFormat")

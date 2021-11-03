@@ -178,14 +178,7 @@ class LoginActivity : LoginValidationClass() {
                         R.anim.anim_exit_right_to_left_2
                 )
 
-                it.apply {
-                    acbLoginCreateNewAccount.isClickable = false                                        // Set button un-clickable for 1 second
-                    postDelayed(
-                            {
-                                acbLoginCreateNewAccount.isClickable = true
-                            }, 1000
-                    )
-                }
+                finish()
             } else {
                 internetToast()
             }

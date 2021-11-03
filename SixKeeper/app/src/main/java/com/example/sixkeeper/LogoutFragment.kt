@@ -16,10 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class LogoutFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -32,7 +36,7 @@ class LogoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appCompatActivity = activity as AppCompatActivity
+        setVariables()
         disableMenuItem()
         closeKeyboard()
         showDialog()
@@ -42,6 +46,11 @@ class LogoutFragment : Fragment() {
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
+    }
+
+    private fun setVariables() {
+        appCompatActivity = activity as AppCompatActivity
+        firebaseDatabase = FirebaseDatabase.getInstance()
     }
 
     private fun disableMenuItem() {
@@ -123,6 +132,12 @@ class LogoutFragment : Fragment() {
                 userId,
                 encodingClass.encodeData(0.toString())
         )
+
+        val decodedUserId = encodingClass.decodeData(userId)
+        databaseReference = firebaseDatabase.getReference(decodedUserId)
+
+        val encodedInactiveStatus = encodingClass.encodeData(0.toString())
+        databaseReference.child("status").setValue(encodedInactiveStatus)
     }
 
     private fun goToLoginActivity() {                                                               // Go to login (Username and Password)
