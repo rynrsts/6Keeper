@@ -274,6 +274,12 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         firebaseUserAccountModelClass.setBirthDate(encodedBirthDate)
         firebaseUserAccountModelClass.setEmail(encodedEmail)
         firebaseUserAccountModelClass.setMobileNumber(encodedMobileNumber)
+        firebaseUserAccountModelClass.setProfilePhoto("")
+        firebaseUserAccountModelClass.setPwWrongAttempt("")
+        firebaseUserAccountModelClass.setPwLockTime("")
+        firebaseUserAccountModelClass.setMPinWrongAttempt("")
+        firebaseUserAccountModelClass.setFWrongAttempt("")
+        firebaseUserAccountModelClass.setMPinLockTime("")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -285,7 +291,7 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 }
 
                 button.setOnClickListener {
-                    ProcessPhoenix.triggerRebirth(applicationContext);
+                    ProcessPhoenix.triggerRebirth(applicationContext)
                 }
             }
 

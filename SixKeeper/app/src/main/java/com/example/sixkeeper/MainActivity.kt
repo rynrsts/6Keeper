@@ -2,6 +2,12 @@ package com.example.sixkeeper
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+
 
 class MainActivity : ChangeStatusBarToWhiteClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,79 +16,49 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
 
         changeStatusBarColor()
         goTo()
-//        setButtonOnClick()
     }
 
     private fun goTo() {
         val databaseHandlerClass = DatabaseHandlerClass(this)
+        val firebaseDatabase = FirebaseDatabase.getInstance()
         val encodingClass = EncodingClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var status = ""
+        var userId = ""
 
         for (u in userAccList) {
-            status = u.accountStatus
+            userId = encodingClass.decodeData(u.userId)
         }
 
-        if (encodingClass.encodeData(1.toString()) == status) {                                     // Go to login (Master PIN)
-            val goToMasterPINActivity = Intent(this, MasterPINActivity::class.java)
-            startActivity(goToMasterPINActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2,
-                    R.anim.anim_0
-            )
-        } else {                                                                                    // Go to login (Username and Password)
-            val goToLoginActivity = Intent(this, LoginActivity::class.java)
-            startActivity(goToLoginActivity)
-        }
+        val databaseReference = firebaseDatabase.getReference(userId)
+        val statusReference = databaseReference.child("status")
+        var status = ""
+        val button = Button(this)
 
-        this.finish()
-    }
+        statusReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                status = dataSnapshot.getValue(String::class.java).toString()
 
-    /*
-    private fun setButtonOnClick() {
-        val acbMainLogin: Button = findViewById(R.id.acbMainLogin)
-        val acbMainCreateNewAccount: Button = findViewById(R.id.acbMainCreateNewAccount)
-
-        acbMainLogin.setOnClickListener {
-            val goToLoginActivity = Intent(this, LoginActivity::class.java)
-
-            startActivity(goToLoginActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
-
-            it.apply {
-                acbMainLogin.isClickable = false
-                postDelayed(
-                        {
-                            acbMainLogin.isClickable = true
-                        }, 1000
-                )
+                button.performClick()
             }
-        }
 
-        acbMainCreateNewAccount.setOnClickListener {
-            val goToCreateNewAccountActivity = Intent(
-                    this,
-                    CreateNewAccountActivity::class.java
-            )
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
 
-            startActivity(goToCreateNewAccountActivity)
-            overridePendingTransition(
-                    R.anim.anim_enter_right_to_left_2,
-                    R.anim.anim_exit_right_to_left_2
-            )
-
-            it.apply {
-                acbMainCreateNewAccount.isClickable = false
-                postDelayed(
-                        {
-                            acbMainCreateNewAccount.isClickable = true
-                        }, 1000
+        button.setOnClickListener {
+            if (encodingClass.encodeData(1.toString()) == status) {                                 // Go to login (Master PIN)
+                val goToMasterPINActivity =
+                        Intent(this, MasterPINActivity::class.java)
+                startActivity(goToMasterPINActivity)
+                overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2,
+                        R.anim.anim_0
                 )
+            } else {                                                                                // Go to login (Username and Password)
+                val goToLoginActivity = Intent(this, LoginActivity::class.java)
+                startActivity(goToLoginActivity)
             }
+
+            this.finish()
         }
     }
-    */
 }

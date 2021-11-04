@@ -121,44 +121,84 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         val encodedPassword = encodingClass.encodeData(etLoginPassword.text.toString())
         encryptedPassword = encryptionClass.hashData(encodedPassword)
         val encodedStatus = encodingClass.encodeData(0.toString())
-        var uUsername = ""
-        var uPassword: ByteArray? = null
         val passwordString = encodingClass.decodeSHA(encryptedPassword)
 
-        val dataList = ArrayList<String>(0)
+//        val dataList = ArrayList<String>(0)
         val button = Button(this)
 
         for (u in userAccList) {
             userId = u.userId
-            uUsername = u.username
-            uPassword = u.password
         }
 
         val decodedUserId = encodingClass.decodeData(userId)
         databaseReference = firebaseDatabase.getReference(decodedUserId)
 
-        databaseReference.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                dataList.add(snapshot.getValue(String::class.java).toString())
+        val usernameRef = databaseReference.child("username")
+        val passwordRef = databaseReference.child("password")
+        val statusRef = databaseReference.child("status")
+        val pwWrongAttemptRef = databaseReference.child("pwWrongAttempt")
+        val pwLockTimeRef = databaseReference.child("pwLockTime")
 
-                if (dataList.size == 9) {
+        var username = ""
+        var password = ""
+        var status = ""
+        var pwWrongAttempt = ""
+        var pwLockTime = ""
+        var count = 0
+
+        usernameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                username = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        passwordRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                password = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        statusRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                status = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        pwWrongAttemptRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                pwWrongAttempt = encodingClass.decodeData(value)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        pwLockTimeRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                pwLockTime = encodingClass.decodeData(value)
+                count++
+
+                if (count == 1) {
                     button.performClick()
                 }
             }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
 
         button.setOnClickListener {
-            val waitingTime = waitingTime()
+            val waitingTime = waitingTime(pwWrongAttempt, pwLockTime)
 
             if (
-                    encodedUsername == uUsername && encodedUsername == dataList[8] &&
-                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6] &&
-                    encodedStatus == dataList[7]
+                    encodedUsername == username && passwordString == password &&
+                    encodedStatus == status
             ) {
                 if (waitingTime == 0.toLong()) {
                     restartAttemptAndTime()
@@ -181,9 +221,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                     lockToast(waitingTime)
                 }
             } else if (
-                    encodedUsername == uUsername && encodedUsername == dataList[8] &&
-                    encryptedPassword.contentEquals(uPassword) && passwordString == dataList[6] &&
-                    encodedStatus != dataList[7]
+                    encodedUsername == username && passwordString == password &&
+                    encodedStatus != status
             ) {
                 if (waitingTime == 0.toLong()) {
                     val toast: Toast = Toast.makeText(
@@ -203,7 +242,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 }
             } else if (validateUsername()) {
                 if (waitingTime == 0.toLong()) {
-                    updateAccountStatus()
+                    updateAccountStatus(pwWrongAttempt)
                 } else {
                     lockToast(waitingTime)
                 }
@@ -238,48 +277,28 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         }
     }
 
-    private fun restartAttemptAndTime() {
-        databaseHandlerClass.updateAccountStatus(
-                "pw_wrong_attempt",
-                ""
-        )
-
-        databaseHandlerClass.updateAccountStatus(
-                "pw_lock_time",
-                ""
-        )
-    }
-
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    fun waitingTime(): Long {
-        val userStatusList: List<UserAccountStatusModelClass> =
-                databaseHandlerClass.viewAccountStatus()
+    fun waitingTime(pwWrongAttempt: String, pwLockTime: String): Long {
         var waitingTime: Long = 0
 
-        for (u in userStatusList) {
-            val pwWrongAttempt = encodingClass.decodeData(u.pwWrongAttempt)
+        if (pwWrongAttempt.isNotEmpty()) {
+            val wrongAttempts = Integer.parseInt(pwWrongAttempt)
 
-            if (pwWrongAttempt.isNotEmpty()) {
-                val wrongAttempts = Integer.parseInt(pwWrongAttempt)
+            if (wrongAttempts % 3 == 0) {
+                if (pwLockTime.isNotEmpty()) {
+                    val dateToday: Date = dateFormat.parse(getCurrentDate())
+                    val lockeDate: Date = dateFormat.parse(pwLockTime)
+                    val timeDifference: Long = dateToday.time - lockeDate.time
+                    val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
+                    val loop = wrongAttempts / 3
+                    var timer = 30
 
-                if (wrongAttempts % 3 == 0) {
-                    val pwLockDate = encodingClass.decodeData(u.pwLockTime)
+                    for (i in 1 until loop) {
+                        timer *= 2
+                    }
 
-                    if (pwLockDate.isNotEmpty()) {
-                        val dateToday: Date = dateFormat.parse(getCurrentDate())
-                        val lockeDate: Date = dateFormat.parse(pwLockDate)
-                        val timeDifference: Long = dateToday.time - lockeDate.time
-                        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference)
-                        val loop = wrongAttempts / 3
-                        var timer = 30
-
-                        for (i in 1 until loop) {
-                            timer *= 2
-                        }
-
-                        if (seconds < timer) {
-                            waitingTime = timer - seconds
-                        }
+                    if (seconds < timer) {
+                        waitingTime = timer - seconds
                     }
                 }
             }
@@ -294,12 +313,12 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return dateFormat.format(calendar.time)
     }
 
-    private fun updateUserStatus() {                                                                // Update account status to 1
-        databaseHandlerClass.updateUserStatus(
-                userId,
-                encodingClass.encodeData(1.toString())
-        )
+    private fun restartAttemptAndTime() {
+        databaseReference.child("pwWrongAttempt").setValue("")
+        databaseReference.child("pwLockTime").setValue("")
+    }
 
+    private fun updateUserStatus() {                                                                // Update account status to 1
         val encodedActiveStatus = encodingClass.encodeData(1.toString())
         databaseReference.child("status").setValue(encodedActiveStatus)
     }
@@ -317,36 +336,49 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         return bool
     }
+    
+    private fun lockToast(waitingTime: Long) {
+        var sec = ""
 
-    private fun updateAccountStatus() {                                                             // Update password wrong attempt
-        val userStatusList: List<UserAccountStatusModelClass> =
-                databaseHandlerClass.viewAccountStatus()
+        if (waitingTime == 1.toLong()) {
+            sec = "second"
+        } else if (waitingTime > 1.toLong()) {
+            sec = "seconds"
+        }
+
+        val toast: Toast = Toast.makeText(
+                applicationContext,
+                "Account is locked. Please wait for $waitingTime $sec",
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
+    private fun updateAccountStatus(pwWrongAttempt: String) {                                       // Update password wrong attempt
         var wrongAttempt = 0
         var timer = 30
 
-        for (u in userStatusList) {
-            val pwWrongAttempt = encodingClass.decodeData(u.pwWrongAttempt)
-
-            if (pwWrongAttempt.isNotEmpty()) {
-                wrongAttempt = Integer.parseInt(pwWrongAttempt)
-            }
+        if (pwWrongAttempt.isNotEmpty()) {
+            wrongAttempt = Integer.parseInt(pwWrongAttempt)
         }
+
         wrongAttempt++
 
-        databaseHandlerClass.updateAccountStatus(
-                "pw_wrong_attempt",
-                encodingClass.encodeData(wrongAttempt.toString())
-        )
+        val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
+
+        databaseReference.child("pwWrongAttempt").setValue(encodedWrongAttempt)
 
         if (wrongAttempt % 3 == 0) {
             for (i in 1 until (wrongAttempt / 3)) {
                 timer *= 2
             }
 
-            databaseHandlerClass.updateAccountStatus(
-                    "pw_lock_time",
-                    encodingClass.encodeData(getCurrentDate())
-            )
+            val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
+
+            databaseReference.child("pwLockTime").setValue(encodedCurrentDate)
 
             val toast: Toast = Toast.makeText(
                     applicationContext,
@@ -367,26 +399,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 setGravity(Gravity.CENTER, 0, 0)
                 show()
             }
-        }
-    }
-
-    private fun lockToast(waitingTime: Long) {
-        var sec = ""
-
-        if (waitingTime == 1.toLong()) {
-            sec = "second"
-        } else if (waitingTime > 1.toLong()) {
-            sec = "seconds"
-        }
-
-        val toast: Toast = Toast.makeText(
-                applicationContext,
-                "Account is locked. Please wait for $waitingTime $sec",
-                Toast.LENGTH_SHORT
-        )
-        toast.apply {
-            setGravity(Gravity.CENTER, 0, 0)
-            show()
         }
     }
 }

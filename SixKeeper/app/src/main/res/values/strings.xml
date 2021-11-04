@@ -61,7 +61,7 @@
         Returning to previous page will discard data. Continue?
     </string>
     <string name="create_new_acc_message">
-        The app will be restarted. Continue creating the account?
+        The application will restart after (finishing) registration. Continue creating the account?
     </string>
     <string name="create_new_acc_note">
         Note: Once you click register, existing account and other saved data in the app will be

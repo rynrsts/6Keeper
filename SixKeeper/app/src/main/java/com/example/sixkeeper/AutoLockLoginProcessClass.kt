@@ -356,7 +356,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 dataList.add(snapshot.getValue(String::class.java).toString())
 
-                if (dataList.size == 9) {
+                if (dataList.size == 15) {
                     button.performClick()
                 }
             }

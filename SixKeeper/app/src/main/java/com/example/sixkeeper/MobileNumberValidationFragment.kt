@@ -1,12 +1,14 @@
 package com.example.sixkeeper
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -92,17 +94,56 @@ class MobileNumberValidationFragment : Fragment() {
             } else {
                 internetToast()
             }
+
+            it.apply {
+                acbMobileNumberGetOTP.isClickable = false                                           // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            acbMobileNumberGetOTP.isClickable = true
+                        }, 60000
+                )
+            }
         }
 
         acbMobileNumberEnterOTP.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
                 val otp = etMobileNumberEnterOTP.text.toString()
 
-                if (TextUtils.isEmpty(otp)) {
+                if (!TextUtils.isEmpty(otp)) {
                     verifyCode(otp)
+
+                    val immKeyboard: InputMethodManager = appCompatActivity.getSystemService(
+                            Context.INPUT_METHOD_SERVICE
+                    ) as InputMethodManager
+
+                    when {
+                        immKeyboard.isActive ->
+                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                                    appCompatActivity.currentFocus?.windowToken, 0
+                            )
+                    }
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            appCompatActivity.applicationContext,
+                            R.string.mobile_number_enter_otp_mes,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
                 }
             } else {
                 internetToast()
+            }
+
+            it.apply {
+                acbMobileNumberEnterOTP.isClickable = false                                         // Set button un-clickable for 1 second
+                postDelayed(
+                        {
+                            acbMobileNumberEnterOTP.isClickable = true
+                        }, 1000
+                )
             }
         }
     }

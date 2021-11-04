@@ -4,14 +4,18 @@ class FirebaseUserAccountModelClass {
     private var username: String? = null
     private var password: String? = null
     private var masterPin: String? = null
-    private var creationDate: String? = null
-    private var lastLogin: String? = null
     private var status: String? = null
     private var firstName: String? = null
     private var lastName: String? = null
     private var birthDate: String? = null
     private var email: String? = null
     private var mobileNumber: String? = null
+    private var profilePhoto: String? = null
+    private var pwWrongAttempt: String? = null
+    private var pwLockTime: String? = null
+    private var mPinWrongAttempt: String? = null
+    private var fWrongAttempt: String? = null
+    private var mPinLockTime: String? = null
 
     fun getUsername(): String? {
         return username
@@ -35,22 +39,6 @@ class FirebaseUserAccountModelClass {
 
     fun setMasterPin(s: String?) {
         masterPin = s
-    }
-
-    fun getCreationDate(): String? {
-        return creationDate
-    }
-
-    fun setCreationDate(s: String?) {
-        creationDate = s
-    }
-
-    fun getLastLogin(): String? {
-        return lastLogin
-    }
-
-    fun setLastLogin(s: String?) {
-        lastLogin = s
     }
 
     fun getStatus(): String? {
@@ -99,5 +87,53 @@ class FirebaseUserAccountModelClass {
 
     fun setMobileNumber(s: String?) {
         mobileNumber = s
+    }
+
+    fun getProfilePhoto(): String? {
+        return profilePhoto
+    }
+
+    fun setProfilePhoto(s: String?) {
+        profilePhoto = s
+    }
+
+    fun getPwWrongAttempt(): String? {
+        return pwWrongAttempt
+    }
+
+    fun setPwWrongAttempt(s: String?) {
+        pwWrongAttempt = s
+    }
+
+    fun getPwLockTime(): String? {
+        return pwLockTime
+    }
+
+    fun setPwLockTime(s: String?) {
+        pwLockTime = s
+    }
+
+    fun getMPinWrongAttempt(): String? {
+        return mPinWrongAttempt
+    }
+
+    fun setMPinWrongAttempt(s: String?) {
+        mPinWrongAttempt = s
+    }
+
+    fun getFWrongAttempt(): String? {
+        return fWrongAttempt
+    }
+
+    fun setFWrongAttempt(s: String?) {
+        fWrongAttempt = s
+    }
+
+    fun getMPinLockTime(): String? {
+        return mPinLockTime
+    }
+
+    fun setMPinLockTime(s: String?) {
+        mPinLockTime = s
     }
 }
