@@ -173,39 +173,8 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         encodedMobileNumber = encodingClass.encodeData(mobileNumber.toString())
 
         val tableStatus = databaseHandlerClass.truncateAllTables()
-        val userInfoStatus = databaseHandlerClass.addUserInfo(
-                UserInfoModelClass(
-                        encodingClass.encodeData(userId.toString()),
-                        encodedFirstName,
-                        encodedLastName,
-                        encodedBirthDate,
-                        encodedEmail,
-                        encodedMobileNumber,
-                        "",
-                        encodingClass.encodeData(0.toString()),
-                        encodingClass.encodeData(0.toString()),
-                        encodingClass.encodeData(0.toString())
-                )
-        )
         val userAccStatus = databaseHandlerClass.addUserAcc(
-                UserAccModelClass(
-                        encodingClass.encodeData(userId.toString()),
-                        encodedUsername,
-                        encryptedPassword,
-                        encryptedMasterPin,
-                        encodedStatus,
-                        encodingClass.encodeData(date),
-                        ""
-                )
-        )
-        val userAccountStatus = databaseHandlerClass.addAccountStatus(
-                UserAccountStatusModelClass(
-                        "",
-                        "",
-                        "",
-                        "",
-                        ""
-                )
+                UserAccModelClass(encodingClass.encodeData(userId.toString()))
         )
         val userSettingsStatus = databaseHandlerClass.addSettings(
                 UserSettingsModelClass(
@@ -216,18 +185,11 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                         encodingClass.encodeData(0.toString()),
                 )
         )
-        val userProfileStatus = databaseHandlerClass.addProfilePhoto(
-                encodingClass.encodeData(userId.toString()),
-                "".toByteArray(),
-        )
 
         if (
                 tableStatus > -1 &&
-                userInfoStatus > -1 &&
                 userAccStatus > -1 &&
-                userAccountStatus > -1 &&
-                userSettingsStatus > -1 &&
-                userProfileStatus > -1
+                userSettingsStatus > -1
         ) {
             val toast: Toast = Toast.makeText(
                     applicationContext,
@@ -280,6 +242,9 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         firebaseUserAccountModelClass.setMPinWrongAttempt("")
         firebaseUserAccountModelClass.setFWrongAttempt("")
         firebaseUserAccountModelClass.setMPinLockTime("")
+        firebaseUserAccountModelClass.setFnEditCount("")
+        firebaseUserAccountModelClass.setLnEditCount("")
+        firebaseUserAccountModelClass.setBdEditCount("")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

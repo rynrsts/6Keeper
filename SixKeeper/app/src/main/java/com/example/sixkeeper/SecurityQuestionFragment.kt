@@ -13,18 +13,29 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
 
 class SecurityQuestionFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var userAccList: List<UserAccModelClass>
 
     private lateinit var etSecurityQuestionFirstName: EditText
     private lateinit var etSecurityQuestionLastName: EditText
     private lateinit var etSecurityQuestionBirthDate: EditText
     private lateinit var etSecurityQuestionEmail: EditText
     private lateinit var etSecurityQuestionMobileNumber: EditText
+
+    private var userId = ""
+    private lateinit var firstNameD: String
+    private lateinit var lastNameD: String
+    private lateinit var birthDateD: String
+    private lateinit var emailD: String
+    private lateinit var mobileNumberD: String
 
     private lateinit var firstName: String
     private lateinit var lastName: String
@@ -57,6 +68,8 @@ class SecurityQuestionFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        userAccList = databaseHandlerClass.validateUserAcc()
 
         etSecurityQuestionFirstName =
                 appCompatActivity.findViewById(R.id.etSecurityQuestionFirstName)
@@ -67,6 +80,58 @@ class SecurityQuestionFragment : Fragment() {
         etSecurityQuestionEmail = appCompatActivity.findViewById(R.id.etSecurityQuestionEmail)
         etSecurityQuestionMobileNumber =
                 appCompatActivity.findViewById(R.id.etSecurityQuestionMobileNumber)
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
+
+        val firstNameRef = databaseReference.child("firstName")
+        val lastNameRef = databaseReference.child("lastName")
+        val birthDateRef = databaseReference.child("birthDate")
+        val emailRef = databaseReference.child("email")
+        val mobileNumberRef = databaseReference.child("mobileNumber")
+
+        firstNameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                firstNameD = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        lastNameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                lastNameD = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        birthDateRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                birthDateD = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        emailRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                emailD = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        mobileNumberRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                mobileNumberD = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     private fun setButtonOnClick() {
@@ -88,13 +153,11 @@ class SecurityQuestionFragment : Fragment() {
                             ) as InputMethodManager
 
                     if (
-                            databaseHandlerClass.verifyInformation(
-                                    encodedFirstName,
-                                    encodedLastName,
-                                    encodedBirthDate,
-                                    encodedEmail,
-                                    encodedMobileNumber
-                            )
+                            encodedFirstName == firstNameD &&
+                            encodedLastName == lastNameD &&
+                            encodedBirthDate == birthDateD &&
+                            encodedEmail == emailD &&
+                            encodedMobileNumber == mobileNumberD
                     ) {
                         val forgotCredentialsActivity: ForgotCredentialsActivity =
                                 activity as ForgotCredentialsActivity

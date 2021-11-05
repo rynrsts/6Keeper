@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,9 +26,13 @@ class ResetMasterPINFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var userAccList: List<UserAccModelClass>
 
     private lateinit var tvResetMasterPINMes: TextView
 
+    private var userId = ""
     private var masterPin = 0
 
     override fun onCreateView(
@@ -55,8 +61,16 @@ class ResetMasterPINFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        userAccList = databaseHandlerClass.validateUserAcc()
 
         tvResetMasterPINMes = appCompatActivity.findViewById(R.id.tvResetMasterPINMes)
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 
     private fun setMasterPINText() {
@@ -116,6 +130,8 @@ class ResetMasterPINFragment : Fragment() {
                         if (InternetConnectionClass().isConnected()) {
                             val encryptionClass = EncryptionClass()
                             val encodedInput = encodingClass.encodeData(masterPin.toString())
+                            val encryptedInput = encryptionClass.hashData(encodedInput)
+                            val inputString = encodingClass.decodeSHA(encryptedInput)
 
                             var actionLogId = 1000001
                             val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -128,9 +144,10 @@ class ResetMasterPINFragment : Fragment() {
                                 actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
                             }
 
-                            databaseHandlerClass.updateUserAcc(                                     // Reset Master PIN
-                                    "master_pin", encryptionClass.hashData(encodedInput), date
-                            )
+                            databaseReference.child("masterPin").setValue(inputString)
+                            databaseReference.child("mpinWrongAttempt").setValue("")
+                            databaseReference.child("fwrongAttempt").setValue("")
+                            databaseReference.child("mpinLockTime").setValue("")
 
                             databaseHandlerClass.addEventToActionLog(                               // Add event to Action Log
                                     UserActionLogModelClass(
@@ -140,21 +157,6 @@ class ResetMasterPINFragment : Fragment() {
                                             ),
                                             encodingClass.encodeData(date)
                                     )
-                            )
-
-                            databaseHandlerClass.updateAccountStatus(
-                                    "m_pin_wrong_attempt",
-                                    ""
-                            )
-
-                            databaseHandlerClass.updateAccountStatus(
-                                    "f_wrong_attempt",
-                                    ""
-                            )
-
-                            databaseHandlerClass.updateAccountStatus(
-                                    "m_pin_lock_time",
-                                    ""
                             )
 
                             it.apply {

@@ -21,8 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -61,22 +60,13 @@ open class UserAccountEditProcessClass : Fragment() {
     private var editCount: Int = 0
 
     private var userId: String = ""
+    private var password = ""
     private var masterPin: Int = 0
 
     @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {                                                     // Override on attach
         super.onAttach(activity)
         attActivity = activity                                                                      // Attach activity
-    }
-
-    fun setVariables() {
-        viewId = args.userAccountEditId
-        appCompatActivity = activity as AppCompatActivity
-
-        databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
-        encryptionClass = EncryptionClass()
-        firebaseDatabase = FirebaseDatabase.getInstance()
     }
 
     fun getViewId(): String {
@@ -87,8 +77,76 @@ open class UserAccountEditProcessClass : Fragment() {
         return appCompatActivity
     }
 
-    fun getEditCount(): Int {
-        return editCount
+    fun getEtUserEditCurrentPass(): EditText {
+        return etUserEditCurrentPass
+    }
+
+    fun getEtUserEditNewPass(): EditText {
+        return etUserEditNewPass
+    }
+
+    fun getEtUserEditConfirmPass(): EditText {
+        return etUserEditConfirmPass
+    }
+
+    fun getIvUserEditCurrentTogglePass(): ImageView {
+        return ivUserEditCurrentTogglePass
+    }
+
+    fun getIvUserEditNewTogglePass(): ImageView {
+        return ivUserEditNewTogglePass
+    }
+
+    fun getIvUserEditConfirmTogglePass(): ImageView {
+        return ivUserEditConfirmTogglePass
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {                                                    // Override back press
+                if (editMode) {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
+                    builder.setMessage(R.string.user_edit_cancel_alert_mes)
+                    builder.setCancelable(false)
+
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        etUserEditTextBox.setText(previousData)
+                        goBackToViewMode()
+                    }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
+
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.many_alert_title)
+                    alert.show()
+                } else {
+                    val controller = Navigation.findNavController(view!!)
+                    controller.popBackStack(R.id.userAccountEditFragment, true)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    fun setVariables() {
+        viewId = args.userAccountEditId
+        appCompatActivity = activity as AppCompatActivity
+
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 
     fun isFirstNameToUsername(): Boolean {
@@ -125,6 +183,81 @@ open class UserAccountEditProcessClass : Fragment() {
         tvUserEditNote = appCompatActivity.findViewById(R.id.tvUserEditNote)
     }
 
+    fun setInfoContent() {                                                                          // Set user information data
+        val button = Button(appCompatActivity)
+        var childRef = ""
+        var countChildRef = ""
+        var returnedValue = ""
+        var returnedEditCount = ""
+        var count = 0
+
+        when (viewId) {
+            "first name" -> {
+                childRef = "firstName"
+                countChildRef = "fnEditCount"
+            }
+            "last name" -> {
+                childRef = "lastName"
+                countChildRef = "lnEditCount"
+            }
+            "birth date" -> {
+                childRef = "birthDate"
+                countChildRef = "bdEditCount"
+            }
+            "email" -> {
+                childRef = "email"
+            }
+            "mobile number" -> {
+                childRef = "mobileNumber"
+            }
+            "username" -> {
+                childRef = "username"
+            }
+        }
+
+        if (viewId == "first name" || viewId == "last name" || viewId == "birth date") {
+            val countChildReference = databaseReference.child(countChildRef)
+
+            countChildReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    returnedEditCount = encodingClass.decodeData(value)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
+        }
+
+        val childReference = databaseReference.child(childRef)
+
+        childReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                returnedValue = encodingClass.decodeData(value)
+                count++
+
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            if (returnedEditCount.isNotEmpty()) {
+                editCount = Integer.parseInt(returnedEditCount)
+            }
+
+            etUserEditTextBox.setText(returnedValue)
+
+            if (editCount == 0) {
+                setViewButton()
+            }
+
+            setEditOnClick()
+        }
+    }
+
     fun setViewButton() {                                                                           // View for button in the bottom
         clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
         val layoutButton = layoutInflater.inflate(
@@ -133,179 +266,7 @@ open class UserAccountEditProcessClass : Fragment() {
         clUserAccountEditButton.addView(layoutButton)
     }
 
-    fun setFirstName() {                                                                            // View for First Name
-        tvUserEditLabel.setText(R.string.many_first_name)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
-    }
-
-    fun setLastName() {                                                                             // View for Last Name
-        tvUserEditLabel.setText(R.string.many_last_name)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
-    }
-
-    fun setBirthDate() {                                                                            // View for Birth Date
-        tvUserEditLabel.setText(R.string.many_birth_date)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_CLASS_TEXT
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_date_range_gray)
-    }
-
-    fun setEmail() {                                                                                // View for Email
-        tvUserEditLabel.setText(R.string.many_email)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(60))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_email_gray)
-    }
-
-    fun setMobileNumber() {                                                                         // View for Mobile Number
-        tvUserEditLabel.setText(R.string.many_mobile_number)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_CLASS_NUMBER
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_phone_gray)
-    }
-
-    fun setUsername() {                                                                             // View for Username
-        tvUserEditLabel.setText(R.string.many_username)
-        etUserEditTextBox.apply {
-            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
-        }
-        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
-    }
-
-    fun setInfoContent() {                                                                          // Set user information data
-        etUserEditTextBox.setText(viewUserInformation())
-    }
-
-    private fun viewUserInformation(): String {                                                     // View desired user information
-        val userInfoList: List<UserInfoModelClass> = databaseHandlerClass.viewUserInfo()
-        val userUsername: String = databaseHandlerClass.viewUsername()
-        var returnValue = ""
-
-        var firstName = ""
-        var lastName = ""
-        var birthDate = ""
-        var email = ""
-        var mobileNumber = ""
-        val username = encodingClass.decodeData(userUsername)
-        var fnEditCount = ""
-        var lnEditCount = ""
-        var bdEditCount = ""
-
-        for (u in userInfoList) {
-            userId = encodingClass.decodeData(u.userId)
-            firstName = encodingClass.decodeData(u.firstName)
-            lastName = encodingClass.decodeData(u.lastName)
-            birthDate = encodingClass.decodeData(u.birthDate)
-            email = encodingClass.decodeData(u.email)
-            mobileNumber = encodingClass.decodeData(u.mobileNumber)
-            fnEditCount = encodingClass.decodeData(u.fnEditCount)
-            lnEditCount = encodingClass.decodeData(u.lnEditCount)
-            bdEditCount = encodingClass.decodeData(u.bdEditCount)
-        }
-
-        when (viewId) {
-            "first name" -> {
-                returnValue = firstName
-                editCount = Integer.parseInt(fnEditCount)
-            }
-            "last name" -> {
-                returnValue = lastName
-                editCount = Integer.parseInt(lnEditCount)
-            }
-            "birth date" -> {
-                returnValue = birthDate
-                editCount = Integer.parseInt(bdEditCount)
-            }
-            "email" -> {
-                returnValue = email
-            }
-            "mobile number" -> {
-                returnValue = mobileNumber
-            }
-            "username" -> {
-                returnValue = username
-            }
-        }
-
-        return returnValue
-    }
-
-    fun setView2() {                                                                                // View for Password
-        val clUserAccountEditContainer: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
-        val layoutContainer = layoutInflater.inflate(
-                R.layout.layout_user_edit_2, view as ViewGroup?, false
-        )
-        clUserAccountEditContainer.addView(layoutContainer)
-
-        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
-        val layoutButton = layoutInflater.inflate(
-                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
-        )
-        clUserAccountEditButton.addView(layoutButton)
-
-        etUserEditCurrentPass = appCompatActivity.findViewById(R.id.etUserEditCurrentPass)
-        etUserEditNewPass = appCompatActivity.findViewById(R.id.etUserEditNewPass)
-        tvUserEditNewPassNote = appCompatActivity.findViewById(R.id.tvUserEditNewPassNote)
-        etUserEditConfirmPass = appCompatActivity.findViewById(R.id.etUserEditConfirmPass)
-        tvUserEditConfirmPassNote = appCompatActivity.findViewById(R.id.tvUserEditConfirmPassNote)
-
-        ivUserEditCurrentTogglePass =
-                appCompatActivity.findViewById(R.id.ivUserEditCurrentTogglePass)
-        ivUserEditNewTogglePass = appCompatActivity.findViewById(R.id.ivUserEditNewTogglePass)
-        ivUserEditConfirmTogglePass =
-                appCompatActivity.findViewById(R.id.ivUserEditConfirmTogglePass)
-    }
-
-    fun getEtUserEditCurrentPass(): EditText {
-        return etUserEditCurrentPass
-    }
-
-    fun getEtUserEditNewPass(): EditText {
-        return etUserEditNewPass
-    }
-
-    fun getEtUserEditConfirmPass(): EditText {
-        return etUserEditConfirmPass
-    }
-
-    fun getIvUserEditCurrentTogglePass(): ImageView {
-        return ivUserEditCurrentTogglePass
-    }
-
-    fun getIvUserEditNewTogglePass(): ImageView {
-        return ivUserEditNewTogglePass
-    }
-
-    fun getIvUserEditConfirmTogglePass(): ImageView {
-        return ivUserEditConfirmTogglePass
-    }
-
-    fun setView3() {                                                                                // View for Master PIN
-        val clUserAccountEditContainer: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
-        val layoutContainer = layoutInflater.inflate(
-                R.layout.layout_user_edit_3, view as ViewGroup?, false
-        )
-        clUserAccountEditContainer.addView(layoutContainer)
-    }
-
-    fun setEditOnClick() {
+    private fun setEditOnClick() {
         when {
             isFirstNameToUsername() -> {
                 if (isFirstNameToBirthDate() && editCount > 0) {
@@ -465,9 +426,13 @@ open class UserAccountEditProcessClass : Fragment() {
                 val newPass = etUserEditNewPass.text.toString()
                 val confirmPass = etUserEditConfirmPass.text.toString()
 
+                val encodedCurrentPass = encodingClass.encodeData(currentPass)
+                val encryptedCurrentPass = encryptionClass.hashData(encodedCurrentPass)
+                val currentPassString = encodingClass.decodeSHA(encryptedCurrentPass)
+
                 if (
                         isPasswordValid(newPass) && confirmPass == newPass &&
-                        validateUserAccPass(currentPass)
+                        currentPassString == password
                 ) {
                     showSaveAlertDialog()
 
@@ -488,7 +453,7 @@ open class UserAccountEditProcessClass : Fragment() {
 
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
-                            !validateUserAccPass(currentPass)
+                            currentPassString != password
                     ) {
                         val toast: Toast = Toast.makeText(
                                 appCompatActivity.applicationContext,
@@ -503,153 +468,6 @@ open class UserAccountEditProcessClass : Fragment() {
                 }
             }
         }
-    }
-
-    private fun showSaveAlertDialog() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-
-        if (isFirstNameToBirthDate()) {
-            builder.setMessage(R.string.user_edit_save_alert_mes_2)
-        } else if (isEmailToUsername() || viewId == "password" || viewId == "master pin") {
-            builder.setMessage(R.string.user_edit_save_alert_mes)
-        }
-
-        builder.setCancelable(false)
-
-        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            val goToConfirmActivity = Intent(
-                    appCompatActivity, ConfirmActionActivity::class.java
-            )
-
-            @Suppress("DEPRECATION")
-            startActivityForResult(goToConfirmActivity, 16914)
-            appCompatActivity.overridePendingTransition(
-                    R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
-            )
-        }
-        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-            dialog.cancel()
-        }
-
-        val alert: AlertDialog = builder.create()
-        alert.setTitle(R.string.many_alert_title_confirm)
-        alert.show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 14523 && resultCode == 14523) {
-            if (viewId == "master pin") {
-                masterPin = data?.getIntExtra("masterPin", 0)!!
-                showSaveAlertDialog()
-            }
-        }
-
-        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
-            when (viewId) {
-                "first name" -> {
-                    updateInfo("first_name")
-                    updateDataInfo("firstName")
-                    updateEditCount("fn_edit_count")
-                    setInfoContent()
-                    goBackToViewMode()
-                }
-                "last name" -> {
-                    updateInfo("last_name")
-                    updateDataInfo("lastName")
-                    updateEditCount("ln_edit_count")
-                    setInfoContent()
-                    goBackToViewMode()
-                }
-                "birth date" -> {
-                    updateInfo("birth_date")
-                    updateDataInfo("birthDate")
-                    updateEditCount("bd_edit_count")
-                    setInfoContent()
-                    goBackToViewMode()
-                }
-                "email" -> {
-                    updateInfo("email")
-                    updateDataInfo("email")
-                    setInfoContent()
-                    goBackToViewMode()
-                }
-                "mobile number" -> {
-                    updateInfo("mobile_number")
-                    updateDataInfo("mobileNumber")
-                    setInfoContent()
-                    goBackToViewMode()
-                }
-                "username" -> {
-                    updateAccUsername()
-                    setInfoContent()
-                    goBackToViewMode()
-                    setUsernameInMenu()
-                }
-                "password" -> {
-                    updateAccPassword()
-                    view?.apply {
-                        postDelayed(
-                                {
-                                    appCompatActivity.onBackPressed()
-                                }, 250
-                        )
-                    }
-                }
-                "master pin" -> {
-                    updateAccMasterPIN()
-                    view?.apply {
-                        postDelayed(
-                                {
-                                    appCompatActivity.onBackPressed()
-                                }, 250
-                        )
-                    }
-                }
-            }
-
-            val toast: Toast = Toast.makeText(
-                    appCompatActivity.applicationContext,
-                    R.string.many_changes_saved,
-                    Toast.LENGTH_SHORT
-            )
-            toast.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {                                                    // Override back press
-                if (editMode) {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
-                    builder.setMessage(R.string.user_edit_cancel_alert_mes)
-                    builder.setCancelable(false)
-
-                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                        etUserEditTextBox.setText(previousData)
-                        goBackToViewMode()
-                    }
-                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                        dialog.cancel()
-                    }
-
-                    val alert: AlertDialog = builder.create()
-                    alert.setTitle(R.string.many_alert_title)
-                    alert.show()
-                } else {
-                    val controller = Navigation.findNavController(view!!)
-                    controller.popBackStack(R.id.userAccountEditFragment, true)
-                }
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun isNameValid(s: String): Boolean {                                                   // Accept letters, (.) and (-) only
@@ -672,140 +490,6 @@ open class UserAccountEditProcessClass : Fragment() {
         val exp = "[a-zA-Z0-9._-]{6,}"
         val pattern: Pattern = Pattern.compile(exp)
         return pattern.matcher(s).matches()
-    }
-
-    private fun validateUserAccPass(pass: String): Boolean {
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var bool = false
-
-        val encodedPassword = encodingClass.encodeData(pass)
-        val encryptedPassword = encryptionClass.hashData(encodedPassword)
-
-        for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
-            bool = encryptedPassword.contentEquals(u.password)
-        }
-
-        return bool
-    }
-
-    private fun isPasswordValid(s: String): Boolean {                                               // Accept 1 lowercase, uppercase, number, (.), (_) and (-) only
-        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(?=.{8,})(^[a-zA-Z0-9._-]+\$)"
-        val pattern = Pattern.compile(exp)
-        return pattern.matcher(s).matches()
-    }
-
-    private fun updateInfo(field: String) {                                                         // Update desired information
-        val input = etUserEditTextBox.text.toString()
-        databaseHandlerClass.updateUserInfo(
-                field, encodingClass.encodeData(input), getCurrentDate()
-        )
-
-        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
-                UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account $viewId was modified."),
-                        encodingClass.encodeData(getCurrentDate())
-                )
-        )
-    }
-
-    private fun updateDataInfo(field: String) {                                                     // Update information in Firebase
-        val input = etUserEditTextBox.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
-
-        databaseReference = firebaseDatabase.getReference(userId)
-        databaseReference.child(field).setValue(encodedInput)
-    }
-
-    private fun updateEditCount(field: String) {                                                    // Update edit count
-        editCount += 1
-        databaseHandlerClass.updateEditCountUserInfo(
-                field, encodingClass.encodeData(editCount.toString())
-        )
-    }
-
-    private fun getLastActionLogId(): Int {
-        var actionLogId = 1000001
-        val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-        if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-        }
-
-        return actionLogId
-    }
-
-    private fun updateAccUsername() {                                                               // Update Username
-        val input = etUserEditTextBox.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
-
-        if (viewId == "username") {
-            databaseHandlerClass.updateUserUsername(encodedInput, getCurrentDate())
-
-            databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
-                    UserActionLogModelClass(
-                            encodingClass.encodeData(getLastActionLogId().toString()),
-                            encodingClass.encodeData("App account username '$previousData'" +
-                                    " was modified to '$input'."),
-                            encodingClass.encodeData(getCurrentDate())
-                    )
-            )
-        }
-
-        databaseReference = firebaseDatabase.getReference(userId)
-        databaseReference.child("username").setValue(encodedInput)
-    }
-
-    private fun updateAccPassword() {                                                               // Update Password
-        val input = etUserEditNewPass.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
-        val encryptedInput = encryptionClass.hashData(encodedInput)
-        val inputString = encodingClass.decodeSHA(encryptedInput)
-
-        databaseHandlerClass.updateUserAcc("password", encryptedInput, getCurrentDate())
-
-        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
-                UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account password was modified."),
-                        encodingClass.encodeData(getCurrentDate())
-                )
-        )
-
-        databaseReference = firebaseDatabase.getReference(userId)
-        databaseReference.child("password").setValue(inputString)
-    }
-
-    private fun updateAccMasterPIN() {                                                              // Update Master PIN
-        val encodedInput = encodingClass.encodeData(masterPin.toString())
-        val encryptedInput = encryptionClass.hashData(encodedInput)
-        val inputString = encodingClass.decodeSHA(encryptedInput)
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-
-        for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
-        }
-
-        databaseHandlerClass.updateUserAcc("master_pin", encryptedInput, getCurrentDate())
-
-        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
-                UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account master pin was modified."),
-                        encodingClass.encodeData(getCurrentDate())
-                )
-        )
-
-        databaseReference = firebaseDatabase.getReference(userId)
-        databaseReference.child("masterPin").setValue(inputString)
-    }
-    
-    @SuppressLint("SimpleDateFormat")
-    private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-        return dateFormat.format(calendar.time)
     }
 
     private fun goBackToViewMode() {                                                                // Go back to view mode
@@ -844,13 +528,284 @@ open class UserAccountEditProcessClass : Fragment() {
         editMode = false
     }
 
-    private fun setUsernameInMenu() {                                                               // Set update username in menu
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var username = ""
+    private fun showSaveAlertDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(getAppCompatActivity())
 
-        for (u in userAccList) {
-            username = encodingClass.decodeData(u.username)
+        if (isFirstNameToBirthDate()) {
+            builder.setMessage(R.string.user_edit_save_alert_mes_2)
+        } else if (isEmailToUsername() || viewId == "password" || viewId == "master pin") {
+            builder.setMessage(R.string.user_edit_save_alert_mes)
         }
+
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            val goToConfirmActivity = Intent(
+                    appCompatActivity, ConfirmActionActivity::class.java
+            )
+
+            @Suppress("DEPRECATION")
+            startActivityForResult(goToConfirmActivity, 16914)
+            appCompatActivity.overridePendingTransition(
+                    R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
+            )
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+            dialog.cancel()
+        }
+
+        val alert: AlertDialog = builder.create()
+        alert.setTitle(R.string.many_alert_title_confirm)
+        alert.show()
+    }
+
+    private fun isPasswordValid(s: String): Boolean {                                               // Accept 1 lowercase, uppercase, number, (.), (_) and (-) only
+        val exp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?=.*[._-])(?=\\S+\$)(?=.{8,})(^[a-zA-Z0-9._-]+\$)"
+        val pattern = Pattern.compile(exp)
+        return pattern.matcher(s).matches()
+    }
+
+    fun setFirstName() {                                                                            // View for First Name
+        tvUserEditLabel.setText(R.string.many_first_name)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
+    }
+
+    fun setLastName() {                                                                             // View for Last Name
+        tvUserEditLabel.setText(R.string.many_last_name)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
+    }
+
+    fun setBirthDate() {                                                                            // View for Birth Date
+        tvUserEditLabel.setText(R.string.many_birth_date)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_CLASS_TEXT
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_date_range_gray)
+    }
+
+    fun setEmail() {                                                                                // View for Email
+        tvUserEditLabel.setText(R.string.many_email)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(60))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_email_gray)
+    }
+
+    fun setMobileNumber() {                                                                         // View for Mobile Number
+        tvUserEditLabel.setText(R.string.many_mobile_number)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_phone_gray)
+    }
+
+    fun setUsername() {                                                                             // View for Username
+        tvUserEditLabel.setText(R.string.many_username)
+        etUserEditTextBox.apply {
+            inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            filters = arrayOf<InputFilter>(InputFilter.LengthFilter(30))
+        }
+        ivUserEditIcon.setImageResource(R.drawable.ic_person_gray)
+    }
+
+    fun setView2() {                                                                                // View for Password
+        val clUserAccountEditContainer: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_user_edit_2, view as ViewGroup?, false
+        )
+        clUserAccountEditContainer.addView(layoutContainer)
+
+        clUserAccountEditButton = appCompatActivity.findViewById(R.id.clUserAccountEditButton)
+        val layoutButton = layoutInflater.inflate(
+                R.layout.layout_user_edit_button_2, view as ViewGroup?, false
+        )
+        clUserAccountEditButton.addView(layoutButton)
+
+        etUserEditCurrentPass = appCompatActivity.findViewById(R.id.etUserEditCurrentPass)
+        etUserEditNewPass = appCompatActivity.findViewById(R.id.etUserEditNewPass)
+        tvUserEditNewPassNote = appCompatActivity.findViewById(R.id.tvUserEditNewPassNote)
+        etUserEditConfirmPass = appCompatActivity.findViewById(R.id.etUserEditConfirmPass)
+        tvUserEditConfirmPassNote = appCompatActivity.findViewById(R.id.tvUserEditConfirmPassNote)
+
+        ivUserEditCurrentTogglePass =
+                appCompatActivity.findViewById(R.id.ivUserEditCurrentTogglePass)
+        ivUserEditNewTogglePass = appCompatActivity.findViewById(R.id.ivUserEditNewTogglePass)
+        ivUserEditConfirmTogglePass =
+                appCompatActivity.findViewById(R.id.ivUserEditConfirmTogglePass)
+
+        getPassword()
+        setEditOnClick()
+    }
+
+    private fun getPassword() {
+        val passwordRef = databaseReference.child("password")
+
+        passwordRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                password = dataSnapshot.getValue(String::class.java).toString()
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    fun setView3() {                                                                                // View for Master PIN
+        val clUserAccountEditContainer: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEditContainer)
+        val layoutContainer = layoutInflater.inflate(
+                R.layout.layout_user_edit_3, view as ViewGroup?, false
+        )
+        clUserAccountEditContainer.addView(layoutContainer)
+
+        setEditOnClick()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 14523 && resultCode == 14523) {
+            if (viewId == "master pin") {
+                masterPin = data?.getIntExtra("masterPin", 0)!!
+                showSaveAlertDialog()
+            }
+        }
+
+        if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
+            when (viewId) {
+                "first name" -> {
+                    updateInfo("firstName")
+                    updateEditCount("fnEditCount")
+                    goBackToViewMode()
+                }
+                "last name" -> {
+                    updateInfo("lastName")
+                    updateEditCount("lnEditCount")
+                    goBackToViewMode()
+                }
+                "birth date" -> {
+                    updateInfo("birthDate")
+                    updateEditCount("bdEditCount")
+                    goBackToViewMode()
+                }
+                "email" -> {
+                    updateInfo("email")
+                    goBackToViewMode()
+                }
+                "mobile number" -> {
+                    updateInfo("mobileNumber")
+                    goBackToViewMode()
+                }
+                "username" -> {
+                    updateAccUsername()
+                    goBackToViewMode()
+                    setUsernameInMenu()
+                }
+                "password" -> {
+                    updateAccPassword()
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    appCompatActivity.onBackPressed()
+                                }, 250
+                        )
+                    }
+                }
+                "master pin" -> {
+                    updateAccMasterPIN()
+                    view?.apply {
+                        postDelayed(
+                                {
+                                    appCompatActivity.onBackPressed()
+                                }, 250
+                        )
+                    }
+                }
+            }
+
+            val toast: Toast = Toast.makeText(
+                    appCompatActivity.applicationContext,
+                    R.string.many_changes_saved,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+        }
+    }
+
+    private fun updateInfo(field: String) {                                                         // Update desired information
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account $viewId was modified."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
+
+        val input = etUserEditTextBox.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
+
+        databaseReference.child(field).setValue(encodedInput)
+    }
+
+    private fun getLastActionLogId(): Int {
+        var actionLogId = 1000001
+        val lastId = databaseHandlerClass.getLastIdOfActionLog()
+
+        if (lastId.isNotEmpty()) {
+            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+        }
+
+        return actionLogId
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        return dateFormat.format(calendar.time)
+    }
+
+    private fun updateEditCount(field: String) {                                                    // Update edit count
+        editCount += 1
+        clUserAccountEditButton.removeAllViews()
+
+        val encodedInput = encodingClass.encodeData(editCount.toString())
+
+        databaseReference.child(field).setValue(encodedInput)
+    }
+
+    private fun updateAccUsername() {                                                               // Update Username
+        val input = etUserEditTextBox.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account username '$previousData'" +
+                                " was modified to '$input'."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
+
+        databaseReference.child("username").setValue(encodedInput)
+    }
+
+    private fun setUsernameInMenu() {                                                               // Set update username in menu
+        val input = etUserEditTextBox.text.toString()
 
         val navigationView: NavigationView =
                 appCompatActivity.findViewById(R.id.nvIndexNavigationView)
@@ -858,6 +813,39 @@ open class UserAccountEditProcessClass : Fragment() {
         val tvNavigationHeaderUsername: TextView =
                 headerView.findViewById(R.id.tvNavigationHeaderUsername)
 
-        tvNavigationHeaderUsername.text = username
+        tvNavigationHeaderUsername.text = input
+    }
+
+    private fun updateAccPassword() {                                                               // Update Password
+        val input = etUserEditNewPass.text.toString()
+        val encodedInput = encodingClass.encodeData(input)
+        val encryptedInput = encryptionClass.hashData(encodedInput)
+        val inputString = encodingClass.decodeSHA(encryptedInput)
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account password was modified."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
+
+        databaseReference.child("password").setValue(inputString)
+    }
+
+    private fun updateAccMasterPIN() {                                                              // Update Master PIN
+        val encodedInput = encodingClass.encodeData(masterPin.toString())
+        val encryptedInput = encryptionClass.hashData(encodedInput)
+        val inputString = encodingClass.decodeSHA(encryptedInput)
+
+        databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
+                UserActionLogModelClass(
+                        encodingClass.encodeData(getLastActionLogId().toString()),
+                        encodingClass.encodeData("App account master pin was modified."),
+                        encodingClass.encodeData(getCurrentDate())
+                )
+        )
+
+        databaseReference.child("masterPin").setValue(inputString)
     }
 }

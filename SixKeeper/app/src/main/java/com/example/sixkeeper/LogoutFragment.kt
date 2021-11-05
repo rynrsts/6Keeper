@@ -128,11 +128,6 @@ class LogoutFragment : Fragment() {
             userId = u.userId
         }
 
-        databaseHandlerClass.updateUserStatus(
-                userId,
-                encodingClass.encodeData(0.toString())
-        )
-
         val decodedUserId = encodingClass.decodeData(userId)
         databaseReference = firebaseDatabase.getReference(decodedUserId)
 

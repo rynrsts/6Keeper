@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 
-
 class DatabaseHandlerClass(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -16,44 +15,16 @@ class DatabaseHandlerClass(context: Context) :
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "SixKeeperDatabase"
 
-        private const val TABLE_USER_INFO = "UserInformationTable"
         private const val TABLE_USER_ACC = "UserAccountTable"
-        private const val TABLE_ACCOUNT_STATUS = "AccountStatusTable"
         private const val TABLE_SETTINGS = "SettingsTable"
-        private const val TABLE_PROFILE = "ProfileTable"
         private const val TABLE_ACTION_LOG = "ActionLogTable"
         private const val TABLE_CATEGORIES = "CategoriesTable"
         private const val TABLE_PLATFORMS = "PlatformsTable"
         private const val TABLE_ACCOUNTS = "AccountsTable"
         private const val TABLE_SAVED_PASS = "SavedPasswordTable"
 
-        // TABLE_USER_INFO
-        private const val KEY_USER_ID = "user_id"
-        private const val KEY_FIRST_NAME = "first_name"
-        private const val KEY_LAST_NAME = "last_name"
-        private const val KEY_BIRTH_DATE = "birth_date"
-        private const val KEY_EMAIL = "email"
-        private const val KEY_MOBILE_NUMBER = "mobile_number"
-        private const val KEY_LAST_UPDATE = "last_update"
-        private const val KEY_FN_EDIT_COUNT = "fn_edit_count"
-        private const val KEY_LN_EDIT_COUNT = "ln_edit_count"
-        private const val KEY_BD_EDIT_COUNT = "bd_edit_count"
-
         // TABLE_USER_ACC
-//        private const val KEY_USER_ID = "user_id"
-        private const val KEY_USERNAME = "username"
-        private const val KEY_PASSWORD = "password"
-        private const val KEY_MASTER_PIN = "master_pin"
-        private const val KEY_ACCOUNT_STATUS = "account_status"
-        private const val KEY_CREATION_DATE = "creation_date"
-        private const val KEY_LAST_LOGIN = "last_login"
-
-        // TABLE_ACCOUNT_STATUS
-        private const val KEY_PW_WRONG_ATTEMPT = "pw_wrong_attempt"
-        private const val KEY_PW_LOCK_TIME = "pw_lock_time"
-        private const val KEY_M_PIN_WRONG_ATTEMPT = "m_pin_wrong_attempt"
-        private const val KEY_F_WRONG_ATTEMPT = "f_wrong_attempt"
-        private const val KEY_M_PIN_LOCK_TIME = "m_pin_lock_time"
+        private const val KEY_USER_ID = "user_id"
 
         // TABLE_SETTINGS
 //        private const val KEY_USER_ID = "user_id"
@@ -61,10 +32,6 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_AUTO_LOCK = "auto_lock"
         private const val KEY_AUTO_LOCK_TIMER = "auto_lock_timer"
         private const val KEY_FINGERPRINT = "fingerprint"
-
-        // TABLE_PROFILE
-//        private const val KEY_USER_ID = "user_id"
-        private const val KEY_PROFILE_PHOTO = "profile_photo"
 
         // TABLE_ACTION_LOG
         private const val KEY_ACTION_LOG_ID = "action_log_id"
@@ -94,7 +61,7 @@ class DatabaseHandlerClass(context: Context) :
         private const val KEY_ACCOUNT_IS_FAVORITES = "account_is_favorites"
         private const val KEY_ACCOUNT_DELETED = "account_deleted"
         private const val KEY_ACCOUNT_DELETE_DATE = "account_delete_date"
-        // KEY_CREATION_DATE = "creation_date"
+        private const val KEY_CREATION_DATE = "creation_date"
         private const val KEY_PASSWORD_STATUS = "password_status"
 //        private const val KEY_PLATFORM_ID = "platform_id"
 //        private const val KEY_PLATFORM_NAME = "platform_name"
@@ -110,38 +77,9 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createUserInfoTable = (
-                "CREATE TABLE " + TABLE_USER_INFO + "(" +
-                        KEY_USER_ID + " TEXT," +
-                        KEY_FIRST_NAME + " TEXT," +
-                        KEY_LAST_NAME + " TEXT," +
-                        KEY_BIRTH_DATE + " TEXT," +
-                        KEY_EMAIL + " TEXT," +
-                        KEY_MOBILE_NUMBER + " TEXT," +
-                        KEY_LAST_UPDATE + " TEXT," +
-                        KEY_FN_EDIT_COUNT + " TEXT," +
-                        KEY_LN_EDIT_COUNT + " TEXT," +
-                        KEY_BD_EDIT_COUNT + " TEXT" +
-                        ")"
-                )
         val createUserAccTable = (
                 "CREATE TABLE " + TABLE_USER_ACC + "(" +
-                        KEY_USER_ID + " TEXT," +
-                        KEY_USERNAME + " TEXT," +
-                        KEY_PASSWORD + " BLOB," +
-                        KEY_MASTER_PIN + " BLOB," +
-                        KEY_ACCOUNT_STATUS + " TEXT," +
-                        KEY_CREATION_DATE + " TEXT," +
-                        KEY_LAST_LOGIN + " TEXT" +
-                        ")"
-                )
-        val createAccountStatusTable = (
-                "CREATE TABLE " + TABLE_ACCOUNT_STATUS + "(" +
-                        KEY_PW_WRONG_ATTEMPT + " TEXT," +
-                        KEY_PW_LOCK_TIME + " TEXT," +
-                        KEY_M_PIN_WRONG_ATTEMPT + " BLOB," +
-                        KEY_F_WRONG_ATTEMPT + " BLOB," +
-                        KEY_M_PIN_LOCK_TIME + " TEXT" +
+                        KEY_USER_ID + " TEXT" +
                         ")"
                 )
         val createSettingsTable = (
@@ -151,12 +89,6 @@ class DatabaseHandlerClass(context: Context) :
                         KEY_AUTO_LOCK + " TEXT," +
                         KEY_AUTO_LOCK_TIMER + " TEXT," +
                         KEY_FINGERPRINT + " TEXT" +
-                        ")"
-                )
-        val createProfileTable = (
-                "CREATE TABLE " + TABLE_PROFILE + "(" +
-                        KEY_USER_ID + " TEXT," +
-                        KEY_PROFILE_PHOTO + " BLOB" +
                         ")"
                 )
         val createActionLogTable = (
@@ -211,11 +143,8 @@ class DatabaseHandlerClass(context: Context) :
                         ")"
                 )
 
-        db?.execSQL(createUserInfoTable)
         db?.execSQL(createUserAccTable)
-        db?.execSQL(createAccountStatusTable)
         db?.execSQL(createSettingsTable)
-        db?.execSQL(createProfileTable)
         db?.execSQL(createActionLogTable)
         db?.execSQL(createCategoriesTable)
         db?.execSQL(createPlatformsTable)
@@ -224,11 +153,8 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_INFO")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_ACCOUNT_STATUS")
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER_ACC")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_PROFILE")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ACTION_LOG")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_CATEGORIES")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PLATFORMS")
@@ -245,62 +171,15 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    fun addUserInfo(userInfo: UserInfoModelClass): Long {                                           // Add User Information
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_USER_ID, userInfo.userId)
-            put(KEY_FIRST_NAME, userInfo.firstName)
-            put(KEY_LAST_NAME, userInfo.lastName)
-            put(KEY_BIRTH_DATE, userInfo.birthDate)
-            put(KEY_EMAIL, userInfo.email)
-            put(KEY_MOBILE_NUMBER, userInfo.mobileNumber)
-            put(KEY_LAST_UPDATE, userInfo.lastUpdate)
-            put(KEY_FN_EDIT_COUNT, userInfo.fnEditCount)
-            put(KEY_LN_EDIT_COUNT, userInfo.lnEditCount)
-            put(KEY_BD_EDIT_COUNT, userInfo.bdEditCount)
-        }
-
-        val success = db.insert(TABLE_USER_INFO, null, contentValues)
-
-        db.close()
-        return success
-    }
-
     fun addUserAcc(userAcc: UserAccModelClass): Long {                                              // Add User Account
         val db = this.writableDatabase
         val contentValues = ContentValues()
 
         contentValues.apply {
             put(KEY_USER_ID, userAcc.userId)
-            put(KEY_USERNAME, userAcc.username)
-            put(KEY_PASSWORD, userAcc.password)
-            put(KEY_MASTER_PIN, userAcc.masterPin)
-            put(KEY_ACCOUNT_STATUS, userAcc.accountStatus)
-            put(KEY_CREATION_DATE, userAcc.creationDate)
-            put(KEY_LAST_LOGIN, userAcc.lastLogin)
         }
 
         val success = db.insert(TABLE_USER_ACC, null, contentValues)
-
-        db.close()
-        return success
-    }
-
-    fun addAccountStatus(userAccountStatus: UserAccountStatusModelClass): Long {                    // Add Account Status
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_PW_WRONG_ATTEMPT, userAccountStatus.pwWrongAttempt)
-            put(KEY_PW_LOCK_TIME, userAccountStatus.pwLockTime)
-            put(KEY_M_PIN_WRONG_ATTEMPT, userAccountStatus.mPinWrongAttempt)
-            put(KEY_F_WRONG_ATTEMPT, userAccountStatus.fWrongAttempt)
-            put(KEY_M_PIN_LOCK_TIME, userAccountStatus.mPinLockTime)
-        }
-
-        val success = db.insert(TABLE_ACCOUNT_STATUS, null, contentValues)
 
         db.close()
         return success
@@ -319,21 +198,6 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         val success = db.insert(TABLE_SETTINGS, null, contentValues)
-
-        db.close()
-        return success
-    }
-
-    fun addProfilePhoto(userId: String, userPhoto: ByteArray): Long {                               // Add blank Profile Photo
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_USER_ID, userId)
-            put(KEY_PROFILE_PHOTO, userPhoto)
-        }
-
-        val success = db.insert(TABLE_PROFILE, null, contentValues)
 
         db.close()
         return success
@@ -458,34 +322,13 @@ class DatabaseHandlerClass(context: Context) :
         }
 
         var userId: String
-        var userUsername: String
-        var userPassword: ByteArray
-        var userMasterPIN: ByteArray
-        var userAccountStatus: String
-        var userCreationDate: String
-        var userLastLogin: String
 
         if (cursor.moveToFirst()) {
             do {
                 userId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
-                userUsername = cursor.getString(cursor.getColumnIndex(KEY_USERNAME))
-                userPassword = cursor.getBlob(cursor.getColumnIndex(KEY_PASSWORD))
-                userMasterPIN = cursor.getBlob(cursor.getColumnIndex(KEY_MASTER_PIN))
-                userAccountStatus =
-                        cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_STATUS))
-                userCreationDate =
-                        cursor.getString(cursor.getColumnIndex(KEY_CREATION_DATE))
-                userLastLogin =
-                        cursor.getString(cursor.getColumnIndex(KEY_LAST_LOGIN))
 
                 val user = UserAccModelClass(
-                        userId = userId,
-                        username = userUsername,
-                        password = userPassword,
-                        masterPin = userMasterPIN,
-                        accountStatus = userAccountStatus,
-                        creationDate = userCreationDate,
-                        lastLogin = userLastLogin
+                        userId = userId
                 )
                 userAccList.add(user)
             } while (cursor.moveToNext())
@@ -494,225 +337,6 @@ class DatabaseHandlerClass(context: Context) :
         cursor.close()
         db.close()
         return userAccList
-    }
-
-    @SuppressLint("Recycle")
-    fun viewAccStatus(): String {                                                                   // View Account Status
-        val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return String.toString()
-        }
-
-        var userStatus = ""
-
-        if (cursor.moveToFirst()) {
-            do {
-                userStatus = cursor.getString(cursor.getColumnIndex(KEY_ACCOUNT_STATUS))
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userStatus
-    }
-
-    @SuppressLint("Recycle")
-    fun viewUserInfo(): List<UserInfoModelClass> {                                                  // View User Information
-        val userInfoList: ArrayList<UserInfoModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var userId: String
-        var userFirstName: String
-        var userLastName: String
-        var userBirthDate: String
-        var userEmail: String
-        var userMobileNumber: String
-        var userLastUpdate: String
-        var userFnEditCount: String
-        var userLnEditCount: String
-        var userBdEditCount: String
-
-        if (cursor.moveToFirst()) {
-            do {
-                userId = cursor.getString(cursor.getColumnIndex(KEY_USER_ID))
-                userFirstName = cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME))
-                userLastName = cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME))
-                userBirthDate = cursor.getString(cursor.getColumnIndex(KEY_BIRTH_DATE))
-                userEmail = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
-                userMobileNumber = cursor.getString(cursor.getColumnIndex(KEY_MOBILE_NUMBER))
-                userLastUpdate = cursor.getString(cursor.getColumnIndex(KEY_LAST_UPDATE))
-                userFnEditCount = cursor.getString(cursor.getColumnIndex(KEY_FN_EDIT_COUNT))
-                userLnEditCount = cursor.getString(cursor.getColumnIndex(KEY_LN_EDIT_COUNT))
-                userBdEditCount = cursor.getString(cursor.getColumnIndex(KEY_BD_EDIT_COUNT))
-
-
-                val user = UserInfoModelClass(
-                        userId = userId,
-                        firstName = userFirstName,
-                        lastName = userLastName,
-                        birthDate = userBirthDate,
-                        email = userEmail,
-                        mobileNumber = userMobileNumber,
-                        lastUpdate = userLastUpdate,
-                        fnEditCount = userFnEditCount,
-                        lnEditCount = userLnEditCount,
-                        bdEditCount = userBdEditCount
-                )
-                userInfoList.add(user)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userInfoList
-    }
-
-    @SuppressLint("Recycle")
-    fun viewUsername(): String {                                                                    // View Username
-        val selectQuery = "SELECT * FROM $TABLE_USER_ACC"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return String.toString()
-        }
-
-        var userUsername = ""
-
-        if (cursor.moveToFirst()) {
-            do {
-                userUsername = cursor.getString(cursor.getColumnIndex(KEY_USERNAME))
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userUsername
-    }
-
-    fun viewAccountStatus(): List<UserAccountStatusModelClass> {                                    // View Account Status
-        val userAccStatusList: ArrayList<UserAccountStatusModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_ACCOUNT_STATUS"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var userPwWrongAttempt: String
-        var userPwLockTime: String
-        var userMPinWrongAttempt: String
-        var userFWrongAttempt: String
-        var userMPinLockTime: String
-
-        if (cursor.moveToFirst()) {
-            do {
-                userPwWrongAttempt = cursor.getString(cursor.getColumnIndex(KEY_PW_WRONG_ATTEMPT))
-                userPwLockTime = cursor.getString(cursor.getColumnIndex(KEY_PW_LOCK_TIME))
-                userMPinWrongAttempt =
-                        cursor.getString(cursor.getColumnIndex(KEY_M_PIN_WRONG_ATTEMPT))
-                userFWrongAttempt = cursor.getString(cursor.getColumnIndex(KEY_F_WRONG_ATTEMPT))
-                userMPinLockTime = cursor.getString(cursor.getColumnIndex(KEY_M_PIN_LOCK_TIME))
-
-                val user = UserAccountStatusModelClass(
-                        pwWrongAttempt = userPwWrongAttempt,
-                        pwLockTime = userPwLockTime,
-                        mPinWrongAttempt = userMPinWrongAttempt,
-                        fWrongAttempt = userFWrongAttempt,
-                        mPinLockTime = userMPinLockTime
-                )
-                userAccStatusList.add(user)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return userAccStatusList
-    }
-
-    fun verifyInformation(                                                                          // Verify Information for Reset
-            firstName: String,
-            lastName: String,
-            birthDate: String,
-            email: String,
-            mobileNumber: String
-    ): Boolean {
-        val selectQuery = "SELECT * FROM $TABLE_USER_INFO"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-        var correct = false
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return false
-        }
-
-        if (cursor.moveToFirst()) {
-            do {
-                if (
-                        firstName == cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)) &&
-                        lastName == cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)) &&
-                        birthDate == cursor.getString(cursor.getColumnIndex(KEY_BIRTH_DATE)) &&
-                        email == cursor.getString(cursor.getColumnIndex(KEY_EMAIL)) &&
-                        mobileNumber == cursor.getString(cursor.getColumnIndex(KEY_MOBILE_NUMBER))
-                ) {
-                    correct = true
-                }
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return correct
-    }
-
-    fun viewProfilePhoto(): ByteArray {                                                             // View Profile Photo
-        val selectQuery = "SELECT * FROM $TABLE_PROFILE"
-        val db = this.readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return "".toByteArray()
-        }
-
-        var profilePhoto: ByteArray = "".toByteArray()
-
-        if (cursor.moveToFirst()) {
-            do {
-                profilePhoto = cursor.getBlob(cursor.getColumnIndex(KEY_PROFILE_PHOTO))
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return profilePhoto
     }
 
     fun getLastIdOfActionLog(): String {                                                            // Get last Id of of Platforms
@@ -1371,144 +995,6 @@ class DatabaseHandlerClass(context: Context) :
      *******************************************************************************************
      */
 
-    fun updateUserStatus(id: String, accStatus: String): Int {                                      // Update User Status, 0 or 1
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_ACCOUNT_STATUS, accStatus)
-        }
-
-        val success = db.update(
-                TABLE_USER_ACC,
-                contentValues,
-                "$KEY_USER_ID='$id'",
-                null
-        )
-
-        db.close()
-        return success
-    }
-
-    fun updateLastLogin(id: String, lastLogin: String): Int {                                       // Update last login
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_LAST_LOGIN, lastLogin)
-        }
-
-        val success = db.update(
-                TABLE_USER_ACC,
-                contentValues,
-                "$KEY_USER_ID='$id'",
-                null
-        )
-
-        db.close()
-        return success
-    }
-
-    fun updateUserInfo(field: String, updatedData: String, lastUpdate: String): Int {               // Update User Information
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(field, updatedData)
-            put(KEY_LAST_UPDATE, lastUpdate)
-        }
-
-        val success = db.update(TABLE_USER_INFO, contentValues, null, null)
-
-        db.close()
-        return success
-    }
-
-    fun updateEditCountUserInfo(field: String, updatedData: String): Int {                          // Update Edit Count in User Information
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(field, updatedData)
-        }
-
-        val success = db.update(TABLE_USER_INFO, contentValues, null, null)
-
-        db.close()
-        return success
-    }
-
-    fun updateUserUsername(updatedData: String, lastUpdate: String): Int {                          // Update Username
-        val db = this.writableDatabase
-        val contentValues1 = ContentValues()
-        val contentValues2 = ContentValues()
-
-        contentValues1.apply {
-            put(KEY_USERNAME, updatedData)
-        }
-        contentValues2.apply {
-            put(KEY_LAST_UPDATE, lastUpdate)
-        }
-
-        val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
-        db.update(TABLE_USER_INFO, contentValues2, null, null)
-
-        db.close()
-        return success
-    }
-
-    fun updateUserAcc(field: String, updatedData: ByteArray, lastUpdate: String): Int {             // Update User Account
-        val db = this.writableDatabase
-        val contentValues1 = ContentValues()
-        val contentValues2 = ContentValues()
-
-        contentValues1.apply {
-            put(field, updatedData)
-        }
-        contentValues2.apply {
-            put(KEY_LAST_UPDATE, lastUpdate)
-        }
-
-        val success = db.update(TABLE_USER_ACC, contentValues1, null, null)
-        db.update(TABLE_USER_INFO, contentValues2, null, null)
-
-        db.close()
-        return success
-    }
-
-    fun updateAccountStatus(field: String, updatedValue: String): Int {                             // Update Account Status
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(field, updatedValue)
-        }
-
-        val success = db.update(
-                TABLE_ACCOUNT_STATUS,
-                contentValues,
-                null,
-                null
-        )
-
-        db.close()
-        return success
-    }
-
-    fun updateProfilePhoto(value: ByteArray): Int {                                                 // Update Profile Photo
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-
-        contentValues.apply {
-            put(KEY_PROFILE_PHOTO, value)
-        }
-
-        val success = db.update(TABLE_PROFILE, contentValues, null, null)
-
-        db.close()
-        return success
-    }
-
     fun updateSettings(field: String, value: String): Int {                                         // Update Settings
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -1741,10 +1227,7 @@ class DatabaseHandlerClass(context: Context) :
         val db = this.writableDatabase
 
         val success = db.delete(TABLE_USER_ACC, "", null)
-        db.delete(TABLE_USER_INFO, "", null)
-        db.delete(TABLE_ACCOUNT_STATUS, "", null)
         db.delete(TABLE_SAVED_PASS, "", null)
-        db.delete(TABLE_PROFILE, "", null)
         db.delete(TABLE_ACTION_LOG, "", null)
         db.delete(TABLE_CATEGORIES, "", null)
         db.delete(TABLE_PLATFORMS, "", null)

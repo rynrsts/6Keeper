@@ -97,6 +97,11 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
                                 R.anim.anim_enter_left_to_right_1,
                                 R.anim.anim_exit_left_to_right_1
                         )
+                    } else if (fragmentNum == 2) {
+                        setCustomAnimations(
+                                R.anim.anim_enter_left_to_right_1,
+                                R.anim.anim_exit_left_to_right_1
+                        )
                     }
 
                     replace(R.id.clForgotCredentialsContainer, resetSelectionFragment)

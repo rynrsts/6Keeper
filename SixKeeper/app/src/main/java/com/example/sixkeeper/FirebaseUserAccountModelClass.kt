@@ -16,124 +16,151 @@ class FirebaseUserAccountModelClass {
     private var mPinWrongAttempt: String? = null
     private var fWrongAttempt: String? = null
     private var mPinLockTime: String? = null
-
-    fun getUsername(): String? {
-        return username
-    }
+    private var fnEditCount: String? = null
+    private var lnEditCount: String? = null
+    private var bdEditCount: String? = null
 
     fun setUsername(s: String?) {
         username = s
     }
 
-    fun getPassword(): String? {
-        return password
+    fun getUsername(): String? {
+        return username
     }
 
     fun setPassword(s: String?) {
         password = s
     }
 
-    fun getMasterPin(): String? {
-        return masterPin
+    fun getPassword(): String? {
+        return password
     }
 
     fun setMasterPin(s: String?) {
         masterPin = s
     }
 
-    fun getStatus(): String? {
-        return status
+    fun getMasterPin(): String? {
+        return masterPin
     }
 
     fun setStatus(s: String?) {
         status = s
     }
 
-    fun getFirstName(): String? {
-        return firstName
+    fun getStatus(): String? {
+        return status
     }
 
     fun setFirstName(s: String?) {
         firstName = s
     }
 
-    fun getLastName(): String? {
-        return lastName
+    fun getFirstName(): String? {
+        return firstName
     }
 
     fun setLastName(s: String?) {
         lastName = s
     }
 
-    fun getBirthDate(): String? {
-        return birthDate
+    fun getLastName(): String? {
+        return lastName
     }
 
     fun setBirthDate(s: String?) {
         birthDate = s
     }
 
-    fun getEmail(): String? {
-        return email
+    fun getBirthDate(): String? {
+        return birthDate
     }
 
     fun setEmail(s: String?) {
         email = s
     }
 
-    fun getMobileNumber(): String? {
-        return mobileNumber
+    fun getEmail(): String? {
+        return email
     }
 
     fun setMobileNumber(s: String?) {
         mobileNumber = s
     }
 
-    fun getProfilePhoto(): String? {
-        return profilePhoto
+    fun getMobileNumber(): String? {
+        return mobileNumber
     }
 
     fun setProfilePhoto(s: String?) {
         profilePhoto = s
     }
 
-    fun getPwWrongAttempt(): String? {
-        return pwWrongAttempt
+    fun getProfilePhoto(): String? {
+        return profilePhoto
     }
 
     fun setPwWrongAttempt(s: String?) {
         pwWrongAttempt = s
     }
 
-    fun getPwLockTime(): String? {
-        return pwLockTime
+    fun getPwWrongAttempt(): String? {
+        return pwWrongAttempt
     }
 
     fun setPwLockTime(s: String?) {
         pwLockTime = s
     }
 
-    fun getMPinWrongAttempt(): String? {
-        return mPinWrongAttempt
+    fun getPwLockTime(): String? {
+        return pwLockTime
     }
 
     fun setMPinWrongAttempt(s: String?) {
         mPinWrongAttempt = s
     }
 
-    fun getFWrongAttempt(): String? {
-        return fWrongAttempt
+    fun getMPinWrongAttempt(): String? {
+        return mPinWrongAttempt
     }
 
     fun setFWrongAttempt(s: String?) {
         fWrongAttempt = s
     }
 
-    fun getMPinLockTime(): String? {
-        return mPinLockTime
+    fun getFWrongAttempt(): String? {
+        return fWrongAttempt
     }
 
     fun setMPinLockTime(s: String?) {
         mPinLockTime = s
+    }
+
+    fun getMPinLockTime(): String? {
+        return mPinLockTime
+    }
+
+    fun setFnEditCount(s: String?) {
+        fnEditCount = s
+    }
+
+    fun getFnEditCount(): String? {
+        return fnEditCount
+    }
+
+    fun setLnEditCount(s: String?) {
+        lnEditCount = s
+    }
+
+    fun getLnEditCount(): String? {
+        return lnEditCount
+    }
+
+    fun setBdEditCount(s: String?) {
+        bdEditCount = s
+    }
+
+    fun getBdEditCount(): String? {
+        return bdEditCount
     }
 }

@@ -240,7 +240,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 } else {
                     lockToast(waitingTime)
                 }
-            } else if (validateUsername()) {
+            } else if (encodedUsername == username) {
                 if (waitingTime == 0.toLong()) {
                     updateAccountStatus(pwWrongAttempt)
                 } else {
@@ -321,20 +321,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private fun updateUserStatus() {                                                                // Update account status to 1
         val encodedActiveStatus = encodingClass.encodeData(1.toString())
         databaseReference.child("status").setValue(encodedActiveStatus)
-    }
-
-    private fun validateUsername(): Boolean {                                                       // Validate username
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var bool = false
-
-        val encodedUsername = encodingClass.encodeData(etLoginUsername.text.toString())
-
-        for (u in userAccList) {
-            userId = u.userId
-            bool = encodedUsername == u.username
-        }
-
-        return bool
     }
     
     private fun lockToast(waitingTime: Long) {

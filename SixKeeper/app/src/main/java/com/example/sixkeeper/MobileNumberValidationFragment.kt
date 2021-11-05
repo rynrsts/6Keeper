@@ -21,6 +21,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
+import com.google.firebase.database.*
 import java.util.concurrent.TimeUnit
 
 
@@ -28,11 +29,18 @@ class MobileNumberValidationFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
 
+    private lateinit var databaseHandlerClass: DatabaseHandlerClass
+    private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var userAccList: List<UserAccModelClass>
+
     private lateinit var etMobileNumberGetOTP: EditText
     private lateinit var etMobileNumberEnterOTP: EditText
 
     private var mAuth: FirebaseAuth? = null
 
+    private var userId = ""
     private var verificationId: String? = null
 
     override fun onCreateView(
@@ -48,7 +56,6 @@ class MobileNumberValidationFragment : Fragment() {
 
         setVariables()
         setMobileNumber()
-        setOnclick()
     }
 
     @Suppress("DEPRECATION")
@@ -60,6 +67,17 @@ class MobileNumberValidationFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
 
+        databaseHandlerClass = DatabaseHandlerClass(attActivity)
+        encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        userAccList = databaseHandlerClass.validateUserAcc()
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
+
         etMobileNumberGetOTP = appCompatActivity.findViewById(R.id.etMobileNumberGetOTP)
         etMobileNumberEnterOTP = appCompatActivity.findViewById(R.id.etMobileNumberEnterOTP)
 
@@ -67,16 +85,38 @@ class MobileNumberValidationFragment : Fragment() {
     }
 
     private fun setMobileNumber() {
-        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
-        val userInfoList: List<UserInfoModelClass> = databaseHandlerClass.viewUserInfo()
+//        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
+//        val encodingClass = EncodingClass()
+//        val userInfoList: List<UserInfoModelClass> = databaseHandlerClass.viewUserInfo()
+//        var mobileNumber = ""
+//
+//        for (u in userInfoList) {
+//            mobileNumber = encodingClass.decodeData(u.mobileNumber)
+//        }
+
+        val button = Button(appCompatActivity)
+        val mobileNumberRef = databaseReference.child("mobileNumber")
         var mobileNumber = ""
+        var count = 0
 
-        for (u in userInfoList) {
-            mobileNumber = encodingClass.decodeData(u.mobileNumber)
+        mobileNumberRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                mobileNumber = encodingClass.decodeData(value)
+                count++
+
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            etMobileNumberGetOTP.setText(mobileNumber)
+            setOnclick()
         }
-
-        etMobileNumberGetOTP.setText(mobileNumber)
     }
 
     private fun setOnclick() {

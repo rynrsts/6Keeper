@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -24,12 +25,16 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var userAccList: List<UserAccModelClass>
 
     private lateinit var etResetPasswordNewPass: EditText
     private lateinit var etResetPasswordConfirmPass: EditText
     private lateinit var ivResetPasswordNewTogglePass: ImageView
     private lateinit var ivResetPasswordConfirmTogglePass: ImageView
 
+    private var userId = ""
     private var newPass = ""
     private var newPassVisibility: Int = 0
     private var confirmPassVisibility: Int = 0
@@ -61,12 +66,21 @@ class ResetPasswordFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        userAccList = databaseHandlerClass.validateUserAcc()
 
         etResetPasswordNewPass = appCompatActivity.findViewById(R.id.etResetPasswordNewPass)
         etResetPasswordConfirmPass = appCompatActivity.findViewById(R.id.etResetPasswordConfirmPass)
-        ivResetPasswordNewTogglePass = appCompatActivity.findViewById(R.id.ivResetPasswordNewTogglePass)
+        ivResetPasswordNewTogglePass =
+                appCompatActivity.findViewById(R.id.ivResetPasswordNewTogglePass)
         ivResetPasswordConfirmTogglePass =
                 appCompatActivity.findViewById(R.id.ivResetPasswordConfirmTogglePass)
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -92,6 +106,8 @@ class ResetPasswordFragment : Fragment() {
                             if (InternetConnectionClass().isConnected()) {
                                 val encryptionClass = EncryptionClass()
                                 val encodedInput = encodingClass.encodeData(newPass)
+                                val encryptedInput = encryptionClass.hashData(encodedInput)
+                                val inputString = encodingClass.decodeSHA(encryptedInput)
 
                                 var actionLogId = 1000001
                                 val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -105,10 +121,9 @@ class ResetPasswordFragment : Fragment() {
                                             Integer.parseInt(encodingClass.decodeData(lastId)) + 1
                                 }
 
-                                databaseHandlerClass.updateUserAcc(                                 // Reset password
-                                        "password", encryptionClass.hashData(encodedInput),
-                                        date
-                                )
+                                databaseReference.child("password").setValue(inputString)
+                                databaseReference.child("pwWrongAttempt").setValue("")
+                                databaseReference.child("pwLockTime").setValue("")
 
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
@@ -118,16 +133,6 @@ class ResetPasswordFragment : Fragment() {
                                                 ),
                                                 encodingClass.encodeData(date)
                                         )
-                                )
-
-                                databaseHandlerClass.updateAccountStatus(
-                                        "pw_wrong_attempt",
-                                        ""
-                                )
-
-                                databaseHandlerClass.updateAccountStatus(
-                                        "pw_lock_time",
-                                        ""
                                 )
 
                                 view?.apply {

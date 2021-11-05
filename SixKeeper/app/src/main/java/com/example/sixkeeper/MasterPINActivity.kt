@@ -288,7 +288,6 @@ class MasterPINActivity : MasterPINProcessClass() {
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                     if (InternetConnectionClass().isConnected()) {
                         updateUserStatus()
-                        updateLastLogin()
                         goToLoginActivity()
                     } else {
                         internetToast()

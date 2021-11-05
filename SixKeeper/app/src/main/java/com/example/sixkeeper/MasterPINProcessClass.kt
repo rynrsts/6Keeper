@@ -493,14 +493,6 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         databaseReference.child("status").setValue(encodedInactiveStatus)
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun updateLastLogin() {
-        databaseHandlerClass.updateLastLogin(
-                userId,
-                encodingClass.encodeData(getCurrentDate())
-        )
-    }
-
     fun goToLoginActivity() {                                                                       // Go to login (Username and Password)
         val goToLoginActivity = Intent(this, LoginActivity::class.java)
         startActivity(goToLoginActivity)

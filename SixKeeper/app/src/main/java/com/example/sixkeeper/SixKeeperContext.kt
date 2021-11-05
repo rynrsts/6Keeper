@@ -5,12 +5,18 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Button
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class SixKeeperContext : Application() {
     private var context: Context? = null
 
     override fun onCreate() {
         super.onCreate()
+
         context = applicationContext
         setupActivityListener()
     }
@@ -31,33 +37,51 @@ class SixKeeperContext : Application() {
     }
 
     private fun blockCapture(activity: Activity) {
-        if (getCaptureState()) {
-            activity.window.setFlags(
-                    WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE
-            )
-        }
-    }
-
-    private fun getCaptureState(): Boolean {
         val databaseHandlerClass = DatabaseHandlerClass(applicationContext)
         val encodingClass = EncodingClass()
-        val userStatus: String = databaseHandlerClass.viewAccStatus()
-        val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
-        var blockCapture = false
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+        val button = Button(context)
 
-        if (encodingClass.decodeData(userStatus) == "0") {
-            blockCapture = false
-        } else if(encodingClass.decodeData(userStatus) == "1") {
-            for (u in userSettings) {
-                if (encodingClass.decodeData(u.screenCapture) == "0") {
-                    blockCapture = true
-                } else if (encodingClass.decodeData(u.screenCapture) == "1") {
-                    blockCapture = false
+        for (u in userAccList) {
+            userId = u.userId
+        }
+
+        val decodedUserId = encodingClass.decodeData(userId)
+        val databaseReference = firebaseDatabase.getReference(decodedUserId)
+
+        val statusRef = databaseReference.child("status")
+        var status = ""
+        var count = 0
+
+        statusRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                status = encodingClass.decodeData(value)
+                count++
+
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
+
+            if (status == "1") {
+                for (u in userSettings) {
+                    if (encodingClass.decodeData(u.screenCapture) == "0") {
+                        activity.window.setFlags(
+                                WindowManager.LayoutParams.FLAG_SECURE,
+                                WindowManager.LayoutParams.FLAG_SECURE
+                        )
+                    }
                 }
             }
         }
-
-        return blockCapture
     }
 }

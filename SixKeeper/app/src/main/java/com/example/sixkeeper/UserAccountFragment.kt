@@ -163,30 +163,13 @@ class UserAccountFragment : Fragment() {
 
                 ivUserAccountPhoto.setImageDrawable(imageDrawable)
             }
+
+            photoOnClick()
         }
     }
 
-    @SuppressLint("SimpleDateFormat", "InflateParams")
-    private fun setOnClick() {
-        val clUserAccountFirstName: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountFirstName)
-        val clUserAccountLastName: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountLastName)
-        val clUserAccountBirthDate: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
-        val clUserAccountEmail: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountEmail)
-        val clUserAccountMobileNum: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
-        val clUserAccountUsername: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountUsername)
-        val clUserAccountPassword: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountPassword)
-        val clUserAccountMasterPIN: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountMasterPIN)
-        val clUserAccountExportData: ConstraintLayout =
-                appCompatActivity.findViewById(R.id.clUserAccountExportData)
-
+    @SuppressLint("InflateParams")
+    private fun photoOnClick() {
         ivUserAccountPhoto.setOnClickListener {
             if (                                                                                    // Check if permission is granted
                     ActivityCompat.checkSelfPermission(
@@ -211,9 +194,8 @@ class UserAccountFragment : Fragment() {
                             dialogView.findViewById(R.id.tvProfilePhotoAdd)
                     val llProfilePhotoRemove: LinearLayout =
                             dialogView.findViewById(R.id.llProfilePhotoRemove)
-                    val profilePhoto = databaseHandlerClass.viewProfilePhoto()
 
-                    if (profilePhoto.contentEquals("".toByteArray())) {
+                    if (profilePhotoB.contentEquals("".toByteArray())) {
                         tvProfilePhotoAdd.setText(R.string.user_change_profile_photo)
                     } else {
                         llProfilePhotoRemove.addView(removeProfilePhoto)
@@ -251,7 +233,8 @@ class UserAccountFragment : Fragment() {
                     llProfilePhotoRemove.setOnClickListener {
                         if (InternetConnectionClass().isConnected()) {
                             ivUserAccountPhoto.setImageDrawable(null)
-//                            updateProfilePhoto("removed!", "".toByteArray())
+                            databaseReference.child("profilePhoto").setValue("")
+                            profilePhotoB = "".toByteArray()
                             addEventToActionLog("removed")
                             setProfilePhotoInMenu(null)
                         } else {
@@ -273,6 +256,28 @@ class UserAccountFragment : Fragment() {
                 )
             }
         }
+    }
+
+    @SuppressLint("SimpleDateFormat", "InflateParams")
+    private fun setOnClick() {
+        val clUserAccountFirstName: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountFirstName)
+        val clUserAccountLastName: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountLastName)
+        val clUserAccountBirthDate: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountBirthDate)
+        val clUserAccountEmail: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountEmail)
+        val clUserAccountMobileNum: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountMobileNum)
+        val clUserAccountUsername: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountUsername)
+        val clUserAccountPassword: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountPassword)
+        val clUserAccountMasterPIN: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountMasterPIN)
+        val clUserAccountExportData: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountExportData)
 
         clUserAccountFirstName.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
@@ -403,9 +408,14 @@ class UserAccountFragment : Fragment() {
 
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
-                                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                                encodingClass.encodeData("Data was exported to the " +
-                                                        "'SixKeeper' folder in the internal storage."),
+                                                encodingClass.encodeData(
+                                                        getLastActionLogId().toString()
+                                                ),
+                                                encodingClass.encodeData(
+                                                        "Data was exported to the " +
+                                                                "'SixKeeper' folder in the " +
+                                                                "internal storage."
+                                                ),
                                                 encodingClass.encodeData(getCurrentDate())
                                         )
                                 )
@@ -486,6 +496,7 @@ class UserAccountFragment : Fragment() {
                             addEventToActionLog("modified")
                         }
 
+                        profilePhotoB = imageByteArray
                         databaseReference.child("profilePhoto").setValue(newProfilePhoto)
 
                         setProfilePhotoInMenu(imageDrawable)
@@ -519,6 +530,16 @@ class UserAccountFragment : Fragment() {
                         encodingClass.encodeData(getCurrentDate())
                 )
         )
+
+        val message = "Profile Photo was $action!"
+
+        val toast: Toast = Toast.makeText(
+                appCompatActivity, message, Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
     }
 
     private fun getLastActionLogId(): Int {

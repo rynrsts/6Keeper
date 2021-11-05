@@ -26,10 +26,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -37,6 +34,8 @@ import java.util.concurrent.TimeUnit
 class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -48,6 +47,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     @SuppressLint("SimpleDateFormat")
     private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
+    private var userId = ""
     private var backgroundDate = ""
     private var status = "unlocked"
     private var start = true
@@ -141,6 +141,16 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
         encodingClass = EncodingClass()
+
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        val userAccList = databaseHandlerClass.validateUserAcc()
+        userId = ""
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 
     private fun populate() {                                                                        // Populate menu and fragments
@@ -177,19 +187,34 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     }
 
     private fun setUsername() {                                                                     // Show username in the navigation header
-        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var username = ""
-
-        for (u in userAccList) {
-            username = encodingClass.decodeData(u.username)
-        }
-
         headerView = navigationView.getHeaderView(0)
         clNavigationHeader = headerView.findViewById(R.id.clNavigationHeader)
-        val tvNavigationHeaderUsername: TextView =
-                headerView.findViewById(R.id.tvNavigationHeaderUsername)
 
-        tvNavigationHeaderUsername.text = username
+        val button = Button(this)
+
+        val usernameRef = databaseReference.child("username")
+        var username = ""
+        var count = 0
+
+        usernameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                username = dataSnapshot.getValue(String::class.java).toString()
+                count++
+
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            val tvNavigationHeaderUsername: TextView =
+                    headerView.findViewById(R.id.tvNavigationHeaderUsername)
+            val decodedUsername = encodingClass.decodeData(username)
+
+            tvNavigationHeaderUsername.text = decodedUsername
+        }
     }
 
     private fun setProfilePhoto() {
@@ -197,15 +222,6 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 headerView.findViewById(R.id.ivNavigationHeaderPhoto)
         val button = Button(this)
 
-        val firebaseDatabase = FirebaseDatabase.getInstance()
-        val userAccList = databaseHandlerClass.validateUserAcc()
-        var userId = ""
-
-        for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
-        }
-
-        val databaseReference = firebaseDatabase.getReference(userId)
         val profilePhotoRef = databaseReference.child("profilePhoto")
         var profilePhoto = ""
         var count = 0

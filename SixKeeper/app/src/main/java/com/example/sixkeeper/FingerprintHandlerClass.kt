@@ -76,8 +76,6 @@ class FingerprintHandlerClass(
     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence) {                    // Authentication error
         if (errString != "Fingerprint operation canceled.") {
             if (!locked()) {
-                vibrator()
-
                 val toast: Toast = Toast.makeText(
                         context,
                         "Authentication error: $errString",
@@ -166,8 +164,6 @@ class FingerprintHandlerClass(
 
     override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence) {                   // Authentication help
         if (!locked()) {
-            vibrator()
-
             val toast: Toast = Toast.makeText(
                     context,
                     "Authentication help: $helpString",
@@ -184,8 +180,6 @@ class FingerprintHandlerClass(
         if (!locked()) {
             when (label) {
                 "login" -> {
-                    resetAttemptAndTime()
-
                     val goToIndexActivity = Intent(context, IndexActivity::class.java)
                     context.startActivity(goToIndexActivity)
                     context.overridePendingTransition(
@@ -196,14 +190,10 @@ class FingerprintHandlerClass(
                     context.finish()
                 }
                 "confirm action" -> {
-                    resetAttemptAndTime()
-
                     context.setResult(16914)
                     context.onBackPressed()
                 }
                 "auto lock" -> {
-                    resetAttemptAndTime()
-
                     context.setResult(1215311)
                     context.finish()
                     context.overridePendingTransition(
@@ -323,24 +313,5 @@ class FingerprintHandlerClass(
         } else {
             vibrator.vibrate(350)
         }
-    }
-
-    private fun resetAttemptAndTime() {
-        val databaseHandlerClass = DatabaseHandlerClass(context)
-
-        databaseHandlerClass.updateAccountStatus(
-                "m_pin_wrong_attempt",
-                ""
-        )
-
-        databaseHandlerClass.updateAccountStatus(
-                "f_wrong_attempt",
-                ""
-        )
-
-        databaseHandlerClass.updateAccountStatus(
-                "m_pin_lock_time",
-                ""
-        )
     }
 }
