@@ -145,7 +145,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
 
     fun setFingerprintOff() {
         databaseHandlerClass.updateSettings(
-                "fingerprint",  encodingClass.encodeData(0.toString())
+                "fingerprint", encodingClass.encodeData(0.toString())
         )
     }
 
@@ -212,6 +212,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                         val value = dataSnapshot.getValue(String::class.java).toString()
                         mPinWrongAttempt = encodingClass.decodeData(value)
                     }
+
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
 
@@ -220,6 +221,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                         val value = dataSnapshot.getValue(String::class.java).toString()
                         mPinLockTime = encodingClass.decodeData(value)
                     }
+
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
 
@@ -232,6 +234,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                             button.performClick()
                         }
                     }
+
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
 
@@ -335,94 +338,91 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         val encryptedMasterPIN = encryptionClass.hashData(encodedMasterPIN)
         val masterPINString = encodingClass.decodeSHA(encryptedMasterPIN)
 
-            if (masterPINString == masterPin) {
-                databaseReference.child("mpinWrongAttempt").setValue("")
-                databaseReference.child("fwrongAttempt").setValue("")
-                databaseReference.child("mpinLockTime").setValue("")
+        if (masterPINString == masterPin) {
+            databaseReference.child("mpinWrongAttempt").setValue("")
+            databaseReference.child("fwrongAttempt").setValue("")
+            databaseReference.child("mpinLockTime").setValue("")
 
-                val goToIndexActivity = Intent(this, IndexActivity::class.java)
-                startActivity(goToIndexActivity)
-                overridePendingTransition(
-                        R.anim.anim_enter_top_to_bottom_2,
-                        R.anim.anim_exit_top_to_bottom_2
-                )
+            val goToIndexActivity = Intent(this, IndexActivity::class.java)
+            startActivity(goToIndexActivity)
+            overridePendingTransition(
+                    R.anim.anim_enter_top_to_bottom_2,
+                    R.anim.anim_exit_top_to_bottom_2
+            )
 
-                this.finish()
-            } else {
-                var wrongAttempt = 0
-                var timer = 30
+            this.finish()
+        } else {
+            var wrongAttempt = 0
+            var timer = 30
 
-                if (mPinWrongAttempt.isNotEmpty()) {
-                    wrongAttempt = Integer.parseInt(mPinWrongAttempt)
-                }
-
-                wrongAttempt++
-
-                val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
-
-                databaseReference.child("mpinWrongAttempt").setValue(encodedWrongAttempt)
-
-                var toast: Toast = Toast.makeText(
-                        applicationContext, R.string.many_incorrect_master_pin, Toast.LENGTH_SHORT
-                )
-
-                if (wrongAttempt % 3 == 0) {
-                    for (i in 1 until (wrongAttempt / 3)) {
-                        timer *= 2
-                    }
-
-                    val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
-                    val encodedFWrongAttempt =
-                            encodingClass.encodeData((wrongAttempt * 2).toString())
-
-                    databaseReference.child("mpinLockTime").setValue(encodedCurrentDate)
-                    databaseReference.child("fwrongAttempt")
-                            .setValue(encodedFWrongAttempt)
-
-                    toast = Toast.makeText(
-                            applicationContext,
-                            "Account is locked. Please wait for $timer seconds",
-                            Toast.LENGTH_SHORT
-                    )
-                }
-
-                disableButtons()
-
-                view.apply {
-                    postDelayed(
-                            {
-                                toast.apply {
-                                    setGravity(Gravity.CENTER, 0, 0)
-                                    show()
-                                }
-
-                                val vibrator: Vibrator =
-                                        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-                                @Suppress("DEPRECATION")
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {               // If android version is Oreo and above
-                                    vibrator.vibrate(                                               // Vibrate for wrong confirmation
-                                            VibrationEffect.createOneShot(
-                                                    350,
-                                                    VibrationEffect.DEFAULT_AMPLITUDE
-                                            )
-                                    )
-                                } else {
-                                    vibrator.vibrate(350)
-                                }
-
-                                enableButtons()
-                            }, 200
-                    )
-                }
+            if (mPinWrongAttempt.isNotEmpty()) {
+                wrongAttempt = Integer.parseInt(mPinWrongAttempt)
             }
+
+            wrongAttempt++
+
+            val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
+            databaseReference.child("mpinWrongAttempt").setValue(encodedWrongAttempt)
+
+            var toast: Toast = Toast.makeText(
+                    applicationContext, R.string.many_incorrect_master_pin, Toast.LENGTH_SHORT
+            )
+
+            if (wrongAttempt % 3 == 0) {
+                for (i in 1 until (wrongAttempt / 3)) {
+                    timer *= 2
+                }
+
+                val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
+                val encodedFWrongAttempt =
+                        encodingClass.encodeData((wrongAttempt * 2).toString())
+
+                databaseReference.child("mpinLockTime").setValue(encodedCurrentDate)
+                databaseReference.child("fwrongAttempt")
+                        .setValue(encodedFWrongAttempt)
+
+                toast = Toast.makeText(
+                        applicationContext,
+                        "Account is locked. Please wait for $timer seconds",
+                        Toast.LENGTH_SHORT
+                )
+            }
+
+            disableButtons()
+
+            view.apply {
+                postDelayed(
+                        {
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+
+                            val vibrator: Vibrator =
+                                    getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+                            @Suppress("DEPRECATION")
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {               // If android version is Oreo and above
+                                vibrator.vibrate(                                               // Vibrate for wrong confirmation
+                                        VibrationEffect.createOneShot(
+                                                350,
+                                                VibrationEffect.DEFAULT_AMPLITUDE
+                                        )
+                                )
+                            } else {
+                                vibrator.vibrate(350)
+                            }
+
+                            enableButtons()
+                        }, 200
+                )
+            }
+        }
     }
 
     fun internetToast() {
         val toast: Toast = Toast.makeText(
-                applicationContext,
-                R.string.many_internet_connection,
-                Toast.LENGTH_SHORT
+                applicationContext, R.string.many_internet_connection, Toast.LENGTH_SHORT
         )
         toast.apply {
             setGravity(Gravity.CENTER, 0, 0)

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +26,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -190,21 +195,50 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private fun setProfilePhoto() {
         val ivNavigationHeaderPhoto: ImageView =
                 headerView.findViewById(R.id.ivNavigationHeaderPhoto)
-        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+        val button = Button(this)
 
-        if (profilePhoto.toString().isNotEmpty()) {
-            val imageDrawable: Drawable = BitmapDrawable(
-                    resources,
-                    BitmapFactory.decodeByteArray(
-                            profilePhoto,
-                            0,
-                            profilePhoto.size
-                    )
-            )
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val userAccList = databaseHandlerClass.validateUserAcc()
+        var userId = ""
 
-            ivNavigationHeaderPhoto.setImageDrawable(imageDrawable)
-        } else {
-            ivNavigationHeaderPhoto.setImageDrawable(null)
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        val databaseReference = firebaseDatabase.getReference(userId)
+        val profilePhotoRef = databaseReference.child("profilePhoto")
+        var profilePhoto = ""
+        var count = 0
+
+        profilePhotoRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                profilePhoto = dataSnapshot.getValue(String::class.java).toString()
+                count++
+
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            val profilePhotoB = encodingClass.decodeByteArray(profilePhoto)
+
+            if (profilePhoto.isNotEmpty()) {
+                val imageDrawable: Drawable = BitmapDrawable(
+                        resources,
+                        BitmapFactory.decodeByteArray(
+                                profilePhotoB,
+                                0,
+                                profilePhotoB.size
+                        )
+                )
+
+                ivNavigationHeaderPhoto.setImageDrawable(imageDrawable)
+            } else {
+                ivNavigationHeaderPhoto.setImageDrawable(null)
+            }
         }
     }
 

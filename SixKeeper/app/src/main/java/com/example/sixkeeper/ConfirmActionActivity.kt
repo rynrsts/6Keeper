@@ -13,6 +13,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.view.Gravity
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -21,6 +22,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
@@ -207,75 +211,53 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         val tvConfirmActionForgotPass: TextView = findViewById(R.id.tvConfirmActionForgotPass)
 
         getAcbConfirmActionButton1().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(1)
-            }
+                pushNumber(1, it)
         }
 
         getAcbConfirmActionButton2().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(2)
-            }
+                pushNumber(2, it)
         }
 
         getAcbConfirmActionButton3().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(3)
-            }
+                pushNumber(3, it)
         }
 
         getAcbConfirmActionButton4().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(4)
-            }
+                pushNumber(4, it)
         }
 
         getAcbConfirmActionButton5().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(5)
-            }
+                pushNumber(5, it)
         }
 
         getAcbConfirmActionButton6().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(6)
-            }
+                pushNumber(6, it)
         }
 
         getAcbConfirmActionButton7().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(7)
-            }
+                pushNumber(7, it)
         }
 
         getAcbConfirmActionButton8().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(8)
-            }
+                pushNumber(8, it)
         }
 
         getAcbConfirmActionButton9().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(9)
-            }
+                pushNumber(9, it)
         }
 
         getAcbConfirmActionButton0().setOnClickListener {
-            if (!locked("")) {
-                pushNumber(0)
-            }
+                pushNumber(0, it)
         }
 
         getAcbConfirmActionButtonDelete().setOnClickListener {
-            if (!locked("")) {
                 if (getPin().size > 0) {
                     unShadePin()
                     getPin().pop()
                 }
-            }
         }
 
-        getAcbConfirmActionButtonCancel().setOnClickListener {
+        getAcbConfirmActionButtonCancel().setOnClickListener { it ->
             it.apply {
                 getAcbConfirmActionButtonCancel().isClickable = false                               // Set button un-clickable for 1 second
                 postDelayed(
@@ -285,11 +267,43 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                 )
             }
 
-            if (locked("cancel")) {
-                finishAffinity()
-            } else {
-                onBackPressed()
-                fingerprintHandlerClass.stopFingerAuth()
+            val button = Button(this)
+
+            val mPinWrongAttemptRef = getDatabaseReference().child("mpinWrongAttempt")
+            val mPinLockTimeRef = getDatabaseReference().child("mpinLockTime")
+
+            var mPinWrongAttempt = ""
+            var mPinLockTime = ""
+            var count = 0
+
+            mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    mPinWrongAttempt = getEncodingClass().decodeData(value)
+                }
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
+
+            mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    mPinLockTime = getEncodingClass().decodeData(value)
+                    count++
+
+                    if (count == 1) {
+                        button.performClick()
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
+
+            button.setOnClickListener {
+                if (locked("cancel", mPinWrongAttempt, mPinLockTime, it)) {
+                    finishAffinity()
+                } else {
+                    onBackPressed()
+                    fingerprintHandlerClass.stopFingerAuth()
+                }
             }
         }
 

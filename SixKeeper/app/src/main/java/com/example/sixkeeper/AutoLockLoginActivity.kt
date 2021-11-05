@@ -202,71 +202,49 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
         val tvAutoLockLoginForgotPass: TextView = findViewById(R.id.tvAutoLockLoginForgotPass)
 
         getAcbAutoLockLoginButton1().setOnClickListener {
-            if (!locked()) {
-                pushNumber(1)
-            }
+            pushNumber(1, it)
         }
 
         getAcbAutoLockLoginButton2().setOnClickListener {
-            if (!locked()) {
-                pushNumber(2)
-            }
+            pushNumber(2, it)
         }
 
         getAcbAutoLockLoginButton3().setOnClickListener {
-            if (!locked()) {
-                pushNumber(3)
-            }
+            pushNumber(3, it)
         }
 
         getAcbAutoLockLoginButton4().setOnClickListener {
-            if (!locked()) {
-                pushNumber(4)
-            }
+            pushNumber(4, it)
         }
 
         getAcbAutoLockLoginButton5().setOnClickListener {
-            if (!locked()) {
-                pushNumber(5)
-            }
+            pushNumber(5, it)
         }
 
         getAcbAutoLockLoginButton6().setOnClickListener {
-            if (!locked()) {
-                pushNumber(6)
-            }
+            pushNumber(6, it)
         }
 
         getAcbAutoLockLoginButton7().setOnClickListener {
-            if (!locked()) {
-                pushNumber(7)
-            }
+            pushNumber(7, it)
         }
 
         getAcbAutoLockLoginButton8().setOnClickListener {
-            if (!locked()) {
-                pushNumber(8)
-            }
+            pushNumber(8, it)
         }
 
         getAcbAutoLockLoginButton9().setOnClickListener {
-            if (!locked()) {
-                pushNumber(9)
-            }
+            pushNumber(9, it)
         }
 
         getAcbAutoLockLoginButton0().setOnClickListener {
-            if (!locked()) {
-                pushNumber(0)
-            }
+            pushNumber(0, it)
         }
 
         getAcbAutoLockLoginButtonDelete().setOnClickListener {
-            if (!locked()) {
-                if (getPin().size > 0) {
-                    unShadePin()
-                    getPin().pop()
-                }
+            if (getPin().size > 0) {
+                unShadePin()
+                getPin().pop()
             }
         }
 

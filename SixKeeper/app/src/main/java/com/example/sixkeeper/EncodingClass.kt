@@ -2,6 +2,7 @@ package com.example.sixkeeper
 
 import android.util.Base64
 
+
 class EncodingClass {
     fun encodeData(data: String): String {                                                          // Encode data using Base64
         val encrypt = Base64.encode(data.toByteArray(), Base64.DEFAULT)
@@ -15,5 +16,13 @@ class EncodingClass {
 
     fun decodeSHA(data: ByteArray): String {
         return Base64.encodeToString(data, Base64.DEFAULT)
+    }
+
+    fun encodeToString(data: ByteArray): String {
+        return Base64.encodeToString(data, Base64.DEFAULT)
+    }
+
+    fun decodeByteArray(data: String): ByteArray {
+        return Base64.decode(data, Base64.DEFAULT)
     }
 }

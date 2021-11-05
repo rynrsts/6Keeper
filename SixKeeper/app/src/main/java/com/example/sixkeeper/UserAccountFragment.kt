@@ -19,10 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -43,13 +41,20 @@ import java.util.*
 class UserAccountFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
-
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var userAccList: List<UserAccModelClass>
 
     private lateinit var ivUserAccountPhoto: ImageView
 
+    private lateinit var button: Button
+
     private var field = ""
+    private var userId: String = ""
+
+    private lateinit var profilePhotoB: ByteArray
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -81,6 +86,17 @@ class UserAccountFragment : Fragment() {
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+
+        button = Button(appCompatActivity)
+
+        userAccList = databaseHandlerClass.validateUserAcc()
+
+        for (u in userAccList) {
+            userId = encodingClass.decodeData(u.userId)
+        }
+
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 
     private fun disableHeaderItem() {
@@ -115,19 +131,38 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun setProfilePhoto() {
-        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+        val profilePhotoRef = databaseReference.child("profilePhoto")
+        var profilePhoto = ""
+        var count = 0
 
-        if (profilePhoto.contentEquals("".toByteArray())) {
-            ivUserAccountPhoto.setImageDrawable(null)
-        } else {
-            val imageDrawable: Drawable = BitmapDrawable(
-                    resources,
-                    BitmapFactory.decodeByteArray(
-                            profilePhoto, 0, profilePhoto.size
-                    )
-            )
+        profilePhotoRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                profilePhoto = dataSnapshot.getValue(String::class.java).toString()
+                count++
 
-            ivUserAccountPhoto.setImageDrawable(imageDrawable)
+                if (count == 1) {
+                    button.performClick()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        button.setOnClickListener {
+            profilePhotoB = encodingClass.decodeByteArray(profilePhoto)
+
+            if (profilePhotoB.contentEquals("".toByteArray())) {
+                ivUserAccountPhoto.setImageDrawable(null)
+            } else {
+                val imageDrawable: Drawable = BitmapDrawable(
+                        resources,
+                        BitmapFactory.decodeByteArray(
+                                profilePhotoB, 0, profilePhotoB.size
+                        )
+                )
+
+                ivUserAccountPhoto.setImageDrawable(imageDrawable)
+            }
         }
     }
 
@@ -172,7 +207,8 @@ class UserAccountFragment : Fragment() {
                     )
                     val llProfilePhotoAdd: LinearLayout =
                             dialogView.findViewById(R.id.llProfilePhotoAdd)
-                    val tvProfilePhotoAdd: TextView = dialogView.findViewById(R.id.tvProfilePhotoAdd)
+                    val tvProfilePhotoAdd: TextView =
+                            dialogView.findViewById(R.id.tvProfilePhotoAdd)
                     val llProfilePhotoRemove: LinearLayout =
                             dialogView.findViewById(R.id.llProfilePhotoRemove)
                     val profilePhoto = databaseHandlerClass.viewProfilePhoto()
@@ -215,7 +251,7 @@ class UserAccountFragment : Fragment() {
                     llProfilePhotoRemove.setOnClickListener {
                         if (InternetConnectionClass().isConnected()) {
                             ivUserAccountPhoto.setImageDrawable(null)
-                            updateProfilePhoto("removed!", "".toByteArray())
+//                            updateProfilePhoto("removed!", "".toByteArray())
                             addEventToActionLog("removed")
                             setProfilePhotoInMenu(null)
                         } else {
@@ -433,24 +469,24 @@ class UserAccountFragment : Fragment() {
                             selectedImage
                     )?.readBytes()
 
-                    if (imageByteArray!!.size <= 1992294) {                                         // If image is less than 2 MB
+                    if (imageByteArray!!.size <= 1900000) {                                         // If image is less than 2 MB
                         val imageDrawable: Drawable = BitmapDrawable(
                                 resources,
                                 BitmapFactory.decodeByteArray(
                                         imageByteArray, 0, imageByteArray.size
                                 )
                         )
-                        val profilePhoto = databaseHandlerClass.viewProfilePhoto()
+                        val newProfilePhoto = encodingClass.encodeToString(imageByteArray)
 
                         ivUserAccountPhoto.setImageDrawable(imageDrawable)
 
-                        if (profilePhoto.contentEquals("".toByteArray())) {
-                            updateProfilePhoto("added", imageByteArray)
+                        if (profilePhotoB.contentEquals("".toByteArray())) {
                             addEventToActionLog("added")
                         } else {
-                            updateProfilePhoto("modified", imageByteArray)
                             addEventToActionLog("modified")
                         }
+
+                        databaseReference.child("profilePhoto").setValue(newProfilePhoto)
 
                         setProfilePhotoInMenu(imageDrawable)
                     } else {
@@ -471,23 +507,6 @@ class UserAccountFragment : Fragment() {
                         show()
                     }
                 }
-            }
-        }
-    }
-
-    private fun updateProfilePhoto(action: String, image: ByteArray) {
-        val profileStatus = databaseHandlerClass.updateProfilePhoto(                                // Update Profile Photo
-                image
-        )
-        val message = "Profile Photo was $action!"
-
-        if (profileStatus > -1) {
-            val toast: Toast = Toast.makeText(
-                    appCompatActivity, message, Toast.LENGTH_SHORT
-            )
-            toast.apply {
-                setGravity(Gravity.CENTER, 0, 0)
-                show()
             }
         }
     }
