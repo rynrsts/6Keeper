@@ -84,10 +84,10 @@ class LoginActivity : LoginValidationClass() {
             }
 
             it.apply {
-                getEtLoginPassword().isClickable = false                                            // Set button un-clickable for 1 second
+                acbLoginLogin.isClickable = false                                                   // Set button un-clickable for 1 second
                 postDelayed(
                         {
-                            getEtLoginPassword().isClickable = true
+                            acbLoginLogin.isClickable = true
                         }, 1000
                 )
             }

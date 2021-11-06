@@ -211,50 +211,50 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         val tvConfirmActionForgotPass: TextView = findViewById(R.id.tvConfirmActionForgotPass)
 
         getAcbConfirmActionButton1().setOnClickListener {
-                pushNumber(1, it)
+            pushNumber(1, it)
         }
 
         getAcbConfirmActionButton2().setOnClickListener {
-                pushNumber(2, it)
+            pushNumber(2, it)
         }
 
         getAcbConfirmActionButton3().setOnClickListener {
-                pushNumber(3, it)
+            pushNumber(3, it)
         }
 
         getAcbConfirmActionButton4().setOnClickListener {
-                pushNumber(4, it)
+            pushNumber(4, it)
         }
 
         getAcbConfirmActionButton5().setOnClickListener {
-                pushNumber(5, it)
+            pushNumber(5, it)
         }
 
         getAcbConfirmActionButton6().setOnClickListener {
-                pushNumber(6, it)
+            pushNumber(6, it)
         }
 
         getAcbConfirmActionButton7().setOnClickListener {
-                pushNumber(7, it)
+            pushNumber(7, it)
         }
 
         getAcbConfirmActionButton8().setOnClickListener {
-                pushNumber(8, it)
+            pushNumber(8, it)
         }
 
         getAcbConfirmActionButton9().setOnClickListener {
-                pushNumber(9, it)
+            pushNumber(9, it)
         }
 
         getAcbConfirmActionButton0().setOnClickListener {
-                pushNumber(0, it)
+            pushNumber(0, it)
         }
 
         getAcbConfirmActionButtonDelete().setOnClickListener {
-                if (getPin().size > 0) {
-                    unShadePin()
-                    getPin().pop()
-                }
+            if (getPin().size > 0) {
+                unShadePin()
+                getPin().pop()
+            }
         }
 
         getAcbConfirmActionButtonCancel().setOnClickListener { it ->
@@ -281,6 +281,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                     val value = dataSnapshot.getValue(String::class.java).toString()
                     mPinWrongAttempt = getEncodingClass().decodeData(value)
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {}
             })
 
@@ -294,6 +295,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                         button.performClick()
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {}
             })
 

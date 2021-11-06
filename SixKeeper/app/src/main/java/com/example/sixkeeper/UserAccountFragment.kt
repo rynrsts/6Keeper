@@ -37,7 +37,6 @@ import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class UserAccountFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
@@ -276,6 +275,8 @@ class UserAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.clUserAccountPassword)
         val clUserAccountMasterPIN: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountMasterPIN)
+        val clUserAccountDeleteAccount: ConstraintLayout =
+                appCompatActivity.findViewById(R.id.clUserAccountDeleteAccount)
         val clUserAccountExportData: ConstraintLayout =
                 appCompatActivity.findViewById(R.id.clUserAccountExportData)
 
@@ -365,6 +366,31 @@ class UserAccountFragment : Fragment() {
             } else {
                 internetToast()
             }
+        }
+
+        clUserAccountDeleteAccount.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
+            builder.setMessage(R.string.user_deactivate_mes)
+            builder.setCancelable(false)
+
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                val goToConfirmActivity = Intent(
+                        appCompatActivity, ConfirmActionActivity::class.java
+                )
+
+                @Suppress("DEPRECATION")
+                startActivityForResult(goToConfirmActivity, 16914)
+                appCompatActivity.overridePendingTransition(
+                        R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
+                )
+            }
+            builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setTitle(R.string.many_alert_title)
+            alert.show()
         }
 
         clUserAccountExportData.setOnClickListener {
@@ -468,6 +494,273 @@ class UserAccountFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when {
+            requestCode == 16914 && resultCode == 16914 -> {                                        // If Master PIN is correct
+                view?.apply {
+                    postDelayed(
+                            {
+                                val goToConfirmWithCredentialsActivity = Intent(
+                                        appCompatActivity,
+                                        ConfirmWithCredentialsActivity::class.java
+                                )
+
+                                @Suppress("DEPRECATION")
+                                startActivityForResult(
+                                        goToConfirmWithCredentialsActivity, 451320
+                                )
+                                appCompatActivity.overridePendingTransition(
+                                        R.anim.anim_enter_bottom_to_top_2, R.anim.anim_0
+                                )
+                            }, 250
+                    )
+                }
+            }
+            requestCode == 451320 && resultCode == 451320 -> {                                      // If Confirm With Credentials
+                val firebaseUserAccountModelClass = FirebaseUserAccountModelClass()
+                val newDatabaseReference = firebaseDatabase.getReference("D-$userId")
+                var count = 0
+                val button = Button(appCompatActivity)
+
+                val usernameRef = databaseReference.child("username")
+                val passwordRef = databaseReference.child("password")
+                val masterPinRef = databaseReference.child("masterPin")
+                val statusRef = databaseReference.child("status")
+                val firstNameRef = databaseReference.child("firstName")
+                val lastNameRef = databaseReference.child("lastName")
+                val birthDateRef = databaseReference.child("birthDate")
+                val emailRef = databaseReference.child("email")
+                val mobileNumberRef = databaseReference.child("mobileNumber")
+                val profilePhotoRef = databaseReference.child("profilePhoto")
+                val pwWrongAttemptRef = databaseReference.child("pwWrongAttempt")
+                val pwLockTimeRef = databaseReference.child("pwLockTime")
+                val mpinWrongAttemptRef = databaseReference.child("mpinWrongAttempt")
+                val fwrongAttempteRef = databaseReference.child("fwrongAttempt")
+                val mpinLockTimeRef = databaseReference.child("mpinLockTime")
+                val fnEditCountRef = databaseReference.child("fnEditCount")
+                val lnEditCountRef = databaseReference.child("lnEditCount")
+                val bdEditCountRef = databaseReference.child("bdEditCount")
+
+                usernameRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setUsername(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                passwordRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setPassword(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                masterPinRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setMasterPin(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                statusRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setStatus(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                firstNameRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setFirstName(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                lastNameRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setLastName(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                birthDateRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setBirthDate(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                emailRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setEmail(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                mobileNumberRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setMobileNumber(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                profilePhotoRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setProfilePhoto(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                pwWrongAttemptRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setPwWrongAttempt(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                pwLockTimeRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setPwLockTime(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                mpinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setMPinWrongAttempt(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                fwrongAttempteRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setFWrongAttempt(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                mpinLockTimeRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setMPinLockTime(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                fnEditCountRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setFnEditCount(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                lnEditCountRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setLnEditCount(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+                bdEditCountRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val value = dataSnapshot.getValue(String::class.java).toString()
+                        firebaseUserAccountModelClass.setBdEditCount(value)
+                        count++
+
+                        button.performClick()
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+
+
+                button.setOnClickListener {
+                    if (count == 18) {
+                        newDatabaseReference.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                newDatabaseReference.setValue(firebaseUserAccountModelClass)
+                                databaseReference.removeValue()
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+
+                        databaseHandlerClass.truncateAllTables()
+
+                        val goToLoginActivity = Intent(appCompatActivity, LoginActivity::class.java)
+
+                        startActivity(goToLoginActivity)
+                        appCompatActivity.overridePendingTransition(
+                                R.anim.anim_enter_top_to_bottom_2,
+                                R.anim.anim_exit_top_to_bottom_2
+                        )
+                        appCompatActivity.finish()
+                    }
+                }
+            }
             requestCode == 135491 && resultCode == Activity.RESULT_OK -> {                          // If image was selected
                 val selectedImage: Uri? = data?.data
 

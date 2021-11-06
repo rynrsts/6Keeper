@@ -60,6 +60,16 @@ class ResetSelectionFragment : Fragment() {
                 internetToast()
             }
         }
+
+        acbResetSelectionEmail.setOnClickListener {
+            if (InternetConnectionClass().isConnected()) {
+                forgotCredentialsActivity.manageForgotFragments(
+                        "emailValidation"
+                )
+            } else {
+                internetToast()
+            }
+        }
     }
 
     private fun internetToast() {

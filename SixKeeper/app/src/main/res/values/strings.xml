@@ -50,6 +50,9 @@
     <!-- Confirm Action -->
     <string name="confirm_confirm_action">Confirm Action with Master PIN</string>
 
+    <!-- Confirm with Credentials -->
+    <string name="confirm_credentials_confirm">Confirm Deactivation</string>
+
     <!-- Create Master PIN -->
     <string name="create_master_pin_desc">
         Master PIN is used for subsequent login and confirmation of actions. <b>Note: A digit
@@ -101,6 +104,10 @@
     <string name="dashboard_duplicate_passwords">Duplicate Passwords</string>
     <string name="dashboard_weak_passwords">Weak Passwords</string>
 
+    <!-- Email Verification -->
+    <string name="email_verification_email_sent">Email Sent</string>
+    <string name="email_verification_verify_email">Verify Email</string>
+
     <!-- Fingerprint -->
     <string name="fingerprint_authentication_failed">Authentication failed</string>
     <string name="fingerprint_enable_lock_screen">
@@ -137,12 +144,15 @@
     <string name="security_question_reset">Reset</string>
 
     <!-- Login -->
+    <string name="login_already_logged_in">The account is logged in on another device</string>
+    <string name="login_deactivated">
+        Cannot find account. It is either removed, deactivated, or not existing.
+    </string>
+    <string name="login_enter_credentials">Please enter your credentials</string>
     <string name="login_forgot_pass"><u>Forgot Password?</u></string>
     <string name="login_import_data"><u>Import Data</u></string>
     <string name="login_import_data_title">Import Data</string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
-    <string name="login_enter_credentials">Please enter your credentials</string>
-    <string name="login_already_logged_in">The account is logged in on another device</string>
 
     <!-- Many -->
     <string name="many_about_us">About</string>
@@ -482,6 +492,10 @@
     <string name="user_change_password">Change Password</string>
     <string name="user_change_profile_photo">Add Profile Photo</string>
     <string name="user_deactivate_account">Deactivate Account</string>
+    <string name="user_deactivate_mes">
+        You will no longer be able to use this account once you deactivate it. Continue
+        deactivation?
+    </string>
     <string name="user_export_data">Export Data</string>
     <string name="user_fingerprint">Fingerprint</string>
     <string name="user_image_size">Image size should be more than 2 MB</string>

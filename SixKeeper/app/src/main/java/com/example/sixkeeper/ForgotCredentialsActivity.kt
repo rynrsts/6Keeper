@@ -11,17 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
 
-class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
+class ForgotCredentialsActivity : AppCompatActivity() {
     private val fragmentManager: FragmentManager = supportFragmentManager
 
     private val resetSelectionFragment: Fragment = ResetSelectionFragment()
     private val securityQuestionFragment: Fragment = SecurityQuestionFragment()
     private val mobileNumberValidationFragment: Fragment = MobileNumberValidationFragment()
+    private val emailVerificationFragment: Fragment = EmailVerificationFragment()
     private val resetPasswordFragment: Fragment = ResetPasswordFragment()
     private val resetMasterPINFragment: Fragment = ResetMasterPINFragment()
 
@@ -38,16 +35,11 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_credentials)
 
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        IndexActivity().setTimer(120)
         getExtra()
         changeActionBarTitle()
         manageForgotFragments(selection)
         setOnClick()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onAppBackgrounded() {
-        this.finish()
     }
 
     private fun getExtra() {
@@ -137,7 +129,7 @@ class ForgotCredentialsActivity : AppCompatActivity(), LifecycleObserver {
                             )
                         }
                         emailValidation -> {                                                        // Email Validation
-                            //
+                            replace(R.id.clForgotCredentialsContainer,emailVerificationFragment)
                         }
                     }
 

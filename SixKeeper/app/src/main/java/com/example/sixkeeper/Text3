@@ -7,6 +7,8 @@ Additional
 
 Enhancement
     Create New Account: Automate '/' in Birth Date
+    Create New Account: Unique User ID
+    Create New Account: Unique Username
     Create New Account: Do not allow Master PIN that starts with 0                                  *
     Create New Account: Limit to 15 years and above
     Create New Account: Add progress

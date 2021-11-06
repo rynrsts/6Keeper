@@ -85,15 +85,6 @@ class MobileNumberValidationFragment : Fragment() {
     }
 
     private fun setMobileNumber() {
-//        val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-//        val encodingClass = EncodingClass()
-//        val userInfoList: List<UserInfoModelClass> = databaseHandlerClass.viewUserInfo()
-//        var mobileNumber = ""
-//
-//        for (u in userInfoList) {
-//            mobileNumber = encodingClass.decodeData(u.mobileNumber)
-//        }
-
         val button = Button(appCompatActivity)
         val mobileNumberRef = databaseReference.child("mobileNumber")
         var mobileNumber = ""
@@ -115,11 +106,11 @@ class MobileNumberValidationFragment : Fragment() {
 
         button.setOnClickListener {
             etMobileNumberGetOTP.setText(mobileNumber)
-            setOnclick()
+            setOnClick()
         }
     }
 
-    private fun setOnclick() {
+    private fun setOnClick() {
         val acbMobileNumberGetOTP: Button =
                 appCompatActivity.findViewById(R.id.acbMobileNumberGetOTP)
         val acbMobileNumberEnterOTP: Button =

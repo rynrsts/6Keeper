@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
@@ -122,8 +123,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         encryptedPassword = encryptionClass.hashData(encodedPassword)
         val encodedStatus = encodingClass.encodeData(0.toString())
         val passwordString = encodingClass.decodeSHA(encryptedPassword)
-
-//        val dataList = ArrayList<String>(0)
         val button = Button(this)
 
         for (u in userAccList) {
@@ -145,14 +144,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         var pwWrongAttempt = ""
         var pwLockTime = ""
         var count = 0
-
-        usernameRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                username = dataSnapshot.getValue(String::class.java).toString()
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
         passwordRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -183,10 +174,33 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
                 pwLockTime = encodingClass.decodeData(value)
-                count++
+            }
 
-                if (count == 1) {
-                    button.performClick()
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        usernameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    username = dataSnapshot.getValue(String::class.java).toString()
+                    count++
+
+                    if (count == 1) {
+                        button.performClick()
+                    }
+                } else {
+                    val toast: Toast = Toast.makeText(
+                            applicationContext,
+                            R.string.login_deactivated,
+                            Toast.LENGTH_SHORT
+                    )
+                    toast.apply {
+                        setGravity(Gravity.CENTER, 0, 0)
+                        show()
+                    }
+
+                    etLoginPassword.setText("")
+                    getEtLoginPassword().requestFocus()
                 }
             }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
+import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,8 +18,13 @@ class SixKeeperContext : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        context = applicationContext
+        setVariables()
         setupActivityListener()
+    }
+
+    private fun setVariables() {
+        context = applicationContext
+        FirebaseApp.initializeApp(applicationContext)
     }
 
     private fun setupActivityListener() {

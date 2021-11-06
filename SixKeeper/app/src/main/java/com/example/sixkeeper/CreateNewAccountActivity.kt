@@ -94,12 +94,6 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
                 builder.setCancelable(false)
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-//                    super.onBackPressed()
-//                    overridePendingTransition(
-//                            R.anim.anim_enter_left_to_right_2,
-//                            R.anim.anim_exit_left_to_right_2
-//                    )
-
                     val goToLoginActivity =
                             Intent(this, LoginActivity::class.java)
 

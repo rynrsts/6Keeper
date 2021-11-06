@@ -1227,12 +1227,12 @@ class DatabaseHandlerClass(context: Context) :
         val db = this.writableDatabase
 
         val success = db.delete(TABLE_USER_ACC, "", null)
-        db.delete(TABLE_SAVED_PASS, "", null)
+        db.delete(TABLE_SETTINGS, "", null)
         db.delete(TABLE_ACTION_LOG, "", null)
         db.delete(TABLE_CATEGORIES, "", null)
         db.delete(TABLE_PLATFORMS, "", null)
         db.delete(TABLE_ACCOUNTS, "", null)
-        db.delete(TABLE_SETTINGS, "", null)
+        db.delete(TABLE_SAVED_PASS, "", null)
 
         db.close()
         return success
