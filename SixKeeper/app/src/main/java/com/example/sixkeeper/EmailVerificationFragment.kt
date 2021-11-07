@@ -1,7 +1,6 @@
 package com.example.sixkeeper
 
 import android.app.Activity
-import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
-
 
 @Suppress("DEPRECATION")
 class EmailVerificationFragment : Fragment() {
@@ -115,56 +113,56 @@ class EmailVerificationFragment : Fragment() {
                     .setHandleCodeInApp(true)
                     .setUrl("https://sixkeeper.page.link")
                     .build()
-            var emailLink = ""
-            val button = Button(appCompatActivity)
+//            var emailLink = ""
+//            val button = Button(appCompatActivity)
 
             mAuth!!.sendSignInLinkToEmail(email, actionCodeSettings)                                // Send email
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-//                            val toast: Toast = Toast.makeText(
-//                                    appCompatActivity.applicationContext,
-//                                    R.string.email_verification_email_sent,
-//                                    Toast.LENGTH_SHORT
-//                            )
-//                            toast.apply {
-//                                setGravity(Gravity.CENTER, 0, 0)
-//                                show()
-//                            }
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.email_verification_email_sent,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
 
-                            val intent = activity?.intent
-                            emailLink = intent?.data.toString()
-
-                            button.performClick()
+//                            val intent = activity?.intent
+//                            emailLink = intent?.data.toString()
+//
+//                            button.performClick()
                         } else {
                             Objects.requireNonNull(task.exception)?.printStackTrace()
                         }
                     }
 
-            button.setOnClickListener {
-                if (mAuth!!.isSignInWithEmailLink(emailLink)) {
-                    mAuth!!.signInWithEmailLink(email, emailLink)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    val forgotCredentialsActivity: ForgotCredentialsActivity =
-                                            activity as ForgotCredentialsActivity
-
-                                    forgotCredentialsActivity.manageForgotFragments(
-                                            forgotCredentialsActivity.getCredential()
-                                    )
-                                }
-                            }
-                } else {
-                    val toast: Toast = Toast.makeText(
-                            appCompatActivity.applicationContext,
-                            "error",
-                            Toast.LENGTH_SHORT
-                    )
-                    toast.apply {
-                        setGravity(Gravity.CENTER, 0, 0)
-                        show()
-                    }
-                }
-            }
+//            button.setOnClickListener {
+//                if (mAuth!!.isSignInWithEmailLink(emailLink)) {
+//                    mAuth!!.signInWithEmailLink(email, emailLink)
+//                            .addOnCompleteListener { task ->
+//                                if (task.isSuccessful) {
+//                                    val forgotCredentialsActivity: ForgotCredentialsActivity =
+//                                            activity as ForgotCredentialsActivity
+//
+//                                    forgotCredentialsActivity.manageForgotFragments(
+//                                            forgotCredentialsActivity.getCredential()
+//                                    )
+//                                }
+//                            }
+//                } else {
+//                    val toast: Toast = Toast.makeText(
+//                            appCompatActivity.applicationContext,
+//                            "error",
+//                            Toast.LENGTH_SHORT
+//                    )
+//                    toast.apply {
+//                        setGravity(Gravity.CENTER, 0, 0)
+//                        show()
+//                    }
+//                }
+//            }
         }
     }
 }

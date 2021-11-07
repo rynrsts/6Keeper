@@ -37,8 +37,8 @@ class ResetSelectionFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.acbResetSelectionEnterInfo)
         val acbResetSelectionMobileNumber: Button =
                 appCompatActivity.findViewById(R.id.acbResetSelectionMobileNumber)
-        val acbResetSelectionEmail: Button =
-                appCompatActivity.findViewById(R.id.acbResetSelectionEmail)
+//        val acbResetSelectionEmail: Button =
+//                appCompatActivity.findViewById(R.id.acbResetSelectionEmail)
 
         val forgotCredentialsActivity: ForgotCredentialsActivity =
                 activity as ForgotCredentialsActivity
@@ -61,15 +61,15 @@ class ResetSelectionFragment : Fragment() {
             }
         }
 
-        acbResetSelectionEmail.setOnClickListener {
-            if (InternetConnectionClass().isConnected()) {
-                forgotCredentialsActivity.manageForgotFragments(
-                        "emailValidation"
-                )
-            } else {
-                internetToast()
-            }
-        }
+//        acbResetSelectionEmail.setOnClickListener {
+//            if (InternetConnectionClass().isConnected()) {
+//                forgotCredentialsActivity.manageForgotFragments(
+//                        "emailValidation"
+//                )
+//            } else {
+//                internetToast()
+//            }
+//        }
     }
 
     private fun internetToast() {

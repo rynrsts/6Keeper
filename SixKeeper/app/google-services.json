@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "425646823641",
+    "firebase_url": "https://keeper-650a1-default-rtdb.firebaseio.com",
     "project_id": "keeper-650a1",
     "storage_bucket": "keeper-650a1.appspot.com"
   },
@@ -13,6 +14,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "425646823641-eb30e75rqkdj3p7luhki17etl55aekt6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sixkeeper",
+            "certificate_hash": "c975b185755995bf020c8c4e45a5d4f5f02c6074"
+          }
+        },
+        {
+          "client_id": "425646823641-t95ikgcob6c4tcvmstin2d0khmv97ohj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sixkeeper",
+            "certificate_hash": "14a3b5578ec234f42d14642fc6e02346c3c01884"
+          }
+        },
+        {
+          "client_id": "425646823641-uhigbmh7c6jsls1q0a233k7kqn1etbuf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sixkeeper",
+            "certificate_hash": "17949df1f24bf4418e62492711cdc601d30aeae2"
+          }
+        },
         {
           "client_id": "425646823641-35id43rrinnngdmdrf3o0d7sjscbh3iu.apps.googleusercontent.com",
           "client_type": 3

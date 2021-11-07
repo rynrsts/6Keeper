@@ -59,18 +59,18 @@
                 app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/acbResetSelectionEnterInfo" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/acbResetSelectionEmail"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="21dp"
-                android:background="@drawable/layout_button_green_border"
-                android:stateListAnimator="@null"
-                android:text="@string/reset_selection_email"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toStartOf="@+id/gResetSelectionVertical91"
-                app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"
-                app:layout_constraintTop_toBottomOf="@+id/acbResetSelectionMobileNumber" />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/acbResetSelectionEmail"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginTop="21dp"-->
+<!--                android:background="@drawable/layout_button_green_border"-->
+<!--                android:stateListAnimator="@null"-->
+<!--                android:text="@string/reset_selection_email"-->
+<!--                android:textAllCaps="false"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/gResetSelectionVertical91"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/gResetSelectionVertical09"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/acbResetSelectionMobileNumber" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

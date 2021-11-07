@@ -175,7 +175,7 @@
     <string name="many_birth_date">Birth Date</string>
     <string name="many_birth_date_format">MM/DD/YYYY</string>
     <string name="many_birth_date_format_message">
-        *Please use the format MM/DD/YYYY.
+        *Please use the format MM/DD/YYYY, and make sure that the date is valid.
     </string>
     <string name="many_birth_date_slash">/</string>
     <string name="many_dashboard">Dashboard</string>

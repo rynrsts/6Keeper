@@ -18,7 +18,7 @@ class ForgotCredentialsActivity : AppCompatActivity() {
     private val resetSelectionFragment: Fragment = ResetSelectionFragment()
     private val securityQuestionFragment: Fragment = SecurityQuestionFragment()
     private val mobileNumberValidationFragment: Fragment = MobileNumberValidationFragment()
-    private val emailVerificationFragment: Fragment = EmailVerificationFragment()
+//    private val emailVerificationFragment: Fragment = EmailVerificationFragment()
     private val resetPasswordFragment: Fragment = ResetPasswordFragment()
     private val resetMasterPINFragment: Fragment = ResetMasterPINFragment()
 
@@ -26,7 +26,7 @@ class ForgotCredentialsActivity : AppCompatActivity() {
     private val selection = "selection"
     private val securityQuestion = "securityQuestion"
     private val mobileNumberValidation = "mobileNumberValidation"
-    private val emailValidation = "emailValidation"
+//    private val emailValidation = "emailValidation"
     private val resetPassword = "resetPassword"
     private val resetMasterPIN = "resetMasterPIN"
     private var fragmentNum = 0
@@ -103,7 +103,8 @@ class ForgotCredentialsActivity : AppCompatActivity() {
 
                 fragmentNum = 0
             }
-            securityQuestion, mobileNumberValidation, emailValidation
+            securityQuestion, mobileNumberValidation
+//                , emailValidation
             -> {
                 fragmentManager.beginTransaction().apply {
                     if (fragmentNum == 0) {
@@ -128,9 +129,9 @@ class ForgotCredentialsActivity : AppCompatActivity() {
                                     mobileNumberValidationFragment
                             )
                         }
-                        emailValidation -> {                                                        // Email Validation
-                            replace(R.id.clForgotCredentialsContainer,emailVerificationFragment)
-                        }
+//                        emailValidation -> {                                                        // Email Validation
+//                            replace(R.id.clForgotCredentialsContainer,emailVerificationFragment)
+//                        }
                     }
 
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

@@ -2,6 +2,8 @@ package com.example.sixkeeper
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,8 @@ import android.widget.Button
 import android.widget.Toast
 
 class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
+
+    private var lastLength = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -29,6 +33,8 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
 
         setVariables()
         setEditTextFocusChange()
+        setBirthDateOnClick()
+        setEditTextOnChange()
         setButtonOnClick()
     }
 
@@ -84,31 +90,64 @@ class CreateNewAccountP1Fragment : CreateNewAccountP1ValidationClass() {
                 }
     }
 
-//    TODO: Add '/' automatically in the birth date
-//    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
-//        getEtCreateNewAccP1BirthDate().addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable) {
-//                setBirthDate(getEtCreateNewAccP1BirthDate().text.toString())
-//
-//                if (getBirthDate().isNotEmpty()) {
-//                    if (getBirthDate().length == 1) {
-//                        typing = true
-//                    }
-//
-//                    if (getBirthDate().length == 2 && typing) {
-//                        setEtCreateNewAccP1BirthDate(getBirthDate() + "/")
-//                        getEtCreateNewAccP1BirthDate().setSelection(
-//                                getEtCreateNewAccP1BirthDate().text.length
-//                        )
-//                        typing = false
-//                    }
-//                }
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-//        })
-//    }
+    private fun setBirthDateOnClick() {
+        getEtCreateNewAccP1BirthDate().setOnClickListener {
+            getEtCreateNewAccP1BirthDate().setSelection(
+                    getEtCreateNewAccP1BirthDate().text.length
+            )
+        }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
+        getEtCreateNewAccP1BirthDate().addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                setBirthDate(getEtCreateNewAccP1BirthDate().text.toString())
+
+                if (getBirthDate().isNotEmpty()) {
+                    if (
+                            (lastLength == 0 && getBirthDate().length == 1) ||
+                            (lastLength == 3 && getBirthDate().length == 4) ||
+                            (lastLength == 6 && getBirthDate().length == 7) ||
+                            (lastLength == 7 && getBirthDate().length == 8) ||
+                            (lastLength == 8 && getBirthDate().length == 9) ||
+                            (lastLength == 9 && getBirthDate().length == 10)
+                    ) {
+                        lastLength++
+                    } else if (
+                            (lastLength == 1 && getBirthDate().isEmpty()) ||
+                            (lastLength == 4 && getBirthDate().length == 3) ||
+                            (lastLength == 7 && getBirthDate().length == 6) ||
+                            (lastLength == 8 && getBirthDate().length == 7) ||
+                            (lastLength == 9 && getBirthDate().length == 8) ||
+                            (lastLength == 10 && getBirthDate().length == 9)
+                    ) {
+                        lastLength--
+                    } else if (
+                            (lastLength == 1 && getBirthDate().length == 2) ||
+                            (lastLength == 4 && getBirthDate().length == 5)
+                    ) {
+                        setEtCreateNewAccP1BirthDate(getBirthDate() + "/")
+                        lastLength += 2
+                    } else if (
+                            (lastLength == 3 && getBirthDate().length == 2) ||
+                            (lastLength == 6 && getBirthDate().length == 5)
+                    ) {
+                        setEtCreateNewAccP1BirthDate(
+                                getBirthDate().substring(0, getBirthDate().length -1)
+                        )
+                        lastLength -= 2
+                    }
+
+                    getEtCreateNewAccP1BirthDate().setSelection(
+                            getEtCreateNewAccP1BirthDate().text.length
+                    )
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+    }
 
     private fun setButtonOnClick() {
         val acbCreateNewAccP1Next: Button =
