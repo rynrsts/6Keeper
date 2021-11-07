@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import java.util.*
 
 open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
@@ -112,6 +114,20 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun pushNumber(i: Int, view: View) {
+        if (pin.size == 0 && i == 0) {
+            val toast: Toast = Toast.makeText(
+                    applicationContext,
+                    R.string.create_master_pin_not_start_with_0,
+                    Toast.LENGTH_SHORT
+            )
+            toast.apply {
+                setGravity(Gravity.CENTER, 0, 0)
+                show()
+            }
+
+            return
+        }
+
         if (pin.size < 6) {
             pin.push(i)
             shadePin(view)
@@ -119,7 +135,6 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     private fun shadePin(view: View) {
-
         when (pin.size) {
             1 ->
                 ivCreateMasterPINCircle1.setImageResource(R.drawable.layout_blue_circle)
@@ -145,8 +160,7 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                     tempS = tempS + "" + temp.pop()
                 val masterPin: Int = tempS.toInt()
 
-                // Return the created Master PIN
-                setResult(14523, Intent().putExtra("masterPin", masterPin))
+                setResult(14523, Intent().putExtra("masterPin", masterPin))                     // Return the created Master PIN
                 finish()
                 overridePendingTransition(
                     R.anim.anim_0,
@@ -312,8 +326,7 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     override fun onBackPressed() {                                                                  // Override back button function
-        setResult(0, Intent().putExtra("masterPin", 0))
-        super.onBackPressed()
+        super.finish()
         overridePendingTransition(
             R.anim.anim_0,
             R.anim.anim_exit_top_to_bottom_2

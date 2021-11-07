@@ -16,8 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +25,7 @@ class ResetMasterPINFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -34,6 +34,7 @@ class ResetMasterPINFragment : Fragment() {
 
     private var userId = ""
     private var masterPin = 0
+    private var masterPinVal = ""
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -61,6 +62,7 @@ class ResetMasterPINFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
@@ -71,6 +73,15 @@ class ResetMasterPINFragment : Fragment() {
         }
 
         databaseReference = firebaseDatabase.getReference(userId)
+
+        val masterPinRef = databaseReference.child("masterPin")
+
+        masterPinRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                masterPinVal = dataSnapshot.getValue(String::class.java).toString()
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     private fun setMasterPINText() {
@@ -128,7 +139,6 @@ class ResetMasterPINFragment : Fragment() {
 
                     builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                         if (InternetConnectionClass().isConnected()) {
-                            val encryptionClass = EncryptionClass()
                             val encodedInput = encodingClass.encodeData(masterPin.toString())
                             val encryptedInput = encryptionClass.hashData(encodedInput)
                             val inputString = encodingClass.decodeSHA(encryptedInput)
@@ -233,13 +243,31 @@ class ResetMasterPINFragment : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        masterPin = data?.getIntExtra("masterPin", 0)!!
-
         when {
             requestCode == 14523 && resultCode == 14523 -> {
-                tvResetMasterPINMes.apply {
-                    setText(R.string.many_setup_complete)
-                    setTextColor(ContextCompat.getColor(context, R.color.blue))
+                if (data != null) {
+                    val input = data.getIntExtra("masterPin", 0)
+                    val encodedInput = encodingClass.encodeData(input.toString())
+                    val encryptedInput = encryptionClass.hashData(encodedInput)
+                    val inputString = encodingClass.decodeSHA(encryptedInput)
+
+                    if (!masterPinVal.contentEquals(inputString)) {
+                        masterPin = input
+
+                        tvResetMasterPINMes.apply {
+                            setText(R.string.many_setup_complete)
+                            setTextColor(ContextCompat.getColor(context, R.color.blue))
+                        }
+                    } else {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.user_edit_master_pin_mes, Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
                 }
             }
         }

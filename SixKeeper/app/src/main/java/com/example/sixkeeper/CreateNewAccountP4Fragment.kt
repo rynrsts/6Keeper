@@ -246,7 +246,9 @@ class CreateNewAccountP4Fragment : Fragment() {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
 
-        masterPin = data?.getIntExtra("masterPin", 0)!!
+        if (data != null) {
+            masterPin = data.getIntExtra("masterPin", 0)
+        }
 
         when {
             requestCode == 14523 && resultCode == 14523 -> {

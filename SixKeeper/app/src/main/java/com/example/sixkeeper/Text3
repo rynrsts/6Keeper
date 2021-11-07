@@ -5,15 +5,13 @@ Additional
 
 
 Enhancement
-    Create New Account: Automate '/' in Birth Date
+    Create New Account: Improve date validation
     Create New Account: Unique User ID
     Create New Account: Unique Username
-    Create New Account: Do not allow Master PIN that starts with 0                                  *
     Create New Account: Limit to 15 years and above
     Create New Account: Add progress
     Import-Export: Select file
-    Reset Password: Make not same with username or old password
-    Reset Master PIN: Make not same with old master pin
+    Reset Password: Make not same with username
     User Account: Confirm Email and Mobile Number
     User Account: Make profile photo be able to crop
     Add Account: Add loading in selecting include system apps

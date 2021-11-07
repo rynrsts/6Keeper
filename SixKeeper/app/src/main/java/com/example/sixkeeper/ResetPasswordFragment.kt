@@ -38,6 +38,7 @@ class ResetPasswordFragment : Fragment() {
     private var newPass = ""
     private var newPassVisibility: Int = 0
     private var confirmPassVisibility: Int = 0
+    private var passwordVal = ""
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -81,6 +82,18 @@ class ResetPasswordFragment : Fragment() {
         }
 
         databaseReference = firebaseDatabase.getReference(userId)
+
+        databaseReference = firebaseDatabase.getReference(userId)
+
+        val passwordRef = databaseReference.child("password")
+
+        passwordRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                passwordVal = dataSnapshot.getValue(String::class.java).toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -97,17 +110,23 @@ class ResetPasswordFragment : Fragment() {
                 val confirmPass = etResetPasswordConfirmPass.text.toString()
 
                 if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                    if (isPasswordValid(newPass) && confirmPass == newPass) {
+                    val encryptionClass = EncryptionClass()
+                    val encodedInput = encodingClass.encodeData(newPass)
+                    val encryptedInput = encryptionClass.hashData(encodedInput)
+                    val inputString = encodingClass.decodeSHA(encryptedInput)
+
+                    if (
+                            isPasswordValid(newPass) && confirmPass == newPass &&
+                            !passwordVal.contentEquals(inputString)
+                    ) {
+                        tvResetPasswordConfirmPassNote.text = ""
+
                         val builder: AlertDialog.Builder = AlertDialog.Builder(appCompatActivity)
                         builder.setMessage(R.string.reset_password_alert)
                         builder.setCancelable(false)
 
                         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                             if (InternetConnectionClass().isConnected()) {
-                                val encryptionClass = EncryptionClass()
-                                val encodedInput = encodingClass.encodeData(newPass)
-                                val encryptedInput = encryptionClass.hashData(encodedInput)
-                                val inputString = encodingClass.decodeSHA(encryptedInput)
 
                                 var actionLogId = 1000001
                                 val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -128,9 +147,8 @@ class ResetPasswordFragment : Fragment() {
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
                                                 encodingClass.encodeData(actionLogId.toString()),
-                                                encodingClass.encodeData(
-                                                        "App account password was modified."
-                                                ),
+                                                encodingClass.encodeData("App account " +
+                                                        "password was modified."),
                                                 encodingClass.encodeData(date)
                                         )
                                 )
@@ -176,10 +194,26 @@ class ResetPasswordFragment : Fragment() {
                                     }, 1000
                             )
                         }
-                    } else if (confirmPass == newPass) {
-                        tvResetPasswordConfirmPassNote.text = ""
-                    } else if (confirmPass != newPass) {
-                        tvResetPasswordConfirmPassNote.setText(R.string.many_validate_confirm_pass)
+                    } else {
+                        if (confirmPass == newPass) {
+                            tvResetPasswordConfirmPassNote.text = ""
+                        } else if (confirmPass != newPass) {
+                            tvResetPasswordConfirmPassNote.setText(R.string.many_validate_confirm_pass)
+                        }
+
+                        if (
+                                isPasswordValid(newPass) && confirmPass == newPass &&
+                                passwordVal.contentEquals(inputString)
+                        ) {
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.user_edit_pass_not_the_same_mes, Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
                     }
                 } else {
                     val toast: Toast = Toast.makeText(

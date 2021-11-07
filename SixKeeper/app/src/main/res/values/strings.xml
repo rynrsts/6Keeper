@@ -58,6 +58,7 @@
         Master PIN is used for subsequent login and confirmation of actions. <b>Note: A digit
         cannot be used for more than two (2) times.</b>
     </string>
+    <string name="create_master_pin_not_start_with_0">Master PIN should not start with 0</string>
 
     <!-- Create New Account -->
     <string name="create_new_acc_alert_message">
@@ -510,9 +511,18 @@
     <string name="user_edit_current_pass">Current Password</string>
     <string name="user_edit_new_pass">New Password</string>
     <string name="user_edit_pass_mes">Wrong Current Password!</string>
+    <string name="user_edit_pass_not_the_same">
+        Current Password and New Password should not be the same
+    </string>
+    <string name="user_edit_pass_not_the_same_mes">
+        New Password should not be the same as the recent Password
+    </string>
     <string name="user_edit_save_alert_mes">Do you want to save the changes?</string>
     <string name="user_edit_save_alert_mes_2">
         This field can only be modified once. Do you want to save the changes?
+    </string>
+    <string name="user_edit_master_pin_mes">
+        New Master PIN should not be the same as the recent Master PIN
     </string>
     <string name="user_edit_master_pin_note">
         Changing the Master PIN will require you to:

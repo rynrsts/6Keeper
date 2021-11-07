@@ -3,6 +3,8 @@ package com.example.sixkeeper
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -40,6 +42,7 @@ class SecurityQuestionFragment : Fragment() {
     private lateinit var firstName: String
     private lateinit var lastName: String
     private lateinit var birthDate: String
+    private var lastLength = 0
     private lateinit var email: String
     private lateinit var mobileNumber: String
 
@@ -55,6 +58,8 @@ class SecurityQuestionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setVariables()
+        setBirthDateOnClick()
+        setEditTextOnChange()
         setButtonOnClick()
     }
 
@@ -131,6 +136,67 @@ class SecurityQuestionFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    private fun setBirthDateOnClick() {
+        etSecurityQuestionBirthDate.setOnClickListener {
+            etSecurityQuestionBirthDate.setSelection(
+                    etSecurityQuestionBirthDate.text.length
+            )
+        }
+    }
+
+    private fun setEditTextOnChange() {                                                             // Set action when EditText changes
+        etSecurityQuestionBirthDate.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                birthDate = etSecurityQuestionBirthDate.text.toString()
+
+                if (birthDate.isNotEmpty()) {
+                    if (
+                            (lastLength == 0 && birthDate.length == 1) ||
+                            (lastLength == 3 && birthDate.length == 4) ||
+                            (lastLength == 6 && birthDate.length == 7) ||
+                            (lastLength == 7 && birthDate.length == 8) ||
+                            (lastLength == 8 && birthDate.length == 9) ||
+                            (lastLength == 9 && birthDate.length == 10)
+                    ) {
+                        lastLength++
+                    } else if (
+                            (lastLength == 1 && birthDate.isEmpty()) ||
+                            (lastLength == 4 && birthDate.length == 3) ||
+                            (lastLength == 7 && birthDate.length == 6) ||
+                            (lastLength == 8 && birthDate.length == 7) ||
+                            (lastLength == 9 && birthDate.length == 8) ||
+                            (lastLength == 10 && birthDate.length == 9)
+                    ) {
+                        lastLength--
+                    } else if (
+                            (lastLength == 1 && birthDate.length == 2) ||
+                            (lastLength == 4 && birthDate.length == 5)
+                    ) {
+                        val birthDateSlash = "$birthDate/"
+
+                        etSecurityQuestionBirthDate.setText(birthDateSlash)
+                        lastLength += 2
+                    } else if (
+                            (lastLength == 3 && birthDate.length == 2) ||
+                            (lastLength == 6 && birthDate.length == 5)
+                    ) {
+                        etSecurityQuestionBirthDate.setText(
+                                birthDate.substring(0, birthDate.length -1)
+                        )
+                        lastLength -= 2
+                    }
+
+                    etSecurityQuestionBirthDate.setSelection(
+                            etSecurityQuestionBirthDate.text.length
+                    )
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
 
