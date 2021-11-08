@@ -136,18 +136,46 @@ class SpecificPlatformFragment : Fragment() {
                 addView(inflatedView)
             }
         } else {
+//            for (u in userAccount) {
+//                val uAccountName = encodingClass.decodeData(u.accountName)
+//
+//                if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
+//                    userAccountId.add(
+//                            encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+//                                    uAccountName + "ramjcammjar" +
+//                                    encodingClass.decodeData(u.accountIsFavorites)
+//                    )
+//                    userAccountName.add(uAccountName)
+//                    userAccountIsFavorites.add(encodingClass.decodeData(u.accountIsFavorites))
+//                }
+//            }
+
+            val tempList = ArrayList<String>(0)
+
             for (u in userAccount) {
+                val uAccountId = encodingClass.decodeData(u.accountId)
                 val uAccountName = encodingClass.decodeData(u.accountName)
+                val uAccountIsFavorites = encodingClass.decodeData(u.accountIsFavorites)
 
                 if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
-                    userAccountId.add(
-                            encodingClass.decodeData(u.accountId) + "ramjcammjar" +
-                                    uAccountName + "ramjcammjar" +
-                                    encodingClass.decodeData(u.accountIsFavorites)
+                    tempList.add(
+                            uAccountName + "ramjcammjar" + uAccountId + "ramjcammjar" +
+                                    uAccountIsFavorites
                     )
-                    userAccountName.add(uAccountName)
-                    userAccountIsFavorites.add(encodingClass.decodeData(u.accountIsFavorites))
                 }
+            }
+
+            tempList.sortBy { it.toLowerCase() }
+
+            for (s in tempList) {
+                val selectedCategoryValue = s.split("ramjcammjar")
+
+                userAccountId.add(
+                        selectedCategoryValue[1] + "ramjcammjar" + selectedCategoryValue[0] +
+                                "ramjcammjar" + selectedCategoryValue[2]
+                )
+                userAccountName.add(selectedCategoryValue[0])
+                userAccountIsFavorites.add(selectedCategoryValue[2])
             }
 
             val accountsListAdapter = AccountsListAdapter(

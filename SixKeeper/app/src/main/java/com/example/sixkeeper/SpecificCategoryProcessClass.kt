@@ -115,7 +115,28 @@ open class SpecificCategoryProcessClass : Fragment() {
                 addView(inflatedView)
             }
         } else {
+//            for (u in userPlatform) {
+//                val uPlatformName = encodingClass.decodeData(u.platformName)
+//                val uPlatformNum = databaseHandlerClass.viewNumberOfAccounts(
+//                        encodingClass.encodeData(0.toString()),
+//                        u.platformId
+//                ).toString()
+//
+//                if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
+//                    userPlatformId.add(
+//                            encodingClass.decodeData(u.platformId) + "ramjcammjar" +
+//                                    uPlatformName + "ramjcammjar" + uPlatformNum
+//
+//                    )
+//                    userPlatformName.add(uPlatformName)
+//                    userNumberOfAccounts.add(uPlatformNum)
+//                }
+//            }
+
+            val tempList = ArrayList<String>(0)
+
             for (u in userPlatform) {
+                val uPlatformId = encodingClass.decodeData(u.platformId)
                 val uPlatformName = encodingClass.decodeData(u.platformName)
                 val uPlatformNum = databaseHandlerClass.viewNumberOfAccounts(
                         encodingClass.encodeData(0.toString()),
@@ -123,14 +144,24 @@ open class SpecificCategoryProcessClass : Fragment() {
                 ).toString()
 
                 if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
-                    userPlatformId.add(
-                            encodingClass.decodeData(u.platformId) + "ramjcammjar" +
-                                    uPlatformName + "ramjcammjar" + uPlatformNum
-
+                    tempList.add(
+                            uPlatformName + "ramjcammjar" + uPlatformId + "ramjcammjar" +
+                                    uPlatformNum
                     )
-                    userPlatformName.add(uPlatformName)
-                    userNumberOfAccounts.add(uPlatformNum)
                 }
+            }
+
+            tempList.sortBy { it.toLowerCase() }
+
+            for (s in tempList) {
+                val selectedCategoryValue = s.split("ramjcammjar")
+
+                userPlatformId.add(
+                        selectedCategoryValue[1] + "ramjcammjar" + selectedCategoryValue[0] +
+                                "ramjcammjar" + selectedCategoryValue[2]
+                )
+                userPlatformName.add(selectedCategoryValue[0])
+                userNumberOfAccounts.add(selectedCategoryValue[2])
             }
 
             val categoriesPlatformsListAdapter = CategoriesPlatformsListAdapter(
