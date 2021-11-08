@@ -409,7 +409,20 @@ open class UserAccountEditProcessClass : Fragment() {
                         (viewId == "mobile number" && text.length == 10) ||
                         (viewId == "username" && isUsernameValid(text))
                 ) {
-                    showSaveAlertDialog()
+                    val input = etUserEditTextBox.text.toString()
+
+                    if (input != previousData) {
+                        showSaveAlertDialog()
+                    } else {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.user_edit_new_previous_mes, Toast.LENGTH_SHORT
+                        )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
+                    }
 
                     it.apply {
                         clUserEditSave.isClickable = false                                          // Set un-clickable for 1 second
@@ -421,50 +434,67 @@ open class UserAccountEditProcessClass : Fragment() {
                 val newPass = etUserEditNewPass.text.toString()
                 val confirmPass = etUserEditConfirmPass.text.toString()
 
-                val encodedCurrentPass = encodingClass.encodeData(currentPass)
-                val encryptedCurrentPass = encryptionClass.hashData(encodedCurrentPass)
-                val currentPassString = encodingClass.decodeSHA(encryptedCurrentPass)
+                val encodedNewPass = encodingClass.encodeData(newPass)
 
-                if (
-                        isPasswordValid(newPass) && confirmPass == newPass &&
-                        currentPass != newPass && currentPassString == password
-                ) {
-                    showSaveAlertDialog()
+                val usernameRef = databaseReference.child("username")
+                var usernameVal = ""
+                var count = 0
+                val button = Button(appCompatActivity)
 
-                    it.apply {
-                        clUserEditSave.isClickable = false                                          // Set un-clickable for 1 second
-                        postDelayed({ clUserEditSave.isClickable = true }, 1000)
+                usernameRef.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        usernameVal = dataSnapshot.getValue(String::class.java).toString()
+                        count++
+
+                        if (count == 1) {
+                            button.performClick()
+                        }
                     }
-                } else {
-                    if (confirmPass == newPass) {
-                        tvUserEditConfirmPassNote.text = ""
-                    } else if (confirmPass != newPass) {
-                        tvUserEditConfirmPassNote.setText(R.string.many_validate_confirm_pass)
-                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
 
+                button.setOnClickListener {
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
-                            currentPass == newPass
+                            currentPass != newPass && usernameVal != encodedNewPass
                     ) {
-                        val toast: Toast = Toast.makeText(
-                                appCompatActivity.applicationContext,
-                                R.string.user_edit_pass_not_the_same, Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
+                        showSaveAlertDialog()
+
+                        clUserEditSave.apply {
+                            clUserEditSave.isClickable = false                                      // Set un-clickable for 1 second
+                            postDelayed({ clUserEditSave.isClickable = true }, 1000)
                         }
-                    } else if (
-                            isPasswordValid(newPass) && confirmPass == newPass &&
-                            currentPass != newPass && currentPassString != password
-                    ) {
-                        val toast: Toast = Toast.makeText(
-                                appCompatActivity.applicationContext,
-                                R.string.user_edit_pass_mes, Toast.LENGTH_SHORT
-                        )
-                        toast.apply {
-                            setGravity(Gravity.CENTER, 0, 0)
-                            show()
+                    } else {
+                        if (confirmPass == newPass) {
+                            tvUserEditConfirmPassNote.text = ""
+                        } else if (confirmPass != newPass) {
+                            tvUserEditConfirmPassNote.setText(R.string.many_validate_confirm_pass)
+                        }
+
+                        if (
+                                isPasswordValid(newPass) && confirmPass == newPass &&
+                                currentPass == newPass
+                        ) {
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.user_edit_pass_not_the_same, Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        } else if (
+                                isPasswordValid(newPass) && confirmPass == newPass &&
+                                currentPass != newPass && usernameVal == encodedNewPass
+                        ) {
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.user_edit_password_mes_2, Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
                         }
                     }
                 }
@@ -684,6 +714,8 @@ open class UserAccountEditProcessClass : Fragment() {
         }
 
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
+            val button = Button(appCompatActivity)
+
             when (viewId) {
                 "first name" -> {
                     updateInfo("firstName")
@@ -714,21 +746,71 @@ open class UserAccountEditProcessClass : Fragment() {
                     changesSavedToast()
                 }
                 "username" -> {
-                    updateAccUsername()
-                    goBackToViewMode()
-                    setUsernameInMenu()
-                    changesSavedToast()
+                    val passwordRef = databaseReference.child("password")
+                    var passwordVal = ""
+                    var count = 0
+                    val input = etUserEditTextBox.text.toString()
+                    val encodedInput = encodingClass.encodeData(input)
+                    val encryptedInput = encryptionClass.hashData(encodedInput)
+                    val inputString = encodingClass.decodeSHA(encryptedInput)
+
+                    passwordRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            passwordVal = dataSnapshot.getValue(String::class.java).toString()
+                            count++
+
+                            if (count == 1) {
+                                button.performClick()
+                            }
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {}
+                    })
+
+                    button.setOnClickListener {
+                        if (!passwordVal.contentEquals(inputString)) {
+                            updateAccUsername(input, encodedInput)
+                            goBackToViewMode()
+                            setUsernameInMenu(input)
+                            changesSavedToast()
+                        } else {
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.user_edit_username_mes,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        }
+                    }
                 }
                 "password" -> {
-                    updateAccPassword()
-                    view?.apply {
-                        postDelayed(
-                                {
-                                    appCompatActivity.onBackPressed()
-                                }, 250
+                    val currentPass = etUserEditCurrentPass.text.toString()
+                    val encodedCurrentPass = encodingClass.encodeData(currentPass)
+                    val encryptedCurrentPass = encryptionClass.hashData(encodedCurrentPass)
+                    val currentPassString = encodingClass.decodeSHA(encryptedCurrentPass)
+
+                    if (currentPassString.contentEquals(password)) {
+                        updateAccPassword()
+                        view?.apply {
+                            postDelayed(
+                                    {
+                                        appCompatActivity.onBackPressed()
+                                    }, 250
+                            )
+                        }
+                        changesSavedToast()
+                    } else {
+                        val toast: Toast = Toast.makeText(
+                                appCompatActivity.applicationContext,
+                                R.string.user_edit_pass_mes, Toast.LENGTH_SHORT
                         )
+                        toast.apply {
+                            setGravity(Gravity.CENTER, 0, 0)
+                            show()
+                        }
                     }
-                    changesSavedToast()
                 }
                 "master pin" -> {
                     val masterPinRef = databaseReference.child("masterPin")
@@ -737,7 +819,6 @@ open class UserAccountEditProcessClass : Fragment() {
                     val encodedInput = encodingClass.encodeData(masterPin.toString())
                     val encryptedInput = encryptionClass.hashData(encodedInput)
                     val inputString = encodingClass.decodeSHA(encryptedInput)
-                    val button = Button(appCompatActivity)
 
                     masterPinRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -748,6 +829,7 @@ open class UserAccountEditProcessClass : Fragment() {
                                 button.performClick()
                             }
                         }
+
                         override fun onCancelled(databaseError: DatabaseError) {}
                     })
 
@@ -762,10 +844,11 @@ open class UserAccountEditProcessClass : Fragment() {
                                         }, 250
                                 )
                             }
-                        } else  {
+                        } else {
                             val toast: Toast = Toast.makeText(
                                     appCompatActivity.applicationContext,
-                                    R.string.user_edit_master_pin_mes, Toast.LENGTH_SHORT
+                                    R.string.user_edit_master_pin_mes,
+                                    Toast.LENGTH_SHORT
                             )
                             toast.apply {
                                 setGravity(Gravity.CENTER, 0, 0)
@@ -820,10 +903,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseReference.child(field).setValue(encodedInput)
     }
 
-    private fun updateAccUsername() {                                                               // Update Username
-        val input = etUserEditTextBox.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
-
+    private fun updateAccUsername(input: String, encodedInput: String) {                            // Update Username
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
                         encodingClass.encodeData(getLastActionLogId().toString()),
@@ -836,9 +916,7 @@ open class UserAccountEditProcessClass : Fragment() {
         databaseReference.child("username").setValue(encodedInput)
     }
 
-    private fun setUsernameInMenu() {                                                               // Set update username in menu
-        val input = etUserEditTextBox.text.toString()
-
+    private fun setUsernameInMenu(input: String) {                                                  // Set update username in menu
         val navigationView: NavigationView =
                 appCompatActivity.findViewById(R.id.nvIndexNavigationView)
         val headerView = navigationView.getHeaderView(0)

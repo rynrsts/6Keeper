@@ -132,6 +132,9 @@
     <string name="reset_master_pin_alert">Do you want to reset master pin?</string>
     <string name="reset_master_pin_mes">Master PIN was reset!</string>
     <string name="reset_master_pin_title">Reset Master PIN</string>
+    <string name="reset_master_pin_not_the_same">
+        New Master PIN should not be the same as the recent Master PIN
+    </string>
 
     <string name="reset_password_alert">Do you want to reset password?</string>
     <string name="reset_password_mes">Password was reset!</string>
@@ -510,9 +513,9 @@
     <string name="user_edit_confirm_pass">Confirm Password</string>
     <string name="user_edit_current_pass">Current Password</string>
     <string name="user_edit_new_pass">New Password</string>
-    <string name="user_edit_pass_mes">Wrong Current Password!</string>
+    <string name="user_edit_pass_mes">Failed to save! Wrong Current Password!</string>
     <string name="user_edit_pass_not_the_same">
-        Current Password and New Password should not be the same
+        New Password and Current Password should not be the same
     </string>
     <string name="user_edit_pass_not_the_same_mes">
         New Password should not be the same as the recent Password
@@ -522,7 +525,7 @@
         This field can only be modified once. Do you want to save the changes?
     </string>
     <string name="user_edit_master_pin_mes">
-        New Master PIN should not be the same as the recent Master PIN
+        Failed to save! New Master PIN should not be the same as the recent Master PIN
     </string>
     <string name="user_edit_master_pin_note">
         Changing the Master PIN will require you to:
@@ -535,6 +538,18 @@
     </string>
     <string name="user_edit_master_pin_note_3">
         (3) Confirm the action of changing the Master PIN by entering the current or old Master PIN.
+    </string>
+    <string name="user_edit_password_mes">
+        Failed to save! New Password should not be the same as the current Username
+    </string>
+    <string name="user_edit_password_mes_2">
+        New Password should not be the same as the current Username
+    </string>
+    <string name="user_edit_username_mes">
+        Failed to save! New Username should not be the same as the current Password
+    </string>
+    <string name="user_edit_new_previous_mes">
+        New value should not be the same with previous
     </string>
 
     <!-- Web View -->

@@ -261,7 +261,8 @@ class ResetMasterPINFragment : Fragment() {
                     } else {
                         val toast: Toast = Toast.makeText(
                                 appCompatActivity.applicationContext,
-                                R.string.user_edit_master_pin_mes, Toast.LENGTH_SHORT
+                                R.string.reset_master_pin_not_the_same,
+                                Toast.LENGTH_SHORT
                         )
                         toast.apply {
                             setGravity(Gravity.CENTER, 0, 0)

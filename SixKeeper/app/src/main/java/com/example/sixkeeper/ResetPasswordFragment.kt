@@ -25,6 +25,7 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -38,6 +39,7 @@ class ResetPasswordFragment : Fragment() {
     private var newPass = ""
     private var newPassVisibility: Int = 0
     private var confirmPassVisibility: Int = 0
+    private var usernameVal = ""
     private var passwordVal = ""
 
     override fun onCreateView(
@@ -67,6 +69,7 @@ class ResetPasswordFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
         encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
@@ -85,7 +88,18 @@ class ResetPasswordFragment : Fragment() {
 
         databaseReference = firebaseDatabase.getReference(userId)
 
+        val usernameRef = databaseReference.child("username")
         val passwordRef = databaseReference.child("password")
+
+        usernameRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                val encryptedValue = encryptionClass.hashData(value)
+                usernameVal = encodingClass.decodeSHA(encryptedValue)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
 
         passwordRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -110,13 +124,13 @@ class ResetPasswordFragment : Fragment() {
                 val confirmPass = etResetPasswordConfirmPass.text.toString()
 
                 if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                    val encryptionClass = EncryptionClass()
                     val encodedInput = encodingClass.encodeData(newPass)
                     val encryptedInput = encryptionClass.hashData(encodedInput)
                     val inputString = encodingClass.decodeSHA(encryptedInput)
 
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
+                            !usernameVal.contentEquals(inputString) &&
                             !passwordVal.contentEquals(inputString)
                     ) {
                         tvResetPasswordConfirmPassNote.text = ""
@@ -203,11 +217,26 @@ class ResetPasswordFragment : Fragment() {
 
                         if (
                                 isPasswordValid(newPass) && confirmPass == newPass &&
+                                usernameVal.contentEquals(inputString)
+                        ) {
+                            val toast: Toast = Toast.makeText(
+                                    appCompatActivity.applicationContext,
+                                    R.string.user_edit_password_mes_2,
+                                    Toast.LENGTH_SHORT
+                            )
+                            toast.apply {
+                                setGravity(Gravity.CENTER, 0, 0)
+                                show()
+                            }
+                        } else if (
+                                isPasswordValid(newPass) && confirmPass == newPass &&
+                                !usernameVal.contentEquals(inputString) &&
                                 passwordVal.contentEquals(inputString)
                         ) {
                             val toast: Toast = Toast.makeText(
                                     appCompatActivity.applicationContext,
-                                    R.string.user_edit_pass_not_the_same_mes, Toast.LENGTH_SHORT
+                                    R.string.user_edit_pass_not_the_same_mes,
+                                    Toast.LENGTH_SHORT
                             )
                             toast.apply {
                                 setGravity(Gravity.CENTER, 0, 0)
