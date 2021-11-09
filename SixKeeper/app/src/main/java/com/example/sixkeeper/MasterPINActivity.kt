@@ -14,6 +14,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -211,46 +212,58 @@ class MasterPINActivity : MasterPINProcessClass() {
         val tvMasterPINForgotPass: TextView = findViewById(R.id.tvMasterPINForgotPass)
 
         getAcbMasterPINButton1().setOnClickListener {
+            clickEffect(it)
             pushNumber(1, it)
         }
 
         getAcbMasterPINButton2().setOnClickListener {
+            clickEffect(it)
             pushNumber(2, it)
         }
 
         getAcbMasterPINButton3().setOnClickListener {
+            clickEffect(it)
             pushNumber(3, it)
         }
 
         getAcbMasterPINButton4().setOnClickListener {
+            clickEffect(it)
             pushNumber(4, it)
         }
 
         getAcbMasterPINButton5().setOnClickListener {
+            clickEffect(it)
             pushNumber(5, it)
         }
 
         getAcbMasterPINButton6().setOnClickListener {
+            clickEffect(it)
             pushNumber(6, it)
         }
 
         getAcbMasterPINButton7().setOnClickListener {
+            clickEffect(it)
             pushNumber(7, it)
         }
 
         getAcbMasterPINButton8().setOnClickListener {
+            clickEffect(it)
             pushNumber(8, it)
         }
 
         getAcbMasterPINButton9().setOnClickListener {
+            clickEffect(it)
             pushNumber(9, it)
         }
 
         getAcbMasterPINButton0().setOnClickListener {
+            clickEffect(it)
             pushNumber(0, it)
         }
 
         getAcbMasterPINButtonDelete().setOnClickListener {
+            clickEffect(it)
+
             if (getPin().size > 0) {
                 unShadePin()
                 getPin().pop()
@@ -258,6 +271,8 @@ class MasterPINActivity : MasterPINProcessClass() {
         }
 
         getAcbMasterPINButtonCancel().setOnClickListener {
+            clickEffect(it)
+
             it.apply {
                 getAcbMasterPINButtonCancel().isClickable = false                                   // Set button un-clickable for 1 second
                 postDelayed(
@@ -330,6 +345,17 @@ class MasterPINActivity : MasterPINProcessClass() {
                         }, 1000
                 )
             }
+        }
+    }
+
+    private fun clickEffect(view: View) {
+        view.apply {
+            view.setBackgroundResource(R.drawable.layout_button_light_gray_quadrilateral)
+            postDelayed(
+                    {
+                        view.setBackgroundResource(R.drawable.layout_button_white_quadrilateral)
+                    }, 100
+            )
         }
     }
 }

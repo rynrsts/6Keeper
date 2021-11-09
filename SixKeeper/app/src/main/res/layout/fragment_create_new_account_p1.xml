@@ -7,18 +7,62 @@
     android:paddingTop="?android:attr/actionBarSize"
     tools:context=".CreateNewAccountP1Fragment">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="25dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCreateNewAccP1Progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvCreateNewAccP1Progress"
+        app:layout_constraintTop_toTopOf="@+id/tvCreateNewAccP1Progress" />
+
+    <TextView
+        android:id="@+id/tvCreateNewAccP1Progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/layout_blue_circle"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/many_one"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCreateNewAccP1Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="@string/create_new_acc_p1_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Progress" />
+
+    <View
+        android:id="@+id/vCreateNewAccP1DivisionProgress"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP1Title" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbarThumbVertical="@null"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1DivisionProgress">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp">
+            android:paddingTop="18dp"
+            android:paddingBottom="21dp">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gCreateNewAccP1Vertical09"
@@ -49,7 +93,7 @@
                 android:id="@+id/tvCreateNewAccP1FirstName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/many_first_name"
                 app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
@@ -288,54 +332,31 @@
                 app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etCreateNewAccP1MobileNumber" />
 
+            <View
+                android:id="@+id/vCreateNewAccP1Division1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toTopOf="@+id/llCreateNewAccP1MobileNumber" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateNewAccP1Next"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/layout_button_green_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_next"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division1" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP1BottomVertical09"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".09" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP1BottomVertical91"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.91" />
-
-        <View
-            android:id="@+id/vCreateNewAccP1Division1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acbCreateNewAccP1Next"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/layout_button_green_quadrilateral"
-            android:stateListAnimator="@null"
-            android:text="@string/many_next"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP1BottomVertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP1BottomVertical09"
-            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP1Division1" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

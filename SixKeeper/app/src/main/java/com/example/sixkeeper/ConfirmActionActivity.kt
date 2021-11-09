@@ -13,6 +13,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -211,46 +212,58 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         val tvConfirmActionForgotPass: TextView = findViewById(R.id.tvConfirmActionForgotPass)
 
         getAcbConfirmActionButton1().setOnClickListener {
+            clickEffect(it)
             pushNumber(1, it)
         }
 
         getAcbConfirmActionButton2().setOnClickListener {
+            clickEffect(it)
             pushNumber(2, it)
         }
 
         getAcbConfirmActionButton3().setOnClickListener {
+            clickEffect(it)
             pushNumber(3, it)
         }
 
         getAcbConfirmActionButton4().setOnClickListener {
+            clickEffect(it)
             pushNumber(4, it)
         }
 
         getAcbConfirmActionButton5().setOnClickListener {
+            clickEffect(it)
             pushNumber(5, it)
         }
 
         getAcbConfirmActionButton6().setOnClickListener {
+            clickEffect(it)
             pushNumber(6, it)
         }
 
         getAcbConfirmActionButton7().setOnClickListener {
+            clickEffect(it)
             pushNumber(7, it)
         }
 
         getAcbConfirmActionButton8().setOnClickListener {
+            clickEffect(it)
             pushNumber(8, it)
         }
 
         getAcbConfirmActionButton9().setOnClickListener {
+            clickEffect(it)
             pushNumber(9, it)
         }
 
         getAcbConfirmActionButton0().setOnClickListener {
+            clickEffect(it)
             pushNumber(0, it)
         }
 
         getAcbConfirmActionButtonDelete().setOnClickListener {
+            clickEffect(it)
+
             if (getPin().size > 0) {
                 unShadePin()
                 getPin().pop()
@@ -258,6 +271,8 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         }
 
         getAcbConfirmActionButtonCancel().setOnClickListener { it ->
+            clickEffect(it)
+
             it.apply {
                 getAcbConfirmActionButtonCancel().isClickable = false                               // Set button un-clickable for 1 second
                 postDelayed(
@@ -332,6 +347,17 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
                         }, 1000
                 )
             }
+        }
+    }
+
+    private fun clickEffect(view: View) {
+        view.apply {
+            view.setBackgroundResource(R.drawable.layout_button_light_gray_quadrilateral)
+            postDelayed(
+                    {
+                        view.setBackgroundResource(R.drawable.layout_button_white_quadrilateral)
+                    }, 100
+            )
         }
     }
 }

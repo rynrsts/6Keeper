@@ -42,7 +42,7 @@
     </string>
 
     <!-- Auto Lock Login -->
-    <string name="auto_lock_enter_master_pin">Welcome Back\nEnter Your Master PIN</string>
+    <string name="auto_lock_enter_master_pin">Welcome Back</string>
     <string name="auto_lock_login_mes">
         You are inactive for set amount of time based on the Auto Lock Timer
     </string>
@@ -71,10 +71,13 @@
         Note: Once you click register, existing account and other saved data in the app will be
         removed.
     </string>
+    <string name="create_new_acc_p1_title"><b>Information (1/3)</b></string>
     <string name="create_new_acc_p1_note">
         Note: Please make sure that the First Name, Last Name and Birth Date fields are correct.
         These can only be changed once.
     </string>
+    <string name="create_new_acc_p3_title"><b>Account (2/3)</b></string>
+    <string name="create_new_acc_p4_title"><b>Master PIN and Confirm (3/3)</b></string>
     <string name="create_new_acc_p4_agree_to_terms">
         I agree to the Terms and Conditions, and Privacy Policy.
     </string>

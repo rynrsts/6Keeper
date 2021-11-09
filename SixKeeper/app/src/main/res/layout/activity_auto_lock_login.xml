@@ -63,7 +63,7 @@
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/tvAutoLockLoginHeading"
+            android:id="@+id/tvAutoLockLoginWelcomeBack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
@@ -74,6 +74,19 @@
             app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
             app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
             app:layout_constraintTop_toBottomOf="@+id/ivAutoLockLoginLogo" />
+
+        <TextView
+            android:id="@+id/tvAutoLockLoginHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:gravity="center"
+            android:text="@string/many_enter_master_pin"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/gAutoLockLoginVertical90"
+            app:layout_constraintStart_toStartOf="@+id/gAutoLockLoginVertical10"
+            app:layout_constraintTop_toBottomOf="@+id/tvAutoLockLoginWelcomeBack" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clAutoLockLoginCircle"

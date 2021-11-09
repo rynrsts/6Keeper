@@ -7,6 +7,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -111,6 +112,13 @@ open class CreateMasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         acbCreateMasterPINButton0 = findViewById(R.id.acbCreateMasterPINButton0)
         acbCreateMasterPINButtonDelete = findViewById(R.id.acbCreateMasterPINButtonDelete)
         acbCreateMasterPINButtonCancel = findViewById(R.id.acbCreateMasterPINButtonCancel)
+    }
+
+    fun blockCapture() {
+        window.setFlags(                                                                            // Block capture
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 
     fun pushNumber(i: Int, view: View) {

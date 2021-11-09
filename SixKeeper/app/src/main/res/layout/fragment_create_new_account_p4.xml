@@ -1,135 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?android:attr/actionBarSize"
-    android:scrollbarThumbVertical="@null"
     tools:context=".CreateNewAccountP4Fragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="25dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCreateNewAccP4Progress"
+        app:layout_constraintEnd_toEndOf="@+id/tvCreateNewAccP4Progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvCreateNewAccP4Progress" />
+
+    <TextView
+        android:id="@+id/tvCreateNewAccP4Progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/layout_blue_circle"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/many_three"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCreateNewAccP4Title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:paddingBottom="30dp">
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="@string/create_new_acc_p4_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Progress" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP4Vertical09"
+    <View
+        android:id="@+id/vCreateNewAccP4DivisionProgress"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="21dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbarThumbVertical="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4DivisionProgress">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".09" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gCreateNewAccP4Vertical91"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.91" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acbCreateNewAccP4MasterPIN"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/layout_button_green_quadrilateral"
-            android:stateListAnimator="@null"
-            android:text="@string/many_setup_master_pin"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvCreateNewAccP4MasterPINMes"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="@color/red"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4MasterPIN" />
+            android:paddingTop="21dp"
+            android:paddingBottom="18dp">
 
-        <View
-            android:id="@+id/vCreateNewAccP4Division1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="30dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4MasterPINMes" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP4Vertical09"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".09" />
 
-        <CheckBox
-            android:id="@+id/cbCreateNewAccP4AgreeToTerms"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:buttonTint="@drawable/style_checked_blue"
-            android:paddingStart="9dp"
-            android:text="@string/create_new_acc_p4_agree_to_terms"
-            android:textColor="@color/lightBlack"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division1"
-            tools:ignore="RtlSymmetry" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gCreateNewAccP4Vertical91"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
 
-        <TextView
-            android:id="@+id/tvCreateNewAccP4Terms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:text="@string/many_terms_conditions_underlined"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/cbCreateNewAccP4AgreeToTerms" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateNewAccP4MasterPIN"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_button_green_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/many_setup_master_pin"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvCreateNewAccP4Privacy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:text="@string/many_privacy_policy_underlined"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Terms" />
+            <TextView
+                android:id="@+id/tvCreateNewAccP4MasterPINMes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4MasterPIN" />
 
-        <View
-            android:id="@+id/vCreateNewAccP4Division2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="27dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Privacy" />
+            <View
+                android:id="@+id/vCreateNewAccP4Division1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4MasterPINMes" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acbCreateNewAccP4Register"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/layout_button_green_quadrilateral"
-            android:stateListAnimator="@null"
-            android:text="@string/create_new_acc_p4_register"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division2" />
+            <CheckBox
+                android:id="@+id/cbCreateNewAccP4AgreeToTerms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:buttonTint="@drawable/style_checked_blue"
+                android:paddingStart="9dp"
+                android:text="@string/create_new_acc_p4_agree_to_terms"
+                android:textColor="@color/lightBlack"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division1"
+                tools:ignore="RtlSymmetry" />
 
-        <TextView
-            android:id="@+id/tvCreateNewAccP4Note"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/create_new_acc_note"
-            android:textColor="@color/red"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
-            app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
-            app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4Register" />
+            <TextView
+                android:id="@+id/tvCreateNewAccP4Terms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/many_terms_conditions_underlined"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/cbCreateNewAccP4AgreeToTerms" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvCreateNewAccP4Privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="@string/many_privacy_policy_underlined"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Terms" />
 
-</ScrollView>
+            <View
+                android:id="@+id/vCreateNewAccP4Division2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccP4Privacy" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acbCreateNewAccP4Register"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/layout_button_green_quadrilateral"
+                android:stateListAnimator="@null"
+                android:text="@string/create_new_acc_p4_register"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/vCreateNewAccP4Division2" />
+
+            <TextView
+                android:id="@+id/tvCreateNewAccP4Note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/create_new_acc_note"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/gCreateNewAccP4Vertical91"
+                app:layout_constraintStart_toStartOf="@+id/gCreateNewAccP4Vertical09"
+                app:layout_constraintTop_toBottomOf="@+id/acbCreateNewAccP4Register" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

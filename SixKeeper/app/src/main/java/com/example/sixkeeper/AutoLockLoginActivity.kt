@@ -13,6 +13,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -202,46 +203,58 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
         val tvAutoLockLoginForgotPass: TextView = findViewById(R.id.tvAutoLockLoginForgotPass)
 
         getAcbAutoLockLoginButton1().setOnClickListener {
+            clickEffect(it)
             pushNumber(1, it)
         }
 
         getAcbAutoLockLoginButton2().setOnClickListener {
+            clickEffect(it)
             pushNumber(2, it)
         }
 
         getAcbAutoLockLoginButton3().setOnClickListener {
+            clickEffect(it)
             pushNumber(3, it)
         }
 
         getAcbAutoLockLoginButton4().setOnClickListener {
+            clickEffect(it)
             pushNumber(4, it)
         }
 
         getAcbAutoLockLoginButton5().setOnClickListener {
+            clickEffect(it)
             pushNumber(5, it)
         }
 
         getAcbAutoLockLoginButton6().setOnClickListener {
+            clickEffect(it)
             pushNumber(6, it)
         }
 
         getAcbAutoLockLoginButton7().setOnClickListener {
+            clickEffect(it)
             pushNumber(7, it)
         }
 
         getAcbAutoLockLoginButton8().setOnClickListener {
+            clickEffect(it)
             pushNumber(8, it)
         }
 
         getAcbAutoLockLoginButton9().setOnClickListener {
+            clickEffect(it)
             pushNumber(9, it)
         }
 
         getAcbAutoLockLoginButton0().setOnClickListener {
+            clickEffect(it)
             pushNumber(0, it)
         }
 
         getAcbAutoLockLoginButtonDelete().setOnClickListener {
+            clickEffect(it)
+
             if (getPin().size > 0) {
                 unShadePin()
                 getPin().pop()
@@ -249,6 +262,8 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
         }
 
         getAcbAutoLockLoginButtonCancel().setOnClickListener {
+            clickEffect(it)
+
             it.apply {
                 getAcbAutoLockLoginButtonCancel().isClickable = false                               // Set button un-clickable for 1 second
                 postDelayed(
@@ -285,6 +300,17 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
                         }, 1000
                 )
             }
+        }
+    }
+
+    private fun clickEffect(view: View) {
+        view.apply {
+            view.setBackgroundResource(R.drawable.layout_button_light_gray_quadrilateral)
+            postDelayed(
+                    {
+                        view.setBackgroundResource(R.drawable.layout_button_white_quadrilateral)
+                    }, 100
+            )
         }
     }
 }
