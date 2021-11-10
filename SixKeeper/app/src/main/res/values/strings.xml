@@ -505,7 +505,7 @@
     </string>
     <string name="user_export_data">Export Data</string>
     <string name="user_fingerprint">Fingerprint</string>
-    <string name="user_image_size">Image size should be more than 2 MB</string>
+    <string name="user_image_size">Image size should be less than 2 MB</string>
     <string name="user_not_image">Selected media is not an image!</string>
     <string name="user_profile_photo">Profile Photo</string>
     <string name="user_remove_profile_photo">Remove Profile Photo</string>

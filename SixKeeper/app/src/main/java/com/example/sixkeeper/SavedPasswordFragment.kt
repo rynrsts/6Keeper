@@ -126,14 +126,6 @@ class SavedPasswordFragment : Fragment() {
 
         clSavedPassDelete.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
-            var s = ""
-
-            for (i in 0 until modelArrayList.size) {
-                s = s + " " + modelArrayList[i].getSelected()
-            }
-
-            Toast.makeText(appCompatActivity, s, Toast.LENGTH_LONG).show()
-
                 var itemCheck = false
 
                 for (i in 0 until modelArrayList.size) {
