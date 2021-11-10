@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "425646823641-pak14f6t9jnb5a0rsidn3rkqrdecq170.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sixkeeper",
+            "certificate_hash": "934b1373ac5a5c907c3d5b60c1f4810f3c731ee2"
+          }
+        },
+        {
           "client_id": "425646823641-t95ikgcob6c4tcvmstin2d0khmv97ohj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

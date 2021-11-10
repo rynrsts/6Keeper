@@ -122,6 +122,16 @@ class MobileNumberValidationFragment : Fragment() {
 
                 val phone = "+63" + etMobileNumberGetOTP.text.toString()
                 sendVerificationCode(phone)
+
+                val toast: Toast = Toast.makeText(
+                        appCompatActivity.applicationContext,
+                        R.string.mobile_number_otp_mes,
+                        Toast.LENGTH_SHORT
+                )
+                toast.apply {
+                    setGravity(Gravity.CENTER, 0, 0)
+                    show()
+                }
             } else {
                 internetToast()
             }

@@ -279,6 +279,7 @@
     <string name="mobile_number_enter_otp">Enter OTP</string>
     <string name="mobile_number_enter_otp_mes">Please enter OTP</string>
     <string name="mobile_number_get_otp">Get OTP</string>
+    <string name="mobile_number_otp_mes">OTP was sent</string>
     <string name="mobile_number_verify_otp">Verify OTP</string>
 
     <!-- Password Generator -->
