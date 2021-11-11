@@ -136,20 +136,6 @@ class SpecificPlatformFragment : Fragment() {
                 addView(inflatedView)
             }
         } else {
-//            for (u in userAccount) {
-//                val uAccountName = encodingClass.decodeData(u.accountName)
-//
-//                if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
-//                    userAccountId.add(
-//                            encodingClass.decodeData(u.accountId) + "ramjcammjar" +
-//                                    uAccountName + "ramjcammjar" +
-//                                    encodingClass.decodeData(u.accountIsFavorites)
-//                    )
-//                    userAccountName.add(uAccountName)
-//                    userAccountIsFavorites.add(encodingClass.decodeData(u.accountIsFavorites))
-//                }
-//            }
-
             val tempList = ArrayList<String>(0)
 
             for (u in userAccount) {

@@ -3,6 +3,7 @@ package com.example.sixkeeper
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -19,6 +20,11 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
     }
 
     private fun goTo() {
+        if (!InternetConnectionClass().isConnected()) {
+            val tvMainMessage: TextView = findViewById(R.id.tvMainMessage)
+            tvMainMessage.setText(R.string.main_internet_mes)
+        }
+
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val encodingClass = EncodingClass()

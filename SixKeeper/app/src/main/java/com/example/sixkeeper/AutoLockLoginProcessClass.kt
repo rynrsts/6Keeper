@@ -24,6 +24,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
+    lateinit var fingerprintHandlerClass: FingerprintHandlerClass
 
     private lateinit var ivAutoLockLoginCircle1: ImageView
     private lateinit var ivAutoLockLoginCircle2: ImageView
@@ -332,6 +333,8 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
             databaseReference.child("mpinWrongAttempt").setValue("")
             databaseReference.child("fwrongAttempt").setValue("")
             databaseReference.child("mpinLockTime").setValue("")
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             setResult(1215311)
 

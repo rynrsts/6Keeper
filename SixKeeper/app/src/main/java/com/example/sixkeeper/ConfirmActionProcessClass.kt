@@ -23,6 +23,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
+    lateinit var fingerprintHandlerClass: FingerprintHandlerClass
 
     private lateinit var ivConfirmActionCircle1: ImageView
     private lateinit var ivConfirmActionCircle2: ImageView
@@ -341,6 +342,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
             databaseReference.child("mpinWrongAttempt").setValue("")
             databaseReference.child("fwrongAttempt").setValue("")
             databaseReference.child("mpinLockTime").setValue("")
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             setResult(16914)
             onBackPressed()

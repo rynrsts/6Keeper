@@ -115,24 +115,6 @@ open class SpecificCategoryProcessClass : Fragment() {
                 addView(inflatedView)
             }
         } else {
-//            for (u in userPlatform) {
-//                val uPlatformName = encodingClass.decodeData(u.platformName)
-//                val uPlatformNum = databaseHandlerClass.viewNumberOfAccounts(
-//                        encodingClass.encodeData(0.toString()),
-//                        u.platformId
-//                ).toString()
-//
-//                if (uPlatformName.toLowerCase().startsWith(platformName.toLowerCase())) {
-//                    userPlatformId.add(
-//                            encodingClass.decodeData(u.platformId) + "ramjcammjar" +
-//                                    uPlatformName + "ramjcammjar" + uPlatformNum
-//
-//                    )
-//                    userPlatformName.add(uPlatformName)
-//                    userNumberOfAccounts.add(uPlatformNum)
-//                }
-//            }
-
             val tempList = ArrayList<String>(0)
 
             for (u in userPlatform) {

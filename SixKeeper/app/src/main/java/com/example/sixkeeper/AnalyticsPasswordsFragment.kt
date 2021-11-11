@@ -168,7 +168,9 @@ class AnalyticsPasswordsFragment : Fragment() {
     }
 
     private fun populateDuplicatePasswords() {                                                      // Duplicate passwords
-        val userDuplicateAccount = databaseHandlerClass.getDuplicateAccountsCount()
+        val userDuplicateAccount = databaseHandlerClass.getDuplicateAccountsCount(
+                encodingClass.encodeData(0.toString())
+        )
         val userAccountDuplicateId = ArrayList<String>(0)
         val userAccountCount = ArrayList<String>(0)
         var duplicateId = 1001

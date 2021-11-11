@@ -562,10 +562,11 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun getDuplicateAccountsCount(): List<UserAccountDuplicateModelClass> {                                      // View Duplicate Accounts
+    fun getDuplicateAccountsCount(deleted: String): List<UserAccountDuplicateModelClass> {          // View Duplicate Accounts
         val userDuplicateCountList: ArrayList<UserAccountDuplicateModelClass> = ArrayList()
         val selectQuery = "SELECT $KEY_ACCOUNT_PASSWORD, COUNT (*) AS 'count' " +
-                "FROM $TABLE_ACCOUNTS GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
+                "FROM $TABLE_ACCOUNTS  WHERE $KEY_ACCOUNT_DELETED = '$deleted' " +
+                "GROUP BY $KEY_ACCOUNT_PASSWORD HAVING COUNT(*) > 1"
         val db = this.readableDatabase
         val cursor: Cursor?
 

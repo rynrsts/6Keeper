@@ -36,8 +36,6 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
-    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auto_lock_login)
@@ -291,6 +289,8 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
             } else {
                 internetToast()
             }
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             it.apply {
                 tvAutoLockLoginForgotPass.isClickable = false                                       // Set button un-clickable for 1 second

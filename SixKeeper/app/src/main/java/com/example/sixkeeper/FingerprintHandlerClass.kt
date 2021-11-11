@@ -39,6 +39,9 @@ class FingerprintHandlerClass(
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
+    private var mPinWrongAttempt = ""
+    private var mPinLockTime = ""
+
     @SuppressLint("SimpleDateFormat")
     private val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
@@ -69,6 +72,27 @@ class FingerprintHandlerClass(
         }
 
         databaseReference = firebaseDatabase.getReference(userId)
+
+        val mPinWrongAttemptRef = databaseReference.child("mpinWrongAttempt")
+        val mPinLockTimeRef = databaseReference.child("mpinLockTime")
+
+        mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                mPinWrongAttempt = encodingClass.decodeData(value)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                mPinLockTime = encodingClass.decodeData(value)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
 
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null)
     }
@@ -202,6 +226,10 @@ class FingerprintHandlerClass(
                     )
                 }
             }
+
+            databaseReference.child("mpinWrongAttempt").setValue("")
+            databaseReference.child("fwrongAttempt").setValue("")
+            databaseReference.child("mpinLockTime").setValue("")
         } else {
             startAuth(fingerprintManagerTemp, cryptoObjectTemp)
         }
@@ -214,31 +242,7 @@ class FingerprintHandlerClass(
     }
 
     private fun locked(): Boolean {
-        val mPinWrongAttemptRef = databaseReference.child("mpinWrongAttempt")
-        val mPinLockTimeRef = databaseReference.child("mpinLockTime")
-
-        var mPinWrongAttempt = ""
-        var mPinLockTime = ""
-
-        mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val value = dataSnapshot.getValue(String::class.java).toString()
-                mPinWrongAttempt = encodingClass.decodeData(value)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-
-        mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val value = dataSnapshot.getValue(String::class.java).toString()
-                mPinLockTime = encodingClass.decodeData(value)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-
-        val waitingTime = waitingTime(mPinWrongAttempt, mPinLockTime)
+        val waitingTime = waitingTime()
         var locked = false
 
         if (waitingTime > 0.toLong()) {
@@ -266,7 +270,7 @@ class FingerprintHandlerClass(
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    fun waitingTime(mPinWrongAttempt: String, mPinLockTime: String): Long {
+    fun waitingTime(): Long {
         var waitingTime: Long = 0
 
         if (mPinWrongAttempt.isNotEmpty()) {

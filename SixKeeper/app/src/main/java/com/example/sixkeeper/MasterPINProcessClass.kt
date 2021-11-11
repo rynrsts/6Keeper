@@ -25,6 +25,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
+    lateinit var fingerprintHandlerClass: FingerprintHandlerClass
 
     private lateinit var ivMasterPINCircle1: ImageView
     private lateinit var ivMasterPINCircle2: ImageView
@@ -342,6 +343,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
             databaseReference.child("mpinWrongAttempt").setValue("")
             databaseReference.child("fwrongAttempt").setValue("")
             databaseReference.child("mpinLockTime").setValue("")
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             val goToIndexActivity = Intent(this, IndexActivity::class.java)
             startActivity(goToIndexActivity)

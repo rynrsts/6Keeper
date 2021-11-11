@@ -43,8 +43,6 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
-    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirm_action)
@@ -338,6 +336,8 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             } else {
                 internetToast()
             }
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             it.apply {
                 tvConfirmActionForgotPass.isClickable = false                                       // Set button un-clickable for 1 second

@@ -39,8 +39,6 @@ class MasterPINActivity : MasterPINProcessClass() {
     private lateinit var fingerprintManager: FingerprintManager
     private lateinit var keyguardManager: KeyguardManager
 
-    private lateinit var fingerprintHandlerClass: FingerprintHandlerClass
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_p_i_n)
@@ -334,8 +332,9 @@ class MasterPINActivity : MasterPINProcessClass() {
                 )
             } else {
                 internetToast()
-                fingerprintHandlerClass.stopFingerAuth()
             }
+
+            fingerprintHandlerClass.stopFingerAuth()
 
             it.apply {
                 tvMasterPINForgotPass.isClickable = false                                           // Set button un-clickable for 1 second

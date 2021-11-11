@@ -161,6 +161,12 @@
     <string name="login_import_data_title">Import Data</string>
     <string name="login_invalid_credentials">Invalid credentials!</string>
 
+    <!-- Main -->
+    <string name="main_internet_mes">
+        Waiting for Internet connection. If you have just connected, the view will automatically
+        load. If it does not, please restart the app.
+    </string>
+
     <!-- Many -->
     <string name="many_about_us">About</string>
     <string name="many_accounts">Accounts</string>
