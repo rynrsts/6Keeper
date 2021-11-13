@@ -87,7 +87,10 @@ class AnalyticsPasswordsFragment : Fragment() {
 
     private fun populateWeakPasswords() {                                                           // Weak passwords
         val userWeakAccount: List<UserAccountModelClass> =
-                databaseHandlerClass.viewWeakAccounts(encodingClass.encodeData("weak"))
+                databaseHandlerClass.viewWeakAccounts(
+                        encodingClass.encodeData(0.toString()),
+                        encodingClass.encodeData("weak")
+                )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)

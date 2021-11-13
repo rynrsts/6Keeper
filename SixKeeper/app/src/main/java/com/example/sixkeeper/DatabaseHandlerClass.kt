@@ -480,9 +480,10 @@ class DatabaseHandlerClass(context: Context) :
     }
 
     @SuppressLint("Recycle")
-    fun viewWeakAccounts(weak: String): List<UserAccountModelClass> {                               // View Weak Accounts
+    fun viewWeakAccounts(deleted: String, weak: String): List<UserAccountModelClass> {              // View Weak Accounts
         val userAccountList: ArrayList<UserAccountModelClass> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS WHERE $KEY_PASSWORD_STATUS = '$weak'"
+        val selectQuery = "SELECT * FROM $TABLE_ACCOUNTS " +
+                "WHERE $KEY_ACCOUNT_DELETED = '$deleted' AND $KEY_PASSWORD_STATUS = '$weak'"
         val db = this.readableDatabase
         val cursor: Cursor?
 
