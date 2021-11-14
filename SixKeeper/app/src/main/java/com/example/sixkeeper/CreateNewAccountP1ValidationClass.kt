@@ -203,7 +203,7 @@ open class CreateNewAccountP1ValidationClass : Fragment() {
     private fun isBirthDateValid(s: String): Boolean {                                              // Accept MM//DD/YYYY format only
 //        val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9])?[0-9][0-9]$"
 //        val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9][0-9][0-9][0-9])?$"
-        val exp = "^(0[0-9]|1[0-2])/([0-2][1-9]|3[0-1])/(19[5-9][0-9]|20[0-1][0-9])$"
+        val exp = "^(0[0-9]|1[0-2])/([0-2][0-9]|3[0-1])/(19[5-9][0-9]|20[0-1][0-9])$"
         val pattern: Pattern = Pattern.compile(exp)
         return pattern.matcher(s).matches()
     }
