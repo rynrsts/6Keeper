@@ -52,7 +52,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         changeStatusBarColor()
         setVariables()
         fingerprint()
-        blockCapture()
+//        blockCapture()
         setButtonOnClick()
     }
 

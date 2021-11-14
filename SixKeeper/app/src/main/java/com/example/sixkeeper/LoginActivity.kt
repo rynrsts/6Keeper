@@ -27,7 +27,7 @@ class LoginActivity : LoginValidationClass() {
         setVariables()
         requestPermission()
         createFolder()
-        blockCapture()
+//        blockCapture()
         setButtonOnClick()
         setEditTextOnChange()
         setImageViewOnClick()

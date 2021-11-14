@@ -46,7 +46,7 @@ class MasterPINActivity : MasterPINProcessClass() {
         changeStatusBarColor()
         setVariables()
         fingerprint()
-        blockCapture()
+//        blockCapture()
         setButtonOnClick()
     }
 
