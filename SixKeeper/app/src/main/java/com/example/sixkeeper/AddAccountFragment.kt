@@ -467,14 +467,19 @@ class AddAccountFragment : Fragment() {
             }
         }
 
-        packageNameTemp.sortWith { o1, o2 ->
-            o1.toString().compareTo(o2.toString())
-        }
+        for (i in 0 until packageNameTemp.size) {
+            for (j in packageNameTemp.size - 1 downTo i + 1) {
+                if (packageNameTemp[i] > packageNameTemp[j]) {
+                    val nameTemp: String = packageNameTemp[i]
+                    val listTemp = packageListTemp[i]
 
-        packageListTemp.sortWith { o1, o2 ->
-            val p1 = o1.applicationInfo.loadLabel(appCompatActivity.packageManager).toString()
-            val p2 = o2.applicationInfo.loadLabel(appCompatActivity.packageManager).toString()
-            p1.compareTo(p2)
+                    packageNameTemp[i] = packageNameTemp[j]
+                    packageNameTemp[j] = nameTemp
+
+                    packageListTemp[i] = packageListTemp[j]
+                    packageListTemp[j] = listTemp
+                }
+            }
         }
 
         return AddAccountAppListAdapter(
