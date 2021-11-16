@@ -27,14 +27,19 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
 
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val firebaseDatabase = FirebaseDatabase.getInstance()
-        val encodingClass = EncodingClass()
+        val encryptionClass = EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = ""
 
-        for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+        if (userAccList.isEmpty()) {
+            goToLoginActivity()
         }
 
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
         val databaseReference = firebaseDatabase.getReference(userId)
         val statusReference = databaseReference.child("status")
         var status = ""
@@ -42,16 +47,20 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
 
         statusReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                status = dataSnapshot.getValue(String::class.java).toString()
+                if (dataSnapshot.value != null) {
+                    status = dataSnapshot.getValue(String::class.java).toString()
 
-                button.performClick()
+                    button.performClick()
+                } else {
+                    goToLoginActivity()
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
         })
 
         button.setOnClickListener {
-            if (encodingClass.encodeData(1.toString()) == status) {                                 // Go to login (Master PIN)
+            if (encryptionClass.encrypt(1.toString(), key) == status) {                             // Go to login (Master PIN)
                 val goToMasterPINActivity =
                         Intent(this, MasterPINActivity::class.java)
                 startActivity(goToMasterPINActivity)
@@ -59,12 +68,18 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
                         R.anim.anim_enter_bottom_to_top_2,
                         R.anim.anim_0
                 )
-            } else {                                                                                // Go to login (Username and Password)
-                val goToLoginActivity = Intent(this, LoginActivity::class.java)
-                startActivity(goToLoginActivity)
-            }
 
-            this.finish()
+                this.finish()
+            } else {                                                                                // Go to login (Username and Password)
+                goToLoginActivity()
+            }
         }
+    }
+
+    private fun goToLoginActivity() {
+        val goToLoginActivity = Intent(this, LoginActivity::class.java)
+        startActivity(goToLoginActivity)
+
+        this.finish()
     }
 }

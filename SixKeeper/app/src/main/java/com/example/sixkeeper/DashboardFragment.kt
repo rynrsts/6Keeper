@@ -21,15 +21,15 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-
 class DashboardFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var llDashboardContainer: LinearLayout
 
+    private lateinit var key: ByteArray
     private lateinit var selectedTab: String
 
     override fun onCreateView(
@@ -89,9 +89,18 @@ class DashboardFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         llDashboardContainer = appCompatActivity.findViewById(R.id.llDashboardContainer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
 
         selectedTab = "summary"
     }
@@ -162,31 +171,31 @@ class DashboardFragment : Fragment() {
         tvDashboardAccounts.text = databaseHandlerClass.viewTotalNumberDashboard2(
                 "AccountsTable",
                 "account_deleted",
-                encodingClass.encodeData("0"),
+                encryptionClass.encrypt("0", key),
                 ""
         ).toString()
         tvDashboardFavorites.text = databaseHandlerClass.viewTotalNumberDashboard2(
                 "AccountsTable",
                 "account_deleted",
-                encodingClass.encodeData("0"),
-                encodingClass.encodeData("1")
+                encryptionClass.encrypt("0", key),
+                encryptionClass.encrypt("1", key)
         ).toString()
         tvDashboardSavedPasswords.text = databaseHandlerClass.viewTotalNumberDashboard2(
                 "SavedPasswordTable",
                 "pass_deleted",
-                encodingClass.encodeData("0"),
+                encryptionClass.encrypt("0", key),
                 ""
         ).toString()
         tvDashboardDeletedAccounts.text = databaseHandlerClass.viewTotalNumberDashboard2(
                 "AccountsTable",
                 "account_deleted",
-                encodingClass.encodeData("1"),
+                encryptionClass.encrypt("1", key),
                 ""
         ).toString()
         tvDashboardDeletedPasswords.text = databaseHandlerClass.viewTotalNumberDashboard2(
                 "SavedPasswordTable",
                 "pass_deleted",
-                encodingClass.encodeData("1"),
+                encryptionClass.encrypt("1", key),
                 ""
         ).toString()
 
@@ -315,14 +324,14 @@ class DashboardFragment : Fragment() {
                 layoutAnalytics.findViewById(R.id.tvDashboardNumOfDuplicate)
 
         val weakPasswords = databaseHandlerClass.viewTotalNumberOfWeakPasswords(                    // Start | Show number of weak passwords
-                encodingClass.encodeData(0.toString()),
-                encodingClass.encodeData("weak")
+                encryptionClass.encrypt(0.toString(), key),
+                encryptionClass.encrypt("weak", key)
         )
 
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(            // Start | Show number of old passwords
                 "deleted",
                 "",
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
         var oldPasswords = 0
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
@@ -334,7 +343,7 @@ class DashboardFragment : Fragment() {
 
         for (u in userAccount) {
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            val creationDate: Date = dateFormat.parse(encodingClass.decodeData(u.creationDate))
+            val creationDate: Date = dateFormat.parse(encryptionClass.decrypt(u.creationDate, key))
             val timeDifference: Long = dateToday.time - creationDate.time
 
             if (TimeUnit.MILLISECONDS.toDays(timeDifference) >= 90) {
@@ -344,7 +353,7 @@ class DashboardFragment : Fragment() {
 
         var numOfDuplicates = 0                                                                     // Start | Show number of duplicate passwords
         val duplicates = databaseHandlerClass.viewTotalNumberOfDuplicatePasswords(
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
 
         if (duplicates.toString().isNotEmpty()) {
@@ -354,7 +363,7 @@ class DashboardFragment : Fragment() {
         val numberOfAccounts: Double = databaseHandlerClass.viewTotalNumberDashboard2(
                 "AccountsTable",
                 "account_deleted",
-                encodingClass.encodeData("0"),
+                encryptionClass.encrypt("0", key),
                 ""
         ).toDouble()
         var score = 0
@@ -488,9 +497,9 @@ class DashboardFragment : Fragment() {
         val userActionLogDate = ArrayList<String>(0)
 
         for (u in userActionLog) {
-            userActionLogId.add(encodingClass.decodeData(u.actionLogId))
-            userActionLogDescription.add(encodingClass.decodeData(u.actionLogDescription))
-            userActionLogDate.add(encodingClass.decodeData(u.actionLogDate))
+            userActionLogId.add(encryptionClass.decrypt(u.actionLogId, key))
+            userActionLogDescription.add(encryptionClass.decrypt(u.actionLogDescription, key))
+            userActionLogDate.add(encryptionClass.decrypt(u.actionLogDate, key))
         }
 
         val actionLogListAdapter = ActionLogListAdapter(

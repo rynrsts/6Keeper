@@ -24,7 +24,6 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
     private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
@@ -36,6 +35,7 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var ivResetPasswordConfirmTogglePass: ImageView
 
     private var userId = ""
+    private lateinit var key: ByteArray
     private var newPass = ""
     private var newPassVisibility: Int = 0
     private var confirmPassVisibility: Int = 0
@@ -68,7 +68,6 @@ class ResetPasswordFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
         encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
@@ -81,9 +80,10 @@ class ResetPasswordFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.ivResetPasswordConfirmTogglePass)
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         databaseReference = firebaseDatabase.getReference(userId)
@@ -94,8 +94,8 @@ class ResetPasswordFragment : Fragment() {
         usernameRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                val encryptedValue = encryptionClass.hashData(value)
-                usernameVal = encodingClass.decodeSHA(encryptedValue)
+                val decryptedValue = encryptionClass.decrypt(value, key)
+                usernameVal = encryptionClass.hash(decryptedValue)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -124,14 +124,12 @@ class ResetPasswordFragment : Fragment() {
                 val confirmPass = etResetPasswordConfirmPass.text.toString()
 
                 if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                    val encodedInput = encodingClass.encodeData(newPass)
-                    val encryptedInput = encryptionClass.hashData(encodedInput)
-                    val inputString = encodingClass.decodeSHA(encryptedInput)
+                    val encryptedInput = encryptionClass.hash(newPass)
 
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
-                            !usernameVal.contentEquals(inputString) &&
-                            !passwordVal.contentEquals(inputString)
+                            !usernameVal.contentEquals(encryptedInput) &&
+                            !passwordVal.contentEquals(encryptedInput)
                     ) {
                         tvResetPasswordConfirmPassNote.text = ""
 
@@ -151,19 +149,23 @@ class ResetPasswordFragment : Fragment() {
 
                                 if (lastId.isNotEmpty()) {
                                     actionLogId =
-                                            Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                                            Integer.parseInt(
+                                                    encryptionClass.decrypt(lastId, key)
+                                            ) + 1
                                 }
 
-                                databaseReference.child("password").setValue(inputString)
+                                databaseReference.child("password").setValue(encryptedInput)
                                 databaseReference.child("pwWrongAttempt").setValue("")
                                 databaseReference.child("pwLockTime").setValue("")
 
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
-                                                encodingClass.encodeData(actionLogId.toString()),
-                                                encodingClass.encodeData("App account " +
-                                                        "password was modified."),
-                                                encodingClass.encodeData(date)
+                                                encryptionClass.encrypt(
+                                                        actionLogId.toString(), key
+                                                ),
+                                                encryptionClass.encrypt("App account " +
+                                                        "password was modified.", key),
+                                                encryptionClass.encrypt(date, key)
                                         )
                                 )
 
@@ -217,7 +219,7 @@ class ResetPasswordFragment : Fragment() {
 
                         if (
                                 isPasswordValid(newPass) && confirmPass == newPass &&
-                                usernameVal.contentEquals(inputString)
+                                usernameVal.contentEquals(encryptedInput)
                         ) {
                             val toast: Toast = Toast.makeText(
                                     appCompatActivity.applicationContext,
@@ -230,8 +232,8 @@ class ResetPasswordFragment : Fragment() {
                             }
                         } else if (
                                 isPasswordValid(newPass) && confirmPass == newPass &&
-                                !usernameVal.contentEquals(inputString) &&
-                                passwordVal.contentEquals(inputString)
+                                !usernameVal.contentEquals(encryptedInput) &&
+                                passwordVal.contentEquals(encryptedInput)
                         ) {
                             val toast: Toast = Toast.makeText(
                                     appCompatActivity.applicationContext,

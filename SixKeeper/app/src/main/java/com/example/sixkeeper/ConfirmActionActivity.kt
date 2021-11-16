@@ -52,7 +52,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
         changeStatusBarColor()
         setVariables()
         fingerprint()
-//        blockCapture()
+        blockCapture()
         setButtonOnClick()
     }
 
@@ -292,7 +292,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    mPinWrongAttempt = getEncodingClass().decodeData(value)
+                    mPinWrongAttempt = getEncryptionClass().decrypt(value, getKey())
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {}
@@ -301,7 +301,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    mPinLockTime = getEncodingClass().decodeData(value)
+                    mPinLockTime = getEncryptionClass().decrypt(value, getKey())
                     count++
 
                     if (count == 1) {

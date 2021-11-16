@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -56,6 +56,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private val temp: Stack<Int> = Stack()
 
     private var userId: String = ""
+    private lateinit var key: ByteArray
 
     fun getAcbMasterPINButton1(): Button {
         return acbMasterPINButton1
@@ -111,7 +112,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
 
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         ivMasterPINCircle1 = findViewById(R.id.ivMasterPINCircle1)
@@ -138,15 +139,16 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         userAccList = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
     fun setFingerprintOff() {
         databaseHandlerClass.updateSettings(
-                "fingerprint", encodingClass.encodeData(0.toString())
+                "fingerprint", encryptionClass.encrypt(0.toString(), key)
         )
     }
 
@@ -155,7 +157,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encodingClass.decodeData(u.fingerprint))
+            fingerprintStatus = Integer.parseInt(encryptionClass.encrypt(u.fingerprint, key))
         }
 
         return fingerprintStatus
@@ -211,7 +213,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinWrongAttempt = encodingClass.decodeData(value)
+                        mPinWrongAttempt = encryptionClass.decrypt(value, key)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -220,7 +222,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinLockTime = encodingClass.decodeData(value)
+                        mPinLockTime = encryptionClass.decrypt(value, key)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -333,13 +335,9 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPIN(                                                              // Validate Master PIN
             pinI: Int, masterPin: String, mPinWrongAttempt: String, view: View
     ) {
-        val encryptionClass = EncryptionClass()
+        val encryptedMasterPIN = encryptionClass.hash(pinI.toString())
 
-        val encodedMasterPIN = encodingClass.encodeData(pinI.toString())
-        val encryptedMasterPIN = encryptionClass.hashData(encodedMasterPIN)
-        val masterPINString = encodingClass.decodeSHA(encryptedMasterPIN)
-
-        if (masterPINString == masterPin) {
+        if (encryptedMasterPIN == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
             databaseReference.child("fwrongAttempt").setValue("")
             databaseReference.child("mpinLockTime").setValue("")
@@ -364,8 +362,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
 
             wrongAttempt++
 
-            val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
-            databaseReference.child("mpinWrongAttempt").setValue(encodedWrongAttempt)
+            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+            databaseReference.child("mpinWrongAttempt").setValue(encryptedWrongAttempt)
 
             var toast: Toast = Toast.makeText(
                     applicationContext, R.string.many_incorrect_master_pin, Toast.LENGTH_SHORT
@@ -376,13 +374,13 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                     timer *= 2
                 }
 
-                val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
-                val encodedFWrongAttempt =
-                        encodingClass.encodeData((wrongAttempt * 2).toString())
+                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+                val encryptedFWrongAttempt =
+                        encryptionClass.encrypt((wrongAttempt * 2).toString(), key)
 
-                databaseReference.child("mpinLockTime").setValue(encodedCurrentDate)
+                databaseReference.child("mpinLockTime").setValue(encryptedCurrentDate)
                 databaseReference.child("fwrongAttempt")
-                        .setValue(encodedFWrongAttempt)
+                        .setValue(encryptedFWrongAttempt)
 
                 toast = Toast.makeText(
                         applicationContext,
@@ -492,8 +490,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun updateUserStatus() {                                                                        // Update account status to 0
-        val encodedInactiveStatus = encodingClass.encodeData(0.toString())
-        databaseReference.child("status").setValue(encodedInactiveStatus)
+        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), key)
+        databaseReference.child("status").setValue(encryptedInactiveStatus)
     }
 
     fun goToLoginActivity() {                                                                       // Go to login (Username and Password)

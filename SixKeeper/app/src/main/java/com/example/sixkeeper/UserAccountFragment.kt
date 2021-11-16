@@ -41,7 +41,7 @@ class UserAccountFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -50,6 +50,7 @@ class UserAccountFragment : Fragment() {
 
     private lateinit var button: Button
 
+    private lateinit var key: ByteArray
     private var field = ""
     private var userId: String = ""
 
@@ -84,7 +85,7 @@ class UserAccountFragment : Fragment() {
         ivUserAccountPhoto = appCompatActivity.findViewById(R.id.ivUserAccountPhoto)
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         button = Button(appCompatActivity)
@@ -92,9 +93,10 @@ class UserAccountFragment : Fragment() {
         userAccList = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -148,7 +150,8 @@ class UserAccountFragment : Fragment() {
         })
 
         button.setOnClickListener {
-            profilePhotoB = encodingClass.decodeByteArray(profilePhoto)
+            val profilePhotoS = encryptionClass.decrypt(profilePhoto, key)
+            profilePhotoB = encryptionClass.decodeBA(profilePhotoS)
 
             if (profilePhotoB.contentEquals("".toByteArray())) {
                 ivUserAccountPhoto.setImageDrawable(null)
@@ -434,15 +437,15 @@ class UserAccountFragment : Fragment() {
 
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
-                                                encodingClass.encodeData(
-                                                        getLastActionLogId().toString()
+                                                encryptionClass.encrypt(
+                                                        getLastActionLogId().toString(), key
                                                 ),
-                                                encodingClass.encodeData(
+                                                encryptionClass.encrypt(
                                                         "Data was exported to the " +
                                                                 "'SixKeeper' folder in the " +
-                                                                "internal storage."
+                                                                "internal storage.", key
                                                 ),
-                                                encodingClass.encodeData(getCurrentDate())
+                                                encryptionClass.encrypt(getCurrentDate(), key)
                                         )
                                 )
                             } catch (e: IOException) {
@@ -737,27 +740,19 @@ class UserAccountFragment : Fragment() {
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
 
-
                 button.setOnClickListener {
                     if (count == 18) {
                         newDatabaseReference.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 newDatabaseReference.setValue(firebaseUserAccountModelClass)
                                 databaseReference.removeValue()
+
+                                databaseHandlerClass.truncateAllTables()
+
+                                appCompatActivity.finish()
                             }
                             override fun onCancelled(error: DatabaseError) {}
                         })
-
-                        databaseHandlerClass.truncateAllTables()
-
-                        val goToLoginActivity = Intent(appCompatActivity, LoginActivity::class.java)
-
-                        startActivity(goToLoginActivity)
-                        appCompatActivity.overridePendingTransition(
-                                R.anim.anim_enter_top_to_bottom_2,
-                                R.anim.anim_exit_top_to_bottom_2
-                        )
-                        appCompatActivity.finish()
                     }
                 }
             }
@@ -779,7 +774,8 @@ class UserAccountFragment : Fragment() {
                                         imageByteArray, 0, imageByteArray.size
                                 )
                         )
-                        val newProfilePhoto = encodingClass.encodeToString(imageByteArray)
+                        val imageString = encryptionClass.encodeS(imageByteArray)
+                        val newProfilePhoto = encryptionClass.encrypt(imageString, key)
 
                         ivUserAccountPhoto.setImageDrawable(imageDrawable)
 
@@ -818,9 +814,9 @@ class UserAccountFragment : Fragment() {
     private fun addEventToActionLog(action: String) {
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("Profile Photo was $action."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("Profile Photo was $action.", key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 
@@ -840,7 +836,7 @@ class UserAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId

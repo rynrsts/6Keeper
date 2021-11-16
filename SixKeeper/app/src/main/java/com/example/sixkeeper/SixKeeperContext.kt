@@ -44,18 +44,22 @@ class SixKeeperContext : Application() {
 
     private fun blockCapture(activity: Activity) {
         val databaseHandlerClass = DatabaseHandlerClass(applicationContext)
-        val encodingClass = EncodingClass()
+        val encryptionClass = EncryptionClass()
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = ""
         val button = Button(context)
 
-        for (u in userAccList) {
-            userId = u.userId
+        if (userAccList.isEmpty()) {
+            return
         }
 
-        val decodedUserId = encodingClass.decodeData(userId)
-        val databaseReference = firebaseDatabase.getReference(decodedUserId)
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
+        val databaseReference = firebaseDatabase.getReference(userId)
 
         val statusRef = databaseReference.child("status")
         var status = ""
@@ -63,12 +67,14 @@ class SixKeeperContext : Application() {
 
         statusRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val value = dataSnapshot.getValue(String::class.java).toString()
-                status = encodingClass.decodeData(value)
-                count++
+                if (dataSnapshot.value != null) {
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    status = encryptionClass.decrypt(value, key)
+                    count++
 
-                if (count == 1) {
-                    button.performClick()
+                    if (count == 1) {
+                        button.performClick()
+                    }
                 }
             }
 
@@ -80,7 +86,7 @@ class SixKeeperContext : Application() {
 
             if (status == "1") {
                 for (u in userSettings) {
-                    if (encodingClass.decodeData(u.screenCapture) == "0") {
+                    if (encryptionClass.decrypt(u.screenCapture, key) == "0") {
                         activity.window.setFlags(
                                 WindowManager.LayoutParams.FLAG_SECURE,
                                 WindowManager.LayoutParams.FLAG_SECURE

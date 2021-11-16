@@ -33,11 +33,12 @@ class SpecificPlatformFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var etSpecificPlatSearchBox: EditText
     private lateinit var lvSpecificPlatContainer: ListView
 
+    private lateinit var key: ByteArray
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedAccountIsFavorites: String
@@ -76,10 +77,19 @@ class SpecificPlatformFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         etSpecificPlatSearchBox = appCompatActivity.findViewById(R.id.etSpecificPlatSearchBox)
         lvSpecificPlatContainer = appCompatActivity.findViewById(R.id.lvSpecificPlatContainer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun setActionBarTitle() {
@@ -112,8 +122,8 @@ class SpecificPlatformFragment : Fragment() {
     private fun populateAccounts(accountName: String) {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
-                encodingClass.encodeData(args.specificPlatformId),
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(args.specificPlatformId, key),
+                encryptionClass.encrypt(0.toString(), key)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -139,9 +149,9 @@ class SpecificPlatformFragment : Fragment() {
             val tempList = ArrayList<String>(0)
 
             for (u in userAccount) {
-                val uAccountId = encodingClass.decodeData(u.accountId)
-                val uAccountName = encodingClass.decodeData(u.accountName)
-                val uAccountIsFavorites = encodingClass.decodeData(u.accountIsFavorites)
+                val uAccountId = encryptionClass.decrypt(u.accountId, key)
+                val uAccountName = encryptionClass.decrypt(u.accountName, key)
+                val uAccountIsFavorites = encryptionClass.decrypt(u.accountIsFavorites, key)
 
                 if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
                     tempList.add(
@@ -287,8 +297,8 @@ class SpecificPlatformFragment : Fragment() {
             llAccountsFavorites.setOnClickListener {
                 if (InternetConnectionClass().isConnected()) {
                     val status = databaseHandlerClass.updateIsFavorites(
-                            encodingClass.encodeData(selectedAccountId),
-                            encodingClass.encodeData(setIsFavorites.toString())
+                            encryptionClass.encrypt(selectedAccountId, key),
+                            encryptionClass.encrypt(setIsFavorites.toString(), key)
                     )
 
                     if (status > -1) {
@@ -305,9 +315,9 @@ class SpecificPlatformFragment : Fragment() {
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encodingClass.encodeData(getLastActionLogId().toString()),
-                                    encodingClass.encodeData(actionMessage),
-                                    encodingClass.encodeData(getCurrentDate())
+                                    encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                    encryptionClass.encrypt(actionMessage, key),
+                                    encryptionClass.encrypt(getCurrentDate(), key)
                             )
                     )
 
@@ -336,7 +346,7 @@ class SpecificPlatformFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId
@@ -406,9 +416,9 @@ class SpecificPlatformFragment : Fragment() {
                     }
                 } else if (clickAction == "Delete Account") {
                     val status = databaseHandlerClass.updateDeleteAccount(
-                            encodingClass.encodeData(accountIdTemp),
-                            encodingClass.encodeData(1.toString()),
-                            encodingClass.encodeData(getCurrentDate()),
+                            encryptionClass.encrypt(accountIdTemp, key),
+                            encryptionClass.encrypt(1.toString(), key),
+                            encryptionClass.encrypt(getCurrentDate(), key),
                             "AccountsTable",
                             "account_id",
                             "account_deleted",
@@ -429,11 +439,11 @@ class SpecificPlatformFragment : Fragment() {
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encodingClass.encodeData(getLastActionLogId().toString()),
-                                    encodingClass.encodeData(
-                                            "Account '$accountNameTemp' was deleted."
+                                    encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                    encryptionClass.encrypt(
+                                            "Account '$accountNameTemp' was deleted.", key
                                     ),
-                                    encodingClass.encodeData(getCurrentDate())
+                                    encryptionClass.encrypt(getCurrentDate(), key)
                             )
                     )
 

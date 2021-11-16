@@ -43,7 +43,7 @@ class AutoLockLoginActivity : AutoLockLoginProcessClass() {
         changeStatusBarColor()
         setVariables()
         fingerprint()
-//        blockCapture()
+        blockCapture()
         setButtonOnClick()
     }
 

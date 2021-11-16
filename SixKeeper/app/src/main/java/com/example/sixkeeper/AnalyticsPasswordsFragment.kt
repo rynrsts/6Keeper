@@ -27,10 +27,11 @@ class AnalyticsPasswordsFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var lvAnalyticsPasswordsContainer: ListView
 
+    private lateinit var key: ByteArray
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedPlatformId: String
@@ -60,10 +61,19 @@ class AnalyticsPasswordsFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         lvAnalyticsPasswordsContainer =
                 appCompatActivity.findViewById(R.id.lvAnalyticsPasswordsContainer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun populateView() {
@@ -88,22 +98,22 @@ class AnalyticsPasswordsFragment : Fragment() {
     private fun populateWeakPasswords() {                                                           // Weak passwords
         val userWeakAccount: List<UserAccountModelClass> =
                 databaseHandlerClass.viewWeakAccounts(
-                        encodingClass.encodeData(0.toString()),
-                        encodingClass.encodeData("weak")
+                        encryptionClass.encrypt(0.toString(), key),
+                        encryptionClass.encrypt("weak", key)
                 )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)
 
         for (u in userWeakAccount) {
-            val uAccountName = encodingClass.decodeData(u.accountName)
-            val uPlatformName = encodingClass.decodeData(u.platformName)
-            val uCategoryName = encodingClass.decodeData(u.categoryName)
+            val uAccountName = encryptionClass.decrypt(u.accountName, key)
+            val uPlatformName = encryptionClass.decrypt(u.platformName, key)
+            val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
 
             userAccountId.add(
-                    encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+                    encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
                             uAccountName + "ramjcammjar" +
-                            encodingClass.decodeData(u.platformId)
+                            encryptionClass.decrypt(u.platformId, key)
             )
             userAccountName.add(uAccountName)
             userAccountDirectory.add("$uCategoryName > $uPlatformName")
@@ -124,7 +134,7 @@ class AnalyticsPasswordsFragment : Fragment() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "deleted",
                 "",
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -140,22 +150,22 @@ class AnalyticsPasswordsFragment : Fragment() {
 
         for (u in userAccount) {
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            val creationDate: Date = dateFormat.parse(encodingClass.decodeData(u.creationDate))
+            val creationDate: Date = dateFormat.parse(encryptionClass.decrypt(u.creationDate, key))
             val timeDifference: Long = dateToday.time - creationDate.time
 
             if (TimeUnit.MILLISECONDS.toDays(timeDifference) >= 90) {
-                val uAccountName = encodingClass.decodeData(u.accountName)
-                val uPlatformName = encodingClass.decodeData(u.platformName)
-                val uCategoryName = encodingClass.decodeData(u.categoryName)
+                val uAccountName = encryptionClass.decrypt(u.accountName, key)
+                val uPlatformName = encryptionClass.decrypt(u.platformName, key)
+                val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
 
                 userAccountId.add(
-                        encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+                        encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
                                 uAccountName + "ramjcammjar" +
-                                encodingClass.decodeData(u.platformId)
+                                encryptionClass.decrypt(u.platformId, key)
                 )
                 userAccountName.add(uAccountName)
                 userAccountDirectory.add("$uCategoryName > $uPlatformName")
-                userAccountDate.add(encodingClass.decodeData(u.creationDate))
+                userAccountDate.add(encryptionClass.decrypt(u.creationDate, key))
             }
         }
 
@@ -172,7 +182,7 @@ class AnalyticsPasswordsFragment : Fragment() {
 
     private fun populateDuplicatePasswords() {                                                      // Duplicate passwords
         val userDuplicateAccount = databaseHandlerClass.getDuplicateAccountsCount(
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
         val userAccountDuplicateId = ArrayList<String>(0)
         val userAccountCount = ArrayList<String>(0)

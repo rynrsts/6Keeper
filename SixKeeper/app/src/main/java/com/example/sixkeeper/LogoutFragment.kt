@@ -120,19 +120,19 @@ class LogoutFragment : Fragment() {
 
     private fun updateUserStatus() {                                                                // Update account status to 0
         val databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        val encodingClass = EncodingClass()
+        val encryptionClass =  EncryptionClass()
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
         var userId = ""
 
         for (u in userAccList) {
-            userId = u.userId
+            userId = encryptionClass.decode(u.userId)
         }
 
-        val decodedUserId = encodingClass.decodeData(userId)
-        databaseReference = firebaseDatabase.getReference(decodedUserId)
+        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
+        databaseReference = firebaseDatabase.getReference(userId)
 
-        val encodedInactiveStatus = encodingClass.encodeData(0.toString())
-        databaseReference.child("status").setValue(encodedInactiveStatus)
+        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), key)
+        databaseReference.child("status").setValue(encryptedInactiveStatus)
     }
 
     private fun goToLoginActivity() {                                                               // Go to login (Username and Password)

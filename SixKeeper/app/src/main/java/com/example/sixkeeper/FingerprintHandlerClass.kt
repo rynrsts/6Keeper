@@ -35,10 +35,11 @@ class FingerprintHandlerClass(
     private var cryptoObjectTemp: FingerprintManager.CryptoObject? = null
 
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
+    private lateinit var key: ByteArray
     private var mPinWrongAttempt = ""
     private var mPinLockTime = ""
 
@@ -60,7 +61,7 @@ class FingerprintHandlerClass(
         fingerprintManagerTemp = manager
         cryptoObjectTemp = cryptoObject
 
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseHandlerClass = DatabaseHandlerClass(context)
 
@@ -68,9 +69,10 @@ class FingerprintHandlerClass(
         var userId = ""
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         val mPinWrongAttemptRef = databaseReference.child("mpinWrongAttempt")
@@ -79,7 +81,7 @@ class FingerprintHandlerClass(
         mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                mPinWrongAttempt = encodingClass.decodeData(value)
+                mPinWrongAttempt = encryptionClass.decrypt(value, key)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -88,7 +90,7 @@ class FingerprintHandlerClass(
         mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                mPinLockTime = encodingClass.decodeData(value)
+                mPinLockTime = encryptionClass.decrypt(value, key)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -125,7 +127,7 @@ class FingerprintHandlerClass(
             fWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    fWrongAttempt = encodingClass.decodeData(value)
+                    fWrongAttempt = encryptionClass.decrypt(value, key)
                     count++
 
                     if (count == 1) {
@@ -143,7 +145,7 @@ class FingerprintHandlerClass(
 
                 wrongAttempt++
 
-                val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
+                val encodedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
 
                 databaseReference.child("fwrongAttempt").setValue(encodedWrongAttempt)
 
@@ -152,9 +154,9 @@ class FingerprintHandlerClass(
                         timer *= 2
                     }
 
-                    val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
+                    val encodedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
                     val encodedMPinWrongAttempt =
-                            encodingClass.encodeData((wrongAttempt / 2).toString())
+                            encryptionClass.encrypt((wrongAttempt / 2).toString(), key)
 
                     databaseReference.child("mpinLockTime").setValue(encodedCurrentDate)
                     databaseReference.child("mpinWrongAttempt")

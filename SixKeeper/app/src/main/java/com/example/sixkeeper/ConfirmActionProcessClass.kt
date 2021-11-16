@@ -19,7 +19,7 @@ import kotlin.concurrent.schedule
 
 open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -53,14 +53,15 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
 
+    private lateinit var key: ByteArray
     private var userId: String = ""
 
     fun getDatabaseReference(): DatabaseReference {
         return databaseReference
     }
 
-    fun getEncodingClass(): EncodingClass {
-        return encodingClass
+    fun getEncryptionClass(): EncryptionClass {
+        return encryptionClass
     }
 
     fun getAcbConfirmActionButton1(): Button {
@@ -110,6 +111,10 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     fun getAcbConfirmActionButtonCancel(): Button {
         return acbConfirmActionButtonCancel
     }
+    
+    fun getKey(): ByteArray {
+        return key
+    }
 
     fun getPin(): Stack<Int> {
         return pin
@@ -117,7 +122,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
 
     fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         ivConfirmActionCircle1 = findViewById(R.id.ivConfirmActionCircle1)
@@ -144,9 +149,10 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         userAccList = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -155,7 +161,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encodingClass.decodeData(u.fingerprint))
+            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, key))
         }
 
         return fingerprintStatus
@@ -212,7 +218,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinWrongAttempt = encodingClass.decodeData(value)
+                        mPinWrongAttempt = encryptionClass.decrypt(value, key)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -221,7 +227,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinLockTime = encodingClass.decodeData(value)
+                        mPinLockTime = encryptionClass.decrypt(value, key)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -334,11 +340,9 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPin(pinI: Int, masterPin: String, mPinWrongAttempt: String) {     // Validate Master PIN
         val encryptionClass = EncryptionClass()
 
-        val encodedConfirmAction = encodingClass.encodeData(pinI.toString())
-        val encryptedConfirmAction = encryptionClass.hashData(encodedConfirmAction)
-        val masterPINString = encodingClass.decodeSHA(encryptedConfirmAction)
+        val encryptedConfirmAction = encryptionClass.hash(pinI.toString())
 
-        if (masterPINString == masterPin) {
+        if (encryptedConfirmAction == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
             databaseReference.child("fwrongAttempt").setValue("")
             databaseReference.child("mpinLockTime").setValue("")
@@ -356,8 +360,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
             }
             wrongAttempt++
 
-            val encodedWrongAttempt = encodingClass.encodeData(wrongAttempt.toString())
-            databaseReference.child("mpinWrongAttempt").setValue(encodedWrongAttempt)
+            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+            databaseReference.child("mpinWrongAttempt").setValue(encryptedWrongAttempt)
 
             var toast: Toast = Toast.makeText(
                     applicationContext, R.string.many_incorrect_master_pin, Toast.LENGTH_SHORT
@@ -368,13 +372,13 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                     timer *= 2
                 }
 
-                val encodedCurrentDate = encodingClass.encodeData(getCurrentDate())
-                val encodedFWrongAttempt =
-                        encodingClass.encodeData((wrongAttempt * 2).toString())
+                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+                val encryptedFWrongAttempt =
+                        encryptionClass.encrypt((wrongAttempt * 2).toString(), key)
 
-                databaseReference.child("mpinLockTime").setValue(encodedCurrentDate)
+                databaseReference.child("mpinLockTime").setValue(encryptedCurrentDate)
                 databaseReference.child("fwrongAttempt")
-                        .setValue(encodedFWrongAttempt)
+                        .setValue(encryptedFWrongAttempt)
 
                 toast = Toast.makeText(
                         applicationContext,

@@ -34,7 +34,7 @@ class SettingsFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var scSettingsScreenCapture: SwitchCompat
     private lateinit var scSettingsAutoLock: SwitchCompat
@@ -52,6 +52,8 @@ class SettingsFragment : Fragment() {
 
     private lateinit var clSettingsAutoLockTimer: ConstraintLayout
 
+    private lateinit var key: ByteArray
+    
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -78,7 +80,7 @@ class SettingsFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         scSettingsScreenCapture = appCompatActivity.findViewById(R.id.scSettingsScreenCapture)
         scSettingsAutoLock = appCompatActivity.findViewById(R.id.scSettingsAutoLock)
@@ -97,6 +99,15 @@ class SettingsFragment : Fragment() {
         ivSettingsFingerprint = appCompatActivity.findViewById(R.id.ivSettingsFingerprint)
 
         clSettingsAutoLockTimer = appCompatActivity.findViewById(R.id.clSettingsAutoLockTimer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun disableMenuItem() {
@@ -136,14 +147,14 @@ class SettingsFragment : Fragment() {
         val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
 
         for (u in userSettings) {
-            if (encodingClass.decodeData(u.screenCapture) == "1") {                                 // Screen Capture
+            if (encryptionClass.decrypt(u.screenCapture, key) == "1") {                                 // Screen Capture
                 scSettingsScreenCapture.apply {
                     tag = "screen capture"
                     isChecked = true
                 }
 
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
-            } else if (encodingClass.decodeData(u.screenCapture) == "0") {
+            } else if (encryptionClass.decrypt(u.screenCapture, key) == "0") {
                 scSettingsScreenCapture.apply {
                     tag = "screen capture"
                     isChecked = false
@@ -152,14 +163,14 @@ class SettingsFragment : Fragment() {
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
             }
 
-            if (encodingClass.decodeData(u.autoLock) == "1") {                                      // Auto Lock
+            if (encryptionClass.decrypt(u.autoLock, key) == "1") {                                      // Auto Lock
                 scSettingsAutoLock.apply {
                     tag = "auto lock"
                     isChecked = true
                 }
 
                 enableAutoLock()
-            } else if (encodingClass.decodeData(u.autoLock) == "0") {
+            } else if (encryptionClass.decrypt(u.autoLock, key) == "0") {
                 scSettingsAutoLock.apply {
                     tag = "auto lock"
                     isChecked = false
@@ -168,7 +179,7 @@ class SettingsFragment : Fragment() {
                 disableAutoLock()
             }
 
-            tvSettingsAutoLockTimerSeconds.text = encodingClass.decodeData(u.autoLockTimer)         // Auto lock timer
+            tvSettingsAutoLockTimerSeconds.text = encryptionClass.decrypt(u.autoLockTimer, key)         // Auto lock timer
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {                                   // Fingerprint
                 try {
@@ -215,14 +226,14 @@ class SettingsFragment : Fragment() {
                         )
                         scSettingsFingerprint.isEnabled = true
 
-                        if (encodingClass.decodeData(u.fingerprint) == "1") {
+                        if (encryptionClass.decrypt(u.fingerprint, key) == "1") {
                             scSettingsFingerprint.apply {
                                 tag = "fingerprint"
                                 isChecked = true
                             }
 
                             tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
-                        } else if (encodingClass.decodeData(u.fingerprint) == "0") {
+                        } else if (encryptionClass.decrypt(u.fingerprint, key) == "0") {
                             scSettingsFingerprint.apply {
                                 tag = "fingerprint"
                                 isChecked = false
@@ -284,7 +295,7 @@ class SettingsFragment : Fragment() {
 
         databaseHandlerClass.updateSettings(
                 "fingerprint",
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
     }
 
@@ -297,7 +308,7 @@ class SettingsFragment : Fragment() {
                 if (scSettingsScreenCapture.isChecked) {
                     databaseHandlerClass.updateSettings(                                            // Update Screen Capture to 1
                             "screen_capture",
-                            encodingClass.encodeData(1.toString())
+                            encryptionClass.encrypt(1.toString(), key)
                     )
 
                     tvSettingsScreenCaptureDesc.setText(R.string.settings_allow_screen_capture)
@@ -305,7 +316,7 @@ class SettingsFragment : Fragment() {
                 } else {
                     databaseHandlerClass.updateSettings(                                            // Update Screen Capture to 0
                             "screen_capture",
-                            encodingClass.encodeData(0.toString())
+                            encryptionClass.encrypt(0.toString(), key)
                     )
 
                     tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
@@ -314,9 +325,9 @@ class SettingsFragment : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData(message),
-                                encodingClass.encodeData(getCurrentDate())
+                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(message, key),
+                                encryptionClass.encrypt(getCurrentDate(), key)
                         )
                 )
             } else {
@@ -331,7 +342,7 @@ class SettingsFragment : Fragment() {
                 if (scSettingsAutoLock.isChecked) {
                     databaseHandlerClass.updateSettings(                                            // Update Auto Lock to 1
                             "auto_lock",
-                            encodingClass.encodeData(1.toString())
+                            encryptionClass.encrypt(1.toString(), key)
                     )
 
                     enableAutoLock()
@@ -339,7 +350,7 @@ class SettingsFragment : Fragment() {
                 } else {
                     databaseHandlerClass.updateSettings(                                            // Update Auto Lock to 0
                             "auto_lock",
-                            encodingClass.encodeData(0.toString())
+                            encryptionClass.encrypt(0.toString(), key)
                     )
 
                     disableAutoLock()
@@ -348,9 +359,9 @@ class SettingsFragment : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData(message),
-                                encodingClass.encodeData(getCurrentDate())
+                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(message, key),
+                                encryptionClass.encrypt(getCurrentDate(), key)
                         )
                 )
             } else {
@@ -405,15 +416,15 @@ class SettingsFragment : Fragment() {
 
                         databaseHandlerClass.updateSettings(                                        // Update Auto Lock Timer
                                 "auto_lock_timer",
-                                encodingClass.encodeData(timer)
+                                encryptionClass.encrypt(timer, key)
                         )
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
-                                        encodingClass.encodeData(getLastActionLogId().toString()),
-                                        encodingClass.encodeData(
-                                                "Auto Lock Timer was modified to $timer."
+                                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                        encryptionClass.encrypt(
+                                                "Auto Lock Timer was modified to $timer.", key
                                         ),
-                                        encodingClass.encodeData(getCurrentDate())
+                                        encryptionClass.encrypt(getCurrentDate(), key)
                                 )
                         )
                         tvSettingsAutoLockTimerSeconds.text = timer
@@ -527,7 +538,7 @@ class SettingsFragment : Fragment() {
                             if (scSettingsFingerprint.isChecked) {
                                 databaseHandlerClass.updateSettings(                                // Update Fingerprint to 1
                                         "fingerprint",
-                                        encodingClass.encodeData(1.toString())
+                                        encryptionClass.encrypt(1.toString(), key)
                                 )
 
                                 tvSettingsFingerprintDesc.setText(R.string.settings_enable_fingerprint)
@@ -535,7 +546,7 @@ class SettingsFragment : Fragment() {
                             } else {
                                 databaseHandlerClass.updateSettings(                                // Update Fingerprint to 0
                                         "fingerprint",
-                                        encodingClass.encodeData(0.toString())
+                                        encryptionClass.encrypt(0.toString(), key)
                                 )
 
                                 tvSettingsFingerprintDesc.setText(R.string.settings_disable_fingerprint)
@@ -544,9 +555,10 @@ class SettingsFragment : Fragment() {
 
                             databaseHandlerClass.addEventToActionLog(                               // Add event to Action Log
                                     UserActionLogModelClass(
-                                            encodingClass.encodeData(getLastActionLogId().toString()),
-                                            encodingClass.encodeData(message),
-                                            encodingClass.encodeData(getCurrentDate())
+                                            encryptionClass.encrypt(
+                                                    getLastActionLogId().toString(), key),
+                                            encryptionClass.encrypt(message, key),
+                                            encryptionClass.encrypt(getCurrentDate(), key)
                                     )
                             )
                         } else {
@@ -593,7 +605,7 @@ class SettingsFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId

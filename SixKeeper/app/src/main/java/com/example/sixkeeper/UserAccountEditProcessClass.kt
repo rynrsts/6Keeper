@@ -33,7 +33,6 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private lateinit var attActivity: Activity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
     private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
@@ -59,6 +58,7 @@ open class UserAccountEditProcessClass : Fragment() {
     private var editMode: Boolean = false
     private var editCount: Int = 0
 
+    private lateinit var key: ByteArray
     private var userId: String = ""
     private var password = ""
     private var masterPin: Int = 0
@@ -136,16 +136,16 @@ open class UserAccountEditProcessClass : Fragment() {
         appCompatActivity = activity as AppCompatActivity
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
         encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -221,7 +221,7 @@ open class UserAccountEditProcessClass : Fragment() {
             countChildReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    returnedEditCount = encodingClass.decodeData(value)
+                    returnedEditCount = encryptionClass.decrypt(value, key)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {}
@@ -233,7 +233,7 @@ open class UserAccountEditProcessClass : Fragment() {
         childReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                returnedValue = encodingClass.decodeData(value)
+                returnedValue = encryptionClass.decrypt(value, key)
                 count++
 
                 if (count == 1) {
@@ -434,7 +434,7 @@ open class UserAccountEditProcessClass : Fragment() {
                 val newPass = etUserEditNewPass.text.toString()
                 val confirmPass = etUserEditConfirmPass.text.toString()
 
-                val encodedNewPass = encodingClass.encodeData(newPass)
+                val encryptedNewPass = encryptionClass.encrypt(newPass, key)
 
                 val usernameRef = databaseReference.child("username")
                 var usernameVal = ""
@@ -456,7 +456,7 @@ open class UserAccountEditProcessClass : Fragment() {
                 button.setOnClickListener {
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
-                            currentPass != newPass && usernameVal != encodedNewPass
+                            currentPass != newPass && usernameVal != encryptedNewPass
                     ) {
                         showSaveAlertDialog()
 
@@ -485,7 +485,7 @@ open class UserAccountEditProcessClass : Fragment() {
                             }
                         } else if (
                                 isPasswordValid(newPass) && confirmPass == newPass &&
-                                currentPass != newPass && usernameVal == encodedNewPass
+                                currentPass != newPass && usernameVal == encryptedNewPass
                         ) {
                             val toast: Toast = Toast.makeText(
                                     appCompatActivity.applicationContext,
@@ -750,9 +750,8 @@ open class UserAccountEditProcessClass : Fragment() {
                     var passwordVal = ""
                     var count = 0
                     val input = etUserEditTextBox.text.toString()
-                    val encodedInput = encodingClass.encodeData(input)
-                    val encryptedInput = encryptionClass.hashData(encodedInput)
-                    val inputString = encodingClass.decodeSHA(encryptedInput)
+                    val encryptedInput = encryptionClass.encrypt(input, key)
+                    val hashedInput = encryptionClass.hash(input)
 
                     passwordRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -767,8 +766,8 @@ open class UserAccountEditProcessClass : Fragment() {
                     })
 
                     button.setOnClickListener {
-                        if (!passwordVal.contentEquals(inputString)) {
-                            updateAccUsername(input, encodedInput)
+                        if (!passwordVal.contentEquals(hashedInput)) {
+                            updateAccUsername(input, encryptedInput)
                             goBackToViewMode()
                             setUsernameInMenu(input)
                             changesSavedToast()
@@ -787,11 +786,9 @@ open class UserAccountEditProcessClass : Fragment() {
                 }
                 "password" -> {
                     val currentPass = etUserEditCurrentPass.text.toString()
-                    val encodedCurrentPass = encodingClass.encodeData(currentPass)
-                    val encryptedCurrentPass = encryptionClass.hashData(encodedCurrentPass)
-                    val currentPassString = encodingClass.decodeSHA(encryptedCurrentPass)
+                    val encryptedCurrentPass = encryptionClass.hash(currentPass)
 
-                    if (currentPassString.contentEquals(password)) {
+                    if (encryptedCurrentPass.contentEquals(password)) {
                         updateAccPassword()
                         view?.apply {
                             postDelayed(
@@ -816,9 +813,7 @@ open class UserAccountEditProcessClass : Fragment() {
                     val masterPinRef = databaseReference.child("masterPin")
                     var masterPinVal = ""
                     var count = 0
-                    val encodedInput = encodingClass.encodeData(masterPin.toString())
-                    val encryptedInput = encryptionClass.hashData(encodedInput)
-                    val inputString = encodingClass.decodeSHA(encryptedInput)
+                    val encryptedInput = encryptionClass.hash(masterPin.toString())
 
                     masterPinRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -834,8 +829,8 @@ open class UserAccountEditProcessClass : Fragment() {
                     })
 
                     button.setOnClickListener {
-                        if (!masterPinVal.contentEquals(inputString)) {
-                            updateAccMasterPIN(inputString)
+                        if (!masterPinVal.contentEquals(encryptedInput)) {
+                            updateAccMasterPIN(encryptedInput)
                             changesSavedToast()
                             view?.apply {
                                 postDelayed(
@@ -864,16 +859,16 @@ open class UserAccountEditProcessClass : Fragment() {
     private fun updateInfo(field: String) {                                                         // Update desired information
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account $viewId was modified."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("App account $viewId was modified.", key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 
         val input = etUserEditTextBox.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
+        val encryptedInput = encryptionClass.encrypt(input, key)
 
-        databaseReference.child(field).setValue(encodedInput)
+        databaseReference.child(field).setValue(encryptedInput)
     }
 
     private fun getLastActionLogId(): Int {
@@ -881,7 +876,7 @@ open class UserAccountEditProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId
@@ -898,22 +893,22 @@ open class UserAccountEditProcessClass : Fragment() {
         editCount += 1
         clUserAccountEditButton.removeAllViews()
 
-        val encodedInput = encodingClass.encodeData(editCount.toString())
+        val encryptedInput = encryptionClass.encrypt(editCount.toString(), key)
 
-        databaseReference.child(field).setValue(encodedInput)
+        databaseReference.child(field).setValue(encryptedInput)
     }
 
-    private fun updateAccUsername(input: String, encodedInput: String) {                            // Update Username
+    private fun updateAccUsername(input: String, encryptedInput: String) {                            // Update Username
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account username '$previousData'" +
-                                " was modified to '$input'."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("App account username '$previousData'" +
+                                " was modified to '$input'.", key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 
-        databaseReference.child("username").setValue(encodedInput)
+        databaseReference.child("username").setValue(encryptedInput)
     }
 
     private fun setUsernameInMenu(input: String) {                                                  // Set update username in menu
@@ -928,27 +923,25 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private fun updateAccPassword() {                                                               // Update Password
         val input = etUserEditNewPass.text.toString()
-        val encodedInput = encodingClass.encodeData(input)
-        val encryptedInput = encryptionClass.hashData(encodedInput)
-        val inputString = encodingClass.decodeSHA(encryptedInput)
+        val encryptedInput =  encryptionClass.hash(input)
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account password was modified."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("App account password was modified.", key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 
-        databaseReference.child("password").setValue(inputString)
+        databaseReference.child("password").setValue(encryptedInput)
     }
 
     private fun updateAccMasterPIN(inputString: String) {                                           // Update Master PIN
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("App account master pin was modified."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("App account master pin was modified.", key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 

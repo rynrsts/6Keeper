@@ -23,12 +23,13 @@ open class AccountsProcessClass : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var etAccountsSearchBox: EditText
     private lateinit var lvAccountsContainer: ListView
     private lateinit var llAccountsNoItem: LinearLayout
 
+    private lateinit var key: ByteArray
     private lateinit var categoryIdTemp: String
     private lateinit var categoryNameTemp: String
 
@@ -53,11 +54,20 @@ open class AccountsProcessClass : Fragment() {
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         etAccountsSearchBox = appCompatActivity.findViewById(R.id.etAccountsSearchBox)
         lvAccountsContainer = appCompatActivity.findViewById(R.id.lvAccountsContainer)
         llAccountsNoItem = appCompatActivity.findViewById(R.id.llAccountsNoItem)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     fun setActionBarTitle() {
@@ -124,8 +134,8 @@ open class AccountsProcessClass : Fragment() {
             val tempList = ArrayList<String>(0)
 
             for (u in userCategory) {
-                val uCategoryId = encodingClass.decodeData(u.categoryId)
-                val uCategoryName = encodingClass.decodeData(u.categoryName)
+                val uCategoryId = encryptionClass.decrypt(u.categoryId, key)
+                val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
                 val uNumOfPlatforms =
                         databaseHandlerClass.viewNumberOfPlatforms(u.categoryId).toString()
 
@@ -279,7 +289,7 @@ open class AccountsProcessClass : Fragment() {
             for (u in userCategory) {
                 if (
                         categoryName.equals(
-                                encodingClass.decodeData(u.categoryName),
+                                encryptionClass.decrypt(u.categoryName, key),
                                 ignoreCase = true
                         ) &&
                         !categoryName.equals(selectedCategoryName, ignoreCase = true)
@@ -288,7 +298,7 @@ open class AccountsProcessClass : Fragment() {
                     break
                 }
 
-                categoryId = Integer.parseInt(encodingClass.decodeData(u.categoryId)) + 1
+                categoryId = Integer.parseInt(encryptionClass.decrypt(u.categoryId, key)) + 1
             }
         }
 
@@ -296,8 +306,8 @@ open class AccountsProcessClass : Fragment() {
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addCategory(                                      // Add Category
                         UserCategoryModelClass(
-                                encodingClass.encodeData(categoryId.toString()),
-                                encodingClass.encodeData(categoryName)
+                                encryptionClass.encrypt(categoryId.toString(), key),
+                                encryptionClass.encrypt(categoryName, key)
                         )
                 )
 
@@ -311,17 +321,18 @@ open class AccountsProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData("Category '$categoryName' was added."),
-                                encodingClass.encodeData(getCurrentDate())
+                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt("Category '$categoryName' was added.",
+                                        key),
+                                encryptionClass.encrypt(getCurrentDate(), key)
                         )
                 )
             } else if (addOrUpdate == "update") {
                 val status = databaseHandlerClass.updateCategory(                                   // Update Category
                         UserCategoryModelClass(
-                                encodingClass.encodeData(selectedCategoryId),
-                                encodingClass.encodeData(categoryName)
-                        ), encodingClass.encodeData(selectedCategoryName)
+                                encryptionClass.encrypt(selectedCategoryId, key),
+                                encryptionClass.encrypt(categoryName, key)
+                        ), encryptionClass.encrypt(selectedCategoryName, key)
                 )
 
                 if (status > -1) {
@@ -334,10 +345,10 @@ open class AccountsProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encodingClass.encodeData(getLastActionLogId().toString()),
-                                encodingClass.encodeData("Category '$selectedCategoryName'" +
-                                        " was modified to '$categoryName'."),
-                                encodingClass.encodeData(getCurrentDate())
+                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt("Category '$selectedCategoryName'" +
+                                        " was modified to '$categoryName'.", key),
+                                encryptionClass.encrypt(getCurrentDate(), key)
                         )
                 )
             }
@@ -376,7 +387,7 @@ open class AccountsProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId
@@ -445,7 +456,7 @@ open class AccountsProcessClass : Fragment() {
         val deleteCategoryStatus = databaseHandlerClass.removeCatPlatAcc(
                 "CategoriesTable",
                 "category_id",
-                encodingClass.encodeData(categoryIdTemp)
+                encryptionClass.encrypt(categoryIdTemp, key)
         )
 
         if (deleteCategoryStatus > -1) {
@@ -462,9 +473,10 @@ open class AccountsProcessClass : Fragment() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData("Category '$categoryNameTemp' was deleted."),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt("Category '$categoryNameTemp' was deleted.",
+                                key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
 
@@ -475,7 +487,7 @@ open class AccountsProcessClass : Fragment() {
     private fun deleteCategoryContents() {                                                          // Delete Categories' contents
         val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                 "category",
-                encodingClass.encodeData(categoryIdTemp)
+                encryptionClass.encrypt(categoryIdTemp, key)
         )
         val userPlatformId = ArrayList<String>(0)
 
@@ -490,12 +502,12 @@ open class AccountsProcessClass : Fragment() {
         databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
                 "category_id",
-                encodingClass.encodeData(categoryIdTemp)
+                encryptionClass.encrypt(categoryIdTemp, key)
         )
         databaseHandlerClass.updateDeleteMultipleAccount(
                 userPlatformIdNoDuplicate,
-                encodingClass.encodeData(1.toString()),
-                encodingClass.encodeData(getCurrentDate()),
+                encryptionClass.encrypt(1.toString(), key),
+                encryptionClass.encrypt(getCurrentDate(), key),
                 "AccountsTable",
                 "platform_id",
                 "account_deleted",

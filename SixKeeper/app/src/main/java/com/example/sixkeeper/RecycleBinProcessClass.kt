@@ -21,7 +21,7 @@ open class RecycleBinProcessClass : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var cbRecycleBinSelectAll: CheckBox
     private lateinit var llRecycleBinNoItem: LinearLayout
@@ -30,6 +30,7 @@ open class RecycleBinProcessClass : Fragment() {
     private val modelArrayList = ArrayList<RecycleBinModelClass>(0)
     private lateinit var recycleBinModelClass: RecycleBinModelClass
 
+    private lateinit var key: ByteArray
     private lateinit var selectedTab: String
     private var totalRestoreNum = 0
     private var restoreCount = 0
@@ -59,11 +60,20 @@ open class RecycleBinProcessClass : Fragment() {
     fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         cbRecycleBinSelectAll = appCompatActivity.findViewById(R.id.cbRecycleBinSelectAll)
         llRecycleBinNoItem = appCompatActivity.findViewById(R.id.llRecycleBinNoItem)
         lvRecycleBinContainer = appCompatActivity.findViewById(R.id.lvRecycleBinContainer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
 
         selectedTab = "accounts"
     }
@@ -105,7 +115,7 @@ open class RecycleBinProcessClass : Fragment() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "deleted",
                 "",
-                encodingClass.encodeData(1.toString())
+                encryptionClass.encrypt(1.toString(), key)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -116,17 +126,17 @@ open class RecycleBinProcessClass : Fragment() {
             inflateNoItem()
         } else {
             for (u in userAccount) {
-                val uId = encodingClass.decodeData(u.accountId)
+                val uId = encryptionClass.decrypt(u.accountId, key)
 
                 userAccountId.add(uId)
-                userAccountName.add(encodingClass.decodeData(u.accountName))
+                userAccountName.add(encryptionClass.decrypt(u.accountName, key))
 
                 recycleBinModelClass = RecycleBinModelClass()
                 recycleBinModelClass.setSelected(false)
                 recycleBinModelClass.setId(Integer.parseInt(uId))
-                recycleBinModelClass.setAccountName(encodingClass.decodeData(u.accountName))
-                recycleBinModelClass.setPlatformName(encodingClass.decodeData(u.platformName))
-                recycleBinModelClass.setCategoryName(encodingClass.decodeData(u.categoryName))
+                recycleBinModelClass.setAccountName(encryptionClass.decrypt(u.accountName, key))
+                recycleBinModelClass.setPlatformName(encryptionClass.decrypt(u.platformName, key))
+                recycleBinModelClass.setCategoryName(encryptionClass.decrypt(u.categoryName, key))
                 modelArrayList.add(recycleBinModelClass)
             }
 
@@ -145,7 +155,7 @@ open class RecycleBinProcessClass : Fragment() {
 
     fun populateDeletedPasswords() {                                                                // Populate with deleted Saved Passwords
         val userSavedPass: List<UserSavedPassModelClass> =
-                databaseHandlerClass.viewSavedPass(encodingClass.encodeData(1.toString()))
+                databaseHandlerClass.viewSavedPass(encryptionClass.encrypt(1.toString(), key))
         val userPasswordId = ArrayList<String>(0)
         val userPasswordPass = ArrayList<String>(0)
 
@@ -155,10 +165,10 @@ open class RecycleBinProcessClass : Fragment() {
             inflateNoItem()
         } else {
             for (u in userSavedPass) {
-                val uId = encodingClass.decodeData(u.passId)
+                val uId = encryptionClass.decrypt(u.passId, key)
 
                 userPasswordId.add(uId)
-                userPasswordPass.add(encodingClass.decodeData(u.generatedPassword))
+                userPasswordPass.add(encryptionClass.decrypt(u.generatedPassword, key))
 
                 recycleBinModelClass = RecycleBinModelClass()
                 recycleBinModelClass.setSelected(false)
@@ -228,8 +238,8 @@ open class RecycleBinProcessClass : Fragment() {
             for (i in 0 until modelArrayList.size) {
                 if (modelArrayList[i].getSelected()) {
                     container.add(
-                            encodingClass.encodeData(
-                                    modelArrayList[i].getId().toString()
+                            encryptionClass.encrypt(
+                                    modelArrayList[i].getId().toString(), key
                             )
                     )
                 }
@@ -273,9 +283,9 @@ open class RecycleBinProcessClass : Fragment() {
 
             databaseHandlerClass.addEventToActionLog(                                               // Add event to Action Log
                     UserActionLogModelClass(
-                            encodingClass.encodeData(getLastActionLogId().toString()),
-                            encodingClass.encodeData(actionLogMessage),
-                            encodingClass.encodeData(getCurrentDate())
+                            encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                            encryptionClass.encrypt(actionLogMessage, key),
+                            encryptionClass.encrypt(getCurrentDate(), key)
                     )
             )
         }
@@ -286,7 +296,7 @@ open class RecycleBinProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
         }
 
         return actionLogId
@@ -313,7 +323,7 @@ open class RecycleBinProcessClass : Fragment() {
                     containerPlatformName.add(modelArrayList[i].getPlatformName())
                     containerCategoryName.add(modelArrayList[i].getCategoryName())
                 } else if (selectedTab == "password generator") {
-                    containerId.add(encodingClass.encodeData(modelArrayList[i].getId().toString()))
+                    containerId.add(encryptionClass.encrypt(modelArrayList[i].getId().toString(), key))
                 }
             }
         }
@@ -344,9 +354,9 @@ open class RecycleBinProcessClass : Fragment() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(getLastActionLogId().toString()),
-                        encodingClass.encodeData(actionLogMessage),
-                        encodingClass.encodeData(getCurrentDate())
+                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt(actionLogMessage, key),
+                        encryptionClass.encrypt(getCurrentDate(), key)
                 )
         )
     }
@@ -354,7 +364,7 @@ open class RecycleBinProcessClass : Fragment() {
     private fun restoreSavedPasswords(selectedId: Array<String?>) {                                 // Restore Saved Passwords
         val status = databaseHandlerClass.updateDeleteMultipleAccount(
                 selectedId,
-                encodingClass.encodeData(0.toString()),
+                encryptionClass.encrypt(0.toString(), key),
                 "",
                 "SavedPasswordTable",
                 "pass_id",
@@ -386,73 +396,73 @@ open class RecycleBinProcessClass : Fragment() {
         totalRestoreNum = selectedId.size
 
         for (i in selectedId.indices) {
-            val encodedId = encodingClass.encodeData(selectedId[i]!!)
-            val encodedPlatformName = encodingClass.encodeData(selectedPlatformName[i]!!)
-            val encodedCategoryName = encodingClass.encodeData(selectedCategoryName[i]!!)
+            val encryptedId = encryptionClass.encrypt(selectedId[i]!!, key)
+            val encryptedPlatformName = encryptionClass.encrypt(selectedPlatformName[i]!!, key)
+            val encryptedCategoryName = encryptionClass.encrypt(selectedCategoryName[i]!!, key)
 
             val userCategory: List<UserCategoryModelClass> =
                     databaseHandlerClass.viewCategory("", "")
             var categoryId = 10001
             var isExisting = false
-            var exEncodedCategoryId = ""
-            var exEncodedCategoryName = ""
+            var exencryptedCategoryId = ""
+            var exencryptedCategoryName = ""
 
             for (u in userCategory) {
                 if (selectedCategoryName[i].equals(
-                                encodingClass.decodeData(u.categoryName), ignoreCase = true)
+                                encryptionClass.decrypt(u.categoryName, key), ignoreCase = true)
                 ) {
                     isExisting = true
-                    exEncodedCategoryId = u.categoryId
-                    exEncodedCategoryName = u.categoryName
+                    exencryptedCategoryId = u.categoryId
+                    exencryptedCategoryName = u.categoryName
                     break
                 }
 
-                categoryId = Integer.parseInt(encodingClass.decodeData(u.categoryId)) + 1
+                categoryId = Integer.parseInt(encryptionClass.decrypt(u.categoryId, key)) + 1
             }
 
             var platformId = 10001
             val lastId = databaseHandlerClass.getLastIdOfPlatform()
 
             if (lastId.isNotEmpty()) {
-                platformId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
+                platformId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
             }
-            val encodedPlatformId = encodingClass.encodeData(platformId.toString())
+            val encryptedPlatformId = encryptionClass.encrypt(platformId.toString(), key)
 
             if (!isExisting) {                                                                      // If Category is not existing...
-                val encodedCategoryId = encodingClass.encodeData(categoryId.toString())
+                val encryptedCategoryId = encryptionClass.encrypt(categoryId.toString(), key)
 
                 databaseHandlerClass.addCategory(                                                   // Add Category
-                        UserCategoryModelClass(encodedCategoryId, encodedCategoryName)
+                        UserCategoryModelClass(encryptedCategoryId, encryptedCategoryName)
                 )
                 databaseHandlerClass.addPlatform(                                                   // Add Platform
                         UserPlatformModelClass(
-                                encodedPlatformId,
-                                encodedPlatformName,
-                                encodedCategoryId,
-                                encodedCategoryName
+                                encryptedPlatformId,
+                                encryptedPlatformName,
+                                encryptedCategoryId,
+                                encryptedCategoryName
                         )
                 )
                 databaseHandlerClass.updateAccountPath(
-                        encodedId, encodingClass.encodeData(0.toString()), "",
-                        encodedPlatformId, encodedPlatformName, encodedCategoryName
+                        encryptedId, encryptionClass.encrypt(0.toString(), key), "",
+                        encryptedPlatformId, encryptedPlatformName, encryptedCategoryName
                 )
                 increaseRestoreCount()
             } else {                                                                                // If Category is existing...
                 val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                         "category",
-                        exEncodedCategoryId
+                        exencryptedCategoryId
                 )
                 var isExistingP = false
-                var exEncodedPlatformId = ""
-                var exEncodedPlatformName = ""
+                var exencryptedPlatformId = ""
+                var exencryptedPlatformName = ""
 
                 for (up in userPlatform) {
                     if (selectedPlatformName[i].equals(
-                                    encodingClass.decodeData(up.platformName), ignoreCase = true)
+                                    encryptionClass.decrypt(up.platformName, key), ignoreCase = true)
                     ) {
                         isExistingP = true
-                        exEncodedPlatformId = up.platformId
-                        exEncodedPlatformName = up.platformName
+                        exencryptedPlatformId = up.platformId
+                        exencryptedPlatformName = up.platformName
                         break
                     }
                 }
@@ -460,40 +470,40 @@ open class RecycleBinProcessClass : Fragment() {
                 if (!isExistingP) {                                                                 // If Platform is not existing...
                     databaseHandlerClass.addPlatform(                                               // Add Platform
                             UserPlatformModelClass(
-                                    encodedPlatformId,
-                                    encodedPlatformName,
-                                    exEncodedCategoryId,
-                                    exEncodedCategoryName
+                                    encryptedPlatformId,
+                                    encryptedPlatformName,
+                                    exencryptedCategoryId,
+                                    exencryptedCategoryName
                             )
                     )
                     databaseHandlerClass.updateAccountPath(
-                            encodedId, encodingClass.encodeData(0.toString()), "",
-                            encodedPlatformId, encodedPlatformName, exEncodedCategoryName
+                            encryptedId, encryptionClass.encrypt(0.toString(), key), "",
+                            encryptedPlatformId, encryptedPlatformName, exencryptedCategoryName
                     )
                     increaseRestoreCount()
                 } else {                                                                            // If Platform is existing...
                     val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                             "platformId",
-                            exEncodedPlatformId,
-                            encodingClass.encodeData(0.toString())
+                            exencryptedPlatformId,
+                            encryptionClass.encrypt(0.toString(), key)
                     )
                     var isExistingA = false
-                    var encodedExistingId = ""
+                    var encryptedExistingId = ""
 
                     for (ua in userAccount) {
                         if (selectedAccountName[i].equals(
-                                        encodingClass.decodeData(ua.accountName), ignoreCase = true)
+                                        encryptionClass.decrypt(ua.accountName, key), ignoreCase = true)
                         ) {
                             isExistingA = true
-                            encodedExistingId = ua.accountId
+                            encryptedExistingId = ua.accountId
                             break
                         }
                     }
 
                     if (!isExistingA) {                                                             // If account is not existing...
                         databaseHandlerClass.updateAccountPath(
-                                encodedId, encodingClass.encodeData(0.toString()), "",
-                                exEncodedPlatformId, exEncodedPlatformName, exEncodedCategoryName
+                                encryptedId, encryptionClass.encrypt(0.toString(), key), "",
+                                exencryptedPlatformId, exencryptedPlatformName, exencryptedCategoryName
                         )
                         increaseRestoreCount()
                     } else {
@@ -506,7 +516,7 @@ open class RecycleBinProcessClass : Fragment() {
 
                         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                             val idTemp = ArrayList<String>(0)
-                            idTemp.add(encodedExistingId)
+                            idTemp.add(encryptedExistingId)
                             var accountIdTemp = arrayOfNulls<String>(idTemp.size)
                             accountIdTemp = idTemp.toArray(accountIdTemp)
 
@@ -516,8 +526,8 @@ open class RecycleBinProcessClass : Fragment() {
                                     "account_id"
                             )
                             databaseHandlerClass.updateAccountPath(
-                                    encodedId, encodingClass.encodeData(0.toString()), "",
-                                    exEncodedPlatformId, exEncodedPlatformName, exEncodedCategoryName
+                                    encryptedId, encryptionClass.encrypt(0.toString(), key), "",
+                                    exencryptedPlatformId, exencryptedPlatformName, exencryptedCategoryName
                             )
                             increaseRestoreCount()
                         }

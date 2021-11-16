@@ -30,7 +30,7 @@ class MobileNumberValidationFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
 
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -41,6 +41,7 @@ class MobileNumberValidationFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
 
     private var userId = ""
+    private lateinit var key: ByteArray
     private var verificationId: String? = null
 
     override fun onCreateView(
@@ -68,14 +69,15 @@ class MobileNumberValidationFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         etMobileNumberGetOTP = appCompatActivity.findViewById(R.id.etMobileNumberGetOTP)
@@ -93,7 +95,7 @@ class MobileNumberValidationFragment : Fragment() {
         mobileNumberRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                mobileNumber = encodingClass.decodeData(value)
+                mobileNumber = encryptionClass.decrypt(value, key)
                 count++
 
                 if (count == 1) {

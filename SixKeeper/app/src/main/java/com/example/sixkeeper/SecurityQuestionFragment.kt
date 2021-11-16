@@ -21,7 +21,7 @@ class SecurityQuestionFragment : Fragment() {
     private lateinit var attActivity: Activity
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -33,6 +33,7 @@ class SecurityQuestionFragment : Fragment() {
     private lateinit var etSecurityQuestionMobileNumber: EditText
 
     private var userId = ""
+    private lateinit var key: ByteArray
     private lateinit var firstNameD: String
     private lateinit var lastNameD: String
     private lateinit var birthDateD: String
@@ -72,7 +73,7 @@ class SecurityQuestionFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
@@ -87,9 +88,10 @@ class SecurityQuestionFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.etSecurityQuestionMobileNumber)
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         val firstNameRef = databaseReference.child("firstName")
@@ -207,11 +209,11 @@ class SecurityQuestionFragment : Fragment() {
         acbSecurityQuestionConfirm.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
                 if (isNotEmpty()) {
-                    val encodedFirstName = encodingClass.encodeData(firstName)
-                    val encodedLastName = encodingClass.encodeData(lastName)
-                    val encodedBirthDate = encodingClass.encodeData(birthDate)
-                    val encodedEmail = encodingClass.encodeData(email)
-                    val encodedMobileNumber = encodingClass.encodeData(mobileNumber)
+                    val encryptedFirstName = encryptionClass.encrypt(firstName, key)
+                    val encryptedLastName = encryptionClass.encrypt(lastName, key)
+                    val encryptedBirthDate = encryptionClass.encrypt(birthDate, key)
+                    val encryptedEmail = encryptionClass.encrypt(email, key)
+                    val encryptedMobileNumber = encryptionClass.encrypt(mobileNumber, key)
 
                     val immKeyboard: InputMethodManager =
                             appCompatActivity.getSystemService(
@@ -219,11 +221,11 @@ class SecurityQuestionFragment : Fragment() {
                             ) as InputMethodManager
 
                     if (
-                            encodedFirstName == firstNameD &&
-                            encodedLastName == lastNameD &&
-                            encodedBirthDate == birthDateD &&
-                            encodedEmail == emailD &&
-                            encodedMobileNumber == mobileNumberD
+                            encryptedFirstName == firstNameD &&
+                            encryptedLastName == lastNameD &&
+                            encryptedBirthDate == birthDateD &&
+                            encryptedEmail == emailD &&
+                            encryptedMobileNumber == mobileNumberD
                     ) {
                         val forgotCredentialsActivity: ForgotCredentialsActivity =
                                 activity as ForgotCredentialsActivity

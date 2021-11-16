@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 
 class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
@@ -48,6 +48,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
     private var userId = ""
+    private lateinit var key: ByteArray
     private var backgroundDate = ""
     private var status = "unlocked"
     private var start = true
@@ -86,16 +87,15 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 val timeDifference: Long = dateToday.time - dateBackground.time
 
                 val databaseHandlerClass = DatabaseHandlerClass(this)
-                val encodingClass = EncodingClass()
                 val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
                 var autoLock = false
 
                 for (u in userSettings) {
-                    if (encodingClass.decodeData(u.autoLock) == "1") {                              // If Auto Lock is 1
+                    if (encryptionClass.decrypt(u.autoLock, key) == "1") {                          // If Auto Lock is 1
                         autoLock = true
 
                         if (timer == 0) {
-                            val autoLockTimer = encodingClass.decodeData(u.autoLockTimer)
+                            val autoLockTimer = encryptionClass.decrypt(u.autoLockTimer, key)
                             timer = Integer.parseInt(
                                     autoLockTimer.replace(" sec", "")
                             )
@@ -140,16 +140,17 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
 
     private fun setVariables() {
         databaseHandlerClass = DatabaseHandlerClass(this)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         firebaseDatabase = FirebaseDatabase.getInstance()
         val userAccList = databaseHandlerClass.validateUserAcc()
         userId = ""
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
-
+        
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -211,9 +212,9 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         button.setOnClickListener {
             val tvNavigationHeaderUsername: TextView =
                     headerView.findViewById(R.id.tvNavigationHeaderUsername)
-            val decodedUsername = encodingClass.decodeData(username)
+            val decryptedUsername = encryptionClass.decrypt(username, key)
 
-            tvNavigationHeaderUsername.text = decodedUsername
+            tvNavigationHeaderUsername.text = decryptedUsername
         }
     }
 
@@ -239,7 +240,8 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         })
 
         button.setOnClickListener {
-            val profilePhotoB = encodingClass.decodeByteArray(profilePhoto)
+            val profilePhotoS = encryptionClass.decrypt(profilePhoto, key)
+            val profilePhotoB = encryptionClass.decodeBA(profilePhotoS)
 
             if (profilePhoto.isNotEmpty()) {
                 val imageDrawable: Drawable = BitmapDrawable(

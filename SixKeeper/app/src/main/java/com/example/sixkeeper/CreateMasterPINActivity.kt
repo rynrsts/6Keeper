@@ -10,7 +10,7 @@ class CreateMasterPINActivity : CreateMasterPINProcessClass() {
 
         changeStatusBarColor()
         setVariables()
-//        blockCapture()
+        blockCapture()
         setButtonOnClick()
     }
 

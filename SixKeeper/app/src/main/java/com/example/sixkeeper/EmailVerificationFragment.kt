@@ -22,7 +22,7 @@ class EmailVerificationFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
 
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userAccList: List<UserAccModelClass>
@@ -32,6 +32,7 @@ class EmailVerificationFragment : Fragment() {
     private lateinit var etEmailVerificationEmail: EditText
 
     private var userId = ""
+    private lateinit var key: ByteArray
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -57,14 +58,15 @@ class EmailVerificationFragment : Fragment() {
         appCompatActivity = activity as AppCompatActivity
 
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         userAccList = databaseHandlerClass.validateUserAcc()
 
         for (u in userAccList) {
-            userId = encodingClass.decodeData(u.userId)
+            userId = encryptionClass.decode(u.userId)
         }
 
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         mAuth = FirebaseAuth.getInstance()
@@ -81,7 +83,7 @@ class EmailVerificationFragment : Fragment() {
         emailRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                email = encodingClass.decodeData(value)
+                email = encryptionClass.decrypt(value, key)
                 count++
 
                 if (count == 1) {

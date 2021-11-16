@@ -21,10 +21,11 @@ class DuplicatePasswordsFragment : Fragment() {
     private lateinit var appCompatActivity: AppCompatActivity
     private lateinit var attActivity: Activity
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
-    private lateinit var encodingClass: EncodingClass
+    private lateinit var encryptionClass: EncryptionClass
 
     private lateinit var lvDuplicatePasswordsContainer: ListView
 
+    private lateinit var key: ByteArray
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedPlatformId: String
@@ -54,31 +55,40 @@ class DuplicatePasswordsFragment : Fragment() {
     private fun setVariables() {
         appCompatActivity = activity as AppCompatActivity
         databaseHandlerClass = DatabaseHandlerClass(attActivity)
-        encodingClass = EncodingClass()
+        encryptionClass = EncryptionClass()
 
         lvDuplicatePasswordsContainer =
                 appCompatActivity.findViewById(R.id.lvDuplicatePasswordsContainer)
+
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+        var userId = ""
+
+        for (u in userAccList) {
+            userId = encryptionClass.decode(u.userId)
+        }
+
+        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun populateDuplicatePasswords() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "password",
                 args.encodedDuplicatePassword,
-                encodingClass.encodeData(0.toString())
+                encryptionClass.encrypt(0.toString(), key)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)
 
         for (u in userAccount) {
-            val uAccountName = encodingClass.decodeData(u.accountName)
-            val uPlatformName = encodingClass.decodeData(u.platformName)
-            val uCategoryName = encodingClass.decodeData(u.categoryName)
+            val uAccountName = encryptionClass.decrypt(u.accountName, key)
+            val uPlatformName = encryptionClass.decrypt(u.platformName, key)
+            val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
 
             userAccountId.add(
-                    encodingClass.decodeData(u.accountId) + "ramjcammjar" +
+                    encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
                             uAccountName + "ramjcammjar" +
-                            encodingClass.decodeData(u.platformId)
+                            encryptionClass.decrypt(u.platformId, key)
             )
             userAccountName.add(uAccountName)
             userAccountDirectory.add("$uCategoryName > $uPlatformName")

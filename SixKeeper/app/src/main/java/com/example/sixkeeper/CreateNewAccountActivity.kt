@@ -18,7 +18,6 @@ import java.util.*
 
 
 class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
-    private lateinit var encodingClass: EncodingClass
     private lateinit var encryptionClass: EncryptionClass
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
@@ -33,15 +32,15 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     private lateinit var password: String
     private var masterPin: Int = 0
 
-    private lateinit var encodedFirstName: String
-    private lateinit var encodedLastName: String
-    private lateinit var encodedBirthDate: String
-    private lateinit var encodedEmail: String
-    private lateinit var encodedMobileNumber: String
-    private lateinit var encodedUsername: String
-    private lateinit var encryptedPassword: ByteArray
-    private lateinit var encryptedMasterPin: ByteArray
-    private lateinit var encodedStatus: String
+    private lateinit var encryptedFirstName: String
+    private lateinit var encryptedLastName: String
+    private lateinit var encryptedBirthDate: String
+    private lateinit var encryptedEmail: String
+    private lateinit var encryptedMobileNumber: String
+    private lateinit var encryptedUsername: String
+    private lateinit var encryptedPassword: String
+    private lateinit var encryptedMasterPin: String
+    private lateinit var encryptedStatus: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,6 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     private fun setVariables() {
-        encodingClass = EncodingClass()
         encryptionClass = EncryptionClass()
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseUserAccountModelClass = FirebaseUserAccountModelClass()
@@ -148,35 +146,37 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     internal fun saveAccount() {                                                                    // Save account data to database
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userId: Int = (1000000..9999999).random()
+        val key = (
+                userId.toString() + userId.toString() + userId.toString().substring(0, 2)
+                )
+                .toByteArray()
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
-        val encodedPassword = encodingClass.encodeData(password)
-        val encodedMasterPIN = encodingClass.encodeData(masterPin.toString())
-
-        encodedUsername = encodingClass.encodeData(username)
-        encryptedPassword = encryptionClass.hashData(encodedPassword)
-        encryptedMasterPin = encryptionClass.hashData(encodedMasterPIN)
-        encodedStatus = encodingClass.encodeData(0.toString())
-        encodedFirstName = encodingClass.encodeData(firstName)
-        encodedLastName = encodingClass.encodeData(lastName)
-        encodedBirthDate = encodingClass.encodeData(birthDate)
-        encodedEmail = encodingClass.encodeData(email)
-        encodedMobileNumber = encodingClass.encodeData(mobileNumber.toString())
+        val encodedUserId = encryptionClass.encode(userId.toString())
+        encryptedUsername = encryptionClass.encrypt(username, key)
+        encryptedPassword = encryptionClass.hash(password)
+        encryptedMasterPin = encryptionClass.hash(masterPin.toString())
+        encryptedStatus = encryptionClass.encrypt(0.toString(), key)
+        encryptedFirstName = encryptionClass.encrypt(firstName, key)
+        encryptedLastName = encryptionClass.encrypt(lastName, key)
+        encryptedBirthDate = encryptionClass.encrypt(birthDate, key)
+        encryptedEmail = encryptionClass.encrypt(email, key)
+        encryptedMobileNumber = encryptionClass.encrypt(mobileNumber.toString(), key)
 
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userAccStatus = databaseHandlerClass.addUserAcc(
-                UserAccModelClass(encodingClass.encodeData(userId.toString()))
+                UserAccModelClass(encodedUserId)
         )
         val userSettingsStatus = databaseHandlerClass.addSettings(
                 UserSettingsModelClass(
-                        encodingClass.encodeData(userId.toString()),
-                        encodingClass.encodeData(0.toString()),
-                        encodingClass.encodeData(1.toString()),
-                        encodingClass.encodeData("10 sec"),
-                        encodingClass.encodeData(0.toString()),
+                        encodedUserId,
+                        encryptionClass.encrypt(0.toString(), key),
+                        encryptionClass.encrypt(1.toString(), key),
+                        encryptionClass.encrypt("10 sec", key),
+                        encryptionClass.encrypt(0.toString(), key),
                 )
         )
 
@@ -196,18 +196,13 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
             }
         }
 
-        var actionLogId = 1000001
-        val lastId = databaseHandlerClass.getLastIdOfActionLog()
-
-        if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encodingClass.decodeData(lastId)) + 1
-        }
+        val actionLogId = 1000001
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encodingClass.encodeData(actionLogId.toString()),
-                        encodingClass.encodeData("App account was created."),
-                        encodingClass.encodeData(date)
+                        encryptionClass.encrypt(actionLogId.toString(), key),
+                        encryptionClass.encrypt("App account was created.", key),
+                        encryptionClass.encrypt(date, key)
                 )
         )
 
@@ -216,20 +211,18 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     }
 
     private fun sendData() {
-        val passwordData = encodingClass.decodeSHA(encryptedPassword)
-        val masterPINData = encodingClass.decodeSHA(encryptedMasterPin)
         val button = Button(this)
         var stack = 0
 
-        firebaseUserAccountModelClass.setUsername(encodedUsername)
-        firebaseUserAccountModelClass.setPassword(passwordData)
-        firebaseUserAccountModelClass.setMasterPin(masterPINData)
-        firebaseUserAccountModelClass.setStatus(encodedStatus)
-        firebaseUserAccountModelClass.setFirstName(encodedFirstName)
-        firebaseUserAccountModelClass.setLastName(encodedLastName)
-        firebaseUserAccountModelClass.setBirthDate(encodedBirthDate)
-        firebaseUserAccountModelClass.setEmail(encodedEmail)
-        firebaseUserAccountModelClass.setMobileNumber(encodedMobileNumber)
+        firebaseUserAccountModelClass.setUsername(encryptedUsername)
+        firebaseUserAccountModelClass.setPassword(encryptedPassword)
+        firebaseUserAccountModelClass.setMasterPin(encryptedMasterPin)
+        firebaseUserAccountModelClass.setStatus(encryptedStatus)
+        firebaseUserAccountModelClass.setFirstName(encryptedFirstName)
+        firebaseUserAccountModelClass.setLastName(encryptedLastName)
+        firebaseUserAccountModelClass.setBirthDate(encryptedBirthDate)
+        firebaseUserAccountModelClass.setEmail(encryptedEmail)
+        firebaseUserAccountModelClass.setMobileNumber(encryptedMobileNumber)
         firebaseUserAccountModelClass.setProfilePhoto("")
         firebaseUserAccountModelClass.setPwWrongAttempt("")
         firebaseUserAccountModelClass.setPwLockTime("")
