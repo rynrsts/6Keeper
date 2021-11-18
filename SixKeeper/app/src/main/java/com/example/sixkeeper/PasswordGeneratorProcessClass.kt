@@ -200,13 +200,19 @@ open class PasswordGeneratorProcessClass : Fragment() {
             if (lengthString.isNotEmpty()) {
                 val length = Integer.parseInt(lengthString) + 1
 
-                if (length in 4..99) {
-                    etPassGeneratorLength.apply {
-                        setText(length.toString())
-                        setSelection(etPassGeneratorLength.text.length)
+                when {
+                    length in 4..30 -> {
+                        etPassGeneratorLength.apply {
+                            setText(length.toString())
+                            setSelection(etPassGeneratorLength.text.length)
+                        }
                     }
-                } else if (length < 4) {
-                    toastMinimumOf4(etPassGeneratorLength)
+                    length < 4 -> {
+                        toastMinimumOf4(etPassGeneratorLength)
+                    }
+                    length > 30 -> {
+                        toastMaximumOf30(etPassGeneratorLength)
+                    }
                 }
             } else {
                 toastMinimumOf4(etPassGeneratorLength)
@@ -222,13 +228,19 @@ open class PasswordGeneratorProcessClass : Fragment() {
             if (lengthString.isNotEmpty()) {
                 val length = Integer.parseInt(lengthString) - 1
 
-                if (length in 4..98) {
-                    etPassGeneratorLength.apply {
-                        setText(length.toString())
-                        setSelection(etPassGeneratorLength.text.length)
+                when {
+                    length in 4..30 -> {
+                        etPassGeneratorLength.apply {
+                            setText(length.toString())
+                            setSelection(etPassGeneratorLength.text.length)
+                        }
                     }
-                } else {
-                    toastMinimumOf4(etPassGeneratorLength)
+                    length < 4 -> {
+                        toastMinimumOf4(etPassGeneratorLength)
+                    }
+                    length > 30 -> {
+                        toastMaximumOf30(etPassGeneratorLength)
+                    }
                 }
             } else {
                 toastMinimumOf4(etPassGeneratorLength)
@@ -245,6 +257,20 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val toast: Toast = Toast.makeText(
                 appCompatActivity.applicationContext,
                 R.string.pass_generator_length_of_4,
+                Toast.LENGTH_SHORT
+        )
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 0)
+            show()
+        }
+    }
+
+    fun toastMaximumOf30(etPassGeneratorLength: EditText) {
+        etPassGeneratorLength.setText("30")
+
+        val toast: Toast = Toast.makeText(
+                appCompatActivity.applicationContext,
+                R.string.pass_generator_length_of_30,
                 Toast.LENGTH_SHORT
         )
         toast.apply {

@@ -295,6 +295,7 @@
     <string name="pass_generator_generated_pass">Generated Password</string>
     <string name="pass_generator_generate_pass">Please generate a password first</string>
     <string name="pass_generator_include">Include:</string>
+    <string name="pass_generator_length_of_30">Length must be maximum of 30</string>
     <string name="pass_generator_length_of_4">Length must be minimum of 4</string>
     <string name="pass_generator_lowercase">Lowercase Alphabets (a–z)</string>
     <string name="pass_generator_medium">Medium</string>

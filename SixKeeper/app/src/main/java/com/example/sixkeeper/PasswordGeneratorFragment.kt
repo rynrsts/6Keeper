@@ -63,7 +63,7 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                     if (passGeneratorLength.isNotEmpty()) {
                         val length = Integer.parseInt(passGeneratorLength)
 
-                        if (length in 4..99) {
+                        if (length in 4..30) {
                             if (
                                     getCbPassGeneratorLowercase().isChecked ||
                                     getCbPassGeneratorUppercase().isChecked ||
@@ -82,8 +82,12 @@ class PasswordGeneratorFragment : PasswordGeneratorProcessClass() {
                                     show()
                                 }
                             }
-                        } else {
+                        } else if (length < 4) {
                             toastMinimumOf4(etPassGeneratorLength)
+                            etPassGeneratorLength.clearFocus()
+                            closeKeyboard()
+                        } else if (length > 30) {
+                            toastMaximumOf30(etPassGeneratorLength)
                             etPassGeneratorLength.clearFocus()
                             closeKeyboard()
                         }
