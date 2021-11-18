@@ -157,7 +157,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encryptionClass.encrypt(u.fingerprint, key))
+            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, key))
         }
 
         return fingerprintStatus
