@@ -407,7 +407,9 @@
     <string name="settings_enable_auto_lock">Enable Auto Lock</string>
     <string name="settings_enable_fingerprint">Enable Fingerprint Authentication</string>
     <string name="settings_fingerprint">Fingerprint</string>
-    <string name="settings_note">Note: Changes will be applied at the next launch.</string>
+    <string name="settings_note">
+        Note: Changes in the Screen Capture will be applied at the next launch.
+    </string>
     <string name="settings_screen_capture">Screen Capture</string>
     <string name="settings_security">Security</string>
 

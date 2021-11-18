@@ -246,7 +246,7 @@ class LoginActivity : LoginValidationClass() {
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            super.onBackPressed()
+            finishAffinity()
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
             dialog.cancel()

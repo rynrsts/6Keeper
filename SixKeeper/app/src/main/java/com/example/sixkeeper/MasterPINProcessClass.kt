@@ -510,7 +510,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         builder.setCancelable(false)
 
         builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            finish()
+            finishAffinity()
         }
         builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
             dialog.cancel()
