@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encryptionClass: EncryptionClass
@@ -409,5 +408,10 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 userId = u.userId
             }
         }
+
+        val decodedUserId = encryptionClass.decode(userId)
+        key = (decodedUserId + decodedUserId + decodedUserId.substring(0, 2)).toByteArray()
+
+        databaseReference = firebaseDatabase.getReference(decodedUserId)
     }
 }
