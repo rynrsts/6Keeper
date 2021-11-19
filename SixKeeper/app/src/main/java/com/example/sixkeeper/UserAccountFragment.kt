@@ -421,7 +421,7 @@ class UserAccountFragment : Fragment() {
                             val destination: FileChannel?
                             val packageName = context?.packageName
                             val currentDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                            val backupDBPath = "/SixKeeper/SixKeeperDatabase"
+                            val backupDBPath = "/SixKeeper/SixKeeperDatabase.skdb"
                             val currentDB = File(data, currentDBPath)
                             val backupDB = File(sd, backupDBPath)
 

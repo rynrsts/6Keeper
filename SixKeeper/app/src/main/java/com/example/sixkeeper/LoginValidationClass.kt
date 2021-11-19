@@ -400,4 +400,14 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
             }
         }
     }
+
+    fun setUserIdAfterImport() {
+        val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
+
+        if (userAccList.isNotEmpty()) {
+            for (u in userAccList) {
+                userId = u.userId
+            }
+        }
+    }
 }

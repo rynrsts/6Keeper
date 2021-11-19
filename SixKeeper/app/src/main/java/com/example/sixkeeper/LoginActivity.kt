@@ -98,8 +98,9 @@ class LoginActivity : LoginValidationClass() {
                 createFolder()
 
                 val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-                builder.setMessage("Make sure there is an exported file named 'SixKeeperDatabase' " +
-                        "in the 'SixKeeper' folder in the internal storage. Continue?")
+                builder.setMessage("Make sure there is an exported file named " +
+                        "'SixKeeperDatabase.skdb' in the 'SixKeeper' folder in the internal " +
+                        "storage. Continue?")
                 builder.setCancelable(false)
 
                 builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
@@ -110,7 +111,7 @@ class LoginActivity : LoginValidationClass() {
                         val source: FileChannel?
                         val destination: FileChannel?
                         val packageName = this.packageName
-                        val currentDBPath = "SixKeeper/SixKeeperDatabase"
+                        val currentDBPath = "SixKeeper/SixKeeperDatabase.skdb"
                         val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
                         val currentDB = File(sd, currentDBPath)
                         val backupDB = File(data, backupDBPath)
@@ -118,7 +119,7 @@ class LoginActivity : LoginValidationClass() {
                         try {
                             source = FileInputStream(currentDB).channel
                             destination = FileOutputStream(backupDB).channel
-                            destination.transferFrom(source, 0, source.size())                              // Save data to folder
+                            destination.transferFrom(source, 0, source.size())                      // Save data to folder
                             source.close()
                             destination.close()
 
@@ -131,6 +132,8 @@ class LoginActivity : LoginValidationClass() {
                                 setGravity(Gravity.CENTER, 0, 0)
                                 show()
                             }
+
+                            setUserIdAfterImport()
                         } catch (e: IOException) {
                             val toast: Toast = Toast.makeText(
                                     this,
