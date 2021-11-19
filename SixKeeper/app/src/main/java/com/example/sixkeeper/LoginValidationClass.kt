@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encryptionClass: EncryptionClass
@@ -319,7 +320,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         return waitingTime
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
         val calendar: Calendar = Calendar.getInstance()
         return dateFormat.format(calendar.time)

@@ -1,7 +1,9 @@
 package com.example.sixkeeper
 
+import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -10,6 +12,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -94,70 +97,80 @@ class LoginActivity : LoginValidationClass() {
         }
 
         tvLoginImportData.setOnClickListener {
-            if (InternetConnectionClass().isConnected()) {
-                createFolder()
+            if (ActivityCompat.checkSelfPermission(                                                 // Check if permission is granted
+                            this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                if (InternetConnectionClass().isConnected()) {
+                    createFolder()
 
-                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-                builder.setMessage("Make sure there is an exported file named " +
-                        "'SixKeeperDatabase.skdb' in the 'SixKeeper' folder in the internal " +
-                        "storage. Continue?")
-                builder.setCancelable(false)
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    builder.setMessage("Make sure there is an exported file named " +
+                            "'SixKeeperDatabase.skdb' in the 'SixKeeper' folder in the internal " +
+                            "storage. Continue?")
+                    builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                    if (InternetConnectionClass().isConnected()) {
-                        @Suppress("DEPRECATION")
-                        val sd = Environment.getExternalStorageDirectory()
-                        val data = Environment.getDataDirectory()
-                        val source: FileChannel?
-                        val destination: FileChannel?
-                        val packageName = this.packageName
-                        val currentDBPath = "SixKeeper/SixKeeperDatabase.skdb"
-                        val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
-                        val currentDB = File(sd, currentDBPath)
-                        val backupDB = File(data, backupDBPath)
+                    builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        if (InternetConnectionClass().isConnected()) {
+                            @Suppress("DEPRECATION")
+                            val sd = Environment.getExternalStorageDirectory()
+                            val data = Environment.getDataDirectory()
+                            val source: FileChannel?
+                            val destination: FileChannel?
+                            val packageName = this.packageName
+                            val currentDBPath = "SixKeeper/SixKeeperDatabase.skdb"
+                            val backupDBPath = "/data/$packageName/databases/SixKeeperDatabase"
+                            val currentDB = File(sd, currentDBPath)
+                            val backupDB = File(data, backupDBPath)
 
-                        try {
-                            source = FileInputStream(currentDB).channel
-                            destination = FileOutputStream(backupDB).channel
-                            destination.transferFrom(source, 0, source.size())                      // Save data to folder
-                            source.close()
-                            destination.close()
+                            try {
+                                source = FileInputStream(currentDB).channel
+                                destination = FileOutputStream(backupDB).channel
+                                destination.transferFrom(source, 0, source.size())                      // Save data to folder
+                                source.close()
+                                destination.close()
 
-                            val toast: Toast = Toast.makeText(
-                                    this,
-                                    "Data was imported! Please enter your credentials",
-                                    Toast.LENGTH_SHORT
-                            )
-                            toast.apply {
-                                setGravity(Gravity.CENTER, 0, 0)
-                                show()
+                                val toast: Toast = Toast.makeText(
+                                        this,
+                                        "Data was imported! Please enter your credentials",
+                                        Toast.LENGTH_SHORT
+                                )
+                                toast.apply {
+                                    setGravity(Gravity.CENTER, 0, 0)
+                                    show()
+                                }
+
+                                setUserIdAfterImport()
+                            } catch (e: IOException) {
+                                val toast: Toast = Toast.makeText(
+                                        this,
+                                        "Cannot find folder and/or file",
+                                        Toast.LENGTH_SHORT
+                                )
+                                toast.apply {
+                                    setGravity(Gravity.CENTER, 0, 0)
+                                    show()
+                                }
                             }
-
-                            setUserIdAfterImport()
-                        } catch (e: IOException) {
-                            val toast: Toast = Toast.makeText(
-                                    this,
-                                    "Cannot find folder and/or file",
-                                    Toast.LENGTH_SHORT
-                            )
-                            toast.apply {
-                                setGravity(Gravity.CENTER, 0, 0)
-                                show()
-                            }
+                        } else {
+                            internetToast()
                         }
-                    } else {
-                        internetToast()
                     }
-                }
-                builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
+                    builder.setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                        dialog.cancel()
+                    }
 
-                val alert: AlertDialog = builder.create()
-                alert.setTitle(R.string.login_import_data_title)
-                alert.show()
+                    val alert: AlertDialog = builder.create()
+                    alert.setTitle(R.string.login_import_data_title)
+                    alert.show()
+                } else {
+                    internetToast()
+                }
             } else {
-                internetToast()
+                ActivityCompat.requestPermissions(                                                  // Request permission
+                        this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        52420
+                )
             }
 
             it.apply {

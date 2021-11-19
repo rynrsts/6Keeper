@@ -524,14 +524,10 @@ class SpecificAccountFragment : Fragment() {
 
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
-                val calendar: Calendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                val date: String = dateFormat.format(calendar.time)
-
                 val status = databaseHandlerClass.updateDeleteAccount(
                         encryptionClass.encrypt(args.specificAccountId, key),
                         encryptionClass.encrypt(1.toString(), key),
-                        encryptionClass.encrypt(date, key),
+                        encryptionClass.encrypt(getCurrentDate(), key),
                         "AccountsTable",
                         "account_id",
                         "account_deleted",
@@ -562,7 +558,7 @@ class SpecificAccountFragment : Fragment() {
                                 encryptionClass.encrypt(actionLogId.toString(), key),
                                 encryptionClass.encrypt("Account " +
                                         "'${args.specificAccountName}' was deleted.", key),
-                                encryptionClass.encrypt(date, key)
+                                encryptionClass.encrypt(getCurrentDate(), key)
                         )
                 )
 

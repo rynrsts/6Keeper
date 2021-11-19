@@ -33,6 +33,8 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
 
         if (userAccList.isEmpty()) {
             goToLoginActivity()
+
+            return
         }
 
         for (u in userAccList) {
