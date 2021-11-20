@@ -3,6 +3,7 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Gravity
@@ -330,10 +331,9 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         return waitingTime
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        return dateFormat.format(Date(elapsedRealtime)).toString()
     }
 
     @SuppressLint("ShowToast")

@@ -406,6 +406,7 @@ class AddAccountFragment : Fragment() {
                 if (isNotEmpty()) {
                     credentialField = sAddAccountCredential1.selectedItem.toString()
                     applicationName = tvAddAccountAppSelection.text.toString()
+                    websiteURL = etAddAccountWebsite.text.toString()
                     description = etAddAccountDescription.text.toString()
 
                     if (cbAddAccountFavorites.isChecked) {
@@ -504,10 +505,9 @@ class AddAccountFragment : Fragment() {
         val credentialFieldPosition = sAddAccountCredential1.selectedItemPosition
         credential = etAddAccountCredential1.text.toString()
         password = etAddAccountPassword.text.toString()
-        websiteURL = etAddAccountWebsite.text.toString()
 
         return name.isNotEmpty() && credentialFieldPosition != 0 && credential.isNotEmpty() &&
-                password.isNotEmpty() && websiteURL.isNotEmpty()
+                password.isNotEmpty()
     }
 
     @SuppressLint("ClickableViewAccessibility")

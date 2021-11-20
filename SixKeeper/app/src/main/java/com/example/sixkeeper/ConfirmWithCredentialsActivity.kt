@@ -3,6 +3,7 @@ package com.example.sixkeeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
@@ -364,10 +365,9 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
         return waitingTime
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        return dateFormat.format(Date(elapsedRealtime)).toString()
     }
 
     private fun lockToast(waitingTime: Long) {

@@ -153,7 +153,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="@string/add_account_website"
+                android:text="@string/add_account_website_opt"
                 app:layout_constraintEnd_toStartOf="@+id/gAddAccountVertical91"
                 app:layout_constraintStart_toStartOf="@+id/gAddAccountVertical09"
                 app:layout_constraintTop_toBottomOf="@+id/etAddAccountPassword" />

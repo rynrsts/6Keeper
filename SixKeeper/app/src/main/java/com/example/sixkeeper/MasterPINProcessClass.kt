@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Gravity
@@ -325,10 +326,9 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         return waitingTime
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        return dateFormat.format(Date(elapsedRealtime)).toString()
     }
 
     @SuppressLint("ShowToast")

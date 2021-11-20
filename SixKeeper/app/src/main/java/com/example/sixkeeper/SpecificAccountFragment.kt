@@ -40,6 +40,7 @@ class SpecificAccountFragment : Fragment() {
     private lateinit var tvSpecificAccWebsiteURL: TextView
 
     private lateinit var key: ByteArray
+    private var websiteUrl = ""
     private var applicationName = ""
     private var packageName = ""
     private var passwordVisibility: Int = 0
@@ -134,11 +135,17 @@ class SpecificAccountFragment : Fragment() {
                         encryptionClass.decrypt(u.accountCredentialField, key)
                 tvSpecificAccCredential.text = encryptionClass.decrypt(u.accountCredential, key)
                 etSpecificAccPassword.setText(encryptionClass.decrypt(u.accountPassword, key))
-                tvSpecificAccWebsiteURL.text = encryptionClass.decrypt(u.accountWebsiteURL, key)
+                websiteUrl = encryptionClass.decrypt(u.accountWebsiteURL, key)
 
                 applicationName = encryptionClass.decrypt(u.accountApplicationName, key)
                 packageName = encryptionClass.decrypt(u.accountPackageName, key)
                 val description = encryptionClass.decrypt(u.accountDescription, key)
+
+                if (websiteUrl.isNotEmpty()) {
+                    tvSpecificAccWebsiteURL.text = websiteUrl
+                } else {
+                    tvSpecificAccWebsiteURL.text = "-"
+                }
 
                 if (applicationName.isNotEmpty()) {
                     tvSpecificAccAppName.text = applicationName
@@ -271,6 +278,8 @@ class SpecificAccountFragment : Fragment() {
                         dialogView.findViewById(R.id.llSpecificAccountWebView)
                 val ivSpecificAccountWebView: ImageView =
                         dialogView.findViewById(R.id.ivSpecificAccountWebView)
+                val tvSpecificAccountWebView: TextView =
+                        dialogView.findViewById(R.id.tvSpecificAccountWebView)
                 val llSpecificAccountApp: LinearLayout =
                         dialogView.findViewById(R.id.llSpecificAccountApp)
                 val ivSpecificAccountApp: ImageView =
@@ -281,41 +290,62 @@ class SpecificAccountFragment : Fragment() {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))        // Browser
                 var browserPackage = ""
 
-                try {                                                                               // Set default browser
-                    val resolveInfo: ResolveInfo = appCompatActivity.packageManager.resolveActivity(
-                            browserIntent, PackageManager.MATCH_DEFAULT_ONLY
-                    )!!
-                    val browserIcon = resolveInfo.activityInfo.loadIcon(
-                            requireContext().packageManager
-                    )
-                    val browserName = resolveInfo.activityInfo.loadLabel(
-                            requireContext().packageManager
-                    ).toString()
-                    browserPackage = resolveInfo.activityInfo.packageName
-                    val browserNameText = "$browserName (default browser)"
+                if (websiteUrl.isNotEmpty()) {
+                    try {                                                                           // Set default browser
+                        val resolveInfo: ResolveInfo =
+                                appCompatActivity.packageManager.resolveActivity(
+                                        browserIntent, PackageManager.MATCH_DEFAULT_ONLY
+                                )!!
+                        val browserIcon = resolveInfo.activityInfo.loadIcon(
+                                requireContext().packageManager
+                        )
+                        val browserName = resolveInfo.activityInfo.loadLabel(
+                                requireContext().packageManager
+                        ).toString()
+                        browserPackage = resolveInfo.activityInfo.packageName
+                        val browserNameText = "$browserName (default browser)"
 
-                    ivSpecificAccountBrowser.setImageDrawable(browserIcon)
-                    tvSpecificAccountBrowser.text = browserNameText
-                } catch (e: Exception) {                                                            // Cannot detect default browser
+                        ivSpecificAccountBrowser.setImageDrawable(browserIcon)
+                        tvSpecificAccountBrowser.text = browserNameText
+                    } catch (e: Exception) {                                                        // Cannot detect default browser
+                        llSpecificAccountBrowser.isEnabled = false
+                        ivSpecificAccountBrowser.setImageDrawable(null)
+                        tvSpecificAccountBrowser.apply {
+                            val noDefaultBrowser = "Cannot detect default browser"
+                            text = noDefaultBrowser
+                            setTextColor(ContextCompat.getColor(context, R.color.gray))
+                        }
+                    }
+                } else {
                     llSpecificAccountBrowser.isEnabled = false
                     ivSpecificAccountBrowser.setImageDrawable(null)
                     tvSpecificAccountBrowser.apply {
-                        val noDefaultBrowser = "Cannot detect default browser"
-                        text = noDefaultBrowser
+                        val noApplication = "No Website URL"
+                        text = noApplication
                         setTextColor(ContextCompat.getColor(context, R.color.gray))
                     }
                 }
 
                 val packageManager: PackageManager = appCompatActivity.packageManager
 
-                val sixKeeperPackageName = requireContext().packageName                             // 6Keeper app
-                val sixKeeperIcon = packageManager.getApplicationIcon(
-                        packageManager.getApplicationInfo(
-                                sixKeeperPackageName, PackageManager.GET_META_DATA
-                        )
-                )
+                if (websiteUrl.isNotEmpty()) {
+                    val sixKeeperPackageName = requireContext().packageName                         // 6Keeper app
+                    val sixKeeperIcon = packageManager.getApplicationIcon(
+                            packageManager.getApplicationInfo(
+                                    sixKeeperPackageName, PackageManager.GET_META_DATA
+                            )
+                    )
 
-                ivSpecificAccountWebView.setImageDrawable(sixKeeperIcon)
+                    ivSpecificAccountWebView.setImageDrawable(sixKeeperIcon)
+                } else {
+                    llSpecificAccountWebView.isEnabled = false
+                    ivSpecificAccountWebView.setImageDrawable(null)
+                    tvSpecificAccountWebView.apply {
+                        val noApplication = "No Website URL"
+                        text = noApplication
+                        setTextColor(ContextCompat.getColor(context, R.color.gray))
+                    }
+                }
 
                 if (applicationName.isNotEmpty()) {                                                 // Selected app
                     val applicationNameText = "$applicationName (selected app)"

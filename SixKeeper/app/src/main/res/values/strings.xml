@@ -29,6 +29,7 @@
     </string>
     <string name="add_account_select_app">Select App</string>
     <string name="add_account_website">Website URL</string>
+    <string name="add_account_website_opt">Website URL (Optional)</string>
 
     <!-- Accounts -->
     <string name="accounts_categories">Categories</string>

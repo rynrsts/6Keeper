@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import android.os.SystemClock
 import android.view.Gravity
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -321,8 +322,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     }
 
     private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        return dateFormat.format(Date(elapsedRealtime)).toString()
     }
 
     private fun restartAttemptAndTime() {
