@@ -35,7 +35,22 @@ class RecycleBinListAdapter(
         tvRecycleBinName.text = name[position]
 
         if (icon == "accounts") {
+            val llRecycleBinHierarchy =
+                    rowView.findViewById(R.id.llRecycleBinHierarchy) as LinearLayout
+            val tvHierarchy = TextView(context)
+
+            tvHierarchy.apply {
+                layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                text = modelArrayList[position].getCategoryName() +
+                        " > " +
+                        modelArrayList[position].getPlatformName()
+                textSize = 14F
+            }
             ivRecycleBinIcon.setImageResource(R.drawable.ic_account_circle_light_gray)
+            llRecycleBinHierarchy.addView(tvHierarchy)
         } else if (icon == "passwords") {
             ivRecycleBinIcon.setImageResource(R.drawable.ic_lock_light_black)
         }
