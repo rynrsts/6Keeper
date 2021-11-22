@@ -147,7 +147,7 @@ class SettingsFragment : Fragment() {
         val userSettings: List<UserSettingsModelClass> = databaseHandlerClass.viewSettings()
 
         for (u in userSettings) {
-            if (encryptionClass.decrypt(u.screenCapture, key) == "1") {                                 // Screen Capture
+            if (encryptionClass.decrypt(u.screenCapture, key) == "1") {                             // Screen Capture
                 scSettingsScreenCapture.apply {
                     tag = "screen capture"
                     isChecked = true
@@ -163,7 +163,7 @@ class SettingsFragment : Fragment() {
                 tvSettingsScreenCaptureDesc.setText(R.string.settings_block_screen_capture)
             }
 
-            if (encryptionClass.decrypt(u.autoLock, key) == "1") {                                      // Auto Lock
+            if (encryptionClass.decrypt(u.autoLock, key) == "1") {                                  // Auto Lock
                 scSettingsAutoLock.apply {
                     tag = "auto lock"
                     isChecked = true
@@ -179,7 +179,7 @@ class SettingsFragment : Fragment() {
                 disableAutoLock()
             }
 
-            tvSettingsAutoLockTimerSeconds.text = encryptionClass.decrypt(u.autoLockTimer, key)         // Auto lock timer
+            tvSettingsAutoLockTimerSeconds.text = encryptionClass.decrypt(u.autoLockTimer, key)     // Auto lock timer
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {                                   // Fingerprint
                 try {

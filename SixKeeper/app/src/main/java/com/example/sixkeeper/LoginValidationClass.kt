@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Environment
 import android.os.SystemClock
 import android.view.Gravity
@@ -127,7 +128,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         key = (decodedUserId + decodedUserId + decodedUserId.substring(0, 2)).toByteArray()
         encryptedUsername = encryptionClass.encrypt(etLoginUsername.text.toString(), key)
         encryptedPassword = encryptionClass.hash(etLoginPassword.text.toString())
-        val encryptedStatus = encryptionClass.encrypt(0.toString(), key)
         val button = Button(this)
 
         databaseReference = firebaseDatabase.getReference(decodedUserId)
@@ -155,7 +155,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         statusRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                status = dataSnapshot.getValue(String::class.java).toString()
+                val value = dataSnapshot.getValue(String::class.java).toString()
+                status = encryptionClass.decrypt(value, key)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -212,7 +213,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
             if (
                     encryptedUsername == username && encryptedPassword == password &&
-                    encryptedStatus == status
+                    0.toString() == status
             ) {
                 if (waitingTime == 0.toLong()) {
                     restartAttemptAndTime()
@@ -236,7 +237,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 }
             } else if (
                     encryptedUsername == username && encryptedPassword == password &&
-                    encryptedStatus != status
+                    0.toString() != status
             ) {
                 if (waitingTime == 0.toLong()) {
                     val toast: Toast = Toast.makeText(
@@ -332,7 +333,10 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     }
 
     private fun updateUserStatus() {                                                                // Update account status to 1
-        val encryptedActiveStatus = encryptionClass.encrypt(1.toString(), key)
+        val encryptedActiveStatus = encryptionClass.encrypt(
+                1.toString() + "ramjcammjar" + getUniquePseudoID(),
+                key
+        )
         databaseReference.child("status").setValue(encryptedActiveStatus)
     }
     
@@ -354,6 +358,36 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
             setGravity(Gravity.CENTER, 0, 0)
             show()
         }
+    }
+
+    private fun getUniquePseudoID(): String {
+        @Suppress("DEPRECATION")
+        val mSzDevIDShort = "35" +
+                Build.BOARD.length % 10 +
+                Build.BRAND.length % 10 +
+                Build.CPU_ABI.length % 10 +
+                Build.DEVICE.length % 10 +
+                Build.DISPLAY.length % 10 +
+                Build.HOST.length % 10 +
+                Build.ID.length % 10 +
+                Build.MANUFACTURER.length % 10 +
+                Build.MODEL.length % 10 +
+                Build.PRODUCT.length % 10 +
+                Build.TAGS.length % 10 +
+                Build.TYPE.length % 10 +
+                Build.USER.length % 10
+        var serial: String
+
+        try {
+            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            serial = Build::class.java.getField("SERIAL")[null].toString()
+
+            return UUID(mSzDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
+        } catch (exception: java.lang.Exception) {
+            serial = "serial"
+        }
+
+        return UUID(mSzDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
     }
 
     private fun updateAccountStatus(pwWrongAttempt: String) {                                       // Update password wrong attempt

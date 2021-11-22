@@ -1,6 +1,7 @@
 package com.example.sixkeeper
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -8,6 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.*
 
 
 class MainActivity : ChangeStatusBarToWhiteClass() {
@@ -45,12 +47,20 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         val databaseReference = firebaseDatabase.getReference(userId)
         val statusReference = databaseReference.child("status")
         var status = ""
+        var deviceId = ""
         val button = Button(this)
 
         statusReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value != null) {
-                    status = dataSnapshot.getValue(String::class.java).toString()
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    val decryptedValue = encryptionClass.decrypt(value, key)
+                    val splitValue = decryptedValue.split("ramjcammjar")
+                    status = splitValue[0]
+
+                    if (splitValue.size == 2) {
+                        deviceId = splitValue[1]
+                    }
 
                     button.performClick()
                 } else {
@@ -62,7 +72,7 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         })
 
         button.setOnClickListener {
-            if (encryptionClass.encrypt(1.toString(), key) == status) {                             // Go to login (Master PIN)
+            if (1.toString() == status && deviceId == getUniquePseudoID()) {                        // Go to login (Master PIN)
                 val goToMasterPINActivity =
                         Intent(this, MasterPINActivity::class.java)
                 startActivity(goToMasterPINActivity)
@@ -83,5 +93,35 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
         startActivity(goToLoginActivity)
 
         this.finish()
+    }
+
+    private fun getUniquePseudoID(): String {
+        @Suppress("DEPRECATION")
+        val mSzDevIDShort = "35" +
+                Build.BOARD.length % 10 +
+                Build.BRAND.length % 10 +
+                Build.CPU_ABI.length % 10 +
+                Build.DEVICE.length % 10 +
+                Build.DISPLAY.length % 10 +
+                Build.HOST.length % 10 +
+                Build.ID.length % 10 +
+                Build.MANUFACTURER.length % 10 +
+                Build.MODEL.length % 10 +
+                Build.PRODUCT.length % 10 +
+                Build.TAGS.length % 10 +
+                Build.TYPE.length % 10 +
+                Build.USER.length % 10
+        var serial: String
+
+        try {
+            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            serial = Build::class.java.getField("SERIAL")[null].toString()
+
+            return UUID(mSzDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
+        } catch (exception: java.lang.Exception) {
+            serial = "serial"
+        }
+
+        return UUID(mSzDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
     }
 }
