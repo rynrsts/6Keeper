@@ -69,7 +69,9 @@ class SixKeeperContext : Application() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value != null) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    status = encryptionClass.decrypt(value, key)
+                    val decryptedValue = encryptionClass.decrypt(value, key)
+                    val selectedValue = decryptedValue.split("ramjcammjar")
+                    status = selectedValue[0]
                     count++
 
                     if (count == 1) {

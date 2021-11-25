@@ -10,10 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.fingerprint.FingerprintManager
-import android.os.Build
-import android.os.CancellationSignal
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import android.view.Gravity
 import android.widget.Button
 import android.widget.Toast
@@ -302,8 +299,8 @@ class FingerprintHandlerClass(
     }
 
     private fun getCurrentDate(): String {
-        val calendar: Calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
+        val elapsedRealtime = SystemClock.elapsedRealtime()
+        return dateFormat.format(Date(elapsedRealtime)).toString()
     }
 
     private fun vibrator() {
