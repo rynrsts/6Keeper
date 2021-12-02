@@ -236,7 +236,8 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
         val encryptedUsername = encryptionClass.encrypt(
                 etConfirmCredentialsUsername.text.toString(), key
         )
-        val encryptedPassword = encryptionClass.hash(etConfirmCredentialsPassword.text.toString())
+        val aesPassword = encryptionClass.encrypt(etConfirmCredentialsPassword.text.toString(), key)
+        val encryptedPassword = encryptionClass.hash(aesPassword)
         val button = Button(this)
 
         val usernameRef = databaseReference.child("username")

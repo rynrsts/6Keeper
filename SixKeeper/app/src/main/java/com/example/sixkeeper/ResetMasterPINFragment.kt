@@ -139,7 +139,8 @@ class ResetMasterPINFragment : Fragment() {
 
                     builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                         if (InternetConnectionClass().isConnected()) {
-                            val encryptedInput = encryptionClass.hash(masterPin.toString())
+                            val aesEncryption = encryptionClass.encrypt(masterPin.toString(), key)
+                            val encryptedInput = encryptionClass.hash(aesEncryption)
 
                             var actionLogId = 1000001
                             val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -246,7 +247,8 @@ class ResetMasterPINFragment : Fragment() {
             requestCode == 14523 && resultCode == 14523 -> {
                 if (data != null) {
                     val input = data.getIntExtra("masterPin", 0)
-                    val encryptedInput = encryptionClass.hash(input.toString())
+                    val aesEncryption = encryptionClass.encrypt(input.toString(), key)
+                    val encryptedInput = encryptionClass.hash(aesEncryption)
 
                     if (!masterPinVal.contentEquals(encryptedInput)) {
                         masterPin = input

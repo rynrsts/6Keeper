@@ -95,7 +95,8 @@ class ResetPasswordFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
                 val decryptedValue = encryptionClass.decrypt(value, key)
-                usernameVal = encryptionClass.hash(decryptedValue)
+                val aesEncryption = encryptionClass.encrypt(decryptedValue, key)
+                usernameVal = encryptionClass.hash(aesEncryption)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -124,7 +125,8 @@ class ResetPasswordFragment : Fragment() {
                 val confirmPass = etResetPasswordConfirmPass.text.toString()
 
                 if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                    val encryptedInput = encryptionClass.hash(newPass)
+                    val aesEncryption = encryptionClass.encrypt(newPass, key)
+                    val encryptedInput = encryptionClass.hash(aesEncryption)
 
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&

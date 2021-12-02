@@ -335,7 +335,8 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPIN(                                                              // Validate Master PIN
             pinI: Int, masterPin: String, mPinWrongAttempt: String, view: View
     ) {
-        val encryptedMasterPIN = encryptionClass.hash(pinI.toString())
+        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
+        val encryptedMasterPIN = encryptionClass.hash(aesEncryption)
 
         if (encryptedMasterPIN == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")

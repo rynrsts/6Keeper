@@ -327,7 +327,8 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPin(pinI: Int, masterPin: String, mPinWrongAttempt: String) {     // Validate Master PIN
         val encryptionClass = EncryptionClass()
 
-        val encryptedAutoLockLogin = encryptionClass.hash(pinI.toString())
+        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
+        val encryptedAutoLockLogin = encryptionClass.hash(aesEncryption)
 
         if (encryptedAutoLockLogin == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")

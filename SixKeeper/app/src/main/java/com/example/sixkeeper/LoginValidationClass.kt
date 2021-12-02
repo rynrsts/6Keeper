@@ -127,7 +127,8 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         val decodedUserId = encryptionClass.decode(userId)
         key = (decodedUserId + decodedUserId + decodedUserId.substring(0, 2)).toByteArray()
         encryptedUsername = encryptionClass.encrypt(etLoginUsername.text.toString(), key)
-        encryptedPassword = encryptionClass.hash(etLoginPassword.text.toString())
+        val aesPassword = encryptionClass.encrypt(etLoginPassword.text.toString(), key)
+        encryptedPassword = encryptionClass.hash(aesPassword)
         val button = Button(this)
 
         databaseReference = firebaseDatabase.getReference(decodedUserId)

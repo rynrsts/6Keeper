@@ -751,7 +751,7 @@ open class UserAccountEditProcessClass : Fragment() {
                     var count = 0
                     val input = etUserEditTextBox.text.toString()
                     val encryptedInput = encryptionClass.encrypt(input, key)
-                    val hashedInput = encryptionClass.hash(input)
+                    val hashedInput = encryptionClass.hash(encryptedInput)
 
                     passwordRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -786,7 +786,8 @@ open class UserAccountEditProcessClass : Fragment() {
                 }
                 "password" -> {
                     val currentPass = etUserEditCurrentPass.text.toString()
-                    val encryptedCurrentPass = encryptionClass.hash(currentPass)
+                    val aesEncryption = encryptionClass.encrypt(currentPass, key)
+                    val encryptedCurrentPass = encryptionClass.hash(aesEncryption)
 
                     if (encryptedCurrentPass.contentEquals(password)) {
                         updateAccPassword()
@@ -813,7 +814,8 @@ open class UserAccountEditProcessClass : Fragment() {
                     val masterPinRef = databaseReference.child("masterPin")
                     var masterPinVal = ""
                     var count = 0
-                    val encryptedInput = encryptionClass.hash(masterPin.toString())
+                    val aesEncryption = encryptionClass.encrypt(masterPin.toString(), key)
+                    val encryptedInput = encryptionClass.hash(aesEncryption)
 
                     masterPinRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -923,7 +925,8 @@ open class UserAccountEditProcessClass : Fragment() {
 
     private fun updateAccPassword() {                                                               // Update Password
         val input = etUserEditNewPass.text.toString()
-        val encryptedInput =  encryptionClass.hash(input)
+        val aesEncryption = encryptionClass.encrypt(input, key)
+        val encryptedInput =  encryptionClass.hash(aesEncryption)
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(

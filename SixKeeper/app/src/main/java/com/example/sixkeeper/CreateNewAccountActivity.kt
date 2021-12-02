@@ -157,8 +157,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
 
         val encodedUserId = encryptionClass.encode(userId.toString())
         encryptedUsername = encryptionClass.encrypt(username, key)
-        encryptedPassword = encryptionClass.hash(password)
-        encryptedMasterPin = encryptionClass.hash(masterPin.toString())
+        val aesPassword = encryptionClass.encrypt(password, key)
+        encryptedPassword = encryptionClass.hash(aesPassword)
+        val aesMasterPin = encryptionClass.encrypt(masterPin.toString(), key)
+        encryptedMasterPin = encryptionClass.hash(aesMasterPin)
         encryptedStatus = encryptionClass.encrypt(0.toString(), key)
         encryptedFirstName = encryptionClass.encrypt(firstName, key)
         encryptedLastName = encryptionClass.encrypt(lastName, key)

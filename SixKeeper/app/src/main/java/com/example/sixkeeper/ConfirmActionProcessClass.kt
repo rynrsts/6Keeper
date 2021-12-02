@@ -340,7 +340,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPin(pinI: Int, masterPin: String, mPinWrongAttempt: String) {     // Validate Master PIN
         val encryptionClass = EncryptionClass()
 
-        val encryptedConfirmAction = encryptionClass.hash(pinI.toString())
+        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
+        val encryptedConfirmAction = encryptionClass.hash(aesEncryption)
 
         if (encryptedConfirmAction == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
