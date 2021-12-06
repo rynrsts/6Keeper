@@ -32,7 +32,6 @@ class EmailVerificationFragment : Fragment() {
     private lateinit var etEmailVerificationEmail: EditText
 
     private var userId = ""
-    private lateinit var key: ByteArray
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -66,7 +65,6 @@ class EmailVerificationFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         mAuth = FirebaseAuth.getInstance()
@@ -83,7 +81,7 @@ class EmailVerificationFragment : Fragment() {
         emailRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                email = encryptionClass.decrypt(value, key)
+                email = encryptionClass.decrypt(value, userId)
                 count++
 
                 if (count == 1) {

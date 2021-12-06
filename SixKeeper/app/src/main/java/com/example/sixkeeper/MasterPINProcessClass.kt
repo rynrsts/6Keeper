@@ -57,7 +57,6 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private val temp: Stack<Int> = Stack()
 
     private var userId: String = ""
-    private lateinit var key: ByteArray
 
     fun getAcbMasterPINButton1(): Button {
         return acbMasterPINButton1
@@ -143,13 +142,12 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
     fun setFingerprintOff() {
         databaseHandlerClass.updateSettings(
-                "fingerprint", encryptionClass.encrypt(0.toString(), key)
+                "fingerprint", encryptionClass.encrypt(0.toString(), userId)
         )
     }
 
@@ -158,7 +156,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, key))
+            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, userId))
         }
 
         return fingerprintStatus
@@ -214,7 +212,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinWrongAttempt = encryptionClass.decrypt(value, key)
+                        mPinWrongAttempt = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -223,7 +221,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinLockTime = encryptionClass.decrypt(value, key)
+                        mPinLockTime = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -335,8 +333,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     private fun validateUserMasterPIN(                                                              // Validate Master PIN
             pinI: Int, masterPin: String, mPinWrongAttempt: String, view: View
     ) {
-        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
-        val encryptedMasterPIN = encryptionClass.hash(aesEncryption)
+        val encryptedMasterPIN = encryptionClass.encryptOnly(pinI.toString(), userId)
 
         if (encryptedMasterPIN == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
@@ -363,7 +360,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
 
             wrongAttempt++
 
-            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), userId)
             databaseReference.child("mpinWrongAttempt").setValue(encryptedWrongAttempt)
 
             var toast: Toast = Toast.makeText(
@@ -375,9 +372,9 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
                     timer *= 2
                 }
 
-                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), userId)
                 val encryptedFWrongAttempt =
-                        encryptionClass.encrypt((wrongAttempt * 2).toString(), key)
+                        encryptionClass.encrypt((wrongAttempt * 2).toString(), userId)
 
                 databaseReference.child("mpinLockTime").setValue(encryptedCurrentDate)
                 databaseReference.child("fwrongAttempt")
@@ -491,7 +488,7 @@ open class MasterPINProcessClass : ChangeStatusBarToWhiteClass() {
     }
 
     fun updateUserStatus() {                                                                        // Update account status to 0
-        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), key)
+        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), userId)
         databaseReference.child("status").setValue(encryptedInactiveStatus)
     }
 

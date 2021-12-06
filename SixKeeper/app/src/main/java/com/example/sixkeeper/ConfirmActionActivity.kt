@@ -292,7 +292,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    mPinWrongAttempt = getEncryptionClass().decrypt(value, getKey())
+                    mPinWrongAttempt = getEncryptionClass().decrypt(value, getUserId())
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {}
@@ -301,7 +301,7 @@ class ConfirmActionActivity : ConfirmActionProcessClass(), LifecycleObserver {
             mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    mPinLockTime = getEncryptionClass().decrypt(value, getKey())
+                    mPinLockTime = getEncryptionClass().decrypt(value, getUserId())
                     count++
 
                     if (count == 1) {

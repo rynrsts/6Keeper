@@ -33,7 +33,6 @@ class SecurityQuestionFragment : Fragment() {
     private lateinit var etSecurityQuestionMobileNumber: EditText
 
     private var userId = ""
-    private lateinit var key: ByteArray
     private lateinit var firstNameD: String
     private lateinit var lastNameD: String
     private lateinit var birthDateD: String
@@ -91,7 +90,6 @@ class SecurityQuestionFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         val firstNameRef = databaseReference.child("firstName")
@@ -209,13 +207,13 @@ class SecurityQuestionFragment : Fragment() {
         acbSecurityQuestionConfirm.setOnClickListener {
             if (InternetConnectionClass().isConnected()) {
                 if (isNotEmpty()) {
-                    val encryptedFirstName = encryptionClass.encrypt(firstName, key)
-                    val encryptedLastName = encryptionClass.encrypt(lastName, key)
-                    val encryptedBirthDate = encryptionClass.encrypt(birthDate, key)
-                    val encryptedEmail = encryptionClass.encrypt(email, key)
-                    val encryptedMobileNumber = encryptionClass.encrypt(mobileNumber, key)
+                    val encryptedFirstName = encryptionClass.encrypt(firstName, userId)
+                    val encryptedLastName = encryptionClass.encrypt(lastName, userId)
+                    val encryptedBirthDate = encryptionClass.encrypt(birthDate, userId)
+                    val encryptedEmail = encryptionClass.encrypt(email, userId)
+                    val encryptedMobileNumber = encryptionClass.encrypt(mobileNumber, userId)
 
-                    val immKeyboard: InputMethodManager =
+                    val immuserIdboard: InputMethodManager =
                             appCompatActivity.getSystemService(
                                     Context.INPUT_METHOD_SERVICE
                             ) as InputMethodManager
@@ -230,8 +228,8 @@ class SecurityQuestionFragment : Fragment() {
                         val forgotCredentialsActivity: ForgotCredentialsActivity =
                                 activity as ForgotCredentialsActivity
 
-                        if (immKeyboard.isActive) {
-                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                        if (immuserIdboard.isActive) {
+                            immuserIdboard.hideSoftInputFromWindow(                                 // Close keyboard
                                     appCompatActivity.currentFocus?.windowToken,
                                     0
                             )
@@ -241,8 +239,8 @@ class SecurityQuestionFragment : Fragment() {
                                 forgotCredentialsActivity.getCredential()
                         )
                     } else {
-                        if (immKeyboard.isActive) {
-                            immKeyboard.hideSoftInputFromWindow(                                    // Close keyboard
+                        if (immuserIdboard.isActive) {
+                            immuserIdboard.hideSoftInputFromWindow(                                 // Close keyboard
                                     appCompatActivity.currentFocus?.windowToken,
                                     0
                             )

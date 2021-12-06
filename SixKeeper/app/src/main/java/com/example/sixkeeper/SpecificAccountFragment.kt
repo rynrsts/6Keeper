@@ -39,7 +39,7 @@ class SpecificAccountFragment : Fragment() {
     private lateinit var etSpecificAccPassword: EditText
     private lateinit var tvSpecificAccWebsiteURL: TextView
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private var websiteUrl = ""
     private var applicationName = ""
     private var packageName = ""
@@ -83,13 +83,10 @@ class SpecificAccountFragment : Fragment() {
         tvSpecificAccWebsiteURL = appCompatActivity.findViewById(R.id.tvSpecificAccWebsiteURL)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun setActionBarTitle() {
@@ -113,8 +110,8 @@ class SpecificAccountFragment : Fragment() {
     private fun populateAccountData() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
-                encryptionClass.encrypt(args.specificPlatformId, key),
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(args.specificPlatformId, userId),
+                encryptionClass.encrypt(0.toString(), userId)
         )
         var platformName = ""
         var categoryName = ""
@@ -129,17 +126,17 @@ class SpecificAccountFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.llSpecificAccFavorites)
 
         for (u in userAccount) {
-            if (args.specificAccountId == encryptionClass.decrypt(u.accountId, key)) {
-                tvSpecificAccName.text = encryptionClass.decrypt(u.accountName, key)
+            if (args.specificAccountId == encryptionClass.decrypt(u.accountId, userId)) {
+                tvSpecificAccName.text = encryptionClass.decrypt(u.accountName, userId)
                 tvSpecificAccCredentialField.text =
-                        encryptionClass.decrypt(u.accountCredentialField, key)
-                tvSpecificAccCredential.text = encryptionClass.decrypt(u.accountCredential, key)
-                etSpecificAccPassword.setText(encryptionClass.decrypt(u.accountPassword, key))
-                websiteUrl = encryptionClass.decrypt(u.accountWebsiteURL, key)
+                        encryptionClass.decrypt(u.accountCredentialField, userId)
+                tvSpecificAccCredential.text = encryptionClass.decrypt(u.accountCredential, userId)
+                etSpecificAccPassword.setText(encryptionClass.decrypt(u.accountPassword, userId))
+                websiteUrl = encryptionClass.decrypt(u.accountWebsiteURL, userId)
 
-                applicationName = encryptionClass.decrypt(u.accountApplicationName, key)
-                packageName = encryptionClass.decrypt(u.accountPackageName, key)
-                val description = encryptionClass.decrypt(u.accountDescription, key)
+                applicationName = encryptionClass.decrypt(u.accountApplicationName, userId)
+                packageName = encryptionClass.decrypt(u.accountPackageName, userId)
+                val description = encryptionClass.decrypt(u.accountDescription, userId)
 
                 if (websiteUrl.isNotEmpty()) {
                     tvSpecificAccWebsiteURL.text = websiteUrl
@@ -159,15 +156,15 @@ class SpecificAccountFragment : Fragment() {
                     tvSpecificAccDescription.text = "-"
                 }
 
-                if (encryptionClass.decrypt(u.accountIsFavorites, key) == "1") {
+                if (encryptionClass.decrypt(u.accountIsFavorites, userId) == "1") {
                     val inflatedView = layoutInflater.inflate(
                             R.layout.layout_favorites_star, null, true
                     )
                     llSpecificAccFavorites.addView(inflatedView)
                 }
 
-                platformName = encryptionClass.decrypt(u.platformName, key)
-                categoryName = encryptionClass.decrypt(u.categoryName, key)
+                platformName = encryptionClass.decrypt(u.platformName, userId)
+                categoryName = encryptionClass.decrypt(u.categoryName, userId)
             }
         }
 
@@ -509,10 +506,10 @@ class SpecificAccountFragment : Fragment() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                         encryptionClass.encrypt(
-                                "$field from account '$accountName' was copied.", key),
-                        encryptionClass.encrypt(getCurrentDate(), key)
+                                "$field from account '$accountName' was copied.", userId),
+                        encryptionClass.encrypt(getCurrentDate(), userId)
                 )
         )
     }
@@ -522,7 +519,7 @@ class SpecificAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -555,9 +552,9 @@ class SpecificAccountFragment : Fragment() {
         if (requestCode == 16914 && resultCode == 16914) {                                          // If Master PIN is correct
             view?.apply {
                 val status = databaseHandlerClass.updateDeleteAccount(
-                        encryptionClass.encrypt(args.specificAccountId, key),
-                        encryptionClass.encrypt(1.toString(), key),
-                        encryptionClass.encrypt(getCurrentDate(), key),
+                        encryptionClass.encrypt(args.specificAccountId, userId),
+                        encryptionClass.encrypt(1.toString(), userId),
+                        encryptionClass.encrypt(getCurrentDate(), userId),
                         "AccountsTable",
                         "account_id",
                         "account_deleted",
@@ -580,15 +577,15 @@ class SpecificAccountFragment : Fragment() {
                 val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
                 if (lastId.isNotEmpty()) {
-                    actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+                    actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
                 }
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encryptionClass.encrypt(actionLogId.toString(), key),
+                                encryptionClass.encrypt(actionLogId.toString(), userId),
                                 encryptionClass.encrypt("Account " +
-                                        "'${args.specificAccountName}' was deleted.", key),
-                                encryptionClass.encrypt(getCurrentDate(), key)
+                                        "'${args.specificAccountName}' was deleted.", userId),
+                                encryptionClass.encrypt(getCurrentDate(), userId)
                         )
                 )
 

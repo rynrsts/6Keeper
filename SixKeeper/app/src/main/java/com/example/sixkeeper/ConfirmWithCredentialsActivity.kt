@@ -27,7 +27,6 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
     private lateinit var ivConfirmCredentialsTogglePass: ImageView
 
     private lateinit var userId: String
-    private lateinit var key: ByteArray
     private lateinit var username: String
     private lateinit var password: String
     private var passwordVisibility: Int = 0
@@ -63,7 +62,6 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -192,7 +190,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
             pwWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    pwWrongAttempt = encryptionClass.decrypt(value, key)
+                    pwWrongAttempt = encryptionClass.decrypt(value, userId)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {}
@@ -201,7 +199,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
             pwLockTimeRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    pwLockTime = encryptionClass.decrypt(value, key)
+                    pwLockTime = encryptionClass.decrypt(value, userId)
                     count++
 
                     if (count == 1) {
@@ -218,7 +216,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
                 if (waitingTime == 0.toLong()) {
                     onBackPressed()
                 } else {
-                    val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), key)
+                    val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), userId)
                     databaseReference.child("status").setValue(encryptedInactiveStatus)
                 }
             }
@@ -234,10 +232,11 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
 
     private fun validateUserCredential() {                                                          // Validate username and password
         val encryptedUsername = encryptionClass.encrypt(
-                etConfirmCredentialsUsername.text.toString(), key
+                etConfirmCredentialsUsername.text.toString(), userId
         )
-        val aesPassword = encryptionClass.encrypt(etConfirmCredentialsPassword.text.toString(), key)
-        val encryptedPassword = encryptionClass.hash(aesPassword)
+        val encryptedPassword = encryptionClass.encryptOnly(
+                etConfirmCredentialsPassword.text.toString(), userId
+        )
         val button = Button(this)
 
         val usernameRef = databaseReference.child("username")
@@ -262,7 +261,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
         pwWrongAttemptRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                pwWrongAttempt = encryptionClass.decrypt(value, key)
+                pwWrongAttempt = encryptionClass.decrypt(value, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -271,7 +270,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
         pwLockTimeRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                pwLockTime = encryptionClass.decrypt(value, key)
+                pwLockTime = encryptionClass.decrypt(value, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -298,13 +297,13 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
                     databaseReference.child("pwWrongAttempt").setValue("")
                     databaseReference.child("pwLockTime").setValue("")
 
-                    val immKeyboard: InputMethodManager = getSystemService(
+                    val immuserIdboard: InputMethodManager = getSystemService(
                             Context.INPUT_METHOD_SERVICE
                     ) as InputMethodManager
 
                     when {
-                        immKeyboard.isActive ->
-                            immKeyboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)       // Close keyboard
+                        immuserIdboard.isActive ->
+                            immuserIdboard.hideSoftInputFromWindow(currentFocus?.windowToken, 0)       // Close userIdboard
                     }
 
                     setResult(451320)
@@ -401,7 +400,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
 
         wrongAttempt++
 
-        val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+        val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), userId)
 
         databaseReference.child("pwWrongAttempt").setValue(encryptedWrongAttempt)
 
@@ -410,7 +409,7 @@ class ConfirmWithCredentialsActivity : ChangeStatusBarToWhiteClass() {
                 timer *= 2
             }
 
-            val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+            val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), userId)
 
             databaseReference.child("pwLockTime").setValue(encryptedCurrentDate)
 

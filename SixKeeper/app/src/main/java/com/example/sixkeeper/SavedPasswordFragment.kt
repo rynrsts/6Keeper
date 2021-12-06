@@ -29,7 +29,7 @@ class SavedPasswordFragment : Fragment() {
     private val modelArrayList = ArrayList<SavedPasswordModelClass>(0)
     private lateinit var savedPasswordModelClass: SavedPasswordModelClass
     
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -62,19 +62,16 @@ class SavedPasswordFragment : Fragment() {
         lvSavedPasswordContainer = appCompatActivity.findViewById(R.id.lvSavedPasswordContainer)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     @SuppressLint("InflateParams")
     private fun viewSavedPass() {                                                                   // View saved password
         val userSavedPass: List<UserSavedPassModelClass> =
-                databaseHandlerClass.viewSavedPass(encryptionClass.encrypt(0.toString(), key))
+                databaseHandlerClass.viewSavedPass(encryptionClass.encrypt(0.toString(), userId))
         val userSavedPassId = ArrayList<String>(0)
         val userSavedPassPassword = ArrayList<String>(0)
         val userSavedPassCreationDate = ArrayList<String>(0)
@@ -103,12 +100,12 @@ class SavedPasswordFragment : Fragment() {
             }
         } else {
             for (u in userSavedPass) {
-                val uId = encryptionClass.decrypt(u.passId, key)
-                val uPassword = encryptionClass.decrypt(u.generatedPassword, key)
+                val uId = encryptionClass.decrypt(u.passId, userId)
+                val uPassword = encryptionClass.decrypt(u.generatedPassword, userId)
 
                 userSavedPassId.add(uId)
                 userSavedPassPassword.add(uPassword)
-                userSavedPassCreationDate.add(encryptionClass.decrypt(u.creationDate, key))
+                userSavedPassCreationDate.add(encryptionClass.decrypt(u.creationDate, userId))
 
                 savedPasswordModelClass = SavedPasswordModelClass()
                 savedPasswordModelClass.setSelected(false)
@@ -234,11 +231,11 @@ class SavedPasswordFragment : Fragment() {
 
                         databaseHandlerClass.addEventToActionLog(                                   // Add event to Action Log
                                 UserActionLogModelClass(
-                                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                        encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                                         encryptionClass.encrypt(
-                                                "Selected saved password was copied.", key
+                                                "Selected saved password was copied.", userId
                                         ),
-                                        encryptionClass.encrypt(getCurrentDate(), key)
+                                        encryptionClass.encrypt(getCurrentDate(), userId)
                                 )
                         )
                     } else {
@@ -292,7 +289,7 @@ class SavedPasswordFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -318,7 +315,7 @@ class SavedPasswordFragment : Fragment() {
                         container.add(
                                 encryptionClass.encrypt(
                                         modelArrayList[i].getId().toString(),
-                                        key
+                                        userId
                                 )
                         )
                     }
@@ -329,8 +326,8 @@ class SavedPasswordFragment : Fragment() {
 
                 val status = databaseHandlerClass.updateDeleteMultipleAccount(
                         selectedId,
-                        encryptionClass.encrypt(1.toString(), key),
-                        encryptionClass.encrypt(getCurrentDate(), key),
+                        encryptionClass.encrypt(1.toString(), userId),
+                        encryptionClass.encrypt(getCurrentDate(), userId),
                         "SavedPasswordTable",
                         "pass_id",
                         "pass_deleted",
@@ -351,11 +348,11 @@ class SavedPasswordFragment : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                                 encryptionClass.encrypt(
-                                        "Selected saved password/s were deleted.", key
+                                        "Selected saved password/s were deleted.", userId
                                 ),
-                                encryptionClass.encrypt(getCurrentDate(), key)
+                                encryptionClass.encrypt(getCurrentDate(), userId)
                         )
                 )
 

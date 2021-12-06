@@ -31,7 +31,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
     private lateinit var cbPassGeneratorNumber: CheckBox
     private lateinit var cbPassGeneratorSpecialChar: CheckBox
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var passwordType: String
 
     @Suppress("DEPRECATION")
@@ -90,13 +90,10 @@ open class PasswordGeneratorProcessClass : Fragment() {
         llPassGeneratorContainer = appCompatActivity.findViewById(R.id.llPassGeneratorContainer)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
 
         passwordType = "medium"
     }
@@ -127,7 +124,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
                 ) as InputMethodManager
 
         if (immKeyboard.isActive) {
-            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
+            immKeyboard.hideSoftInputFromWindow(                                                    // Close userIdboard
                     appCompatActivity.currentFocus?.windowToken,
                     0
             )
@@ -265,6 +262,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     fun toastMaximumOf30(etPassGeneratorLength: EditText) {
         etPassGeneratorLength.setText("30")
 
@@ -362,11 +360,11 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                        encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                         encryptionClass.encrypt(
-                                "A $passwordType type password was generated.", key
+                                "A $passwordType type password was generated.", userId
                         ),
-                        encryptionClass.encrypt(getCurrentDate(), key)
+                        encryptionClass.encrypt(getCurrentDate(), userId)
                 )
         )
 
@@ -378,7 +376,7 @@ open class PasswordGeneratorProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -410,17 +408,17 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
     @SuppressLint("ShowToast")
     fun saveGeneratedPass(generatedPass: String) {                                                  // Save generated password to database
-        val encryptedDelete = encryptionClass.encrypt(0.toString(), key)
+        val encryptedDelete = encryptionClass.encrypt(0.toString(), userId)
         val userSavedPass: List<UserSavedPassModelClass> =
                 databaseHandlerClass.viewSavedPass(encryptedDelete)
-        val encryptedGeneratedPass = encryptionClass.encrypt(generatedPass, key)
+        val encryptedGeneratedPass = encryptionClass.encrypt(generatedPass, userId)
         var passId = 100001
         val lastId = databaseHandlerClass.getLastIdOfSavedPasswords()
         var existing = false
         var toast: Toast? = null
 
         if (lastId.isNotEmpty()) {
-            passId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            passId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         for (u in userSavedPass) {
@@ -433,9 +431,9 @@ open class PasswordGeneratorProcessClass : Fragment() {
         if (!existing) {
             val status = databaseHandlerClass.addGeneratedPass(
                     UserSavedPassModelClass(
-                            encryptionClass.encrypt(passId.toString(), key),
+                            encryptionClass.encrypt(passId.toString(), userId),
                             encryptedGeneratedPass,
-                            encryptionClass.encrypt(getCurrentDate(), key),
+                            encryptionClass.encrypt(getCurrentDate(), userId),
                             encryptedDelete,
                             ""
                     )
@@ -451,9 +449,9 @@ open class PasswordGeneratorProcessClass : Fragment() {
 
             databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                     UserActionLogModelClass(
-                            encryptionClass.encrypt(getLastActionLogId().toString(), key),
-                            encryptionClass.encrypt("Generated password was saved.", key),
-                            encryptionClass.encrypt(getCurrentDate(), key)
+                            encryptionClass.encrypt(getLastActionLogId().toString(), userId),
+                            encryptionClass.encrypt("Generated password was saved.", userId),
+                            encryptionClass.encrypt(getCurrentDate(), userId)
                     )
             )
         } else {

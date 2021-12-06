@@ -35,7 +35,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var lvFavoritesContainer: ListView
     private lateinit var etFavoritesSearchBox: EditText
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedPlatformId: String
@@ -75,13 +75,10 @@ class FavoritesFragment : Fragment() {
         etFavoritesSearchBox = appCompatActivity.findViewById(R.id.etFavoritesSearchBox)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun disableMenuItem() {
@@ -110,7 +107,7 @@ class FavoritesFragment : Fragment() {
                 ) as InputMethodManager
 
         if (immKeyboard.isActive) {
-            immKeyboard.hideSoftInputFromWindow(                                                    // Close keyboard
+            immKeyboard.hideSoftInputFromWindow(                                                    // Close userIdboard
                     appCompatActivity.currentFocus?.windowToken,
                     0
             )
@@ -121,8 +118,8 @@ class FavoritesFragment : Fragment() {
     private fun populateAccounts(accountName: String) {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "accountIsFavorites",
-                encryptionClass.encrypt(1.toString(), key),
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(1.toString(), userId),
+                encryptionClass.encrypt(0.toString(), userId)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -146,16 +143,16 @@ class FavoritesFragment : Fragment() {
             }
         } else {
             for (u in userAccount) {
-                val uAccountName = encryptionClass.decrypt(u.accountName, key)
+                val uAccountName = encryptionClass.decrypt(u.accountName, userId)
 
                 if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
-                    val uPlatformName = encryptionClass.decrypt(u.platformName, key)
-                    val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
+                    val uPlatformName = encryptionClass.decrypt(u.platformName, userId)
+                    val uCategoryName = encryptionClass.decrypt(u.categoryName, userId)
 
                     userAccountId.add(
-                            encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
+                            encryptionClass.decrypt(u.accountId, userId) + "ramjcammjar" +
                                     uAccountName + "ramjcammjar" +
-                                    encryptionClass.decrypt(u.platformId, key)
+                                    encryptionClass.decrypt(u.platformId, userId)
                     )
                     userAccountName.add(uAccountName)
                     userAccountDirectory.add("$uCategoryName > $uPlatformName")
@@ -248,8 +245,8 @@ class FavoritesFragment : Fragment() {
             llAccountsFavorites.setOnClickListener {                                                // Remove from Favorites
                 if (InternetConnectionClass().isConnected()) {
                     val status = databaseHandlerClass.updateIsFavorites(
-                            encryptionClass.encrypt(selectedAccountId, key),
-                            encryptionClass.encrypt(0.toString(), key)
+                            encryptionClass.encrypt(selectedAccountId, userId),
+                            encryptionClass.encrypt(0.toString(), userId)
                     )
 
                     if (status > -1) {
@@ -272,16 +269,16 @@ class FavoritesFragment : Fragment() {
                     val date: String = dateFormat.format(calendar.time)
 
                     if (lastId.isNotEmpty()) {
-                        actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+                        actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
                     }
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encryptionClass.encrypt(actionLogId.toString(), key),
+                                    encryptionClass.encrypt(actionLogId.toString(), userId),
                                     encryptionClass.encrypt("Account " +
                                             "'$selectedAccountName' was removed from Favorites.",
-                                            key),
-                                    encryptionClass.encrypt(date, key)
+                                            userId),
+                                    encryptionClass.encrypt(date, userId)
                             )
                     )
 

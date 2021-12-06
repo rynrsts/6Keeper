@@ -56,7 +56,6 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
     private val temp: Stack<Int> = Stack()
 
     private var userId: String = ""
-    private lateinit var key: ByteArray
 
     fun getAcbAutoLockLoginButton1(): Button {
         return acbAutoLockLoginButton1
@@ -142,7 +141,6 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -151,7 +149,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, key))
+            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, userId))
         }
 
         return fingerprintStatus
@@ -209,7 +207,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinWrongAttempt = encryptionClass.decrypt(value, key)
+                        mPinWrongAttempt = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -218,7 +216,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinLockTime = encryptionClass.decrypt(value, key)
+                        mPinLockTime = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -326,9 +324,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
     @SuppressLint("ShowToast")
     private fun validateUserMasterPin(pinI: Int, masterPin: String, mPinWrongAttempt: String) {     // Validate Master PIN
         val encryptionClass = EncryptionClass()
-
-        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
-        val encryptedAutoLockLogin = encryptionClass.hash(aesEncryption)
+        val encryptedAutoLockLogin = encryptionClass.encryptOnly(pinI.toString(), userId)
 
         if (encryptedAutoLockLogin == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
@@ -353,7 +349,7 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
             }
             wrongAttempt++
 
-            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), userId)
             databaseReference.child("mpinWrongAttempt").setValue(encryptedWrongAttempt)
 
             var toast: Toast = Toast.makeText(
@@ -365,9 +361,9 @@ open class AutoLockLoginProcessClass : ChangeStatusBarToWhiteClass() {
                     timer *= 2
                 }
 
-                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), userId)
                 val encryptedFWrongAttempt =
-                        encryptionClass.encrypt((wrongAttempt * 2).toString(), key)
+                        encryptionClass.encrypt((wrongAttempt * 2).toString(), userId)
 
                 databaseReference.child("mpinLockTime").setValue(encryptedCurrentDate)
                 databaseReference.child("fwrongAttempt")

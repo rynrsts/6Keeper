@@ -128,10 +128,9 @@ class LogoutFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
-        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), key)
+        val encryptedInactiveStatus = encryptionClass.encrypt(0.toString(), userId)
         databaseReference.child("status").setValue(encryptedInactiveStatus)
     }
 

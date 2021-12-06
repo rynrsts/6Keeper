@@ -31,7 +31,7 @@ class AnalyticsPasswordsFragment : Fragment() {
 
     private lateinit var lvAnalyticsPasswordsContainer: ListView
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedPlatformId: String
@@ -67,13 +67,10 @@ class AnalyticsPasswordsFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.lvAnalyticsPasswordsContainer)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun populateView() {
@@ -98,22 +95,22 @@ class AnalyticsPasswordsFragment : Fragment() {
     private fun populateWeakPasswords() {                                                           // Weak passwords
         val userWeakAccount: List<UserAccountModelClass> =
                 databaseHandlerClass.viewWeakAccounts(
-                        encryptionClass.encrypt(0.toString(), key),
-                        encryptionClass.encrypt("weak", key)
+                        encryptionClass.encrypt(0.toString(), userId),
+                        encryptionClass.encrypt("weak", userId)
                 )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)
 
         for (u in userWeakAccount) {
-            val uAccountName = encryptionClass.decrypt(u.accountName, key)
-            val uPlatformName = encryptionClass.decrypt(u.platformName, key)
-            val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
+            val uAccountName = encryptionClass.decrypt(u.accountName, userId)
+            val uPlatformName = encryptionClass.decrypt(u.platformName, userId)
+            val uCategoryName = encryptionClass.decrypt(u.categoryName, userId)
 
             userAccountId.add(
-                    encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
+                    encryptionClass.decrypt(u.accountId, userId) + "ramjcammjar" +
                             uAccountName + "ramjcammjar" +
-                            encryptionClass.decrypt(u.platformId, key)
+                            encryptionClass.decrypt(u.platformId, userId)
             )
             userAccountName.add(uAccountName)
             userAccountDirectory.add("$uCategoryName > $uPlatformName")
@@ -134,7 +131,7 @@ class AnalyticsPasswordsFragment : Fragment() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "deleted",
                 "",
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(0.toString(), userId)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -150,22 +147,22 @@ class AnalyticsPasswordsFragment : Fragment() {
 
         for (u in userAccount) {
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            val creationDate: Date = dateFormat.parse(encryptionClass.decrypt(u.creationDate, key))
+            val creationDate: Date = dateFormat.parse(encryptionClass.decrypt(u.creationDate, userId))
             val timeDifference: Long = dateToday.time - creationDate.time
 
             if (TimeUnit.MILLISECONDS.toDays(timeDifference) >= 90) {
-                val uAccountName = encryptionClass.decrypt(u.accountName, key)
-                val uPlatformName = encryptionClass.decrypt(u.platformName, key)
-                val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
+                val uAccountName = encryptionClass.decrypt(u.accountName, userId)
+                val uPlatformName = encryptionClass.decrypt(u.platformName, userId)
+                val uCategoryName = encryptionClass.decrypt(u.categoryName, userId)
 
                 userAccountId.add(
-                        encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
+                        encryptionClass.decrypt(u.accountId, userId) + "ramjcammjar" +
                                 uAccountName + "ramjcammjar" +
-                                encryptionClass.decrypt(u.platformId, key)
+                                encryptionClass.decrypt(u.platformId, userId)
                 )
                 userAccountName.add(uAccountName)
                 userAccountDirectory.add("$uCategoryName > $uPlatformName")
-                userAccountDate.add(encryptionClass.decrypt(u.creationDate, key))
+                userAccountDate.add(encryptionClass.decrypt(u.creationDate, userId))
             }
         }
 
@@ -182,7 +179,7 @@ class AnalyticsPasswordsFragment : Fragment() {
 
     private fun populateDuplicatePasswords() {                                                      // Duplicate passwords
         val userDuplicateAccount = databaseHandlerClass.getDuplicateAccountsCount(
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(0.toString(), userId)
         )
         val userAccountDuplicateId = ArrayList<String>(0)
         val userAccountCount = ArrayList<String>(0)

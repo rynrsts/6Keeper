@@ -58,7 +58,6 @@ class SixKeeperContext : Application() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
         val databaseReference = firebaseDatabase.getReference(userId)
 
         val statusRef = databaseReference.child("status")
@@ -69,7 +68,7 @@ class SixKeeperContext : Application() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value != null) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    val decryptedValue = encryptionClass.decrypt(value, key)
+                    val decryptedValue = encryptionClass.decrypt(value, userId)
                     val selectedValue = decryptedValue.split("ramjcammjar")
                     status = selectedValue[0]
                     count++
@@ -88,7 +87,7 @@ class SixKeeperContext : Application() {
 
             if (status == "1") {
                 for (u in userSettings) {
-                    if (encryptionClass.decrypt(u.screenCapture, key) == "0") {
+                    if (encryptionClass.decrypt(u.screenCapture, userId) == "0") {
                         activity.window.setFlags(
                                 WindowManager.LayoutParams.FLAG_SECURE,
                                 WindowManager.LayoutParams.FLAG_SECURE

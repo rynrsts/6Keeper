@@ -41,7 +41,6 @@ class MobileNumberValidationFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
 
     private var userId = ""
-    private lateinit var key: ByteArray
     private var verificationId: String? = null
 
     override fun onCreateView(
@@ -77,7 +76,6 @@ class MobileNumberValidationFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         etMobileNumberGetOTP = appCompatActivity.findViewById(R.id.etMobileNumberGetOTP)
@@ -95,7 +93,7 @@ class MobileNumberValidationFragment : Fragment() {
         mobileNumberRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                mobileNumber = encryptionClass.decrypt(value, key)
+                mobileNumber = encryptionClass.decrypt(value, userId)
                 count++
 
                 if (count == 1) {

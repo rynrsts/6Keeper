@@ -51,7 +51,7 @@ class AddAccountFragment : Fragment() {
     private lateinit var ivAddAccountRemove: ImageView
     private lateinit var llAddAccountApplication: LinearLayout
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private var accountName: String = ""
     private lateinit var name: String
     private lateinit var credentialField: String
@@ -158,13 +158,10 @@ class AddAccountFragment : Fragment() {
         cbAddAccountFavorites = appCompatActivity.findViewById(R.id.cbAddAccountFavorites)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
 
         inflatedViewIcon = layoutInflater.inflate(
                 R.layout.layout_add_account_remove, null, true
@@ -172,8 +169,8 @@ class AddAccountFragment : Fragment() {
         ivAddAccountRemove = inflatedViewIcon.findViewById(R.id.ivAddAccountRemove)
         llAddAccountApplication = appCompatActivity.findViewById(R.id.llAddAccountApplication)
 
-        encryptedSpecificPlatformId = encryptionClass.encrypt(args.specificPlatformId, key)
-        deleted = encryptionClass.encrypt(0.toString(), key)
+        encryptedSpecificPlatformId = encryptionClass.encrypt(args.specificPlatformId, userId)
+        deleted = encryptionClass.encrypt(0.toString(), userId)
     }
 
     private fun setSpinner() {
@@ -292,34 +289,34 @@ class AddAccountFragment : Fragment() {
         )
 
         for (u in userAccount) {
-            if (args.specificAccountId == encryptionClass.decrypt(u.accountId, key)) {
-                accountName = encryptionClass.decrypt(u.accountName, key)
+            if (args.specificAccountId == encryptionClass.decrypt(u.accountId, userId)) {
+                accountName = encryptionClass.decrypt(u.accountName, userId)
                 etAddAccountName.apply {
                     setText(accountName)
                     setSelection(etAddAccountName.text.length)
                 }
                 sAddAccountCredential1.setSelection(
-                        items.indexOf(encryptionClass.decrypt(u.accountCredentialField, key))
+                        items.indexOf(encryptionClass.decrypt(u.accountCredentialField, userId))
                 )
                 etAddAccountCredential1.apply {
-                    setText(encryptionClass.decrypt(u.accountCredential, key))
+                    setText(encryptionClass.decrypt(u.accountCredential, userId))
                     setSelection(etAddAccountCredential1.text.length)
                 }
-                nameTemp = encryptionClass.decrypt(u.accountName, key)
-                passwordTemp = encryptionClass.decrypt(u.accountPassword, key)
+                nameTemp = encryptionClass.decrypt(u.accountName, userId)
+                passwordTemp = encryptionClass.decrypt(u.accountPassword, userId)
                 etAddAccountPassword.apply {
                     setText(passwordTemp)
                     setSelection(etAddAccountPassword.text.length)
                 }
                 etAddAccountWebsite.apply {
-                    setText(encryptionClass.decrypt(u.accountWebsiteURL, key))
+                    setText(encryptionClass.decrypt(u.accountWebsiteURL, userId))
                     setSelection(etAddAccountWebsite.text.length)
                 }
-                val appNameTemp = encryptionClass.decrypt(u.accountApplicationName, key)
+                val appNameTemp = encryptionClass.decrypt(u.accountApplicationName, userId)
                 tvAddAccountAppSelection.text = appNameTemp
-                packageName = encryptionClass.decrypt(u.accountPackageName, key)
+                packageName = encryptionClass.decrypt(u.accountPackageName, userId)
                 etAddAccountDescription.apply {
-                    setText(encryptionClass.decrypt(u.accountDescription, key))
+                    setText(encryptionClass.decrypt(u.accountDescription, userId))
                     setSelection(etAddAccountDescription.text.length)
                 }
                 encryptedDateTemp = u.creationDate
@@ -328,7 +325,7 @@ class AddAccountFragment : Fragment() {
                     llAddAccountApplication.addView(inflatedViewIcon)
                 }
 
-                if (encryptionClass.decrypt(u.accountIsFavorites, key) == "1") {
+                if (encryptionClass.decrypt(u.accountIsFavorites, userId) == "1") {
                     cbAddAccountFavorites.isChecked = true
                 }
             }
@@ -538,12 +535,12 @@ class AddAccountFragment : Fragment() {
         var toast: Toast? = null
 
         if (lastId.isNotEmpty()) {
-            accountId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            accountId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         for (u in userAccount) {
             if (
-                    name.equals(encryptionClass.decrypt(u.accountName, key), ignoreCase = true) &&
+                    name.equals(encryptionClass.decrypt(u.accountName, userId), ignoreCase = true) &&
                     !name.equals(accountName, ignoreCase = true)
             ) {
                 existing = true
@@ -555,23 +552,23 @@ class AddAccountFragment : Fragment() {
             if (args.addOrEdit == "add") {                                                          // Add Account
                 val status = databaseHandlerClass.addAccount(
                         UserAccountModelClass(
-                                encryptionClass.encrypt(accountId.toString(), key),
-                                encryptionClass.encrypt(name, key),
-                                encryptionClass.encrypt(credentialField, key),
-                                encryptionClass.encrypt(credential, key),
-                                encryptionClass.encrypt(password, key),
-                                encryptionClass.encrypt(websiteURL, key),
-                                encryptionClass.encrypt(applicationName, key),
-                                encryptionClass.encrypt(packageName, key),
-                                encryptionClass.encrypt(description, key),
-                                encryptionClass.encrypt(isFavorites.toString(), key),
+                                encryptionClass.encrypt(accountId.toString(), userId),
+                                encryptionClass.encrypt(name, userId),
+                                encryptionClass.encrypt(credentialField, userId),
+                                encryptionClass.encrypt(credential, userId),
+                                encryptionClass.encrypt(password, userId),
+                                encryptionClass.encrypt(websiteURL, userId),
+                                encryptionClass.encrypt(applicationName, userId),
+                                encryptionClass.encrypt(packageName, userId),
+                                encryptionClass.encrypt(description, userId),
+                                encryptionClass.encrypt(isFavorites.toString(), userId),
                                 deleted,
                                 "",
-                                encryptionClass.encrypt(getCurrentDate(), key),
-                                encryptionClass.encrypt(checkPasswordStatus(password), key),
+                                encryptionClass.encrypt(getCurrentDate(), userId),
+                                encryptionClass.encrypt(checkPasswordStatus(password), userId),
                                 encryptedSpecificPlatformId,
-                                encryptionClass.encrypt(args.specificPlatformName, key),
-                                encryptionClass.encrypt(args.specificCategoryName, key)
+                                encryptionClass.encrypt(args.specificPlatformName, userId),
+                                encryptionClass.encrypt(args.specificCategoryName, userId)
                         )
                 )
 
@@ -585,11 +582,12 @@ class AddAccountFragment : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(
+                                        getLastActionLogId().toString(), userId),
                                 encryptionClass.encrypt("Account '$name' was added to " +
                                         "'${args.specificCategoryName} > " +
-                                        "${args.specificPlatformName}'.", key),
-                                encryptionClass.encrypt(getCurrentDate(), key)
+                                        "${args.specificPlatformName}'.", userId),
+                                encryptionClass.encrypt(getCurrentDate(), userId)
                         )
                 )
 
@@ -739,7 +737,7 @@ class AddAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -760,7 +758,7 @@ class AddAccountFragment : Fragment() {
             view?.apply {
                 if (args.addOrEdit == "edit") {
                     val encryptedDatePlaceholder = if (password != passwordTemp) {
-                        encryptionClass.encrypt(getCurrentDate(), key)
+                        encryptionClass.encrypt(getCurrentDate(), userId)
                     } else {
                         encryptedDateTemp
                     }
@@ -773,20 +771,20 @@ class AddAccountFragment : Fragment() {
 
                     val status = databaseHandlerClass.updateAccount(
                             UserAccountModelClass(
-                                    encryptionClass.encrypt(args.specificAccountId, key),
-                                    encryptionClass.encrypt(name, key),
-                                    encryptionClass.encrypt(credentialField, key),
-                                    encryptionClass.encrypt(credential, key),
-                                    encryptionClass.encrypt(password, key),
-                                    encryptionClass.encrypt(websiteURL, key),
-                                    encryptionClass.encrypt(applicationName, key),
-                                    encryptionClass.encrypt(packageName, key),
-                                    encryptionClass.encrypt(description, key),
-                                    encryptionClass.encrypt(isFavorites.toString(), key),
+                                    encryptionClass.encrypt(args.specificAccountId, userId),
+                                    encryptionClass.encrypt(name, userId),
+                                    encryptionClass.encrypt(credentialField, userId),
+                                    encryptionClass.encrypt(credential, userId),
+                                    encryptionClass.encrypt(password, userId),
+                                    encryptionClass.encrypt(websiteURL, userId),
+                                    encryptionClass.encrypt(applicationName, userId),
+                                    encryptionClass.encrypt(packageName, userId),
+                                    encryptionClass.encrypt(description, userId),
+                                    encryptionClass.encrypt(isFavorites.toString(), userId),
                                     "",
                                     "",
                                     encryptedDatePlaceholder,
-                                    encryptionClass.encrypt(checkPasswordStatus(password), key),
+                                    encryptionClass.encrypt(checkPasswordStatus(password), userId),
                                     "",
                                     "",
                                     ""
@@ -807,9 +805,9 @@ class AddAccountFragment : Fragment() {
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encryptionClass.encrypt(getLastActionLogId().toString(), key),
-                                    encryptionClass.encrypt(actionMessage, key),
-                                    encryptionClass.encrypt(getCurrentDate(), key)
+                                    encryptionClass.encrypt(getLastActionLogId().toString(), userId),
+                                    encryptionClass.encrypt(actionMessage, userId),
+                                    encryptionClass.encrypt(getCurrentDate(), userId)
                             )
                     )
                 }

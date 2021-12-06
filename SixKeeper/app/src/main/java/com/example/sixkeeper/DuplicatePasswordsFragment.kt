@@ -25,7 +25,7 @@ class DuplicatePasswordsFragment : Fragment() {
 
     private lateinit var lvDuplicatePasswordsContainer: ListView
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedPlatformId: String
@@ -61,34 +61,31 @@ class DuplicatePasswordsFragment : Fragment() {
                 appCompatActivity.findViewById(R.id.lvDuplicatePasswordsContainer)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun populateDuplicatePasswords() {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "password",
                 args.encodedDuplicatePassword,
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(0.toString(), userId)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
         val userAccountDirectory = ArrayList<String>(0)
 
         for (u in userAccount) {
-            val uAccountName = encryptionClass.decrypt(u.accountName, key)
-            val uPlatformName = encryptionClass.decrypt(u.platformName, key)
-            val uCategoryName = encryptionClass.decrypt(u.categoryName, key)
+            val uAccountName = encryptionClass.decrypt(u.accountName, userId)
+            val uPlatformName = encryptionClass.decrypt(u.platformName, userId)
+            val uCategoryName = encryptionClass.decrypt(u.categoryName, userId)
 
             userAccountId.add(
-                    encryptionClass.decrypt(u.accountId, key) + "ramjcammjar" +
+                    encryptionClass.decrypt(u.accountId, userId) + "ramjcammjar" +
                             uAccountName + "ramjcammjar" +
-                            encryptionClass.decrypt(u.platformId, key)
+                            encryptionClass.decrypt(u.platformId, userId)
             )
             userAccountName.add(uAccountName)
             userAccountDirectory.add("$uCategoryName > $uPlatformName")

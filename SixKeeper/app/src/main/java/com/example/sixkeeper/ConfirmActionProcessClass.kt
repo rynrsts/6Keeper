@@ -54,7 +54,6 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     private val pin: Stack<Int> = Stack()
     private val temp: Stack<Int> = Stack()
 
-    private lateinit var key: ByteArray
     private var userId: String = ""
 
     fun getDatabaseReference(): DatabaseReference {
@@ -113,8 +112,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         return acbConfirmActionButtonCancel
     }
     
-    fun getKey(): ByteArray {
-        return key
+    fun getUserId(): String {
+        return userId
     }
 
     fun getPin(): Stack<Int> {
@@ -153,7 +152,6 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -162,7 +160,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
         var fingerprintStatus = 0
 
         for (u in userSettings) {
-            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, key))
+            fingerprintStatus = Integer.parseInt(encryptionClass.decrypt(u.fingerprint, userId))
         }
 
         return fingerprintStatus
@@ -219,7 +217,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinWrongAttemptRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinWrongAttempt = encryptionClass.decrypt(value, key)
+                        mPinWrongAttempt = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -228,7 +226,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                 mPinLockTimeRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val value = dataSnapshot.getValue(String::class.java).toString()
-                        mPinLockTime = encryptionClass.decrypt(value, key)
+                        mPinLockTime = encryptionClass.decrypt(value, userId)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
@@ -339,9 +337,7 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
     @SuppressLint("ShowToast")
     private fun validateUserMasterPin(pinI: Int, masterPin: String, mPinWrongAttempt: String) {     // Validate Master PIN
         val encryptionClass = EncryptionClass()
-
-        val aesEncryption = encryptionClass.encrypt(pinI.toString(), key)
-        val encryptedConfirmAction = encryptionClass.hash(aesEncryption)
+        val encryptedConfirmAction = encryptionClass.encryptOnly(pinI.toString(), userId)
 
         if (encryptedConfirmAction == masterPin) {
             databaseReference.child("mpinWrongAttempt").setValue("")
@@ -361,7 +357,8 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
             }
             wrongAttempt++
 
-            val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+            val encryptedWrongAttempt =
+                    encryptionClass.encrypt(wrongAttempt.toString(), userId)
             databaseReference.child("mpinWrongAttempt").setValue(encryptedWrongAttempt)
 
             var toast: Toast = Toast.makeText(
@@ -373,9 +370,9 @@ open class ConfirmActionProcessClass : ChangeStatusBarToWhiteClass() {
                     timer *= 2
                 }
 
-                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+                val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), userId)
                 val encryptedFWrongAttempt =
-                        encryptionClass.encrypt((wrongAttempt * 2).toString(), key)
+                        encryptionClass.encrypt((wrongAttempt * 2).toString(), userId)
 
                 databaseReference.child("mpinLockTime").setValue(encryptedCurrentDate)
                 databaseReference.child("fwrongAttempt")

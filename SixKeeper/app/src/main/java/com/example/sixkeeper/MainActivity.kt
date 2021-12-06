@@ -43,7 +43,6 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        val key = (userId + userId + userId.substring(0, 2)).toByteArray()
         val databaseReference = firebaseDatabase.getReference(userId)
         val statusReference = databaseReference.child("status")
         var status = ""
@@ -54,7 +53,7 @@ class MainActivity : ChangeStatusBarToWhiteClass() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value != null) {
                     val value = dataSnapshot.getValue(String::class.java).toString()
-                    val decryptedValue = encryptionClass.decrypt(value, key)
+                    val decryptedValue = encryptionClass.decrypt(value, userId)
                     val splitValue = decryptedValue.split("ramjcammjar")
                     status = splitValue[0]
 

@@ -146,27 +146,22 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
     internal fun saveAccount() {                                                                    // Save account data to database
         val databaseHandlerClass = DatabaseHandlerClass(this)
         val userId: Int = (1000000..9999999).random()
-        val key = (
-                userId.toString() + userId.toString() + userId.toString().substring(0, 2)
-                )
-                .toByteArray()
+        val userIdString = userId.toString()
 
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
         val date: String = dateFormat.format(calendar.time)
 
         val encodedUserId = encryptionClass.encode(userId.toString())
-        encryptedUsername = encryptionClass.encrypt(username, key)
-        val aesPassword = encryptionClass.encrypt(password, key)
-        encryptedPassword = encryptionClass.hash(aesPassword)
-        val aesMasterPin = encryptionClass.encrypt(masterPin.toString(), key)
-        encryptedMasterPin = encryptionClass.hash(aesMasterPin)
-        encryptedStatus = encryptionClass.encrypt(0.toString(), key)
-        encryptedFirstName = encryptionClass.encrypt(firstName, key)
-        encryptedLastName = encryptionClass.encrypt(lastName, key)
-        encryptedBirthDate = encryptionClass.encrypt(birthDate, key)
-        encryptedEmail = encryptionClass.encrypt(email, key)
-        encryptedMobileNumber = encryptionClass.encrypt(mobileNumber.toString(), key)
+        encryptedUsername = encryptionClass.encrypt(username, userIdString)
+        encryptedPassword = encryptionClass.encryptOnly(password, userIdString)
+        encryptedMasterPin = encryptionClass.encryptOnly(masterPin.toString(), userIdString)
+        encryptedStatus = encryptionClass.encrypt(0.toString(), userIdString)
+        encryptedFirstName = encryptionClass.encrypt(firstName, userIdString)
+        encryptedLastName = encryptionClass.encrypt(lastName, userIdString)
+        encryptedBirthDate = encryptionClass.encrypt(birthDate, userIdString)
+        encryptedEmail = encryptionClass.encrypt(email, userIdString)
+        encryptedMobileNumber = encryptionClass.encrypt(mobileNumber.toString(), userIdString)
 
         val tableStatus = databaseHandlerClass.truncateAllTables()
         val userAccStatus = databaseHandlerClass.addUserAcc(
@@ -175,10 +170,10 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
         val userSettingsStatus = databaseHandlerClass.addSettings(
                 UserSettingsModelClass(
                         encodedUserId,
-                        encryptionClass.encrypt(0.toString(), key),
-                        encryptionClass.encrypt(1.toString(), key),
-                        encryptionClass.encrypt("10 sec", key),
-                        encryptionClass.encrypt(0.toString(), key),
+                        encryptionClass.encrypt(0.toString(), userIdString),
+                        encryptionClass.encrypt(1.toString(), userIdString),
+                        encryptionClass.encrypt("10 sec", userIdString),
+                        encryptionClass.encrypt(0.toString(), userIdString),
                 )
         )
 
@@ -202,9 +197,9 @@ class CreateNewAccountActivity : CreateNewAccountManageFragmentsClass() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encryptionClass.encrypt(actionLogId.toString(), key),
-                        encryptionClass.encrypt("App account was created.", key),
-                        encryptionClass.encrypt(date, key)
+                        encryptionClass.encrypt(actionLogId.toString(), userIdString),
+                        encryptionClass.encrypt("App account was created.", userIdString),
+                        encryptionClass.encrypt(date, userIdString)
                 )
         )
 

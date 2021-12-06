@@ -48,7 +48,6 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
     private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
     private var userId = ""
-    private lateinit var key: ByteArray
     private var backgroundDate = ""
     private var status = "unlocked"
     private var start = true
@@ -91,11 +90,11 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
                 var autoLock = false
 
                 for (u in userSettings) {
-                    if (encryptionClass.decrypt(u.autoLock, key) == "1") {                          // If Auto Lock is 1
+                    if (encryptionClass.decrypt(u.autoLock, userId) == "1") {                          // If Auto Lock is 1
                         autoLock = true
 
                         if (timer == 0) {
-                            val autoLockTimer = encryptionClass.decrypt(u.autoLockTimer, key)
+                            val autoLockTimer = encryptionClass.decrypt(u.autoLockTimer, userId)
                             timer = Integer.parseInt(
                                     autoLockTimer.replace(" sec", "")
                             )
@@ -149,8 +148,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-        
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
+
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -212,7 +210,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         button.setOnClickListener {
             val tvNavigationHeaderUsername: TextView =
                     headerView.findViewById(R.id.tvNavigationHeaderUsername)
-            val decryptedUsername = encryptionClass.decrypt(username, key)
+            val decryptedUsername = encryptionClass.decrypt(username, userId)
 
             tvNavigationHeaderUsername.text = decryptedUsername
         }
@@ -240,8 +238,7 @@ class IndexActivity : AppCompatActivity(), LifecycleObserver {
         })
 
         button.setOnClickListener {
-            val profilePhotoS = encryptionClass.decrypt(profilePhoto, key)
-            val profilePhotoB = encryptionClass.decodeBA(profilePhotoS)
+            val profilePhotoB = encryptionClass.decodeBA(profilePhoto)
 
             if (profilePhoto.isNotEmpty()) {
                 val imageDrawable: Drawable = BitmapDrawable(

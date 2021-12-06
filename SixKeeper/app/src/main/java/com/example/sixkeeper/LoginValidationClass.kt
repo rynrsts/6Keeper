@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private lateinit var databaseHandlerClass: DatabaseHandlerClass
     private lateinit var encryptionClass: EncryptionClass
@@ -36,7 +35,6 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private val dateFormat: SimpleDateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
     private lateinit var userId: String
-    private lateinit var key: ByteArray
     private lateinit var username: String
     private lateinit var password: String
 
@@ -121,17 +119,14 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         }
 
         for (u in userAccList) {
-            userId = u.userId
+            userId = encryptionClass.decode(u.userId)
         }
 
-        val decodedUserId = encryptionClass.decode(userId)
-        key = (decodedUserId + decodedUserId + decodedUserId.substring(0, 2)).toByteArray()
-        encryptedUsername = encryptionClass.encrypt(etLoginUsername.text.toString(), key)
-        val aesPassword = encryptionClass.encrypt(etLoginPassword.text.toString(), key)
-        encryptedPassword = encryptionClass.hash(aesPassword)
+        encryptedUsername = encryptionClass.encrypt(etLoginUsername.text.toString(), userId)
+        encryptedPassword = encryptionClass.encryptOnly(etLoginPassword.text.toString(), userId)
         val button = Button(this)
 
-        databaseReference = firebaseDatabase.getReference(decodedUserId)
+        databaseReference = firebaseDatabase.getReference(userId)
 
         val usernameRef = databaseReference.child("username")
         val passwordRef = databaseReference.child("password")
@@ -157,7 +152,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         statusRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                status = encryptionClass.decrypt(value, key)
+                status = encryptionClass.decrypt(value, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -166,7 +161,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         pwWrongAttemptRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                pwWrongAttempt = encryptionClass.decrypt(value, key)
+                pwWrongAttempt = encryptionClass.decrypt(value, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -175,7 +170,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
         pwLockTimeRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                pwLockTime = encryptionClass.decrypt(value, key)
+                pwLockTime = encryptionClass.decrypt(value, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -336,7 +331,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
     private fun updateUserStatus() {                                                                // Update account status to 1
         val encryptedActiveStatus = encryptionClass.encrypt(
                 1.toString() + "ramjcammjar" + getUniquePseudoID(),
-                key
+                userId
         )
         databaseReference.child("status").setValue(encryptedActiveStatus)
     }
@@ -401,7 +396,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         wrongAttempt++
 
-        val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), key)
+        val encryptedWrongAttempt = encryptionClass.encrypt(wrongAttempt.toString(), userId)
 
         databaseReference.child("pwWrongAttempt").setValue(encryptedWrongAttempt)
 
@@ -410,7 +405,7 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
                 timer *= 2
             }
 
-            val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), key)
+            val encryptedCurrentDate = encryptionClass.encrypt(getCurrentDate(), userId)
 
             databaseReference.child("pwLockTime").setValue(encryptedCurrentDate)
 
@@ -441,13 +436,10 @@ open class LoginValidationClass : ChangeStatusBarToWhiteClass() {
 
         if (userAccList.isNotEmpty()) {
             for (u in userAccList) {
-                userId = u.userId
+                userId = encryptionClass.decode(u.userId)
             }
         }
 
-        val decodedUserId = encryptionClass.decode(userId)
-        key = (decodedUserId + decodedUserId + decodedUserId.substring(0, 2)).toByteArray()
-
-        databaseReference = firebaseDatabase.getReference(decodedUserId)
+        databaseReference = firebaseDatabase.getReference(userId)
     }
 }

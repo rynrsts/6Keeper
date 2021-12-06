@@ -30,7 +30,7 @@ open class SpecificCategoryProcessClass : Fragment() {
     private lateinit var lvSpecificCatContainer: ListView
     private lateinit var llSpecificCatNoItem: LinearLayout
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var platformIdTemp: String
     private lateinit var platformNameTemp: String
 
@@ -66,13 +66,10 @@ open class SpecificCategoryProcessClass : Fragment() {
         llSpecificCatNoItem = appCompatActivity.findViewById(R.id.llSpecificCatNoItem)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     fun setActionBarTitle() {
@@ -104,7 +101,7 @@ open class SpecificCategoryProcessClass : Fragment() {
     fun populatePlatforms(platformName: String) {                                                   // Populate list view with platforms
         val userPlatform: List<UserPlatformModelClass> = databaseHandlerClass.viewPlatform(
                 "category",
-                encryptionClass.encrypt(args.specificCategoryId, key)
+                encryptionClass.encrypt(args.specificCategoryId, userId)
         )
         val userPlatformId = ArrayList<String>(0)
         val userPlatformName = ArrayList<String>(0)
@@ -128,10 +125,10 @@ open class SpecificCategoryProcessClass : Fragment() {
             val tempList = ArrayList<String>(0)
 
             for (u in userPlatform) {
-                val uPlatformId = encryptionClass.decrypt(u.platformId, key)
-                val uPlatformName = encryptionClass.decrypt(u.platformName, key)
+                val uPlatformId = encryptionClass.decrypt(u.platformId, userId)
+                val uPlatformName = encryptionClass.decrypt(u.platformName, userId)
                 val uPlatformNum = databaseHandlerClass.viewNumberOfAccounts(
-                        encryptionClass.encrypt(0.toString(), key),
+                        encryptionClass.encrypt(0.toString(), userId),
                         u.platformId
                 ).toString()
 
@@ -275,7 +272,7 @@ open class SpecificCategoryProcessClass : Fragment() {
             selectedPlatformId: String,
             selectedPlatformName: String
     ) {
-        val encryptedArgsCategoryId = encryptionClass.encrypt(args.specificCategoryId, key)
+        val encryptedArgsCategoryId = encryptionClass.encrypt(args.specificCategoryId, userId)
         val userPlatform: List<UserPlatformModelClass> =
                 databaseHandlerClass.viewPlatform("category", encryptedArgsCategoryId)
         var platformId = 10001
@@ -284,13 +281,13 @@ open class SpecificCategoryProcessClass : Fragment() {
         var toast: Toast? = null
 
         if (lastId.isNotEmpty()) {
-            platformId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            platformId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         for (u in userPlatform) {
             if (
                     platformName.equals(
-                            encryptionClass.decrypt(u.platformName, key),
+                            encryptionClass.decrypt(u.platformName, userId),
                             ignoreCase = true
                     ) &&
                     !platformName.equals(selectedPlatformName, ignoreCase = true)
@@ -304,10 +301,10 @@ open class SpecificCategoryProcessClass : Fragment() {
             if (addOrUpdate == "add") {
                 val status = databaseHandlerClass.addPlatform(                                      // Add Platform
                         UserPlatformModelClass(
-                                encryptionClass.encrypt(platformId.toString(), key),
-                                encryptionClass.encrypt(platformName, key),
+                                encryptionClass.encrypt(platformId.toString(), userId),
+                                encryptionClass.encrypt(platformName, userId),
                                 encryptedArgsCategoryId,
-                                encryptionClass.encrypt(args.specificCategoryName, key)
+                                encryptionClass.encrypt(args.specificCategoryName, userId)
                         )
                 )
 
@@ -321,17 +318,17 @@ open class SpecificCategoryProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                                 encryptionClass.encrypt("Platform '$platformName' was " +
-                                        "added to '${args.specificCategoryName}'.", key),
-                                encryptionClass.encrypt(getCurrentDate(), key)
+                                        "added to '${args.specificCategoryName}'.", userId),
+                                encryptionClass.encrypt(getCurrentDate(), userId)
                         )
                 )
             } else if (addOrUpdate == "update") {
                 val status = databaseHandlerClass.updatePlatform(                                   // Update Platform
                         UserPlatformModelClass(
-                                encryptionClass.encrypt(selectedPlatformId, key),
-                                encryptionClass.encrypt(platformName, key),
+                                encryptionClass.encrypt(selectedPlatformId, userId),
+                                encryptionClass.encrypt(platformName, userId),
                                 "",
                                 ""
                         )
@@ -347,10 +344,10 @@ open class SpecificCategoryProcessClass : Fragment() {
 
                 databaseHandlerClass.addEventToActionLog(                                           // Add event to Action Log
                         UserActionLogModelClass(
-                                encryptionClass.encrypt(getLastActionLogId().toString(), key),
+                                encryptionClass.encrypt(getLastActionLogId().toString(), userId),
                                 encryptionClass.encrypt("Platform '$selectedPlatformName'" +
-                                        " was modified to '$platformName'.", key),
-                                encryptionClass.encrypt(getCurrentDate(), key)
+                                        " was modified to '$platformName'.", userId),
+                                encryptionClass.encrypt(getCurrentDate(), userId)
                         )
                 )
             }
@@ -377,7 +374,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -445,7 +442,7 @@ open class SpecificCategoryProcessClass : Fragment() {
         val status = databaseHandlerClass.removeCatPlatAcc(
                 "PlatformsTable",
                 "platform_id",
-                encryptionClass.encrypt(platformIdTemp, key)
+                encryptionClass.encrypt(platformIdTemp, userId)
         )
 
         if (status > -1) {
@@ -462,9 +459,9 @@ open class SpecificCategoryProcessClass : Fragment() {
 
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
-                        encryptionClass.encrypt("Platform '$platformNameTemp' was deleted.", key),
-                        encryptionClass.encrypt(getCurrentDate(), key)
+                        encryptionClass.encrypt(getLastActionLogId().toString(), userId),
+                        encryptionClass.encrypt("Platform '$platformNameTemp' was deleted.", userId),
+                        encryptionClass.encrypt(getCurrentDate(), userId)
                 )
         )
 
@@ -497,9 +494,9 @@ open class SpecificCategoryProcessClass : Fragment() {
 
     private fun deleteAccount() {                                                                   // Delete Platforms' contents
         databaseHandlerClass.updateDeleteAccount(
-                encryptionClass.encrypt(platformIdTemp, key),
-                encryptionClass.encrypt(1.toString(), key),
-                encryptionClass.encrypt(getCurrentDate(), key),
+                encryptionClass.encrypt(platformIdTemp, userId),
+                encryptionClass.encrypt(1.toString(), userId),
+                encryptionClass.encrypt(getCurrentDate(), userId),
                 "AccountsTable",
                 "platform_id",
                 "account_deleted",

@@ -32,7 +32,6 @@ class ResetMasterPINFragment : Fragment() {
     private lateinit var tvResetMasterPINMes: TextView
 
     private var userId = ""
-    private lateinit var key: ByteArray
     private var masterPin = 0
     private var masterPinVal = ""
 
@@ -71,7 +70,6 @@ class ResetMasterPINFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
 
         val masterPinRef = databaseReference.child("masterPin")
@@ -139,8 +137,8 @@ class ResetMasterPINFragment : Fragment() {
 
                     builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                         if (InternetConnectionClass().isConnected()) {
-                            val aesEncryption = encryptionClass.encrypt(masterPin.toString(), key)
-                            val encryptedInput = encryptionClass.hash(aesEncryption)
+                            val encryptedInput =
+                                    encryptionClass.encryptOnly(masterPin.toString(), userId)
 
                             var actionLogId = 1000001
                             val lastId = databaseHandlerClass.getLastIdOfActionLog()
@@ -150,7 +148,7 @@ class ResetMasterPINFragment : Fragment() {
                             val date = dateFormat.format(calendar.time)
 
                             if (lastId.isNotEmpty()) {
-                                actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+                                actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
                             }
 
                             databaseReference.child("masterPin").setValue(encryptedInput)
@@ -160,12 +158,12 @@ class ResetMasterPINFragment : Fragment() {
 
                             databaseHandlerClass.addEventToActionLog(                               // Add event to Action Log
                                     UserActionLogModelClass(
-                                            encryptionClass.encrypt(actionLogId.toString(), key),
+                                            encryptionClass.encrypt(actionLogId.toString(), userId),
                                             encryptionClass.encrypt(
                                                     "App account master pin was modified.",
-                                                    key
+                                                    userId
                                             ),
-                                            encryptionClass.encrypt(date, key)
+                                            encryptionClass.encrypt(date, userId)
                                     )
                             )
 
@@ -247,8 +245,7 @@ class ResetMasterPINFragment : Fragment() {
             requestCode == 14523 && resultCode == 14523 -> {
                 if (data != null) {
                     val input = data.getIntExtra("masterPin", 0)
-                    val aesEncryption = encryptionClass.encrypt(input.toString(), key)
-                    val encryptedInput = encryptionClass.hash(aesEncryption)
+                    val encryptedInput = encryptionClass.encryptOnly(input.toString(), userId)
 
                     if (!masterPinVal.contentEquals(encryptedInput)) {
                         masterPin = input

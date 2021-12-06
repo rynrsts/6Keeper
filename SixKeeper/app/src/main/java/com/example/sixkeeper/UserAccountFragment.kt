@@ -50,7 +50,6 @@ class UserAccountFragment : Fragment() {
 
     private lateinit var button: Button
 
-    private lateinit var key: ByteArray
     private var field = ""
     private var userId: String = ""
 
@@ -96,7 +95,6 @@ class UserAccountFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
         databaseReference = firebaseDatabase.getReference(userId)
     }
 
@@ -150,8 +148,7 @@ class UserAccountFragment : Fragment() {
         })
 
         button.setOnClickListener {
-            val profilePhotoS = encryptionClass.decrypt(profilePhoto, key)
-            profilePhotoB = encryptionClass.decodeBA(profilePhotoS)
+            profilePhotoB = encryptionClass.decodeBA(profilePhoto)
 
             if (profilePhotoB.contentEquals("".toByteArray())) {
                 ivUserAccountPhoto.setImageDrawable(null)
@@ -438,14 +435,14 @@ class UserAccountFragment : Fragment() {
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
                                                 encryptionClass.encrypt(
-                                                        getLastActionLogId().toString(), key
+                                                        getLastActionLogId().toString(), userId
                                                 ),
                                                 encryptionClass.encrypt(
                                                         "Data was exported to the " +
                                                                 "'SixKeeper' folder in the " +
-                                                                "internal storage.", key
+                                                                "internal storage.", userId
                                                 ),
-                                                encryptionClass.encrypt(getCurrentDate(), key)
+                                                encryptionClass.encrypt(getCurrentDate(), userId)
                                         )
                                 )
                             } catch (e: IOException) {
@@ -775,7 +772,6 @@ class UserAccountFragment : Fragment() {
                                 )
                         )
                         val imageString = encryptionClass.encodeS(imageByteArray)
-                        val newProfilePhoto = encryptionClass.encrypt(imageString, key)
 
                         ivUserAccountPhoto.setImageDrawable(imageDrawable)
 
@@ -786,7 +782,7 @@ class UserAccountFragment : Fragment() {
                         }
 
                         profilePhotoB = imageByteArray
-                        databaseReference.child("profilePhoto").setValue(newProfilePhoto)
+                        databaseReference.child("profilePhoto").setValue(imageString)
 
                         setProfilePhotoInMenu(imageDrawable)
                     } else {
@@ -814,9 +810,9 @@ class UserAccountFragment : Fragment() {
     private fun addEventToActionLog(action: String) {
         databaseHandlerClass.addEventToActionLog(                                                   // Add event to Action Log
                 UserActionLogModelClass(
-                        encryptionClass.encrypt(getLastActionLogId().toString(), key),
-                        encryptionClass.encrypt("Profile Photo was $action.", key),
-                        encryptionClass.encrypt(getCurrentDate(), key)
+                        encryptionClass.encrypt(getLastActionLogId().toString(), userId),
+                        encryptionClass.encrypt("Profile Photo was $action.", userId),
+                        encryptionClass.encrypt(getCurrentDate(), userId)
                 )
         )
 
@@ -836,7 +832,7 @@ class UserAccountFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId

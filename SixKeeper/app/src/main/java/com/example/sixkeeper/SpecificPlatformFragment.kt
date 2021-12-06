@@ -38,7 +38,7 @@ class SpecificPlatformFragment : Fragment() {
     private lateinit var etSpecificPlatSearchBox: EditText
     private lateinit var lvSpecificPlatContainer: ListView
 
-    private lateinit var key: ByteArray
+    private lateinit var userId: String
     private lateinit var selectedAccountId: String
     private lateinit var selectedAccountName: String
     private lateinit var selectedAccountIsFavorites: String
@@ -83,13 +83,10 @@ class SpecificPlatformFragment : Fragment() {
         lvSpecificPlatContainer = appCompatActivity.findViewById(R.id.lvSpecificPlatContainer)
 
         val userAccList: List<UserAccModelClass> = databaseHandlerClass.validateUserAcc()
-        var userId = ""
 
         for (u in userAccList) {
             userId = encryptionClass.decode(u.userId)
         }
-
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
     }
 
     private fun setActionBarTitle() {
@@ -122,8 +119,8 @@ class SpecificPlatformFragment : Fragment() {
     private fun populateAccounts(accountName: String) {
         val userAccount: List<UserAccountModelClass> = databaseHandlerClass.viewAccount(
                 "platformId",
-                encryptionClass.encrypt(args.specificPlatformId, key),
-                encryptionClass.encrypt(0.toString(), key)
+                encryptionClass.encrypt(args.specificPlatformId, userId),
+                encryptionClass.encrypt(0.toString(), userId)
         )
         val userAccountId = ArrayList<String>(0)
         val userAccountName = ArrayList<String>(0)
@@ -149,9 +146,9 @@ class SpecificPlatformFragment : Fragment() {
             val tempList = ArrayList<String>(0)
 
             for (u in userAccount) {
-                val uAccountId = encryptionClass.decrypt(u.accountId, key)
-                val uAccountName = encryptionClass.decrypt(u.accountName, key)
-                val uAccountIsFavorites = encryptionClass.decrypt(u.accountIsFavorites, key)
+                val uAccountId = encryptionClass.decrypt(u.accountId, userId)
+                val uAccountName = encryptionClass.decrypt(u.accountName, userId)
+                val uAccountIsFavorites = encryptionClass.decrypt(u.accountIsFavorites, userId)
 
                 if (uAccountName.toLowerCase().startsWith(accountName.toLowerCase())) {
                     tempList.add(
@@ -297,8 +294,8 @@ class SpecificPlatformFragment : Fragment() {
             llAccountsFavorites.setOnClickListener {
                 if (InternetConnectionClass().isConnected()) {
                     val status = databaseHandlerClass.updateIsFavorites(
-                            encryptionClass.encrypt(selectedAccountId, key),
-                            encryptionClass.encrypt(setIsFavorites.toString(), key)
+                            encryptionClass.encrypt(selectedAccountId, userId),
+                            encryptionClass.encrypt(setIsFavorites.toString(), userId)
                     )
 
                     if (status > -1) {
@@ -315,9 +312,10 @@ class SpecificPlatformFragment : Fragment() {
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encryptionClass.encrypt(getLastActionLogId().toString(), key),
-                                    encryptionClass.encrypt(actionMessage, key),
-                                    encryptionClass.encrypt(getCurrentDate(), key)
+                                    encryptionClass.encrypt(
+                                            getLastActionLogId().toString(), userId),
+                                    encryptionClass.encrypt(actionMessage, userId),
+                                    encryptionClass.encrypt(getCurrentDate(), userId)
                             )
                     )
 
@@ -346,7 +344,7 @@ class SpecificPlatformFragment : Fragment() {
         val lastId = databaseHandlerClass.getLastIdOfActionLog()
 
         if (lastId.isNotEmpty()) {
-            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, key)) + 1
+            actionLogId = Integer.parseInt(encryptionClass.decrypt(lastId, userId)) + 1
         }
 
         return actionLogId
@@ -416,9 +414,9 @@ class SpecificPlatformFragment : Fragment() {
                     }
                 } else if (clickAction == "Delete Account") {
                     val status = databaseHandlerClass.updateDeleteAccount(
-                            encryptionClass.encrypt(accountIdTemp, key),
-                            encryptionClass.encrypt(1.toString(), key),
-                            encryptionClass.encrypt(getCurrentDate(), key),
+                            encryptionClass.encrypt(accountIdTemp, userId),
+                            encryptionClass.encrypt(1.toString(), userId),
+                            encryptionClass.encrypt(getCurrentDate(), userId),
                             "AccountsTable",
                             "account_id",
                             "account_deleted",
@@ -439,11 +437,13 @@ class SpecificPlatformFragment : Fragment() {
 
                     databaseHandlerClass.addEventToActionLog(                                       // Add event to Action Log
                             UserActionLogModelClass(
-                                    encryptionClass.encrypt(getLastActionLogId().toString(), key),
                                     encryptionClass.encrypt(
-                                            "Account '$accountNameTemp' was deleted.", key
+                                            getLastActionLogId().toString(), userId),
+                                    encryptionClass.encrypt(
+                                            "Account '$accountNameTemp' was deleted.",
+                                            userId
                                     ),
-                                    encryptionClass.encrypt(getCurrentDate(), key)
+                                    encryptionClass.encrypt(getCurrentDate(), userId)
                             )
                     )
 

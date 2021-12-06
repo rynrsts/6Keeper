@@ -35,7 +35,6 @@ class ResetPasswordFragment : Fragment() {
     private lateinit var ivResetPasswordConfirmTogglePass: ImageView
 
     private var userId = ""
-    private lateinit var key: ByteArray
     private var newPass = ""
     private var newPassVisibility: Int = 0
     private var confirmPassVisibility: Int = 0
@@ -83,9 +82,6 @@ class ResetPasswordFragment : Fragment() {
             userId = encryptionClass.decode(u.userId)
         }
 
-        key = (userId + userId + userId.substring(0, 2)).toByteArray()
-        databaseReference = firebaseDatabase.getReference(userId)
-
         databaseReference = firebaseDatabase.getReference(userId)
 
         val usernameRef = databaseReference.child("username")
@@ -94,9 +90,8 @@ class ResetPasswordFragment : Fragment() {
         usernameRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val value = dataSnapshot.getValue(String::class.java).toString()
-                val decryptedValue = encryptionClass.decrypt(value, key)
-                val aesEncryption = encryptionClass.encrypt(decryptedValue, key)
-                usernameVal = encryptionClass.hash(aesEncryption)
+                val decryptedValue = encryptionClass.decrypt(value, userId)
+                usernameVal = encryptionClass.encryptOnly(decryptedValue, userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -125,8 +120,7 @@ class ResetPasswordFragment : Fragment() {
                 val confirmPass = etResetPasswordConfirmPass.text.toString()
 
                 if (newPass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                    val aesEncryption = encryptionClass.encrypt(newPass, key)
-                    val encryptedInput = encryptionClass.hash(aesEncryption)
+                    val encryptedInput = encryptionClass.encryptOnly(newPass, userId)
 
                     if (
                             isPasswordValid(newPass) && confirmPass == newPass &&
@@ -152,7 +146,7 @@ class ResetPasswordFragment : Fragment() {
                                 if (lastId.isNotEmpty()) {
                                     actionLogId =
                                             Integer.parseInt(
-                                                    encryptionClass.decrypt(lastId, key)
+                                                    encryptionClass.decrypt(lastId, userId)
                                             ) + 1
                                 }
 
@@ -163,11 +157,11 @@ class ResetPasswordFragment : Fragment() {
                                 databaseHandlerClass.addEventToActionLog(                           // Add event to Action Log
                                         UserActionLogModelClass(
                                                 encryptionClass.encrypt(
-                                                        actionLogId.toString(), key
+                                                        actionLogId.toString(), userId
                                                 ),
                                                 encryptionClass.encrypt("App account " +
-                                                        "password was modified.", key),
-                                                encryptionClass.encrypt(date, key)
+                                                        "password was modified.", userId),
+                                                encryptionClass.encrypt(date, userId)
                                         )
                                 )
 
