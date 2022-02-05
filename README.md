@@ -1,5 +1,5 @@
 # 6Keeper
-Password Manager (IT Capstone Project)
+Password Security Application using 6KED (6Keeper Encryption/Decryption) System
 
 <br>
 
